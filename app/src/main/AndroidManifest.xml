@@ -27,7 +27,7 @@
             android:theme="@style/Theme.Sliding.Light">
         </activity>
         <activity
-            android:name=".Setup.DataCollection.LessonInput"
+            android:name=".Setup.DataCollection.SubjectInput"
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light">
         </activity>
@@ -42,8 +42,8 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Setup.DataPresentation.LessonCollector"
-            android:label="@string/title_activity_lesson_input"
+            android:name=".Setup.DataPresentation.SubjectCollector"
+            android:label="@string/title_activity_subject_input"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
@@ -53,7 +53,7 @@
         </activity>
         <activity
             android:name=".Setup.DataPresentation.LessonTimeCollector"
-            android:label="@string/title_activity_lesson_time_input"
+            android:label="@string/title_activity_subject_time_input"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

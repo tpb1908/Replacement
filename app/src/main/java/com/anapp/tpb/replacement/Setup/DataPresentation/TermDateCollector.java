@@ -69,7 +69,7 @@ public class TermDateCollector extends AppCompatActivity {
                 location[0] += nextFab.getWidth() / 2;
                 location[1] += nextFab.getHeight() / 2;
 
-                final Intent intent = new Intent(TermDateCollector.this, LessonCollector.class);
+                final Intent intent = new Intent(TermDateCollector.this, SubjectCollector.class);
 
                 mRevealView.setVisibility(View.VISIBLE);
                 mRevealLayout.setVisibility(View.VISIBLE);

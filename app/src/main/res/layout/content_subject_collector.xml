@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.LessonCollector"
-    tools:showIn="@layout/activity_lesson_input">
+    tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector"
+    tools:showIn="@layout/activity_subject_input">
 
     <me.yugy.github.reveallayout.RevealLayout
-        android:id="@+id/reveal_layout_lesson"
+        android:id="@+id/reveal_layout_subject"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentEnd="true"
@@ -19,17 +19,17 @@
         android:visibility="invisible">
 
         <View
-            android:id="@+id/reveal_view_lesson"
+            android:id="@+id/reveal_view_subject"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignStart="@id/reveal_layout_lesson"
-            android:layout_alignTop="@id/reveal_layout_lesson"
+            android:layout_alignStart="@id/reveal_layout_subject"
+            android:layout_alignTop="@id/reveal_layout_subject"
             android:background="@color/colorAccent"
             android:visibility="invisible"/>
     </me.yugy.github.reveallayout.RevealLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/lessonCollectorNextFab"
+        android:id="@+id/subjectCollectorNextFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -41,10 +41,10 @@
         android:src="@drawable/fab_icon_next"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/lessonAddFab"
+        android:id="@+id/subjectAddFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/lessonCollectorNextFab"
+        android:layout_above="@+id/subjectCollectorNextFab"
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin"

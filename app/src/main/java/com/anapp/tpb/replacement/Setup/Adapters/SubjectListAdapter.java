@@ -1,7 +1,6 @@
 package com.anapp.tpb.replacement.Setup.Adapters;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,61 +10,58 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.R;
-import com.anapp.tpb.replacement.Setup.DataCollection.LessonInput;
-import com.anapp.tpb.replacement.Setup.DataCollection.TermInput;
-import com.anapp.tpb.replacement.Setup.DataPresentation.LessonCollector;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.LessonStorageHelper;
-import com.anapp.tpb.replacement.Storage.TableTemplates.Lesson;
-
-import org.w3c.dom.Text;
+import com.anapp.tpb.replacement.Setup.DataCollection.SubjectInput;
+import com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector;
+import com.anapp.tpb.replacement.Storage.StorageHelpers.SubjectStorageHelper;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import java.util.ArrayList;
 
 /**
  * Created by pearson-brayt15 on 04/02/2016.
  */
-public class LessonListAdapter extends RecyclerView.Adapter<LessonListAdapter.ViewHolder> {
-    private LessonCollector parent;
-    private LessonStorageHelper storageHelper;
-    private ArrayList<Lesson> lessons;
+public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.ViewHolder> {
+    private SubjectCollector parent;
+    private SubjectStorageHelper storageHelper;
+    private ArrayList<Subject> subjects;
 
-    public LessonListAdapter(LessonCollector parent, LessonStorageHelper storageHelper) {
+    public SubjectListAdapter(SubjectCollector parent, SubjectStorageHelper storageHelper) {
         this.parent = parent;
         this.storageHelper = storageHelper;
-        lessons = storageHelper.getAllLessons();
+        subjects = storageHelper.getAllSubjects();
     }
 
-    public ArrayList<Lesson> getLessons() {
-        return lessons;
+    public ArrayList<Subject> getSubjects() {
+        return subjects;
     }
 
-    private void updateLesson(int position) {
-        Intent i = new Intent(parent.getApplicationContext(), LessonInput.class);
-        i.putExtra("editingLesson", lessons.get(position));
+    private void updateSubject(int position) {
+        Intent i = new Intent(parent.getApplicationContext(), SubjectInput.class);
+        i.putExtra("editingSubject", subjects.get(position));
         parent.startActivityForResult(i, 1);
     }
 
-    public void updateLessonValue(Lesson l) {
-        lessons.set(lessons.indexOf(l), l);
+    public void updateSubjectValue(Subject l) {
+        subjects.set(subjects.indexOf(l), l);
         storageHelper.update(l);
-        notifyItemChanged(lessons.indexOf(l));
+        notifyItemChanged(subjects.indexOf(l));
     }
 
-    public void addLesson(Lesson l) {
-        l = storageHelper.addLesson(l);
-        lessons.add(l);
+    public void addSubject(Subject l) {
+        l = storageHelper.addSubject(l);
+        subjects.add(l);
         notifyItemInserted(getItemCount());
     }
 
     public void delete(int position) {
-        storageHelper.delete(lessons.get(position));
-        lessons.remove(position);
+        storageHelper.delete(subjects.get(position));
+        subjects.remove(position);
         notifyItemRemoved(position);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.lesson_listitem, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.subject_listitem, parent, false);
         ViewHolder vh = new ViewHolder(v, this);
         return vh;
     }
@@ -79,30 +75,30 @@ public class LessonListAdapter extends RecyclerView.Adapter<LessonListAdapter.Vi
                 delete(holder.getAdapterPosition());
             }
         });
-        holder.lessonName.setText(lessons.get(position).getName());
-        holder.classRoom.setText(lessons.get(position).getClassroom());
-        holder.teacherName.setText(lessons.get(position).getTeacher());
-        holder.colourBar.setBackgroundColor(lessons.get(position).getColor());
-        Log.d("Lesson binding", lessons.get(position).toString());
+        holder.subjectName.setText(subjects.get(position).getName());
+        holder.classRoom.setText(subjects.get(position).getClassroom());
+        holder.teacherName.setText(subjects.get(position).getTeacher());
+        holder.colourBar.setBackgroundColor(subjects.get(position).getColor());
+        Log.d("Subject binding", subjects.get(position).toString());
     }
 
     @Override
     public int getItemCount() {
-        return lessons.size();
+        return subjects.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LessonListAdapter parent;
-        private TextView lessonName;
+        private SubjectListAdapter parent;
+        private TextView subjectName;
         private TextView teacherName;
         private TextView classRoom;
         private View colourBar;
         private ImageButton deleteButton;
 
-        public ViewHolder(View v, LessonListAdapter p) {
+        public ViewHolder(View v, SubjectListAdapter p) {
             super(v);
             this.parent = p;
-            this.lessonName = (TextView) v.findViewById(R.id.lessonName);
+            this.subjectName = (TextView) v.findViewById(R.id.subjectName);
             this.teacherName = (TextView) v.findViewById(R.id.teacherName);
             this.classRoom = (TextView) v.findViewById(R.id.classroom);
             this.deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
@@ -111,7 +107,7 @@ public class LessonListAdapter extends RecyclerView.Adapter<LessonListAdapter.Vi
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parent.updateLesson(getAdapterPosition());
+                    parent.updateSubject(getAdapterPosition());
                 }
             });
 

@@ -14,19 +14,19 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="termNumberInputString">Number of terms</string>
     <string name="nameEntryTitle">Enter your name</string>
-    <string name="title_activity_term_date_collector">TermDateCollecto</string>
-    <string name="title_activity_lesson_input">LessonInput</string>
+    <string name="title_activity_term_date_collector">Term dates</string>
+    <string name="title_activity_subject_input">SubjectInput</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_home">Home</string>
     <string name="ok_button_text">OK</string>
 
-    <string name="lesson_collector_title">Lessons</string>
+    <string name="subject_collector_title">Subjects</string>
     <string name="termDateNameHint">Name</string>
     <string name="termCollectorTitle">Terms</string>
-    <string name="lessonNameInputHint">Lesson name</string>
+    <string name="subjectNameInputHint">Subject name</string>
     <string name="teacherInputHint">Teacher</string>
     <string name="classRoomInputString">Classroom</string>
-    <string name="title_activity_lesson_time_input">LessonTimeInput</string>
+    <string name="title_activity_subject_time_input">SubjectTimeInput</string>
     <string name="colourLabel">Colour</string>
-    <string name="lesson_spinner_label">Lesson</string>
+    <string name="subject_spinner_label">Subject</string>
 </resources>

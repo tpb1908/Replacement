@@ -6,61 +6,61 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.anapp.tpb.replacement.Storage.TableTemplates.Lesson;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import java.util.ArrayList;
 
 /**
  * Created by Theo on 26/01/2016.
  */
-public class LessonStorageHelper extends StorageHelper {
+public class SubjectStorageHelper extends StorageHelper {
     private static final String DATABASE_NAME = "Work";
     private static final int VERSION = 1;
 
-    private static final String TABLE_LESSONS = "Lessons";
+    private static final String TABLE_SUBJECT = "Subjects";
     private static final String KEY_ID = "id";
-    private static final String KEY_LESSON_NAME = "LessonName";
+    private static final String KEY_SUBJECT_NAME = "SubjectName";
     private static final String KEY_CLASSROOM = "Classroom";
     private static final String KEY_TEACHER = "Teacher";
     private static final String KEY_COLOR = "Color";
 
-    public static final String[] COLUMNS = {KEY_ID, KEY_LESSON_NAME, KEY_CLASSROOM, KEY_TEACHER, KEY_COLOR};
+    public static final String[] COLUMNS = {KEY_ID, KEY_SUBJECT_NAME, KEY_CLASSROOM, KEY_TEACHER, KEY_COLOR};
 
-    public LessonStorageHelper(Context context) {
+    public SubjectStorageHelper(Context context) {
         super(context, DATABASE_NAME, VERSION);
 
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE_LESSONS = "CREATE TABLE IF NOT EXISTS " +
-                TABLE_LESSONS +
+        String CREATE_TABLE_SUBJECT = "CREATE TABLE IF NOT EXISTS " +
+                TABLE_SUBJECT +
                 "(" + KEY_ID + " Integer PRIMARY KEY AUTOINCREMENT, " +
-                KEY_LESSON_NAME + " VARCHAR, " +
+                KEY_SUBJECT_NAME + " VARCHAR, " +
                 KEY_CLASSROOM + " VARCHAR, " +
                 KEY_TEACHER + " VARCHAR, " +
                 KEY_COLOR + " Integer)";
-        db.execSQL(CREATE_TABLE_LESSONS);
+        db.execSQL(CREATE_TABLE_SUBJECT);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         super.onUpgrade(db, oldVersion, newVersion);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LESSONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBJECT);
 
         this.onCreate(db);
     }
 
-    public Lesson addLesson(Lesson l) {
+    public Subject addSubject(Subject l) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LESSON_NAME, l.getName());
+        values.put(KEY_SUBJECT_NAME, l.getName());
         values.put(KEY_CLASSROOM, l.getClassroom());
         values.put(KEY_TEACHER, l.getTeacher());
         values.put(KEY_COLOR, l.getColor());
 
-        l.setId((int) db.insert(TABLE_LESSONS, null, values));
+        l.setId((int) db.insert(TABLE_SUBJECT, null, values));
 
         return l;
     }
@@ -70,10 +70,10 @@ public class LessonStorageHelper extends StorageHelper {
         onUpgrade(db, VERSION, VERSION);
     }
 
-    public Lesson getLesson(int id) {
+    public Subject getSubject(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.query(TABLE_LESSONS,
+        Cursor cursor = db.query(TABLE_SUBJECT,
                 COLUMNS,
                 "id = ?",
                 new String[]{String.valueOf(id)},
@@ -85,51 +85,51 @@ public class LessonStorageHelper extends StorageHelper {
             cursor.moveToFirst();
         }
 
-        Lesson l = new Lesson();
+        Subject l = new Subject();
         l.setId(Integer.parseInt(cursor.getString(0)));
         l.setName(cursor.getString(1));
         l.setClassroom(cursor.getString(2));
         l.setTeacher(cursor.getString(3));
         l.setColor(cursor.getInt(4));
 
-        Log.d("Lesson returned " + id, l.toString());
+        Log.d("Subject returned " + id, l.toString());
 
         return l;
     }
 
-    public ArrayList<Lesson> getAllLessons() {
-        ArrayList<Lesson> lessons = new ArrayList<>();
+    public ArrayList<Subject> getAllSubjects() {
+        ArrayList<Subject> subjects = new ArrayList<>();
 
-        String query = "SELECT  * FROM " + TABLE_LESSONS;
+        String query = "SELECT  * FROM " + TABLE_SUBJECT;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        Lesson l;
+        Subject l;
         if (cursor.moveToFirst()) {
             do {
-                l = new Lesson();
+                l = new Subject();
                 l.setId(Integer.parseInt(cursor.getString(0)));
                 l.setName(cursor.getString(1));
                 l.setClassroom(cursor.getString(2));
                 l.setTeacher(cursor.getString(3));
                 l.setColor(cursor.getInt(4));
-                lessons.add(l);
+                subjects.add(l);
             } while (cursor.moveToNext());
         }
-        Log.d("getAllLessons", lessons.toString());
-        return lessons;
+        Log.d("getAllSubjects", subjects.toString());
+        return subjects;
     }
 
-    public int update(Lesson l) {
+    public int update(Subject l) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LESSON_NAME, l.getName());
+        values.put(KEY_SUBJECT_NAME, l.getName());
         values.put(KEY_CLASSROOM, l.getClassroom());
         values.put(KEY_TEACHER, l.getTeacher());
         values.put(KEY_COLOR, l.getColor());
 
-        int i = db.update(TABLE_LESSONS,
+        int i = db.update(TABLE_SUBJECT,
                 values,
                 KEY_ID + " = " + l.getId(),
                 null);
@@ -138,9 +138,9 @@ public class LessonStorageHelper extends StorageHelper {
         return i;
     }
 
-    public void delete(Lesson l) {
+    public void delete(Subject l) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_LESSONS,
+        db.delete(TABLE_SUBJECT,
                 KEY_ID + " = " + l.getId(),
                 null);
         db.close();

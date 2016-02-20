@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Lesson implements Serializable {
+public class Subject implements Serializable {
 
     private int id;
     private String name;
@@ -13,10 +13,10 @@ public class Lesson implements Serializable {
     private String classroom;
     private int color;
 
-    public Lesson() {
+    public Subject() {
     }
 
-    public Lesson(String name, String teacher, String classroom) {
+    public Subject(String name, String teacher, String classroom) {
         this.name = name;
         this.teacher = teacher;
         this.classroom = classroom;
@@ -24,13 +24,13 @@ public class Lesson implements Serializable {
 
     @Override
     public String toString() {
-        return "Lesson {id=" + id + ", name=" + name + ", teacher=" + teacher + ", classroom=" + classroom;
+        return "Subject {id=" + id + ", name=" + name + ", teacher=" + teacher + ", classroom=" + classroom;
     }
 
     @Override
     public boolean equals(Object o) {
         try {
-            Lesson l = (Lesson) o;
+            Subject l = (Subject) o;
             if (l.getId() == id) {
                 return true;
             } else {

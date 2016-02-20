@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.ClassInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.LessonTimeCollector;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.LessonTimeStorageHelper;
+import com.anapp.tpb.replacement.Storage.StorageHelpers.ClassTimeStorageHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.*;
 
 import java.util.ArrayList;
@@ -22,11 +22,11 @@ import java.util.ArrayList;
  */
 public class LessonTimeAdapter extends RecyclerView.Adapter<LessonTimeAdapter.ViewHolder> {
     private ArrayList<ClassTime> classTimes;
-    private ArrayList<Lesson> lessons;
-    private LessonTimeStorageHelper storageHelper;
+    private ArrayList<Subject> subjects;
+    private ClassTimeStorageHelper storageHelper;
     private LessonTimeCollector parent;
 
-    public LessonTimeAdapter(LessonTimeCollector parent, LessonTimeStorageHelper storageHelper) {
+    public LessonTimeAdapter(LessonTimeCollector parent, ClassTimeStorageHelper storageHelper) {
         this.parent = parent;
         this.storageHelper = storageHelper;
         classTimes = storageHelper.getAllClasses();
@@ -73,8 +73,9 @@ public class LessonTimeAdapter extends RecyclerView.Adapter<LessonTimeAdapter.Vi
                 delete(holder.getAdapterPosition());
             }
         });
-        holder.lessonName.setText(lessons.get(position).getName());
-        holder.colourBar.setBackgroundColor(lessons.get(position).getColor());
+        holder.lessonName.setText(subjects.get(position).getName());
+
+        holder.colourBar.setBackgroundColor(subjects.get(position).getColor());
         //Todo- Set times
     }
 
@@ -93,7 +94,7 @@ public class LessonTimeAdapter extends RecyclerView.Adapter<LessonTimeAdapter.Vi
         public ViewHolder(View v, LessonTimeAdapter l) {
             super(v);
             this.parent = l;
-            lessonName = (TextView) v.findViewById(R.id.lessonName);
+            lessonName = (TextView) v.findViewById(R.id.subjectName);
             classTime = (TextView) v.findViewById(R.id.classTime);
             deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
             colourBar = v.findViewById(R.id.colourBar);

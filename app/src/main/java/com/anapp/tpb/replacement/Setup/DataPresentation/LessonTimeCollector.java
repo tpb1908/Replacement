@@ -20,13 +20,13 @@ import android.view.ViewGroup;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.ClassInput;
-import com.anapp.tpb.replacement.Storage.TableTemplates.Lesson;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import java.util.ArrayList;
 
 public class LessonTimeCollector extends AppCompatActivity {
     private static final String[] DAYS = {"Mon", "Tue", "Wed", "Thu", "Fri"};
-    private ArrayList<Lesson> lessons;
+    private ArrayList<Subject> subjects;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -46,10 +46,10 @@ public class LessonTimeCollector extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lesson_time_input);
+        setContentView(R.layout.activity_class_time_input);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Lesson times");
+        toolbar.setTitle("Subject times");
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -67,12 +67,12 @@ public class LessonTimeCollector extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ClassInput.class);
-                i.putExtra("lessons", lessons);
+                i.putExtra("subjects", subjects);
                 startActivityForResult(i, 1);
             }
         });
 
-        lessons = (ArrayList<Lesson>) getIntent().getSerializableExtra("lessons");
+        subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
     }
 
 

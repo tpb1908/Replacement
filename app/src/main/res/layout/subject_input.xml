@@ -5,13 +5,13 @@
 
 
     <EditText
-        android:id="@+id/lessonNameInput"
+        android:id="@+id/subjectNameInput"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="34dp"
-        android:hint="@string/lessonNameInputHint"
+        android:hint="@string/subjectNameInputHint"
         android:inputType="textCapWords"/>
 
     <EditText
@@ -20,7 +20,7 @@
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
 
-        android:layout_below="@+id/lessonNameInput"
+        android:layout_below="@+id/subjectNameInput"
         android:layout_marginTop="40dp"
         android:hint="@string/teacherInputHint"
         android:inputType="textCapWords"/>

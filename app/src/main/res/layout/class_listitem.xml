@@ -29,7 +29,7 @@
                 android:background="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/lessonName"
+                android:id="@+id/subjectName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/classIcon"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/lessonName"
+                android:layout_below="@+id/subjectName"
                 android:layout_marginEnd="22dp"
                 android:background="#00ffffff"
                 android:src="@drawable/delete_icon"/>

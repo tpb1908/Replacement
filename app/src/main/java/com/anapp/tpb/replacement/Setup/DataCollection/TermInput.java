@@ -139,45 +139,17 @@ public class TermInput extends SlidingActivity {
                         }
                         Term overlap = checkDateRangeOverlap(t);
                         if (overlap != null) {
-                            new AlertDialog.Builder(TermInput.this)
-                                    .setTitle("Invalid date range")
-                                    .setMessage("Date range overlaps another term: " + overlap.getName())
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Log.d("Button press- ", "Positive");
-                                        }
-                                    })
-                                    .show();
+                            displayMessage(0, overlap.getName());
                         } else {
                             setResult(RESULT_OK, returnIntent);
                             Log.d("Result", " Result returned. Finishing");
                             finish();
                         }
                     } else {
-                        new AlertDialog.Builder(TermInput.this)
-                                .setTitle("Invalid date range")
-                                .setMessage("Start date must be before end date")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Log.d("Button press- ", "Positive");
-                                    }
-                                })
-                                .show();
+                        displayMessage(1, "");
                     }
-
                 } else {
-                    new AlertDialog.Builder(TermInput.this)
-                            .setTitle("Invalid input")
-                            .setMessage("Please enter both dates and term name")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.d("Button press- ", "Positive");
-                                }
-                            })
-                            .show();
+                    displayMessage(2, "");
                 }
             }
         };
@@ -188,6 +160,57 @@ public class TermInput extends SlidingActivity {
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick, fabListener);
 
         // startDatePicker.setAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up)); //This only sets the animation for the view, not the popup
+    }
+
+    private void displayMessage(int messageId, String overlap) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(TermInput.this, R.style.AppTheme);
+        switch (messageId) {
+            case 0:
+                builder.setTitle("Invalid date range")
+                        .setMessage("Date range overlaps another term: " + overlap)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("Button press- ", "Positive");
+                            }
+                        })
+                        .show();
+                break;
+            case 1:
+                builder.setTitle("Invalid date range")
+                        .setMessage("Start date must be before end date")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("Button press- ", "Positive");
+                            }
+                        })
+                        .show();
+                break;
+            case 2:
+                builder.setTitle("Invalid input")
+                        .setMessage("Please enter both dates and term name")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.d("Button press- ", "Positive");
+                            }
+                        })
+                        .show();
+                break;
+        }
+
+
+        new AlertDialog.Builder(TermInput.this)
+                .setTitle("Invalid date range")
+                .setMessage("Start date must be before end date")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("Button press- ", "Positive");
+                    }
+                })
+                .show();
     }
 
     private Term checkDateRangeOverlap(Term toCheck) {

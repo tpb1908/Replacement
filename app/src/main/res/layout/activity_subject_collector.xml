@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.LessonCollector">
+    tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector">
 
 
     <android.support.v7.widget.Toolbar
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:title="@string/lesson_collector_title">
+        android:title="@string/subject_collector_title">
 
     </android.support.v7.widget.Toolbar>
 
@@ -26,7 +26,7 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/lessonRecyclerView"
+            android:id="@+id/subjectRecyclerView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:clipToPadding="false"
@@ -36,6 +36,6 @@
 
     </LinearLayout>
 
-    <include layout="@layout/content_lesson_collector"/>
+    <include layout="@layout/content_subject_collector"/>
 
 </RelativeLayout>

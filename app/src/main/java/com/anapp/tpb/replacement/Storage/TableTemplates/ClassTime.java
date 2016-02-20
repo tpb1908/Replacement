@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class ClassTime implements Serializable {
     private int id;
-    private int LessonID;
+    private int SubjectID;
     private long start;
     private long end;
 
@@ -19,12 +19,12 @@ public class ClassTime implements Serializable {
         this.id = id;
     }
 
-    public int getLessonID() {
-        return LessonID;
+    public int getSubjectID() {
+        return SubjectID;
     }
 
-    public void setLessonID(int lessonID) {
-        LessonID = lessonID;
+    public void setSubjectID(int ClassID) {
+        ClassID = ClassID;
     }
 
     public long getEnd() {
@@ -45,6 +45,6 @@ public class ClassTime implements Serializable {
 
     @Override
     public String toString() {
-        return "Class {id=" + id + ", lessonId=" + LessonID + ", start=" + start + ", end=" + end + "}";
+        return "Class {id=" + id + ", SubjectId=" + SubjectID + ", start=" + start + ", end=" + end + "}";
     }
 }

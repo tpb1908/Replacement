@@ -13,20 +13,20 @@ import java.util.ArrayList;
 /**
  * Created by Theo on 20/02/2016.
  */
-public class LessonTimeStorageHelper extends StorageHelper {
+public class ClassTimeStorageHelper extends StorageHelper {
     private static final String DATABASE_NAME = "Work";
     private static final int VERSION = 1;
 
     private static final String TABLE_CLASS_TIMES = "ClassTimes";
-    private static final String TABLE_LESSONS = "Lessons";
+    private static final String TABLE_SUBJECTS = "Subjects";
     private static final String KEY_ID = "id";
-    private static final String KEY_LESSON_ID = "Lesson_ID";
+    private static final String KEY_LESSON_ID = "Subject_ID";
     private static final String KEY_START_TIME = "StartTime";
     private static final String KEY_END_TIME = "EndTime";
 
     public static final String[] COLUMNS = {KEY_ID, KEY_LESSON_ID, KEY_START_TIME, KEY_END_TIME};
 
-    public LessonTimeStorageHelper(Context context) {
+    public ClassTimeStorageHelper(Context context) {
         super(context, DATABASE_NAME, VERSION);
     }
 
@@ -35,7 +35,7 @@ public class LessonTimeStorageHelper extends StorageHelper {
         String CREATE_TABLE_LESSON_TIMES = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_CLASS_TIMES +
                 "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                KEY_LESSON_ID + " INT, FOREIGN KEY(" + KEY_LESSON_ID + ") " + "REFERENCES " + TABLE_LESSONS + "(id), " +
+                KEY_LESSON_ID + " INT, FOREIGN KEY(" + KEY_LESSON_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(id), " +
                 KEY_START_TIME + " INT, " +
                 KEY_END_TIME + "INT);";
         db.execSQL(CREATE_TABLE_LESSON_TIMES);
@@ -52,7 +52,7 @@ public class LessonTimeStorageHelper extends StorageHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LESSON_ID, c.getLessonID());
+        values.put(KEY_LESSON_ID, c.getSubjectID());
         values.put(KEY_START_TIME, c.getStart());
         values.put(KEY_END_TIME, c.getEnd());
 
@@ -82,7 +82,7 @@ public class LessonTimeStorageHelper extends StorageHelper {
         }
         ClassTime c = new ClassTime();
         c.setId(Integer.parseInt(cursor.getString(0)));
-        c.setLessonID(cursor.getInt(1));
+        c.setSubjectID(cursor.getInt(1));
         c.setStart(cursor.getInt(2));
         c.setEnd(cursor.getInt(3));
 
@@ -103,7 +103,7 @@ public class LessonTimeStorageHelper extends StorageHelper {
             do {
                 c = new ClassTime();
                 c.setId(Integer.parseInt(cursor.getString(0)));
-                c.setLessonID(cursor.getInt(1));
+                c.setSubjectID(cursor.getInt(1));
                 c.setStart(cursor.getInt(2));
                 c.setEnd(cursor.getInt(3));
                 classes.add(c);
@@ -117,7 +117,7 @@ public class LessonTimeStorageHelper extends StorageHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LESSON_ID, c.getLessonID());
+        values.put(KEY_LESSON_ID, c.getSubjectID());
         values.put(KEY_START_TIME, c.getStart());
         values.put(KEY_END_TIME, c.getEnd());
 

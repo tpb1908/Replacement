@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="me.yugy.github.reveallayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+
+        </activity>
+        <activity
+            android:name=".SingleChildActivity"
+            android:label="SingleChildActivity"
+            />
+        <activity
+            android:name=".MultiChildActivity"
+            android:label="MultiChildActivity"
+            />
+        <activity
+            android:name=".FragmentSampleActivity"
+            android:label="FragmentActivity"
+            />
+    </application>
+
+</manifest>

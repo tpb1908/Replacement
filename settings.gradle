@@ -1,0 +1,2 @@
+include ':app', ':appintro-3.2.0', ':app:FabReveal'
+project(':app:FabReveal').projectDir = new File('libs/FabReveal/app')

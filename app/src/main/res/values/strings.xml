@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Replacement</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_intro">IntroActivity</string>
+
+    <string name="name_collection_first_prompt">First name</string>
+    <string name="name_collection_last_prompt">Last name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="termNumberInputString">Number of terms</string>
+    <string name="nameEntryTitle">Enter your name</string>
+    <string name="title_activity_term_date_collector">TermDateCollecto</string>
+    <string name="title_activity_lesson_input">LessonInput</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_home">Home</string>
+    <string name="ok_button_text">OK</string>
+
+    <string name="lesson_collector_title">Lessons</string>
+    <string name="termDateNameHint">Name</string>
+    <string name="termCollectorTitle">Terms</string>
+    <string name="lessonNameInputHint">Lesson name</string>
+    <string name="teacherInputHint">Teacher</string>
+    <string name="classRoomInputString">Classroom</string>
+    <string name="title_activity_lesson_time_input">LessonTimeInput</string>
+    <string name="colourLabel">Colour</string>
+    <string name="lesson_spinner_label">Lesson</string>
+</resources>

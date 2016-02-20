@@ -1,0 +1,4 @@
+configurations.create("default")
+artifacts.add("default", file('appintro-3.2.0.aar'))
+dependencies {
+}

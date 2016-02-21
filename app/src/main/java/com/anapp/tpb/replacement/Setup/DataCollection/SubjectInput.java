@@ -104,8 +104,11 @@ public class SubjectInput extends SlidingActivity {
                 });
             }
         });
-
-        setTitle("New Subject");
+        if (editing) {
+            setTitle("Edit Subject");
+        } else {
+            setTitle("New Subject");
+        }
         enableFullscreen();
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick, fabListener);

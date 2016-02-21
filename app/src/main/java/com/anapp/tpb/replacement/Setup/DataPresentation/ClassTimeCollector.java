@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.Adapters.ClassTimeAdapter;
@@ -60,7 +62,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         setContentView(R.layout.activity_class_time_input);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Subject times");
+        toolbar.setTitle("Class times");
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -98,7 +100,37 @@ public class ClassTimeCollector extends AppCompatActivity {
     }
 
     public void setDay(int day) {
-        this.day = day;
+        if (this.day != day) {  //Ignoring the multiple calls
+            this.day = day;
+            final FloatingActionButton fabEnd = (FloatingActionButton) findViewById(R.id.fabEnd);
+            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            //TODO- Sort this out and use DP http://stackoverflow.com/questions/30202379/android-views-gettop-getleft-getx-gety-getwidth-getheight-meth
+            if (day == 4) {
+                TranslateAnimation move = new TranslateAnimation(0, 0, 0, -160);
+                move.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        fab.setY(fabEnd.getY() - 88);
+                    }
+
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+                });
+                move.setFillAfter(true);
+                move.setDuration(1000);
+                fab.startAnimation(move);
+
+                fabEnd.setVisibility(View.VISIBLE);
+            } else {
+                fab.setY(fabEnd.getY());
+                fabEnd.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     @Override
@@ -128,22 +160,11 @@ public class ClassTimeCollector extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_lesson_time_input, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -179,7 +200,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_lesson_time_input, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_class_time_input, container, false);
             mAdapter = new ClassTimeAdapter(parent, storageHelper, subjects, sectionNumber);
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.lessonTimeRecyclerView);
             mRecyclerView.setAdapter(mAdapter);

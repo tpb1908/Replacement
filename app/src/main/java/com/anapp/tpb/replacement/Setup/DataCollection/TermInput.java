@@ -153,8 +153,11 @@ public class TermInput extends SlidingActivity {
                 }
             }
         };
-
-        setTitle("New term");
+        if (editing) {
+            setTitle("Edit Term");
+        } else {
+            setTitle("New Term");
+        }
         enableFullscreen();
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick, fabListener);
@@ -163,7 +166,7 @@ public class TermInput extends SlidingActivity {
     }
 
     private void displayMessage(int messageId, String overlap) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(TermInput.this, R.style.AppTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(TermInput.this, R.style.DialogTheme);
         switch (messageId) {
             case 0:
                 builder.setTitle("Invalid date range")

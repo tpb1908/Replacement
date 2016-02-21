@@ -34,10 +34,11 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         ArrayList<ClassTime> c = storageHelper.getAllClasses();
         for (ClassTime classTime : c) {
             if (classTime.getDay() == day) {
+                Log.d("Class with day ", "Day of " + classTime.getDay());
                 classes.add(classTime);
             }
         }
-        classes = c;
+        Log.d("Length of classes ", "For day " + day + " = " + classes.size());
 
     }
 
@@ -85,9 +86,24 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
                 delete(holder.getAdapterPosition());
             }
         });
-        holder.lessonName.setText(subjects.get(position).getName());
+        ClassTime ct = classes.get(position);
+        String timeRange;
+        holder.lessonName.setText(subjects.get(ct.getSubjectID()).getName());
+        holder.colourBar.setBackgroundColor(subjects.get(ct.getSubjectID()).getColor());
+        int start = ct.getStart();
+        int end = ct.getEnd();
+        if (start < 1000) {
+            timeRange = (Integer.toString(start).substring(0, 1) + ":" + Integer.toString(start).substring(1));
+        } else {
+            timeRange = (Integer.toString(start).substring(0, 2) + ":" + Integer.toString(start).substring(2));
+        }
+        if (end < 1000) {
+            timeRange += " to " + (Integer.toString(end).substring(0, 1) + ":" + Integer.toString(end).substring(1));
+        } else {
+            timeRange += " to " + (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
+        }
+        holder.classTime.setText(timeRange);
 
-        holder.colourBar.setBackgroundColor(subjects.get(position).getColor());
         //Todo- Set times
     }
 
@@ -119,6 +135,4 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
             });
         }
     }
-
-
 }

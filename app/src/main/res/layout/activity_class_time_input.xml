@@ -47,4 +47,13 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/fab_plus_icon"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/fab_icon_tick"
+        android:visibility="invisible"/>
+
 </android.support.design.widget.CoordinatorLayout>

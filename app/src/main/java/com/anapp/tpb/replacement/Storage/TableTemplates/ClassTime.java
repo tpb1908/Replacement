@@ -56,4 +56,17 @@ public class ClassTime implements Serializable {
     public String toString() {
         return "Class {id=" + id + ", SubjectId=" + subjectID + ", start=" + start + ", end=" + end + ", day=" + day + "}";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        try {
+            ClassTime ct = (ClassTime) o;
+            if (id == ct.getId()) {
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

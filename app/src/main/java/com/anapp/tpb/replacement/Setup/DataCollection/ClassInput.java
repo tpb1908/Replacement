@@ -103,17 +103,18 @@ public class ClassInput extends SlidingActivity {
             public void onClick(View v) {
                 ClassTime c = new ClassTime();
                 c.setDay(day);
-                c.setSubjectID(subjects.get(lessonSpinner.getSelectedItemPosition()).getId());
+                Log.d("Spinner position ", "" + lessonSpinner.getSelectedItemPosition());
+                c.setSubjectID(subjects.get(lessonSpinner.getSelectedItemPosition()).getId() - 1);
                 if (start != -1 && end != 0 - 1) {
                     if (start < end) {
                         c.setStart(start);
                         c.setEnd(end);
+                        if (editing) {
+                            c.setId(current.getId());
+                        }
                         ClassTime o = checkOverlap(c);
                         if (o == null) {
                             Intent returnIntent = new Intent();
-                            if (editing) {
-                                c.setId(current.getId());
-                            }
                             returnIntent.putExtra("edited", editing);
                             returnIntent.putExtra("class", c);
                             setResult(RESULT_OK, returnIntent);
@@ -129,8 +130,11 @@ public class ClassInput extends SlidingActivity {
                 }
             }
         };
-
-        setTitle("New class");
+        if (editing) {
+            setTitle("Edit Class");
+        } else {
+            setTitle("New Class");
+        }
         enableFullscreen();
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick, fabListener);
@@ -143,8 +147,9 @@ public class ClassInput extends SlidingActivity {
         }
         for (ClassTime ct : classes) {
             if (ct.getDay() == day) {
-                if (ct.getStart() <= toCheck.getEnd() && ct.getEnd() >= toCheck.getStart()) {
+                if (ct.getStart() < toCheck.getEnd() && ct.getEnd() > toCheck.getStart()) {
                     overlap = ct;
+                    Log.d("Overlap found", ct.toString());
                     break;
                 }
             }
@@ -158,12 +163,14 @@ public class ClassInput extends SlidingActivity {
         mTimePicker = new TimePickerDialog(ClassInput.this, R.style.datePickerTheme, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Log.d("Time received", "Hour of " + hourOfDay + " Minute of " + minute);
                 String output = hourOfDay + ":";
                 if (minute < 10) {
                     output += "0" + minute;
                 } else {
                     output += minute;
                 }
+
                 if (tap) {
                     startTime.setText(output);
                     start = (hourOfDay * 100) + minute; //Storing time in format (hh:mm) from 0000 to 2359
@@ -182,7 +189,7 @@ public class ClassInput extends SlidingActivity {
     }
 
     private void displayMessage(int messageID, ClassTime overlap) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ClassInput.this, R.style.AppTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ClassInput.this, R.style.DialogTheme);
         switch (messageID) {
             case 0:
                 builder.setTitle("Invalid time range")

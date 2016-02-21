@@ -155,6 +155,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
     public void deleteSubject(Subject l) {
         SQLiteDatabase db = this.getWritableDatabase();
+        //TODO- Delete all classes with this subjects ID
         db.delete(TABLE_SUBJECT,
                 KEY_ID + " = " + l.getId(),
                 null);

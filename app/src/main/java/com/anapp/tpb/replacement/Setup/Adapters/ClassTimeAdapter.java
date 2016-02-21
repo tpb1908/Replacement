@@ -88,8 +88,15 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         });
         ClassTime ct = classes.get(position);
         String timeRange;
-        holder.lessonName.setText(subjects.get(ct.getSubjectID()).getName());
-        holder.colourBar.setBackgroundColor(subjects.get(ct.getSubjectID()).getColor());
+        Subject s = new Subject();
+        for (Subject si : subjects) {
+            if (ct.getSubjectID() == si.getId()) {
+                s = si;
+                break;
+            }
+        }
+        holder.lessonName.setText(s.getName());
+        holder.colourBar.setBackgroundColor(s.getColor());
         int start = ct.getStart();
         int end = ct.getEnd();
         if (start < 1000) {
@@ -103,8 +110,6 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
             timeRange += " to " + (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
         }
         holder.classTime.setText(timeRange);
-
-        //Todo- Set times
     }
 
     @Override

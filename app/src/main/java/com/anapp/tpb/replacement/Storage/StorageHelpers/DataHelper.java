@@ -153,14 +153,28 @@ public class DataHelper extends SQLiteOpenHelper {
         return i;
     }
 
-    public void deleteSubject(Subject l) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void deleteSubject(Subject s) {
         //TODO- Delete all classes with this subjects ID
+        String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        ClassTime c = new ClassTime();
+        if (cursor.moveToFirst()) {
+            do {
+                Log.d("Delete", "" + cursor.getInt(1));
+                if (cursor.getInt(1) == s.getId()) {
+                    c.setId(cursor.getInt(1));
+                    Log.d("Deleting class", "Deleting class with a subject of " + s.toString());
+                    deleteClass(c);
+                }
+            } while (cursor.moveToNext());
+        }
+        db = this.getWritableDatabase(); //If a class is deleted then the database if closed
         db.delete(TABLE_SUBJECT,
-                KEY_ID + " = " + l.getId(),
+                KEY_ID + " = " + s.getId(),
                 null);
         db.close();
-        Log.d("Delete", l.toString());
+        Log.d("Delete", s.toString());
     }
 
     //End subject methods

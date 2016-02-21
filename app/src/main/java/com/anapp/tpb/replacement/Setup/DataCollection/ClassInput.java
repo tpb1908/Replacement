@@ -104,7 +104,7 @@ public class ClassInput extends SlidingActivity {
                 ClassTime c = new ClassTime();
                 c.setDay(day);
                 Log.d("Spinner position ", "" + lessonSpinner.getSelectedItemPosition());
-                c.setSubjectID(subjects.get(lessonSpinner.getSelectedItemPosition()).getId() - 1);
+                c.setSubjectID(subjects.get(lessonSpinner.getSelectedItemPosition()).getId());
                 if (start != -1 && end != 0 - 1) {
                     if (start < end) {
                         c.setStart(start);

@@ -39,7 +39,7 @@ public class SubjectStorageHelper extends StorageHelper {
                 KEY_SUBJECT_NAME + " VARCHAR, " +
                 KEY_CLASSROOM + " VARCHAR, " +
                 KEY_TEACHER + " VARCHAR, " +
-                KEY_COLOR + " Integer)";
+                KEY_COLOR + " Integer )";
         db.execSQL(CREATE_TABLE_SUBJECT);
     }
 
@@ -100,7 +100,7 @@ public class SubjectStorageHelper extends StorageHelper {
     public ArrayList<Subject> getAllSubjects() {
         ArrayList<Subject> subjects = new ArrayList<>();
 
-        String query = "SELECT  * FROM " + TABLE_SUBJECT;
+        String query = "SELECT * FROM " + TABLE_SUBJECT;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
@@ -120,7 +120,7 @@ public class SubjectStorageHelper extends StorageHelper {
         return subjects;
     }
 
-    public int update(Subject l) {
+    public int updateSubject(Subject l) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -138,7 +138,7 @@ public class SubjectStorageHelper extends StorageHelper {
         return i;
     }
 
-    public void delete(Subject l) {
+    public void deleteSubject(Subject l) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_SUBJECT,
                 KEY_ID + " = " + l.getId(),
@@ -146,6 +146,4 @@ public class SubjectStorageHelper extends StorageHelper {
         db.close();
         Log.d("Delete", l.toString());
     }
-
-
 }

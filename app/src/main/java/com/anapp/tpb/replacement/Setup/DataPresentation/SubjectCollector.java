@@ -14,6 +14,7 @@ import android.view.View;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.Adapters.SubjectListAdapter;
 import com.anapp.tpb.replacement.Setup.DataCollection.SubjectInput;
+import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.SubjectStorageHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
@@ -29,7 +30,7 @@ public class SubjectCollector extends AppCompatActivity {
     private SubjectListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private SubjectStorageHelper storageHelper;
+    private DataHelper storageHelper;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class SubjectCollector extends AppCompatActivity {
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_subject);
         mRevealView = findViewById(R.id.reveal_view_subject);
 
-        storageHelper = new SubjectStorageHelper(this);
+        storageHelper = new DataHelper(this);
 
         addSubjectFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +67,7 @@ public class SubjectCollector extends AppCompatActivity {
                 location[0] += nextFab.getWidth() / 2;
                 location[1] += nextFab.getHeight() / 2;
 
-                final Intent intent = new Intent(SubjectCollector.this, LessonTimeCollector.class);
+                final Intent intent = new Intent(SubjectCollector.this, ClassTimeCollector.class);
                 intent.putExtra("subjects", mAdapter.getSubjects());
 
                 mRevealView.setVisibility(View.VISIBLE);

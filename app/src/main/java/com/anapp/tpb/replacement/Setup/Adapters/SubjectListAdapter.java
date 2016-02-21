@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.SubjectInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector;
+import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.SubjectStorageHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
@@ -22,10 +23,10 @@ import java.util.ArrayList;
  */
 public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.ViewHolder> {
     private SubjectCollector parent;
-    private SubjectStorageHelper storageHelper;
+    private DataHelper storageHelper;
     private ArrayList<Subject> subjects;
 
-    public SubjectListAdapter(SubjectCollector parent, SubjectStorageHelper storageHelper) {
+    public SubjectListAdapter(SubjectCollector parent, DataHelper storageHelper) {
         this.parent = parent;
         this.storageHelper = storageHelper;
         subjects = storageHelper.getAllSubjects();
@@ -43,7 +44,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
 
     public void updateSubjectValue(Subject l) {
         subjects.set(subjects.indexOf(l), l);
-        storageHelper.update(l);
+        storageHelper.updateSubject(l);
         notifyItemChanged(subjects.indexOf(l));
     }
 
@@ -54,7 +55,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
     }
 
     public void delete(int position) {
-        storageHelper.delete(subjects.get(position));
+        storageHelper.deleteSubject(subjects.get(position));
         subjects.remove(position);
         notifyItemRemoved(position);
     }

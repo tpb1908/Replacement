@@ -52,7 +52,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Setup.DataPresentation.LessonTimeCollector"
+            android:name=".Setup.DataPresentation.ClassTimeCollector"
             android:label="@string/title_activity_subject_time_input"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

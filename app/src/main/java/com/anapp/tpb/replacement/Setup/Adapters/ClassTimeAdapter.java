@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.ClassInput;
-import com.anapp.tpb.replacement.Setup.DataPresentation.LessonTimeCollector;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.ClassTimeStorageHelper;
+import com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector;
+import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.*;
 
 import java.util.ArrayList;
@@ -20,40 +20,52 @@ import java.util.ArrayList;
 /**
  * Created by Theo on 19/02/2016.
  */
-public class LessonTimeAdapter extends RecyclerView.Adapter<LessonTimeAdapter.ViewHolder> {
-    private ArrayList<ClassTime> classTimes;
+public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.ViewHolder> {
+    private ArrayList<ClassTime> classes;
     private ArrayList<Subject> subjects;
-    private ClassTimeStorageHelper storageHelper;
-    private LessonTimeCollector parent;
+    private DataHelper storageHelper;
+    private ClassTimeCollector parent;
 
-    public LessonTimeAdapter(LessonTimeCollector parent, ClassTimeStorageHelper storageHelper) {
+    public ClassTimeAdapter(ClassTimeCollector parent, DataHelper storageHelper, ArrayList<Subject> subjects, int day) {
         this.parent = parent;
         this.storageHelper = storageHelper;
-        classTimes = storageHelper.getAllClasses();
+        this.subjects = subjects;
+        this.classes = new ArrayList<>();
+        ArrayList<ClassTime> c = storageHelper.getAllClasses();
+        for (ClassTime classTime : c) {
+            if (classTime.getDay() == day) {
+                classes.add(classTime);
+            }
+        }
+        classes = c;
 
     }
 
     public void updateClass(int position) {
         Intent i = new Intent(parent.getApplicationContext(), ClassInput.class);
-        i.putExtra("editingClass", classTimes.get(position));
+        i.putExtra("editingClass", classes.get(position));
+        i.putExtra("subjects", subjects);
+        i.putExtra("classes", classes);
+        i.putExtra("day", classes.get(position).getDay());
         parent.startActivityForResult(i, 1);
     }
 
     public void updateClassValue(ClassTime c) {
-        classTimes.set(classTimes.indexOf(c), c);
-        storageHelper.update(c);
-        notifyItemChanged(classTimes.indexOf(c));
+        classes.set(classes.indexOf(c), c);
+        storageHelper.updateClass(c);
+        notifyItemChanged(classes.indexOf(c));
     }
 
     public void addClass(ClassTime c) {
+        Log.d("Class Received", "Adding " + c.toString() + " to recycler");
         c = storageHelper.addClass(c);
-        classTimes.add(c);
+        classes.add(c);
         notifyItemInserted(getItemCount());
     }
 
     public void delete(int position) {
-        storageHelper.delete(classTimes.get(position));
-        classTimes.remove(position);
+        storageHelper.deleteClass(classes.get(position));
+        classes.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -81,17 +93,17 @@ public class LessonTimeAdapter extends RecyclerView.Adapter<LessonTimeAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return classTimes.size();
+        return classes.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private LessonTimeAdapter parent;
+        private ClassTimeAdapter parent;
         private TextView lessonName;
         private TextView classTime;
         private ImageButton deleteButton;
         private View colourBar;
 
-        public ViewHolder(View v, LessonTimeAdapter l) {
+        public ViewHolder(View v, ClassTimeAdapter l) {
             super(v);
             this.parent = l;
             lessonName = (TextView) v.findViewById(R.id.subjectName);

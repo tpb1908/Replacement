@@ -23,8 +23,11 @@ public class ClassTimeStorageHelper extends StorageHelper {
     private static final String KEY_LESSON_ID = "Subject_ID";
     private static final String KEY_START_TIME = "StartTime";
     private static final String KEY_END_TIME = "EndTime";
+    private static final String KEY_DAY = "Day";
 
-    public static final String[] COLUMNS = {KEY_ID, KEY_LESSON_ID, KEY_START_TIME, KEY_END_TIME};
+    public static final String[] COLUMNS = {KEY_ID, KEY_LESSON_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY};
+    
+
 
     public ClassTimeStorageHelper(Context context) {
         super(context, DATABASE_NAME, VERSION);
@@ -32,13 +35,21 @@ public class ClassTimeStorageHelper extends StorageHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE_LESSON_TIMES = "CREATE TABLE IF NOT EXISTS " +
-                TABLE_CLASS_TIMES +
-                "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                KEY_LESSON_ID + " INT, FOREIGN KEY(" + KEY_LESSON_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(id), " +
-                KEY_START_TIME + " INT, " +
-                KEY_END_TIME + "INT);";
-        db.execSQL(CREATE_TABLE_LESSON_TIMES);
+        //http://stackoverflow.com/questions/7304888/oncreate-not-being-called-after-getwritabledatabase-getreadabledatabase May be relevant
+        Log.d("OnCreate", "Method called");
+        try {
+            String CREATE_TABLE_CLASS_TIMES = "CREATE TABLE IF NOT EXISTS " +
+                    TABLE_CLASS_TIMES +
+                    "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_LESSON_ID + " INTEGER, " +
+                    "FOREIGN KEY(" + KEY_LESSON_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(id), " +
+                    KEY_START_TIME + " INTEGER, " +
+                    KEY_END_TIME + " INTEGER, " +
+                    KEY_DAY + " INTEGER );";
+            db.execSQL(CREATE_TABLE_CLASS_TIMES);
+        } catch (Exception e) {
+            Log.d("Exception ", "" + e.getStackTrace());
+        }
     }
 
     @Override
@@ -55,6 +66,7 @@ public class ClassTimeStorageHelper extends StorageHelper {
         values.put(KEY_LESSON_ID, c.getSubjectID());
         values.put(KEY_START_TIME, c.getStart());
         values.put(KEY_END_TIME, c.getEnd());
+        values.put(KEY_DAY, c.getDay());
 
         c.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
 
@@ -85,6 +97,7 @@ public class ClassTimeStorageHelper extends StorageHelper {
         c.setSubjectID(cursor.getInt(1));
         c.setStart(cursor.getInt(2));
         c.setEnd(cursor.getInt(3));
+        c.setDay(cursor.getInt(4));
 
         Log.d("ClassTime returned" + id, c.toString());
 
@@ -94,7 +107,7 @@ public class ClassTimeStorageHelper extends StorageHelper {
     public ArrayList<ClassTime> getAllClasses() {
         ArrayList<ClassTime> classes = new ArrayList<>();
 
-        String query = "Select * FROM " + TABLE_CLASS_TIMES;
+        String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
@@ -106,6 +119,7 @@ public class ClassTimeStorageHelper extends StorageHelper {
                 c.setSubjectID(cursor.getInt(1));
                 c.setStart(cursor.getInt(2));
                 c.setEnd(cursor.getInt(3));
+                c.setDay(cursor.getInt(4));
                 classes.add(c);
             } while (cursor.moveToNext());
         }
@@ -113,13 +127,14 @@ public class ClassTimeStorageHelper extends StorageHelper {
         return classes;
     }
 
-    public int update(ClassTime c) {
+    public int updateClass(ClassTime c) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_LESSON_ID, c.getSubjectID());
         values.put(KEY_START_TIME, c.getStart());
         values.put(KEY_END_TIME, c.getEnd());
+        values.put(KEY_DAY, c.getDay());
 
         int i = db.update(TABLE_CLASS_TIMES,
                 values,
@@ -130,7 +145,7 @@ public class ClassTimeStorageHelper extends StorageHelper {
         return i;
     }
 
-    public void delete(ClassTime c) {
+    public void deleteClass(ClassTime c) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CLASS_TIMES,
                 KEY_ID + " = " + c.getId(),

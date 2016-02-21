@@ -29,7 +29,7 @@ public class Main extends AppCompatActivity
 //
 //        ArrayList<Term> terms = tsh.getAllTerms();
 //
-//        tsh.delete(terms.get(0));
+//        tsh.deleteSubject(terms.get(0));
 //
 //        terms = tsh.getAllTerms();
 //        for (Term t : terms) {
@@ -110,10 +110,5 @@ public class Main extends AppCompatActivity
         return true;
     }
 
-    /*TODO-
-    * The setup activity allows setting up terms for the first time
-    * The next arrow button expands into the next layer of setup
-    * Lessons should be added during the same setup process
-     */
 
 }

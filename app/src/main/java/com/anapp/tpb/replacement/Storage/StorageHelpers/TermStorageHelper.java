@@ -142,6 +142,6 @@ public class TermStorageHelper extends StorageHelper {
                 null);
         db.close();
 
-        Log.d("delete", t.toString());
+        Log.d("deleteSubject", t.toString());
     }
 }

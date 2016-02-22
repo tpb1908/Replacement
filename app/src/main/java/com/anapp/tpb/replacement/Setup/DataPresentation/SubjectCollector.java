@@ -15,7 +15,6 @@ import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.Adapters.SubjectListAdapter;
 import com.anapp.tpb.replacement.Setup.DataCollection.SubjectInput;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.SubjectStorageHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import me.yugy.github.reveallayout.RevealLayout;
@@ -111,15 +110,14 @@ public class SubjectCollector extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("Result received ", "From subject input");
         if (resultCode == Activity.RESULT_OK) {
-            Subject l = (Subject) data.getSerializableExtra("subject");
+            Subject s = (Subject) data.getSerializableExtra("subject");
             if (data.getBooleanExtra("edited", false)) {
-                Log.d("Subject received", "Editing " + l.toString());
-                mAdapter.updateSubjectValue(l);
+                Log.d("Data", "Edited subject received " + s.toString());
+                mAdapter.updateSubjectValue(s);
             } else {
-                Log.d("Subject received", l.toString());
-                mAdapter.addSubject(l);
+                Log.d("Data", "Subject received" + s.toString());
+                mAdapter.addSubject(s);
             }
         }
     }

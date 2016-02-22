@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,12 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Work";
     private static final int VERSION = 1;
     private static final String KEY_ID = "id";
+
+    private static final String TABLE_TERMS = "Terms";
+    private static final String KEY_TERM_NAME = "TermName";
+    private static final String KEY_START_DATE = "StartDate";
+    private static final String KEY_END_DATE = "EndDate";
+    public static final String[] TERM_COLUMNS = {KEY_ID, KEY_TERM_NAME, KEY_START_DATE, KEY_END_DATE};
 
     private static final String TABLE_SUBJECT = "Subjects";
     private static final String KEY_SUBJECT_NAME = "SubjectName";
@@ -41,13 +48,21 @@ public class DataHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_TERM_TABLE = "CREATE TABLE IF NOT EXISTS " +
+                TABLE_TERMS +
+                "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                KEY_TERM_NAME + " VARCHAR, " +
+                KEY_START_DATE + " INTEGER, " +
+                KEY_END_DATE + " INTEGER)";
+        db.execSQL(CREATE_TERM_TABLE);
+
         String CREATE_TABLE_SUBJECT = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_SUBJECT +
-                "(" + KEY_ID + " Integer PRIMARY KEY AUTOINCREMENT, " +
+                "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 KEY_SUBJECT_NAME + " VARCHAR, " +
                 KEY_CLASSROOM + " VARCHAR, " +
                 KEY_TEACHER + " VARCHAR, " +
-                KEY_COLOR + " Integer )";
+                KEY_COLOR + " INTEGER )";
         db.execSQL(CREATE_TABLE_SUBJECT);
 
         String CREATE_TABLE_CLASS_TIMES = "CREATE TABLE IF NOT EXISTS " +
@@ -57,7 +72,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_START_TIME + " INTEGER, " +
                 KEY_END_TIME + " INTEGER, " +
                 KEY_DAY + " INTEGER, " +
-                "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(id)) ";
+                "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(" + KEY_ID + ")) ";
         db.execSQL(CREATE_TABLE_CLASS_TIMES);
     }
 
@@ -66,18 +81,104 @@ public class DataHelper extends SQLiteOpenHelper {
 
     }
 
-    public Subject addSubject(Subject l) {
+    public Term addTerm(Term t) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_TERM_NAME, t.getName());
+        values.put(KEY_START_DATE, t.getStartDate());
+        values.put(KEY_END_DATE, t.getEndDate());
+        t.setId((int) db.insert(DATABASE_NAME, null, values));
+        Log.d("Data", "Adding term with values of " + t.toString());
+        return t;
+    }
+
+    public Term getTerm(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_TERMS,
+                TERM_COLUMNS,
+                "id = ?", //selections
+                new String[]{String.valueOf(id)},
+                null, //group by
+                null, //having
+                null, //order by
+                null); //limit
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        Term t = new Term();
+        t.setId(cursor.getInt(0));
+        t.setName(cursor.getString(1));
+        t.setStartDate(cursor.getInt(2));
+        t.setEndDate(cursor.getInt(3));
+        Log.d("Data ", "Reading term with values of " + t.toString());
+
+        return t;
+    }
+
+    public ArrayList<Term> getAllTerms() {
+        ArrayList<Term> list = new ArrayList<>();
+
+        String query = "SELECT  * FROM " + TABLE_TERMS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        Term t;
+        if (cursor.moveToFirst()) {
+            do {
+                t = new Term();
+                t.setId(Integer.parseInt(cursor.getString(0)));
+                t.setName(cursor.getString(1));
+                t.setStartDate(Long.parseLong(cursor.getString(2)));
+                t.setEndDate(Long.parseLong(cursor.getString(3)));
+                list.add(t);
+            } while (cursor.moveToNext());
+        }
+        Log.d("Data", "Returning all terms " + list.toString());
+        return list;
+    }
+
+    public int update(Term t) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_SUBJECT_NAME, l.getName());
-        values.put(KEY_CLASSROOM, l.getClassroom());
-        values.put(KEY_TEACHER, l.getTeacher());
-        values.put(KEY_COLOR, l.getColor());
+        values.put(KEY_TERM_NAME, t.getName());
+        values.put(KEY_START_DATE, t.getStartDate());
+        values.put(KEY_END_DATE, t.getEndDate());
+        int i = db.update(TABLE_TERMS,
+                values,
+                KEY_ID + " = " + t.getId(),
+                null);
+        db.close();
+        Log.d("Data", "Updating term to values of " + t.toString());
+        return i;
+    }
 
-        l.setId((int) db.insert(TABLE_SUBJECT, null, values));
+    public void delete(Term t) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_TERMS,
+                KEY_ID + " = " + t.getId(),
+                null);
+        db.close();
 
-        return l;
+        Log.d("Data", "Deleting term with values of" + t.toString());
+    }
+
+    //End term methods
+
+    public Subject addSubject(Subject s) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_SUBJECT_NAME, s.getName());
+        values.put(KEY_CLASSROOM, s.getClassroom());
+        values.put(KEY_TEACHER, s.getTeacher());
+        values.put(KEY_COLOR, s.getColor());
+
+        s.setId((int) db.insert(TABLE_SUBJECT, null, values));
+        Log.d("Data", "Adding term with values of " + s.toString());
+        return s;
     }
 
     public void deleteAll() {
@@ -100,16 +201,16 @@ public class DataHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
-        Subject l = new Subject();
-        l.setId(Integer.parseInt(cursor.getString(0)));
-        l.setName(cursor.getString(1));
-        l.setClassroom(cursor.getString(2));
-        l.setTeacher(cursor.getString(3));
-        l.setColor(cursor.getInt(4));
+        Subject s = new Subject();
+        s.setId(Integer.parseInt(cursor.getString(0)));
+        s.setName(cursor.getString(1));
+        s.setClassroom(cursor.getString(2));
+        s.setTeacher(cursor.getString(3));
+        s.setColor(cursor.getInt(4));
 
-        Log.d("Subject returned " + id, l.toString());
+        Log.d("Data", "Reading subject with values of " + s.toString());
 
-        return l;
+        return s;
     }
 
     public ArrayList<Subject> getAllSubjects() {
@@ -119,65 +220,54 @@ public class DataHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
-        Subject l;
+        Subject s;
         if (cursor.moveToFirst()) {
             do {
-                l = new Subject();
-                l.setId(Integer.parseInt(cursor.getString(0)));
-                l.setName(cursor.getString(1));
-                l.setClassroom(cursor.getString(2));
-                l.setTeacher(cursor.getString(3));
-                l.setColor(cursor.getInt(4));
-                subjects.add(l);
+                s = new Subject();
+                s.setId(Integer.parseInt(cursor.getString(0)));
+                s.setName(cursor.getString(1));
+                s.setClassroom(cursor.getString(2));
+                s.setTeacher(cursor.getString(3));
+                s.setColor(cursor.getInt(4));
+                subjects.add(s);
             } while (cursor.moveToNext());
         }
-        Log.d("getAllSubjects", subjects.toString());
+        Log.d("Data", "Getting all subjects" + subjects.toString());
         return subjects;
     }
 
-    public int updateSubject(Subject l) {
+    public int updateSubject(Subject s) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_SUBJECT_NAME, l.getName());
-        values.put(KEY_CLASSROOM, l.getClassroom());
-        values.put(KEY_TEACHER, l.getTeacher());
-        values.put(KEY_COLOR, l.getColor());
+        values.put(KEY_SUBJECT_NAME, s.getName());
+        values.put(KEY_CLASSROOM, s.getClassroom());
+        values.put(KEY_TEACHER, s.getTeacher());
+        values.put(KEY_COLOR, s.getColor());
 
         int i = db.update(TABLE_SUBJECT,
                 values,
-                KEY_ID + " = " + l.getId(),
+                KEY_ID + " = " + s.getId(),
                 null);
 
         db.close();
+        Log.d("Data", "Updating subject to values of" + s.toString());
         return i;
     }
 
     public void deleteSubject(Subject s) {
-        //TODO- Delete all classes with this subjects ID
         String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        Log.d("Test", "Deleting subject with " + s.toString());
-        int cID;
-        if (cursor.moveToFirst()) {
-            do {
-                Log.d("Test", "Class with SKey of" + cursor.getInt(1));
-                if (cursor.getInt(1) == s.getId()) {
-                    cID = cursor.getInt(1);
-                    Log.d("Test", "Deleting class with a subject of " + s.toString());
-                    db.delete(TABLE_CLASS_TIMES,
-                            KEY_SUBJECT_ID + " = " + cID,
-                            null);
-                }
-            } while (cursor.moveToNext());
-        }
+        Log.d("Data", "Deleting subject with values of " + s.toString());
+        int numClass = db.delete(TABLE_CLASS_TIMES,
+                KEY_SUBJECT_ID + " = " + s.getId(),
+                null);
+        Log.d("Data", "Deletion of subject resulted in deletion of " + numClass + " classes");
 
         db.delete(TABLE_SUBJECT,
                 KEY_ID + " = " + s.getId(),
                 null);
         db.close();
-        Log.d("Delete", s.toString());
     }
 
     //End subject methods
@@ -192,7 +282,7 @@ public class DataHelper extends SQLiteOpenHelper {
         values.put(KEY_DAY, c.getDay());
 
         c.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
-
+        Log.d("Data", "Adding class with values of " + c.toString());
         return c;
     }
 
@@ -217,7 +307,7 @@ public class DataHelper extends SQLiteOpenHelper {
         c.setEnd(cursor.getInt(3));
         c.setDay(cursor.getInt(4));
 
-        Log.d("ClassTime returned" + id, c.toString());
+        Log.d("Data", "Returning class with values of " + c.toString());
 
         return c;
     }
@@ -241,7 +331,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 classes.add(c);
             } while (cursor.moveToNext());
         }
-        Log.d("getAllClasses", classes.toString());
+        Log.d("Data", "Returning all classes" + classes.toString());
         return classes;
     }
 
@@ -260,6 +350,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 null);
 
         db.close();
+        Log.d("Data", "Updating class to values of " + c.toString());
         return i;
     }
 
@@ -269,8 +360,6 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + c.getId(),
                 null);
         db.close();
-        Log.d("Delete", c.toString());
+        Log.d("Data", "Deleting class with values of " + c.toString());
     }
-
-
 }

@@ -39,22 +39,7 @@ public class ClassTimeCollector extends AppCompatActivity {
     private ArrayList<ClassRecyclerFragment> fragments;
     private DataHelper storageHelper;
     private int day;
-
-
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
@@ -65,12 +50,10 @@ public class ClassTimeCollector extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Class times");
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // Create the adapter that will return a fragment for each of the sections
         mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         fragments = new ArrayList<>();
         day = 0;
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -91,23 +74,32 @@ public class ClassTimeCollector extends AppCompatActivity {
         });
 
         subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
-
         storageHelper = new DataHelper(this);
         classes = storageHelper.getAllClasses();
     }
 
+    //Method is used to give the ClassTimeCollector access to the fragments
     public void addFragment(ClassRecyclerFragment f) {
         fragments.add(f);
     }
 
+    //Method used by viewpage to change controls in parent
     public void setDay(int day) {
-        if (this.day != day) {  //Ignoring the multiple calls
+        if (this.day != day) {  //Ignoring the multiple calls from the viewpager
             final FloatingActionButton fabEnd = (FloatingActionButton) findViewById(R.id.fabEnd);
             final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            //DP conversion  http://stackoverflow.com/questions/30202379/android-views-gettop-getleft-getx-gety-getwidth-getheight-meth
             final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics()); //Height of fab + fab margin into pixels
+
             TranslateAnimation move;
-            //TODO- Sort this out and use DP http://stackoverflow.com/questions/30202379/android-views-gettop-getleft-getx-gety-getwidth-getheight-meth
-            if (day == 4) { //When the day has been changed to 4
+            /* The TranslationAnimation works in pixels rather than DP, so the value is converted above
+            * The screen grid starts from the top left, so in order to shift the fab up enough to let the fabEND
+            * take its place, and leave the correct margin, the DP value is - (height of fab (56dp) + fab marge (16dp))
+            * In order to actually set the value position of the FAB (its click location), a call to fab.setY() must be used
+            * As in order to keep its location constant, it needs a default location, which is the Y value of the fabEnd
+             */
+
+            if (day == 4) { //When the day has been changed to 4 (Friday)
                 move = new TranslateAnimation(0, 0, 0, -px);
                 move.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -126,7 +118,6 @@ public class ClassTimeCollector extends AppCompatActivity {
                         fab.startAnimation(animation);
                     }
                 });
-                //move.setFillAfter(true);
                 move.setDuration(300);
                 fab.startAnimation(move);
                 fabEnd.setVisibility(View.VISIBLE);
@@ -160,21 +151,15 @@ public class ClassTimeCollector extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("Result received", "From ClassInput");
         if (resultCode == RESULT_OK) {
             ClassTime c = (ClassTime) data.getSerializableExtra("class");
-            Log.d("Test", "Received class with values of " + c.toString());
-            Log.d("ClassTime", "Day of " + c.getDay());
-            if (data.getBooleanExtra("edited", false)) {
-                for (ClassRecyclerFragment f : fragments) {
-                    if (f.sectionNumber == c.getDay()) {
+            Log.d("Data", "Received class with values of " + c.toString());
+            for (ClassRecyclerFragment f : fragments) {
+                //Finding the correct fragment to add the class to
+                if (f.sectionNumber == c.getDay()) {
+                    if (data.getBooleanExtra("edited", false)) {
                         f.mAdapter.updateClassValue(c);
-                    }
-                }
-            } else {
-                for (ClassRecyclerFragment f : fragments) {
-                    Log.d("Day of " + f.sectionNumber, "Class day of " + c.getDay());
-                    if (f.sectionNumber == c.getDay()) {
+                    } else {
                         f.mAdapter.addClass(c);
                     }
                 }
@@ -206,19 +191,15 @@ public class ClassTimeCollector extends AppCompatActivity {
         public ClassRecyclerFragment() {
         }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
         public static ClassRecyclerFragment newInstance(ClassTimeCollector parent, int sectionNumber, DataHelper storageHelper, ArrayList<Subject> subjects) {
             ClassRecyclerFragment fragment = new ClassRecyclerFragment();
-            fragment.setParent(parent);
+            fragment.setParent(parent); //The fragment needs a parent in order to communicate data
             Bundle args = new Bundle();
             fragment.setSectionNumber(sectionNumber);
             fragment.setArguments(args);
             fragment.setStorageHelper(storageHelper);
             fragment.setSubjects(subjects);
-            fragment.parent.addFragment(fragment);
+            parent.addFragment(fragment); //Passing the fragment back to its parent. Nobody like children
             return fragment;
         }
 
@@ -234,6 +215,8 @@ public class ClassTimeCollector extends AppCompatActivity {
 
             return rootView;
         }
+
+        //Setters for objects passed from parent
 
         public void setParent(ClassTimeCollector parent) {
             this.parent = parent;
@@ -263,7 +246,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
-            Log.d("Primary item changed", "Position is " + position);
+            Log.d("Data", "Change in primary position,  position is " + position);
             parent.setDay(position);
         }
 
@@ -283,7 +266,6 @@ public class ClassTimeCollector extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return DAYS[position];
         }
-
 
     }
 }

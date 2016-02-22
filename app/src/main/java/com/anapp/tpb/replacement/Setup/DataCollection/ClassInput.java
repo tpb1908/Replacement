@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,7 +38,6 @@ public class ClassInput extends SlidingActivity {
     private int start = -1;
     private int end = -1;
     private boolean editing;
-
     private EditText startTime;
     private EditText endTime;
 
@@ -60,31 +58,31 @@ public class ClassInput extends SlidingActivity {
             current = (ClassTime) getIntent().getSerializableExtra("editingClass");
             start = current.getStart();
             end = current.getEnd();
+            String time; //Recommended to perform string concatenation outside of setText() method
+            //Time is stored in a 0000 2359 format. If hour < 10, then time < 100 -> String must be split differently
             if (start < 1000) {
-                startTime.setText(Integer.toString(start).substring(0, 1) + ":" + Integer.toString(start).substring(1));
+                time = (Integer.toString(start).substring(0, 1) + ":" + Integer.toString(start).substring(1));
             } else {
-                startTime.setText(Integer.toString(start).substring(0, 2) + ":" + Integer.toString(start).substring(2));
+                time = (Integer.toString(start).substring(0, 2) + ":" + Integer.toString(start).substring(2));
             }
+            startTime.setText(time);
             if (end < 1000) {
-                endTime.setText(Integer.toString(end).substring(0, 1) + ":" + Integer.toString(end).substring(1));
+                time = (Integer.toString(end).substring(0, 1) + ":" + Integer.toString(end).substring(1));
             } else {
-                endTime.setText(Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
+                time = (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
             }
+            endTime.setText(time);
             //TODO- Work out how to select the selected subject
             editing = true;
         } catch (Exception e) {
             editing = false;
         }
-        Log.d("Editing", "" + editing);
-        Log.d("Received lesson array", subjects.toString());
-
         final String[] lessonsA = new String[subjects.size()];
         int i = 0;
         for (Subject l : subjects) {
             lessonsA[i++] = l.getName();
         }
         lessonSpinner.setAdapter(new LessonArrayAdapter(getApplicationContext(), R.layout.subject_spinner_layout, lessonsA));
-
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +95,6 @@ public class ClassInput extends SlidingActivity {
                 displayTimePicker(false);
             }
         });
-
         fabListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,15 +138,18 @@ public class ClassInput extends SlidingActivity {
     }
 
     private ClassTime checkOverlap(ClassTime toCheck) {
+        //TODO- Consider returning an array of values, in order to inform user of their stupidity
         ClassTime overlap = null;
         if (editing) {
+            //If the current class is in the ArrayList, it will be found to overlap with itself
             classes.remove(toCheck);
         }
         for (ClassTime ct : classes) {
             if (ct.getDay() == day) {
+                //See here -http://stackoverflow.com/a/325964/4191572  > used rather than >= as lessons times may be continuous
                 if (ct.getStart() < toCheck.getEnd() && ct.getEnd() > toCheck.getStart()) {
                     overlap = ct;
-                    Log.d("Overlap found", ct.toString());
+                    Log.d("Data", "Overlap found " + ct.toString());
                     break;
                 }
             }
@@ -157,30 +157,30 @@ public class ClassInput extends SlidingActivity {
         return overlap;
     }
 
-    private void displayTimePicker(final boolean tap) {
+    private void displayTimePicker(final boolean startEnd) {
         TimePickerDialog mTimePicker;
-
+        //Creating dialog
         mTimePicker = new TimePickerDialog(ClassInput.this, R.style.datePickerTheme, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Log.d("Time received", "Hour of " + hourOfDay + " Minute of " + minute);
+                Log.d("Data", "Time received- Hour of " + hourOfDay + " Minute of " + minute);
                 String output = hourOfDay + ":";
+                //Formatting the string
                 if (minute < 10) {
                     output += "0" + minute;
                 } else {
                     output += minute;
                 }
-
-                if (tap) {
+                if (startEnd) {
                     startTime.setText(output);
-                    start = (hourOfDay * 100) + minute; //Storing time in format (hh:mm) from 0000 to 2359
+                    start = (hourOfDay * 100) + minute;
                 } else {
                     endTime.setText(output);
                     end = (hourOfDay * 100) + minute;
                 }
             }
-        }, 8, 0, true); //Use 24 hour time. Default of 8am
-        if (tap) {
+        }, 9, 0, true); //Use 24 hour time. Default of 9am
+        if (startEnd) {
             mTimePicker.setTitle("Select start time");
         } else {
             mTimePicker.setTitle("Select end time");
@@ -188,6 +188,7 @@ public class ClassInput extends SlidingActivity {
         mTimePicker.show();
     }
 
+    //Method displays an error message.
     private void displayMessage(int messageID, ClassTime overlap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ClassInput.this, R.style.DialogTheme);
         switch (messageID) {
@@ -251,7 +252,7 @@ public class ClassInput extends SlidingActivity {
             View colourBar = row.findViewById(R.id.colourBar);
             name.setText(subjects.get(position).getName() + ", " + subjects.get(position).getTeacher());
             colourBar.setBackgroundColor(subjects.get(position).getColor());
-            Log.d("Spinner binding", subjects.get(position).toString());
+            Log.d("Data", "Spinner binding " + subjects.get(position).toString());
             return row;
         }
     }

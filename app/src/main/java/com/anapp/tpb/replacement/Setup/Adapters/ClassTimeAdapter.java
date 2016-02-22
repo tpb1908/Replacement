@@ -32,14 +32,13 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         this.subjects = subjects;
         this.classes = new ArrayList<>();
         ArrayList<ClassTime> c = storageHelper.getAllClasses();
+        //Only adding classes which are relevant to the selected day
         for (ClassTime classTime : c) {
             if (classTime.getDay() == day) {
-                Log.d("Class with day ", "Day of " + classTime.getDay());
                 classes.add(classTime);
             }
         }
-        Log.d("Length of classes ", "For day " + day + " = " + classes.size());
-
+        Log.d("Data", "Selected classes for day " + day + ", " + classes.toString());
     }
 
     public void updateClass(int position) {
@@ -48,6 +47,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         i.putExtra("subjects", subjects);
         i.putExtra("classes", classes);
         i.putExtra("day", classes.get(position).getDay());
+        //Activity must be started through activity, passing to ClassTimeCollector
         parent.startActivityForResult(i, 1);
     }
 
@@ -55,19 +55,21 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         classes.set(classes.indexOf(c), c);
         storageHelper.updateClass(c);
         notifyItemChanged(classes.indexOf(c));
+        Log.d("Data", "Updating " + c.toString() + " in recycler");
     }
 
     public void addClass(ClassTime c) {
-        Log.d("Test", "Adding " + c.toString() + " to recycler");
         c = storageHelper.addClass(c);
         classes.add(c);
         notifyItemInserted(getItemCount());
+        Log.d("Data", "Adding " + c.toString() + " to recycler");
     }
 
     public void delete(int position) {
         storageHelper.deleteClass(classes.get(position));
         classes.remove(position);
         notifyItemRemoved(position);
+        Log.d("Data", "Removing class at position " + position);
     }
 
     @Override
@@ -79,10 +81,10 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        //Adding listener for delete button
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Adapter position- ", "" + holder.getAdapterPosition());
                 delete(holder.getAdapterPosition());
             }
         });
@@ -105,11 +107,12 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
             timeRange = (Integer.toString(start).substring(0, 2) + ":" + Integer.toString(start).substring(2));
         }
         if (end < 1000) {
-            timeRange += " to " + (Integer.toString(end).substring(0, 1) + ":" + Integer.toString(end).substring(1));
+            timeRange += " - " + (Integer.toString(end).substring(0, 1) + ":" + Integer.toString(end).substring(1));
         } else {
-            timeRange += " to " + (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
+            timeRange += " - " + (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
         }
         holder.classTime.setText(timeRange);
+        Log.d("Data", "Binding class with value of " + classes.get(position).toString());
     }
 
     @Override
@@ -131,7 +134,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
             classTime = (TextView) v.findViewById(R.id.classTime);
             deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
             colourBar = v.findViewById(R.id.colourBar);
-
+            //Adding listener to the entire view, in order to allow editing
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

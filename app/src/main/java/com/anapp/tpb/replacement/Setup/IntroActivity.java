@@ -14,10 +14,8 @@ import com.github.paolorotolo.appintro.AppIntroFragment;
 public class IntroActivity extends AppIntro {
     FragmentCreator first;
 
-
     @Override
     public void onSkipPressed() {
-
     }
 
     @Override
@@ -25,17 +23,11 @@ public class IntroActivity extends AppIntro {
         showSkipButton(false);
         showStatusBar(false);
         setSeparatorColor(getResources().getColor(R.color.colorDivider));
-
         first = FragmentCreator.newInstance(R.layout.name_collection);
         addSlide(first);
 
         addSlide(AppIntroFragment.newInstance("Test slide 1", "Change this", R.drawable.fab_plus_icon, R.color.colorAccent));
         addSlide(AppIntroFragment.newInstance("Test slide 2", "Change this as well", R.drawable.fab_plus_icon, R.color.colorAccent));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("Result", "Result returned much further up than it should be");
     }
 
     @Override
@@ -58,7 +50,6 @@ public class IntroActivity extends AppIntro {
 
     @Override
     public boolean onKeyDown(int code, KeyEvent keyEvent) {
-
         return true;
     }
 }

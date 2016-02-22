@@ -14,6 +14,7 @@ import android.view.View;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.Adapters.TermListAdapter;
 import com.anapp.tpb.replacement.Setup.DataCollection.TermInput;
+import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.TermStorageHelper;
 
@@ -29,7 +30,7 @@ public class TermDateCollector extends AppCompatActivity {
     private TermListAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private TermStorageHelper storageHelper;
+    private DataHelper storageHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +41,7 @@ public class TermDateCollector extends AppCompatActivity {
         setSupportActionBar(t);
         this.getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
 
-
-        storageHelper = new TermStorageHelper(getApplicationContext());
-
+        storageHelper = new DataHelper(getApplicationContext());
         nextFab = (FloatingActionButton) findViewById(R.id.termDataNextFab);
         addTermFab = (FloatingActionButton) findViewById(R.id.termAddFab);
 
@@ -98,28 +97,23 @@ public class TermDateCollector extends AppCompatActivity {
         });
 
         mAdapter = new TermListAdapter(this, storageHelper);
-
         mRecyclerView = (RecyclerView) findViewById(R.id.termRecyclerView);
-
         //mRecyclerView.setHasFixedSize(true); //Improves performance if the view doesn't expand
-
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("Result- ", "Result received with code " + resultCode + " Code needed is " + Activity.RESULT_OK);
         if (resultCode == Activity.RESULT_OK) {
             Term t = (Term) data.getSerializableExtra("term");
             if (data.getBooleanExtra("edited", false)) {
-                Log.d("Term received", "Editing " + t.toString());
+                Log.d("Data", "Edited term received  " + t.toString());
                 mAdapter.updateTermValue(t);
             } else {
-                Log.d("Term received", t.toString());
+                Log.d("Data", "Term received " + t.toString());
                 mAdapter.addItem(t);
             }
         }

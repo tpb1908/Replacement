@@ -13,7 +13,6 @@ import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.SubjectInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.SubjectStorageHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import java.util.ArrayList;
@@ -37,27 +36,32 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
     }
 
     private void updateSubject(int position) {
+        //Update intent must be started through parent, SubjectCollector
         Intent i = new Intent(parent.getApplicationContext(), SubjectInput.class);
         i.putExtra("editingSubject", subjects.get(position));
         parent.startActivityForResult(i, 1);
+
     }
 
     public void updateSubjectValue(Subject l) {
         subjects.set(subjects.indexOf(l), l);
         storageHelper.updateSubject(l);
         notifyItemChanged(subjects.indexOf(l));
+        Log.d("Data", "Updating " + l.toString() + " in recycler");
     }
 
     public void addSubject(Subject l) {
         l = storageHelper.addSubject(l);
         subjects.add(l);
         notifyItemInserted(getItemCount());
+        Log.d("Data", "Adding " + l.toString() + " to recycler");
     }
 
     public void delete(int position) {
         storageHelper.deleteSubject(subjects.get(position));
         subjects.remove(position);
         notifyItemRemoved(position);
+        Log.d("Data", "Removing subject at position " + position);
     }
 
     @Override
@@ -69,6 +73,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +85,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
         holder.classRoom.setText(subjects.get(position).getClassroom());
         holder.teacherName.setText(subjects.get(position).getTeacher());
         holder.colourBar.setBackgroundColor(subjects.get(position).getColor());
-        Log.d("Subject binding", subjects.get(position).toString());
+        Log.d("Data", "Binding subject" + subjects.get(position).toString());
     }
 
     @Override

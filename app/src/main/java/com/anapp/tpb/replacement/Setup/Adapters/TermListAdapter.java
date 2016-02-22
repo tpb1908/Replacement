@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.TermInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.TermDateCollector;
+import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.TermStorageHelper;
 
@@ -24,10 +25,10 @@ import java.util.Date;
  */
 public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHolder> {
     private ArrayList<Term> terms;
-    private TermStorageHelper storageHelper;
+    private DataHelper storageHelper;
     private TermDateCollector parent;
 
-    public TermListAdapter(TermDateCollector parent, TermStorageHelper storageHelper) {
+    public TermListAdapter(TermDateCollector parent, DataHelper storageHelper) {
         this.parent = parent;
         this.storageHelper = storageHelper;
         terms = storageHelper.getAllTerms();
@@ -43,6 +44,16 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
         storageHelper.delete(terms.get(position));
         terms.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public ArrayList<Term> getTerms() {
+        return terms;
+    }
+
+    public void updateTermValue(Term t) {
+        terms.set(terms.indexOf(t), t);
+        storageHelper.update(t);
+        notifyItemChanged(terms.indexOf(t));
     }
 
     @Override
@@ -69,7 +80,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
         Date end = new Date(terms.get(holder.getAdapterPosition()).getEndDate());
         dateRange = start.toString().substring(0, 10) + " to " + end.toString().substring(0, 10);
         holder.termDateRangeTextView.setText(dateRange);
-        Log.d("Term binding", terms.get(position).toString() + "    " + start.toString() + "     " + end.toString());
+        Log.d("Binding", "Binding term " + terms.get(position).toString() + "  " + start.toString() + "  " + end.toString());
     }
 
     private void updateTerm(int position) {
@@ -78,16 +89,6 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
         i.putExtra("editingTerm", terms.get(position));
         parent.startActivityForResult(i, 1);
 
-    }
-
-    public ArrayList<Term> getTerms() {
-        return terms;
-    }
-
-    public void updateTermValue(Term t) {
-        terms.set(terms.indexOf(t), t);
-        storageHelper.update(t);
-        notifyItemChanged(terms.indexOf(t));
     }
 
     @Override

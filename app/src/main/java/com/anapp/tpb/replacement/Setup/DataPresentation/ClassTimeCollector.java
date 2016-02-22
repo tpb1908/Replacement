@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -101,18 +102,14 @@ public class ClassTimeCollector extends AppCompatActivity {
 
     public void setDay(int day) {
         if (this.day != day) {  //Ignoring the multiple calls
-            this.day = day;
             final FloatingActionButton fabEnd = (FloatingActionButton) findViewById(R.id.fabEnd);
             final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics()); //Height of fab + fab margin into pixels
+            TranslateAnimation move;
             //TODO- Sort this out and use DP http://stackoverflow.com/questions/30202379/android-views-gettop-getleft-getx-gety-getwidth-getheight-meth
-            if (day == 4) {
-                TranslateAnimation move = new TranslateAnimation(0, 0, 0, -160);
+            if (day == 4) { //When the day has been changed to 4
+                move = new TranslateAnimation(0, 0, 0, -px);
                 move.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        fab.setY(fabEnd.getY() - 88);
-                    }
-
                     @Override
                     public void onAnimationStart(Animation animation) {
                     }
@@ -120,17 +117,44 @@ public class ClassTimeCollector extends AppCompatActivity {
                     @Override
                     public void onAnimationRepeat(Animation animation) {
                     }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        fab.setY(fabEnd.getY() - px);
+                        //The animation below stops the flickering/jump once the animation completes. No idea why
+                        animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
+                        animation.setDuration(1);
+                        fab.startAnimation(animation);
+                    }
                 });
-                move.setFillAfter(true);
-                move.setDuration(1000);
+                //move.setFillAfter(true);
+                move.setDuration(300);
                 fab.startAnimation(move);
-
                 fabEnd.setVisibility(View.VISIBLE);
-            } else {
-                fab.setY(fabEnd.getY());
+            } else if (this.day == 4) { //When the current day is 4, and has not yet been changed
+                move = new TranslateAnimation(0, 0, 0, px);
+                move.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        fab.setY(fabEnd.getY());
+                        animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
+                        animation.setDuration(1);
+                        fab.startAnimation(animation);
+                    }
+                });
+                move.setDuration(300);
+                fab.startAnimation(move);
                 fabEnd.setVisibility(View.INVISIBLE);
             }
         }
+        this.day = day;
     }
 
     @Override
@@ -139,6 +163,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         Log.d("Result received", "From ClassInput");
         if (resultCode == RESULT_OK) {
             ClassTime c = (ClassTime) data.getSerializableExtra("class");
+            Log.d("Test", "Received class with values of " + c.toString());
             Log.d("ClassTime", "Day of " + c.getDay());
             if (data.getBooleanExtra("edited", false)) {
                 for (ClassRecyclerFragment f : fragments) {

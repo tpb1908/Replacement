@@ -58,7 +58,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
     }
 
     public void addClass(ClassTime c) {
-        Log.d("Class Received", "Adding " + c.toString() + " to recycler");
+        Log.d("Test", "Adding " + c.toString() + " to recycler");
         c = storageHelper.addClass(c);
         classes.add(c);
         notifyItemInserted(getItemCount());

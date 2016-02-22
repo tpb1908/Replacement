@@ -29,11 +29,11 @@ public class DataHelper extends SQLiteOpenHelper {
 
     private static final String TABLE_CLASS_TIMES = "ClassTimes";
     private static final String TABLE_SUBJECTS = "Subjects";
-    private static final String KEY_LESSON_ID = "Subject_ID";
+    private static final String KEY_SUBJECT_ID = "Subject_ID";
     private static final String KEY_START_TIME = "StartTime";
     private static final String KEY_END_TIME = "EndTime";
     private static final String KEY_DAY = "Day";
-    private static final String CLASS_COLUMNS[] = {KEY_ID, KEY_LESSON_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY};
+    private static final String CLASS_COLUMNS[] = {KEY_ID, KEY_SUBJECT_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY};
 
     public DataHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -53,11 +53,11 @@ public class DataHelper extends SQLiteOpenHelper {
         String CREATE_TABLE_CLASS_TIMES = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_CLASS_TIMES +
                 "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                KEY_LESSON_ID + " INTEGER, " +
+                KEY_SUBJECT_ID + " INTEGER, " +
                 KEY_START_TIME + " INTEGER, " +
                 KEY_END_TIME + " INTEGER, " +
                 KEY_DAY + " INTEGER, " +
-                "FOREIGN KEY(" + KEY_LESSON_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(id)) ";
+                "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(id)) ";
         db.execSQL(CREATE_TABLE_CLASS_TIMES);
     }
 
@@ -158,18 +158,21 @@ public class DataHelper extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        ClassTime c = new ClassTime();
+        Log.d("Test", "Deleting subject with " + s.toString());
+        int cID;
         if (cursor.moveToFirst()) {
             do {
-                Log.d("Delete", "" + cursor.getInt(1));
+                Log.d("Test", "Class with SKey of" + cursor.getInt(1));
                 if (cursor.getInt(1) == s.getId()) {
-                    c.setId(cursor.getInt(1));
-                    Log.d("Deleting class", "Deleting class with a subject of " + s.toString());
-                    deleteClass(c);
+                    cID = cursor.getInt(1);
+                    Log.d("Test", "Deleting class with a subject of " + s.toString());
+                    db.delete(TABLE_CLASS_TIMES,
+                            KEY_SUBJECT_ID + " = " + cID,
+                            null);
                 }
             } while (cursor.moveToNext());
         }
-        db = this.getWritableDatabase(); //If a class is deleted then the database if closed
+
         db.delete(TABLE_SUBJECT,
                 KEY_ID + " = " + s.getId(),
                 null);
@@ -183,7 +186,7 @@ public class DataHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LESSON_ID, c.getSubjectID());
+        values.put(KEY_SUBJECT_ID, c.getSubjectID());
         values.put(KEY_START_TIME, c.getStart());
         values.put(KEY_END_TIME, c.getEnd());
         values.put(KEY_DAY, c.getDay());
@@ -246,7 +249,7 @@ public class DataHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_LESSON_ID, c.getSubjectID());
+        values.put(KEY_SUBJECT_ID, c.getSubjectID());
         values.put(KEY_START_TIME, c.getStart());
         values.put(KEY_END_TIME, c.getEnd());
         values.put(KEY_DAY, c.getDay());

@@ -47,16 +47,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/teacherName"
-                android:layout_alignTop="@+id/classIcon"
+                android:layout_alignBaseline="@+id/subjectName"
+                android:layout_alignBottom="@+id/subjectName"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="111dp"/>
+                android:layout_marginEnd="48dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/classRoom"
-                android:layout_alignStart="@+id/teacherName"
-                android:layout_alignBottom="@+id/classIcon"/>
+                android:layout_alignBaseline="@+id/classTime"
+                android:layout_alignBottom="@+id/classTime"
+                android:layout_alignStart="@+id/teacherName"/>
 
             <ImageView
                 android:id="@+id/classIcon"

@@ -45,6 +45,8 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String KEY_END_TIME = "EndTime";
     private static final String KEY_DAY = "Day";
     private static final String CLASS_COLUMNS[] = {KEY_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY, KEY_SUBJECT_ID};
+    private static ArrayList<ClassTime> classTimeCache = new ArrayList<>();
+    private static boolean classTimeCacheValid = false;
 
     private static final String TABLE_TASKS = "Tasks";
     private static final String KEY_TYPE = "Type";
@@ -573,6 +575,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
         c.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
         Log.d("Data", "Adding class with values of " + c.toString());
+        classTimeCacheValid = false;
         return c;
     }
 
@@ -604,6 +607,9 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<ClassTime> getAllClasses() {
+        if(classTimeCacheValid) {
+            return classTimeCache;
+        }
         ArrayList<ClassTime> classes = new ArrayList<>();
 
         String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
@@ -625,6 +631,8 @@ public class DataHelper extends SQLiteOpenHelper {
         cursor.close();
         Collections.sort(classes);
         Collections.reverse(classes);
+        classTimeCache = classes;
+        classTimeCacheValid = true;
         Log.d("Data", "Returning all classes" + classes.toString());
         return classes;
     }
@@ -634,8 +642,15 @@ public class DataHelper extends SQLiteOpenHelper {
      * @return An arraylist of the classes on the current day
      */
     public ArrayList<ClassTime> getClassesForDay(int day) {
-
         ArrayList<ClassTime> result = new ArrayList<>();
+        if(classTimeCacheValid) {
+            for(ClassTime c :classTimeCache) {
+                if(c.getDay() == day) {
+                    result.add(c);
+                }
+            }
+            return result;
+        }
         String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -668,7 +683,6 @@ public class DataHelper extends SQLiteOpenHelper {
     public ArrayList<ClassTime> getClassesToday() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
-
         return getClassesForDay(day);
     }
 
@@ -688,6 +702,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
         db.close();;
         Log.d("Data", "Updating class to values of " + c.toString());
+        classTimeCacheValid = false;
         return i;
     }
 
@@ -697,6 +712,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + c.getId(),
                 null);
         db.close();
+        classTimeCacheValid = false;
         Log.d("Data", "Deleting class with values of " + c.toString());
     }
 }

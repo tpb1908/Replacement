@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
 import com.anapp.tpb.replacement.R;
+import com.anapp.tpb.replacement.Setup.ClassSetup;
 import com.anapp.tpb.replacement.Setup.IntroActivity;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
@@ -42,6 +43,9 @@ public class Home extends AppCompatActivity implements TodayFragment.TodayInterf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
+
+        Intent j = new Intent(getApplicationContext(), ClassSetup.class);
+        startActivity(j);
 
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();

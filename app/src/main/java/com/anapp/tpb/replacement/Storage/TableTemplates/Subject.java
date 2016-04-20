@@ -24,7 +24,7 @@ public class Subject implements Serializable {
 
     @Override
     public String toString() {
-        return "Subject {id=" + id + ", name=" + name + ", teacher=" + teacher + ", classroom=" + classroom;
+        return "Subject {id=" + id + ", name=" + name + ", teacher=" + teacher + ", classroom=" + classroom +"}";
     }
 
     @Override

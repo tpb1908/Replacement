@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 19/02/2016.
  */
-public class ClassTime implements Serializable {
+public class ClassTime implements Serializable, Comparable<ClassTime> {
     private int id;
     private int day;
     private int subjectID;
@@ -50,6 +50,21 @@ public class ClassTime implements Serializable {
 
     public void setDay(int day) {
         this.day = day;
+    }
+
+
+    @Override
+    public int compareTo (ClassTime another) {
+        if(start >= another.getEnd()) {
+            return 1;
+        } else {
+            return -1;
+        }
+//        else if(end < another.getStart()) {
+//            return -1;
+//        } else {
+//            return 0;
+//        }
     }
 
     @Override

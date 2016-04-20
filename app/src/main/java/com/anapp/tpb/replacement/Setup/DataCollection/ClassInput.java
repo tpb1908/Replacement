@@ -29,8 +29,8 @@ import java.util.ArrayList;
  * Created by Theo on 19/02/2016.
  */
 public class ClassInput extends SlidingActivity {
-    private ArrayList<Subject> subjects; //Lessons must have their database IDs
-    private ArrayList<ClassTime> classes;
+    private ArrayList<Subject> subjects; //Classes must have their database IDs
+    private ArrayList<ClassTime> classesForDay;
     private Spinner lessonSpinner;
     private FloatingActionButton.OnClickListener fabListener;
     private ClassTime current;
@@ -52,8 +52,10 @@ public class ClassInput extends SlidingActivity {
         startTime = (EditText) findViewById(R.id.startTime);
         endTime = (EditText) findViewById(R.id.endTime);
         subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
-        classes = (ArrayList<ClassTime>) getIntent().getSerializableExtra("classes");
+        classesForDay = (ArrayList<ClassTime>) getIntent().getSerializableExtra("classes");
+        Log.d("Classes passed", "Classes passed " + classesForDay);
         day = getIntent().getIntExtra("day", 0);
+        int spinnerDefaultIndex = 0;
         try {
             current = (ClassTime) getIntent().getSerializableExtra("editingClass");
             start = current.getStart();
@@ -71,18 +73,26 @@ public class ClassInput extends SlidingActivity {
             } else {
                 time = (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
             }
+            Log.d("Subject", "Class of " + current);
+            for(Subject s : subjects) {
+                if(s.getId() == current.getSubjectID()) {
+                    Log.d("Subject", "Found subject with id of " + s.getId());
+                    spinnerDefaultIndex = subjects.indexOf(s);
+                }
+            }
             endTime.setText(time);
-            //TODO- Work out how to select the selected subject
             editing = true;
         } catch (Exception e) {
             editing = false;
         }
-        final String[] lessonsA = new String[subjects.size()];
+        final String[] subjectNames = new String[subjects.size()];
         int i = 0;
-        for (Subject l : subjects) {
-            lessonsA[i++] = l.getName();
+        for (Subject s : subjects) {
+            subjectNames[i++] = s.getName();
         }
-        lessonSpinner.setAdapter(new LessonArrayAdapter(getApplicationContext(), R.layout.subject_spinner_layout, lessonsA));
+
+        lessonSpinner.setAdapter(new ClassArrayAdapter(getApplicationContext(), R.layout.subject_spinner_layout, subjectNames));
+        lessonSpinner.setSelection(spinnerDefaultIndex);
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,10 +152,12 @@ public class ClassInput extends SlidingActivity {
         ClassTime overlap = null;
         if (editing) {
             //If the current class is in the ArrayList, it will be found to overlap with itself
-            classes.remove(toCheck);
+            classesForDay.remove(toCheck);
         }
-        for (ClassTime ct : classes) {
-            if (ct.getDay() == day) {
+        for (ClassTime ct : classesForDay) {
+            Log.d("Data", "Class of " + ct.toString());
+            if (ct.getDay() == toCheck.getDay()) {
+                Log.d("Data", "Class of " + ct.toString());
                 //See here -http://stackoverflow.com/a/325964/4191572  > used rather than >= as lessons times may be continuous
                 if (ct.getStart() < toCheck.getEnd() && ct.getEnd() > toCheck.getStart()) {
                     overlap = ct;
@@ -198,7 +210,7 @@ public class ClassInput extends SlidingActivity {
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Log.d("Button press- ", "Positive");
+
                             }
                         })
                         .show();
@@ -215,8 +227,10 @@ public class ClassInput extends SlidingActivity {
                         .show();
                 break;
             case 2:
+                // + subjects.get(overlap.getSubjectID()).getName()
+                Log.d("Data", "ClassTime passed to message handler " + overlap.toString());
                 builder.setTitle("Invalid time range")
-                        .setMessage("Overlap with another lesson: " + subjects.get(overlap.getSubjectID()).getName() +
+                        .setMessage("Overlap with another class: " +
                                 ", from " + overlap.getStart() + " to " + overlap.getEnd())
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -229,30 +243,31 @@ public class ClassInput extends SlidingActivity {
         }
     }
 
-    private class LessonArrayAdapter extends ArrayAdapter<String> {
+    private class ClassArrayAdapter extends ArrayAdapter<String> { //Change to subject
 
-        public LessonArrayAdapter(Context context, int textViewResourceId, String[] strings) {
+        public ClassArrayAdapter (Context context, int textViewResourceId, String[] strings) {
             super(context, textViewResourceId, strings);
         }
 
+
+
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
+            return getCustomView(position, parent);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            return getCustomView(position, convertView, parent);
+            return getCustomView(position,parent);
         }
 
-        public View getCustomView(int position, View convertView, ViewGroup parent) {
+        public View getCustomView(int position, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
             View row = inflater.inflate(R.layout.subject_spinner_layout, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
             TextView name = (TextView) row.findViewById(R.id.subjectText);
             View colourBar = row.findViewById(R.id.colourBar);
             name.setText(subjects.get(position).getName() + ", " + subjects.get(position).getTeacher());
             colourBar.setBackgroundColor(subjects.get(position).getColor());
-            Log.d("Data", "Spinner binding " + subjects.get(position).toString());
             return row;
         }
     }

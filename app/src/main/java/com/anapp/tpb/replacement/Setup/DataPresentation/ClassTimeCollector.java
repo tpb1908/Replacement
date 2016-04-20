@@ -1,18 +1,17 @@
 package com.anapp.tpb.replacement.Setup.DataPresentation;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -32,6 +31,8 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import java.util.ArrayList;
 
+
+//TODO- Redo all of this on friday
 public class ClassTimeCollector extends AppCompatActivity {
     private static final String[] DAYS = {"Mon", "Tue", "Wed", "Thu", "Fri"};
     private ArrayList<Subject> subjects;
@@ -41,6 +42,7 @@ public class ClassTimeCollector extends AppCompatActivity {
     private int day;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private Class nextWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +63,30 @@ public class ClassTimeCollector extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), ClassInput.class);
                 i.putExtra("subjects", subjects);
+                Log.d("Classes", "Classes with intent " + classes);
                 i.putExtra("classes", classes);
                 i.putExtra("day", day);
                 startActivityForResult(i, 1);
             }
         });
 
+        FloatingActionButton fabEnd = (FloatingActionButton) findViewById(R.id.fabEnd);
+        fabEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i  = new Intent(getApplicationContext(), nextWindow);
+                startActivity(i);
+            }
+        });
+
+        nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
         subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
         storageHelper = new DataHelper(this);
         classes = storageHelper.getAllClasses();
@@ -83,8 +97,17 @@ public class ClassTimeCollector extends AppCompatActivity {
         fragments.add(f);
     }
 
+    public void removeClass(ClassTime toRemove) {
+        Log.d("Removing class", "Removing " + toRemove);
+        int index = classes.indexOf(toRemove);
+        if(index >= 0) {
+            classes.remove(index);
+        }
+    }
+
     //Method used by viewpage to change controls in parent
     public void setDay(int day) {
+        day += 2;
         if (this.day != day) {  //Ignoring the multiple calls from the viewpager
             final FloatingActionButton fabEnd = (FloatingActionButton) findViewById(R.id.fabEnd);
             final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -98,8 +121,7 @@ public class ClassTimeCollector extends AppCompatActivity {
             * In order to actually set the value position of the FAB (its click location), a call to fab.setY() must be used
             * As in order to keep its location constant, it needs a default location, which is the Y value of the fabEnd
              */
-
-            if (day == 4) { //When the day has been changed to 4 (Friday)
+            if (day == 6) { //When the day has been changed to 4 (Friday)
                 move = new TranslateAnimation(0, 0, 0, -px);
                 move.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -121,7 +143,7 @@ public class ClassTimeCollector extends AppCompatActivity {
                 move.setDuration(300);
                 fab.startAnimation(move);
                 fabEnd.setVisibility(View.VISIBLE);
-            } else if (this.day == 4) { //When the current day is 4, and has not yet been changed
+            } else if (this.day == 6) { //When the current day is 4, and has not yet been changed
                 move = new TranslateAnimation(0, 0, 0, px);
                 move.setAnimationListener(new Animation.AnimationListener() {
                     @Override
@@ -145,6 +167,7 @@ public class ClassTimeCollector extends AppCompatActivity {
                 fabEnd.setVisibility(View.INVISIBLE);
             }
         }
+        Log.d("Day change ", "Day changed to " + day);
         this.day = day;
     }
 
@@ -154,15 +177,15 @@ public class ClassTimeCollector extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             ClassTime c = (ClassTime) data.getSerializableExtra("class");
             Log.d("Data", "Received class with values of " + c.toString());
-            for (ClassRecyclerFragment f : fragments) {
-                //Finding the correct fragment to add the class to
-                if (f.sectionNumber == c.getDay()) {
-                    if (data.getBooleanExtra("edited", false)) {
-                        f.mAdapter.updateClassValue(c);
-                    } else {
-                        f.mAdapter.addClass(c);
-                    }
-                }
+            //-2 as day are indexed from 0 at saturday, whereas pager sections are 0 at monday
+            ClassRecyclerFragment f = fragments.get(c.getDay()-2);
+            if (data.getBooleanExtra("edited", false)) {
+                f.mAdapter.updateClassValue(c);
+                int index = classes.indexOf(c);
+                classes.set(index, c);
+            } else {
+                f.mAdapter.addClass(c);
+                classes.add(c);
             }
         }
     }
@@ -178,6 +201,11 @@ public class ClassTimeCollector extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Classes for paging through different days
+
+    /**
+     * The fragment for each day
+     */
     public static class ClassRecyclerFragment extends Fragment {
 
         private RecyclerView mRecyclerView;
@@ -188,7 +216,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         private ArrayList<Subject> subjects;
         private int sectionNumber;
 
-        public ClassRecyclerFragment() {
+        public ClassRecyclerFragment() { //Empty public constructor
         }
 
         public static ClassRecyclerFragment newInstance(ClassTimeCollector parent, int sectionNumber, DataHelper storageHelper, ArrayList<Subject> subjects) {
@@ -199,7 +227,7 @@ public class ClassTimeCollector extends AppCompatActivity {
             fragment.setArguments(args);
             fragment.setStorageHelper(storageHelper);
             fragment.setSubjects(subjects);
-            parent.addFragment(fragment); //Passing the fragment back to its parent. Nobody like children
+            parent.addFragment(fragment); //Passing the fragment back to its parent.
             return fragment;
         }
 
@@ -235,8 +263,11 @@ public class ClassTimeCollector extends AppCompatActivity {
         }
     }
 
+    /**
+     * Simple pager adapter which manages the different days for class input
+     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        ClassTimeCollector parent;
+        private ClassTimeCollector parent;
 
         public SectionsPagerAdapter(ClassTimeCollector parent, FragmentManager fm) {
             super(fm);

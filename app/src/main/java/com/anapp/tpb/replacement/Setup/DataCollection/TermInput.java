@@ -217,7 +217,6 @@ public class TermInput extends SlidingActivity {
     }
 
     private Term checkDateRangeOverlap(Term toCheck) {
-//        Log.d("Range check", "Checking- termNames is " + termNames);
         Term overlap = null;
         if (terms != null) {
             if (editing) {

@@ -6,10 +6,12 @@
     <Spinner
         android:id="@+id/subjectSpinner"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/endTime"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        android:spinnerMode="dropdown"
+        android:clickable="true"/>
 
     <EditText
         android:id="@+id/startTime"

@@ -13,14 +13,16 @@ import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.ClassInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
-import com.anapp.tpb.replacement.Storage.TableTemplates.*;
+import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Theo on 19/02/2016.
  */
-public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.ViewHolder> {
+public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.ViewHolderClass> {
     private ArrayList<ClassTime> classes;
     private ArrayList<Subject> subjects;
     private DataHelper storageHelper;
@@ -30,15 +32,8 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         this.parent = parent;
         this.storageHelper = storageHelper;
         this.subjects = subjects;
-        this.classes = new ArrayList<>();
-        ArrayList<ClassTime> c = storageHelper.getAllClasses();
-        //Only adding classes which are relevant to the selected day
-        for (ClassTime classTime : c) {
-            if (classTime.getDay() == day) {
-                classes.add(classTime);
-            }
-        }
-        Log.d("Data", "Selected classes for day " + day + ", " + classes.toString());
+        this.classes = storageHelper.getClassesForDay(day);
+        Log.d("Data", "Selected classes for day " +( day)+ ", " + classes.toString());
     }
 
     public void updateClass(int position) {
@@ -51,36 +46,42 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         parent.startActivityForResult(i, 1);
     }
 
+    //Method used when a ClassInput returns a value from a class which has already been created
     public void updateClassValue(ClassTime c) {
         classes.set(classes.indexOf(c), c);
         storageHelper.updateClass(c);
+        Collections.sort(classes);
         notifyItemChanged(classes.indexOf(c));
         Log.d("Data", "Updating " + c.toString() + " in recycler");
     }
 
+    //Adds a class to the recycler, and calls the storagehelper method to save the class
     public void addClass(ClassTime c) {
         c = storageHelper.addClass(c);
         classes.add(c);
-        notifyItemInserted(getItemCount());
+        Collections.sort(classes);
+        notifyItemInserted(classes.indexOf(c));
         Log.d("Data", "Adding " + c.toString() + " to recycler");
     }
 
     public void delete(int position) {
+        parent.removeClass(classes.get(position));
         storageHelper.deleteClass(classes.get(position));
         classes.remove(position);
         notifyItemRemoved(position);
-        Log.d("Data", "Removing class at position " + position);
+        Log.d("Data", "Removing class at position " + position + " data now consists of " + classes);
     }
 
+    //Method inflates a new viewholder instance with the class_listitem layout
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolderClass onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.class_listitem, parent, false);
-        ViewHolder vh = new ViewHolder(v, this);
+        ViewHolderClass vh = new ViewHolderClass(v, this);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolderClass holder, int position) {
         //Adding listener for delete button
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +98,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
                 break;
             }
         }
-        holder.lessonName.setText(s.getName());
+        holder.className.setText(s.getName());
         holder.colourBar.setBackgroundColor(s.getColor());
         int start = ct.getStart();
         int end = ct.getEnd();
@@ -107,9 +108,9 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
             timeRange = (Integer.toString(start).substring(0, 2) + ":" + Integer.toString(start).substring(2));
         }
         if (end < 1000) {
-            timeRange += " - " + (Integer.toString(end).substring(0, 1) + ":" + Integer.toString(end).substring(1));
+            timeRange += " to " + (Integer.toString(end).substring(0, 1) + ":" + Integer.toString(end).substring(1));
         } else {
-            timeRange += " - " + (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
+            timeRange += " to " + (Integer.toString(end).substring(0, 2) + ":" + Integer.toString(end).substring(2));
         }
         holder.classTime.setText(timeRange);
         Log.d("Data", "Binding class with value of " + classes.get(position).toString());
@@ -120,17 +121,17 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         return classes.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ClassTimeAdapter parent;
-        private TextView lessonName;
+    public static class ViewHolderClass extends RecyclerView.ViewHolder {
+        private static ClassTimeAdapter parent; //Parent is the same throughout all instances
+        private TextView className;
         private TextView classTime;
         private ImageButton deleteButton;
         private View colourBar;
 
-        public ViewHolder(View v, ClassTimeAdapter l) {
+        public ViewHolderClass (View v, ClassTimeAdapter p) {
             super(v);
-            this.parent = l;
-            lessonName = (TextView) v.findViewById(R.id.subjectName);
+            parent = p;
+            className = (TextView) v.findViewById(R.id.subjectName);
             classTime = (TextView) v.findViewById(R.id.classTime);
             deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
             colourBar = v.findViewById(R.id.colourBar);

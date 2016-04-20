@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Term implements Serializable {
+public class Term implements Serializable, Comparable<Term> {
     private int id;
     private String name;
     private long startDate;
@@ -38,6 +38,17 @@ public class Term implements Serializable {
             }
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    @Override
+    public int compareTo (Term another) {
+        if(startDate > another.getStartDate()) {
+            return 1;
+        } else if(startDate == another.getStartDate()) {
+            return 0;
+        } else {
+            return -1;
         }
     }
 

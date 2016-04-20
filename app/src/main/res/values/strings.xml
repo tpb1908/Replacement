@@ -10,7 +10,6 @@
     <string name="name_collection_first_prompt">First name</string>
     <string name="name_collection_last_prompt">Last name</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="termNumberInputString">Number of terms</string>
     <string name="nameEntryTitle">Enter your name</string>
@@ -19,6 +18,7 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_home">Home</string>
     <string name="ok_button_text">OK</string>
+    <string name="action_edit">Edit</string>
 
     <string name="subject_collector_title">Subjects</string>
     <string name="termDateNameHint">Name</string>
@@ -29,4 +29,5 @@
     <string name="title_activity_subject_time_input">SubjectTimeInput</string>
     <string name="colourLabel">Colour</string>
     <string name="subject_spinner_label">Subject</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

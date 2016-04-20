@@ -13,8 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:title="@string/subject_collector_title">
+        android:background="@color/colorPrimary">
 
     </android.support.v7.widget.Toolbar>
 

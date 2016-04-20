@@ -1,7 +1,6 @@
 package com.anapp.tpb.replacement.Setup.Adapters;
 
 import android.content.Intent;
-import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +14,9 @@ import com.anapp.tpb.replacement.Setup.DataCollection.TermInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.TermDateCollector;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.TermStorageHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -37,7 +36,8 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
     public void addItem(Term term) {
         term = storageHelper.addTerm(term);
         terms.add(term);
-        notifyItemInserted(getItemCount());
+        Collections.sort(terms);
+        notifyItemInserted(terms.indexOf(term));
     }
 
     public void delete(int position) {
@@ -52,6 +52,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
 
     public void updateTermValue(Term t) {
         terms.set(terms.indexOf(t), t);
+        Collections.sort(terms);
         storageHelper.update(t);
         notifyItemChanged(terms.indexOf(t));
     }
@@ -112,7 +113,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("ViewHolder", "Click detected");
+                    Log.d("ClassViewholder", "Click detected");
                     parent.updateTerm(getAdapterPosition());
                 }
             });

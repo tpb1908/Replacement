@@ -16,13 +16,15 @@
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
     </style>
 
-    <style name="DialogTheme" parent="DialogTheme">
+    <!--TODO Add a light dialog theme-->
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="android:textColorPrimary">@color/colorPrimaryText</item>
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
-
     </style>
+
 </resources>

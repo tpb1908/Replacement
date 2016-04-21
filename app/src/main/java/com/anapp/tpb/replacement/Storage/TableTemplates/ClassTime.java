@@ -60,11 +60,10 @@ public class ClassTime implements Serializable, Comparable<ClassTime> {
         } else {
             return -1;
         }
-//        else if(end < another.getStart()) {
-//            return -1;
-//        } else {
-//            return 0;
-//        }
+    }
+
+    public boolean overlaps(ClassTime toCheck) {
+        return (start < toCheck.getEnd() && end > toCheck.getStart());
     }
 
     @Override

@@ -52,6 +52,10 @@ public class Term implements Serializable, Comparable<Term> {
         }
     }
 
+    public boolean overlaps(Term toCheck) {
+        return(startDate <= toCheck.getEndDate()) && (endDate >= toCheck.getStartDate());
+    }
+
     public String getName() {
         return name;
     }

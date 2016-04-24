@@ -25,11 +25,14 @@ import java.util.ArrayList;
  * Created by theo on 20/04/16.
  */
 public class ClassInput extends SlidingActivity {
+    private static final String TAG = "ClassInput";
+    private ArrayList<Subject> subjects;
     private ArrayList<ClassTime> classesForDay;
     private ClassTime current;
     private int start = -1;
     private int end = -1;
     private boolean editing;
+    private Spinner lessonSpinner;
     private EditText startTime;
     private EditText endTime;
     private FloatingActionButton.OnClickListener fabListener;
@@ -47,10 +50,10 @@ public class ClassInput extends SlidingActivity {
         setContent(R.layout.class_input);
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         enableFullscreen();
-        Spinner lessonSpinner = (Spinner) findViewById(R.id.subjectSpinner);
+        lessonSpinner = (Spinner) findViewById(R.id.subjectSpinner);
         startTime = (EditText) findViewById(R.id.startTime);
         endTime = (EditText) findViewById(R.id.endTime);
-        ArrayList<Subject> subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
+        subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
         classesForDay = (ArrayList<ClassTime>) getIntent().getSerializableExtra("classes");
         day = getIntent().getIntExtra("day", 0);
         int spinnerDefaultIndex = 0;
@@ -72,6 +75,7 @@ public class ClassInput extends SlidingActivity {
                 }
             }
             editing = true;
+            Log.i(TAG, "Editing a class " + current);
         } catch (Exception e) {
             editing = false;
         }
@@ -107,7 +111,10 @@ public class ClassInput extends SlidingActivity {
                 if(start != -1 && end != -1) {
                     ClassTime ct = new ClassTime();
                     if(editing) {
+                        ct.setId(current.getId());
                         ct.setSubjectID(current.getSubjectID());
+                    } else {
+                        ct.setSubjectID(subjects.get(lessonSpinner.getSelectedItemPosition()).getId());
                     }
                     ct.setStart(start);
                     ct.setEnd(end);
@@ -152,7 +159,6 @@ public class ClassInput extends SlidingActivity {
         mTimePicker = new TimePickerDialog(ClassInput.this, R.style.datePickerTheme, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet (TimePicker view, int hourOfDay, int minute) {
-                Log.d("Data", "Time received- Hour of " + hourOfDay + " Minute of " + minute);
                 String output = hourOfDay + ":";
                 //Formatting the string
                 if (minute < 10) {

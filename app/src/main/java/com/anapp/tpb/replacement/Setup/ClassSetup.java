@@ -82,7 +82,7 @@ public class ClassSetup extends AppCompatActivity {
             }
         });
 
-        nextFab = (FloatingActionButton) findViewById(R.id.fabEnd);
+        nextFab = (FloatingActionButton) findViewById(R.id.addClassFinishFab);
         nextFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
@@ -188,7 +188,7 @@ public class ClassSetup extends AppCompatActivity {
         public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_class_time_input, container, false);
             mAdapter = new ClassSetupAdapter(parent, dataHelper,  day);
-            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.lessonTimeRecyclerView);
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
             mRecyclerView.setAdapter(mAdapter);
             mLayoutManager = new LinearLayoutManager(parent);
             mRecyclerView.setLayoutManager(mLayoutManager);

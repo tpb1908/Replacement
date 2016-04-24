@@ -20,35 +20,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Setup.ClassSetup$ClassInputSlider"
-            android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light">
-
-        </activity>
 
         <activity
-            android:name=".Setup.DataCollection.ClassInput"
+            android:name=".Setup.DataPresentation.ClassTimeCollector"
             android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
+
         <activity
-            android:name=".Setup.ClassInput"
-            android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light">
-        </activity>
-        <activity
-            android:name=".Setup.ClassSetup"
+            android:name=".Setup2.Collectors.ClassCollector"
             android:taskAffinity=""
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Setup.DataCollection.TermInput"
-            android:taskAffinity=""
-            android:theme="@style/Theme.Sliding.Light">
-        </activity>
-        <activity
-            android:name=".Setup.DataCollection.SubjectInput"
+            android:name=".Setup2.Input.ClassInput"
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light">
         </activity>
@@ -57,20 +42,9 @@
             android:label="@string/title_activity_intro"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity
-            android:name=".Setup.DataPresentation.TermDateCollector"
-            android:label="@string/title_activity_term_date_collector"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".Setup.DataPresentation.SubjectCollector"
-            android:label="@string/title_activity_subject_input"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".Setup.DataPresentation.ClassTimeCollector"
-            android:label="@string/title_activity_subject_time_input"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Setup2.TestActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:taskAffinity="">
         </activity>
     </application>
 

@@ -24,7 +24,6 @@ import android.view.animation.TranslateAnimation;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.Adapters.ClassTimeAdapter;
-import com.anapp.tpb.replacement.Setup.DataCollection.ClassInput;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
@@ -34,12 +33,15 @@ import java.util.ArrayList;
 
 //TODO- Redo all of this on friday
 public class ClassTimeCollector extends AppCompatActivity {
+    private static final String TAG = "ClassTimeCollector";
     private static final String[] DAYS = {"Mon", "Tue", "Wed", "Thu", "Fri"};
     private ArrayList<Subject> subjects;
     private ArrayList<ClassTime> classes;
     private ArrayList<ClassRecyclerFragment> fragments;
     private DataHelper storageHelper;
     private int day;
+    private FloatingActionButton addClassFab;
+    private FloatingActionButton nextFab;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private Class nextWindow;
@@ -59,26 +61,45 @@ public class ClassTimeCollector extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled (int position, float positionOffset, int positionOffsetPixels) {
+            }
+            @Override
+            public void onPageSelected (int position) {
+                if(position != day && position == 4) {
+                    updateFab(true);
+                } else if(day == 4) {
+                    updateFab(false);
+                }
+                day = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged (int state) {
+
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        addClassFab = (FloatingActionButton) findViewById(R.id.addClassFab);
+        nextFab = (FloatingActionButton) findViewById(R.id.addClassFinishFab);
+        addClassFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), ClassInput.class);
+                Intent i = new Intent(getApplicationContext(), com.anapp.tpb.replacement.Setup2.Input.ClassInput.class);
+                Log.i(TAG, "Adding subjects " + subjects);
                 i.putExtra("subjects", subjects);
                 Log.d("Classes", "Classes with intent " + classes);
-                i.putExtra("classes", classes);
+                i.putExtra("classes", storageHelper.getClassesForDay(day));
                 i.putExtra("day", day);
                 startActivityForResult(i, 1);
             }
         });
 
-        FloatingActionButton fabEnd = (FloatingActionButton) findViewById(R.id.fabEnd);
-        fabEnd.setOnClickListener(new View.OnClickListener() {
+        nextFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i  = new Intent(getApplicationContext(), nextWindow);
@@ -87,9 +108,9 @@ public class ClassTimeCollector extends AppCompatActivity {
         });
 
         nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
-        subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
         storageHelper = new DataHelper(this);
         classes = storageHelper.getAllClasses();
+        subjects = storageHelper.getAllSubjects();
     }
 
     //Method is used to give the ClassTimeCollector access to the fragments
@@ -105,71 +126,57 @@ public class ClassTimeCollector extends AppCompatActivity {
         }
     }
 
-    //Method used by viewpage to change controls in parent
-    public void setDay(int day) {
-        day += 2;
-        if (this.day != day) {  //Ignoring the multiple calls from the viewpager
-            final FloatingActionButton fabEnd = (FloatingActionButton) findViewById(R.id.fabEnd);
-            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            //DP conversion  http://stackoverflow.com/questions/30202379/android-views-gettop-getleft-getx-gety-getwidth-getheight-meth
-            final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics()); //Height of fab + fab margin into pixels
+    public void updateFab(boolean done) {
+        final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics()); //Height of fab + fab margin into pixels
+        TranslateAnimation move;
+        if(done) {
+            move = new TranslateAnimation(0, 0, 0, -px);
+            move.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    addClassFab.setY(nextFab.getY() - px);
+                    //The animation below stops the flickering/jump once the animation completes. No idea why
+                    animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
+                    animation.setDuration(1);
+                    addClassFab.startAnimation(animation);
+                }
+            });
+            move.setDuration(300);
+            addClassFab.startAnimation(move);
+            nextFab.setVisibility(View.VISIBLE);
+        } else {
+            move = new TranslateAnimation(0, 0, 0, px);
+            move.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
 
-            TranslateAnimation move;
-            /* The TranslationAnimation works in pixels rather than DP, so the value is converted above
-            * The screen grid starts from the top left, so in order to shift the fab up enough to let the fabEND
-            * take its place, and leave the correct margin, the DP value is - (height of fab (56dp) + fab marge (16dp))
-            * In order to actually set the value position of the FAB (its click location), a call to fab.setY() must be used
-            * As in order to keep its location constant, it needs a default location, which is the Y value of the fabEnd
-             */
-            if (day == 6) { //When the day has been changed to 4 (Friday)
-                move = new TranslateAnimation(0, 0, 0, -px);
-                move.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        fab.setY(fabEnd.getY() - px);
-                        //The animation below stops the flickering/jump once the animation completes. No idea why
-                        animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
-                        animation.setDuration(1);
-                        fab.startAnimation(animation);
-                    }
-                });
-                move.setDuration(300);
-                fab.startAnimation(move);
-                fabEnd.setVisibility(View.VISIBLE);
-            } else if (this.day == 6) { //When the current day is 4, and has not yet been changed
-                move = new TranslateAnimation(0, 0, 0, px);
-                move.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        fab.setY(fabEnd.getY());
-                        animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
-                        animation.setDuration(1);
-                        fab.startAnimation(animation);
-                    }
-                });
-                move.setDuration(300);
-                fab.startAnimation(move);
-                fabEnd.setVisibility(View.INVISIBLE);
-            }
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    addClassFab.setY(nextFab.getY());
+                    animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
+                    animation.setDuration(1);
+                    addClassFab.startAnimation(animation);
+                }
+            });
+            move.setDuration(300);
+            addClassFab.startAnimation(move);
+            nextFab.setVisibility(View.INVISIBLE);
         }
-        Log.d("Day change ", "Day changed to " + day);
-        this.day = day;
     }
+
+    //Method used by viewpage to change controls in parent
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -236,7 +243,7 @@ public class ClassTimeCollector extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_class_time_input, container, false);
             mAdapter = new ClassTimeAdapter(parent, storageHelper, subjects, sectionNumber);
-            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.lessonTimeRecyclerView);
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
             mRecyclerView.setAdapter(mAdapter);
             mLayoutManager = new LinearLayoutManager(parent);
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -263,9 +270,6 @@ public class ClassTimeCollector extends AppCompatActivity {
         }
     }
 
-    /**
-     * Simple pager adapter which manages the different days for class input
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
         private ClassTimeCollector parent;
 
@@ -278,7 +282,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
             Log.d("Data", "Change in primary position,  position is " + position);
-            parent.setDay(position);
+            parent.day = position + 2;
         }
 
         @Override

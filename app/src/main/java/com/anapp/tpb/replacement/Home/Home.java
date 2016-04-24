@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
 import com.anapp.tpb.replacement.R;
-import com.anapp.tpb.replacement.Setup.ClassSetup;
 import com.anapp.tpb.replacement.Setup.IntroActivity;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
@@ -43,16 +42,30 @@ public class Home extends AppCompatActivity implements TodayFragment.TodayInterf
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
+        dataHelper = new DataHelper(this);
+//        Subject  s = new Subject();
+//        s.setClassroom("Classroom");
+//        s.setColor(getResources().getColor(R.color.colorAccent));
+//        s.setName("Subject 1");
+//        s.setTeacher("Teacher 1");
+//        dataHelper.addSubject(s);
+//        s.setClassroom("Classroom 2");
+//        s.setColor(getResources().getColor(R.color.colorPrimaryDark));
+//        s.setName("Subject 2");
+//        s.setTeacher("Teacher 2");
+//        dataHelper.addSubject(s);
+//
+//        Intent j = new Intent(getApplicationContext(), ClassTimeCollector.class);
+//        startActivity(j);
 
-        Intent j = new Intent(getApplicationContext(), ClassSetup.class);
-        startActivity(j);
+
 
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("firststart", false);
             editor.apply();
             Intent i = new Intent(getApplicationContext(), IntroActivity.class);
-            startActivity(i);
+            //startActivity(i);
         } else {
             setContentView(R.layout.activity_home);
 
@@ -101,7 +114,7 @@ public class Home extends AppCompatActivity implements TodayFragment.TodayInterf
 
             });
 
-            dataHelper = new DataHelper(this);
+
         }
 
     }
@@ -179,6 +192,15 @@ public class Home extends AppCompatActivity implements TodayFragment.TodayInterf
         public CharSequence getPageTitle(int position) {
             return titles[position];
         }
+    }
+
+    private void setUpTestData() {
+        ClassTime c = new ClassTime();
+        c.setStart(1100);
+        c.setEnd(1400);
+        c.setDay(1);
+        c.setSubjectID(1);
+        //c = dataHelper.addClass(c);
     }
 
 

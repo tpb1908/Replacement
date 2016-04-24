@@ -19,6 +19,14 @@ public class TimeFormatter {
         return format(time, ":");
     }
 
+    public static String format(int hour, int minute, String separator) {
+        return format((hour*100)+minute, separator);
+    }
+
+    public static String format(int hour, int minute) {
+        return format((hour*100)+minute);
+    }
+
     public static String getHour(int time) {
         if(time < 1000) {
             return Integer.toString(time).substring(0, 1);

@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.R;
-import com.anapp.tpb.replacement.Setup.DataCollection.ClassInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
@@ -23,6 +22,7 @@ import java.util.Collections;
  * Created by Theo on 19/02/2016.
  */
 public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.ViewHolderClass> {
+    private static final String TAG =" ClassTimeAdapter";
     private ArrayList<ClassTime> classes;
     private ArrayList<Subject> subjects;
     private DataHelper storageHelper;
@@ -37,7 +37,8 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
     }
 
     public void updateClass(int position) {
-        Intent i = new Intent(parent.getApplicationContext(), ClassInput.class);
+        Intent i = new Intent(parent.getApplicationContext(), com.anapp.tpb.replacement.Setup2.Input.ClassInput.class);
+        Log.i(TAG, "Updating class " + classes.get(position));
         i.putExtra("editingClass", classes.get(position));
         i.putExtra("subjects", subjects);
         i.putExtra("classes", classes);

@@ -218,7 +218,6 @@ public class SubjectCollector extends AppCompatActivity {
                 });
 
             }
-
         }
     }
 }

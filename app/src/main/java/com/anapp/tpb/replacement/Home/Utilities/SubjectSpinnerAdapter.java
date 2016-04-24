@@ -16,6 +16,7 @@ import java.util.ArrayList;
  * Created by theo on 20/04/16.
  */
 public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget.SpinnerAdapter {
+    private static final String TAG = "SubjectSpinnerAdapter";
     private Context context;
     private ArrayList<Subject> subjects;
 

@@ -5,7 +5,6 @@
                 android:clipChildren="false"
     >
 
-    <!--TODO- Get rid of shitty absolute layout, and move the delete button so it is aligned properly-->
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"

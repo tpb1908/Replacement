@@ -2,10 +2,10 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector.ClassRecyclerFragment">
+                tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/lessonTimeRecyclerView"
+        android:id="@+id/dayClassTimeRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </android.support.v7.widget.RecyclerView>

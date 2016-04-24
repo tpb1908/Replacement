@@ -450,7 +450,7 @@ public class DataHelper extends SQLiteOpenHelper {
         values.put(KEY_COLOR, s.getColor());
 
         s.setId((int) db.insert(TABLE_SUBJECTS, null, values));
-        Log.d("Data", "Adding term with values of " + s.toString());
+        Log.d("Data", "Adding subject with values of " + s.toString());
         return s;
     }
 
@@ -501,7 +501,6 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public ArrayList<Subject> getAllSubjects() {
         ArrayList<Subject> subjects = new ArrayList<>();
-
         String query = "SELECT * FROM " + TABLE_SUBJECTS;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
@@ -608,6 +607,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
     public ArrayList<ClassTime> getAllClasses() {
         if(classTimeCacheValid) {
+            Log.i(TABLE_CLASS_TIMES, "Returning cached classes " + classTimeCache);
             return classTimeCache;
         }
         ArrayList<ClassTime> classes = new ArrayList<>();
@@ -669,10 +669,7 @@ public class DataHelper extends SQLiteOpenHelper {
             } while(cursor.moveToNext());
         }
         cursor.close();
-        Log.d("Sorting", "Before sorting " + result);
         Collections.sort(result);
-        Log.d("Sorting", "After sorting " + result);
-
         return  result;
     }
 

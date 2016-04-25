@@ -31,11 +31,7 @@ public class Subject implements Serializable {
     public boolean equals(Object o) {
         try {
             Subject l = (Subject) o;
-            if (l.getId() == id) {
-                return true;
-            } else {
-                return false;
-            }
+            return l.getId() == id;
         } catch (Exception e) {
             return false;
         }

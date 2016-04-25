@@ -114,6 +114,16 @@ public class Task {
     }
 
     @Override
+    public boolean equals (Object o) {
+        try {
+            Task t = (Task) o;
+            return t.getId() == id;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
     public String toString() {
         return "Task {id="+id+", type="+type+", title="+title+ ", detail=" + detail+
                 ", startDate=" +startDate+", endDate="+endDate+", reminder="+showReminder+

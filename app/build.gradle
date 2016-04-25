@@ -34,7 +34,7 @@ dependencies {
 
     compile 'com.github.paolorotolo:appintro:3.3.0'
     compile 'com.klinkerapps:sliding-activity:1.2.3'
-    
+
     compile 'com.pes.materialcolorpicker:library:1.0.+'
     compile 'com.gordonwong:material-sheet-fab:1.2.1'
     compile project(':app:FabReveal')

@@ -209,10 +209,6 @@ public class ClassTimeCollector extends AppCompatActivity {
     }
 
     //Classes for paging through different days
-
-    /**
-     * The fragment for each day
-     */
     public static class ClassRecyclerFragment extends Fragment {
 
         private RecyclerView mRecyclerView;

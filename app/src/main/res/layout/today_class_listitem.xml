@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="match_parent"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
               android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -27,13 +27,25 @@
                 android:layout_alignParentTop="true"
                 android:background="@color/colorPrimary"/>
 
+            <!--Top line of textviews. Subject and teacher -->
             <TextView
                 android:id="@+id/subjectName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/classIcon"
                 android:layout_toEndOf="@+id/classIcon"
+                android:layout_toLeftOf="@+id/teacherName"
+                android:singleLine="true"
                 android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/teacherName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/subjectName"
+                android:singleLine="true"
+                android:layout_alignParentEnd="true"
+                android:paddingEnd="10dp"/>
 
             <TextView
                 android:id="@+id/classTime"
@@ -41,16 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/classIcon"
                 android:layout_marginRight="8dp"
-                android:layout_toEndOf="@+id/classIcon"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/teacherName"
-                android:layout_alignBaseline="@+id/subjectName"
-                android:layout_alignBottom="@+id/subjectName"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="48dp"/>
+                android:layout_toEndOf="@+id/classIcon"
+                android:layout_toLeftOf="@+id/classRoom"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +62,9 @@
                 android:id="@+id/classRoom"
                 android:layout_alignBaseline="@+id/classTime"
                 android:layout_alignBottom="@+id/classTime"
-                android:layout_alignStart="@+id/teacherName"/>
+                android:layout_alignParentRight="true"
+                android:singleLine="true"
+                android:paddingEnd="10dp"/>
 
             <ImageView
                 android:id="@+id/classIcon"
@@ -74,7 +80,7 @@
             <ProgressBar
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
+                android:layout_height="6dp"
                 android:id="@+id/progressBar"
                 android:layout_gravity="left|center_horizontal"
                 android:layout_alignParentTop="true"

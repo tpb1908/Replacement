@@ -1,5 +1,7 @@
 package com.anapp.tpb.replacement.Storage.TableTemplates;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -31,18 +33,14 @@ public class Term implements Serializable, Comparable<Term> {
     public boolean equals(Object o) {
         try {
             Term t = (Term) o;
-            if (t.getId() == id) {
-                return true;
-            } else {
-                return false;
-            }
+            return t.getId() == id;
         } catch (Exception e) {
             return false;
         }
     }
 
     @Override
-    public int compareTo (Term another) {
+    public int compareTo (@NonNull Term another) {
         if(startDate > another.getStartDate()) {
             return 1;
         } else if(startDate == another.getStartDate()) {

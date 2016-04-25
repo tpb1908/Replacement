@@ -9,7 +9,11 @@ public class TimeFormatter {
     
     public static String format(int time, String separator) {
         if (time < 1000) {
-            return (Integer.toString(time).substring(0, 1) + separator + Integer.toString(time).substring(1));
+            if(time == 0) {
+                return "0:00";
+            } else {
+                return (Integer.toString(time).substring(0, 1) + separator + Integer.toString(time).substring(1));
+            }
         } else {
             return (Integer.toString(time).substring(0, 2) + separator + Integer.toString(time).substring(2));
         }

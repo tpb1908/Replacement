@@ -21,9 +21,12 @@ import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.IntroActivity;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
+
+import java.util.ArrayList;
 
 public class Home extends AppCompatActivity implements TodayFragment.TodayInterface {
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
@@ -43,22 +46,7 @@ public class Home extends AppCompatActivity implements TodayFragment.TodayInterf
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
-//        Subject  s = new Subject();
-//        s.setClassroom("Classroom");
-//        s.setColor(getResources().getColor(R.color.colorAccent));
-//        s.setName("Subject 1");
-//        s.setTeacher("Teacher 1");
-//        dataHelper.addSubject(s);
-//        s.setClassroom("Classroom 2");
-//        s.setColor(getResources().getColor(R.color.colorPrimaryDark));
-//        s.setName("Subject 2");
-//        s.setTeacher("Teacher 2");
-//        dataHelper.addSubject(s);
-//
-//        Intent j = new Intent(getApplicationContext(), ClassTimeCollector.class);
-//        startActivity(j);
-
-
+        //setUpTestData();
 
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();
@@ -195,12 +183,48 @@ public class Home extends AppCompatActivity implements TodayFragment.TodayInterf
     }
 
     private void setUpTestData() {
-        ClassTime c = new ClassTime();
-        c.setStart(1100);
-        c.setEnd(1400);
-        c.setDay(1);
-        c.setSubjectID(1);
-        //c = dataHelper.addClass(c);
+        ArrayList<Integer> subIDs = new ArrayList<>();
+        Subject s = new Subject();
+        s.setClassroom("L4.14");
+        s.setTeacher("TMM");
+        s.setName("Further maths");
+        s.setColor(39423);
+        s = dataHelper.addSubject(s);
+        subIDs.add(s.getId());
+        s.setClassroom("L0.25");
+        s.setTeacher("RJS");
+        s.setName("Maths");
+        s.setColor(13209);
+        s = dataHelper.addSubject(s);
+        subIDs.add(s.getId());
+        s.setClassroom("L2.09");
+        s.setTeacher("MQL");
+        s.setName("Computer science");
+        s.setColor(3381555);
+        s = dataHelper.addSubject(s);
+        subIDs.add(s.getId());
+        s.setClassroom("L4.08");
+        s.setTeacher("SWG");
+        s.setName("Physics");
+        s.setColor(16737792);
+        s = dataHelper.addSubject(s);
+        subIDs.add(s.getId());
+        s.setClassroom("L1.10");
+        s.setTeacher("SJY");
+        s.setName("Physics");
+        s.setColor(13382400);
+        s = dataHelper.addSubject(s);
+        subIDs.add(s.getId());
+        ClassTime classTime = new ClassTime();
+        for(int i = 0; i < 7; i++) {
+            classTime.setDay(i);
+            for(int j = 0;j < 24; j++) {
+                classTime.setStart(100 * j);
+                classTime.setEnd((100* (j+1)));
+                classTime.setSubjectID( subIDs.get( (int) (Math.random() * subIDs.size())) );
+                dataHelper.addClass(classTime);
+            }
+        }
     }
 
 

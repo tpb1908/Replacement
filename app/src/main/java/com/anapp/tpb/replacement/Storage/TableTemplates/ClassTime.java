@@ -75,10 +75,7 @@ public class ClassTime implements Serializable, Comparable<ClassTime> {
     public boolean equals(Object o) {
         try {
             ClassTime ct = (ClassTime) o;
-            if (id == ct.getId()) {
-                return true;
-            }
-            return false;
+            return id == ct.getId();
         } catch (Exception e) {
             return false;
         }

@@ -41,7 +41,7 @@ public class TermInput extends SlidingActivity {
     private boolean editing = false;
     private Term editingTerm;
     private boolean startEnd = true;
-    DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

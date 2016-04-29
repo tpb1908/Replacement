@@ -57,7 +57,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
         Log.d("Data", "Adding " + l.toString() + " to recycler");
     }
 
-    public void delete(int position) {
+    private void delete(int position) {
         storageHelper.deleteSubject(subjects.get(position));
         subjects.remove(position);
         notifyItemRemoved(position);

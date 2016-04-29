@@ -36,7 +36,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         Log.d("Data", "Selected classes for day " +( day)+ ", " + classes.toString());
     }
 
-    public void updateClass(int position) {
+    private void updateClass(int position) {
         Intent i = new Intent(parent.getApplicationContext(), com.anapp.tpb.replacement.Setup2.Input.ClassInput.class);
         Log.i(TAG, "Updating class " + classes.get(position));
         i.putExtra("editingClass", classes.get(position));
@@ -65,7 +65,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         Log.d("Data", "Adding " + c.toString() + " to recycler");
     }
 
-    public void delete(int position) {
+    private void delete(int position) {
         parent.removeClass(classes.get(position));
         storageHelper.deleteClass(classes.get(position));
         classes.remove(position);

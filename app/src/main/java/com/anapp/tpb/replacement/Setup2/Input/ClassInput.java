@@ -136,7 +136,7 @@ public class ClassInput extends SlidingActivity {
             }
         };
     }
-
+    //FIXME- Boolean inversion
     private boolean checkTimeRangeOverlap(ClassTime toCheck) {
         for(ClassTime ct : classesForDay) {
             if(ct.overlaps(toCheck)) {

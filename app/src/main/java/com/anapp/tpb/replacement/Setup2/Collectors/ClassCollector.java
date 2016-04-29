@@ -101,7 +101,7 @@ public class ClassCollector extends AppCompatActivity {
         nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
     }
 
-    public void updateFab(boolean done) {
+    private void updateFab(boolean done) {
         //DP conversion  http://stackoverflow.com/questions/30202379/android-views-gettop-getleft-getx-gety-getwidth-getheight-meth
         final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics()); //Height of fab + fab margin into pixels
         TranslateAnimation move;

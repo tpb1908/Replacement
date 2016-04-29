@@ -41,7 +41,7 @@ public class TestClassRecycler extends RecyclerView.Adapter<TestClassRecycler.Cl
         return classesForDay;
     }
 
-    public void openClass(ClassTime ct) {
+    private void openClass(ClassTime ct) {
         Intent i = new Intent(parent.getApplicationContext(), ClassInput.class);
         ArrayList<ClassTime> classes = new ArrayList<>(classesForDay);
         classes.remove(ct);
@@ -69,7 +69,7 @@ public class TestClassRecycler extends RecyclerView.Adapter<TestClassRecycler.Cl
         Log.i(TAG, "Class list is now " + classesForDay);
     }
 
-    public void delete(int position) {
+    private void delete(int position) {
         dataHelper.deleteClass(classesForDay.get(position));
         classesForDay.remove(position);
         notifyItemRemoved(position);

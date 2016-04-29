@@ -96,7 +96,7 @@ public class ClassSetup extends AppCompatActivity {
 
     }
 
-    public void updateFab(boolean done) {
+    private void updateFab(boolean done) {
         //DP conversion  http://stackoverflow.com/questions/30202379/android-views-gettop-getleft-getx-gety-getwidth-getheight-meth
         final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics()); //Height of fab + fab margin into pixels
         TranslateAnimation move;
@@ -476,6 +476,7 @@ public class ClassSetup extends AppCompatActivity {
             setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick, fabListener);
         }
 
+        //FIXME- Boolean inversion
         private boolean checkOverlap(ClassTime toCheck) {
             ClassTime overlap = null;
             boolean foundOverlap = false;

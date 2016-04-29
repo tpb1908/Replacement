@@ -114,7 +114,7 @@ public class ClassTimeCollector extends AppCompatActivity {
     }
 
     //Method is used to give the ClassTimeCollector access to the fragments
-    public void addFragment(ClassRecyclerFragment f) {
+    private void addFragment(ClassRecyclerFragment f) {
         fragments.add(f);
     }
 
@@ -126,7 +126,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         }
     }
 
-    public void updateFab(boolean done) {
+    private void updateFab(boolean done) {
         final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, getResources().getDisplayMetrics()); //Height of fab + fab margin into pixels
         TranslateAnimation move;
         if(done) {

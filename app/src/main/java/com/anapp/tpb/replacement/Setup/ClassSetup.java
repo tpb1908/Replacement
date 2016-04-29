@@ -199,11 +199,11 @@ public class ClassSetup extends AppCompatActivity {
 
 
     public static class ClassSetupAdapter extends RecyclerView.Adapter<ClassSetupAdapter.ClassViewHolder> {
+        private final int day;
         private ClassSetup parent;
         private DataHelper dataHelper;
         private ArrayList<Subject> subjects;
         private ArrayList<ClassTime> classes;
-        private final int day;
 
         public ClassSetupAdapter (ClassSetup parent, DataHelper dataHelper, int day) {
             this.day = day;
@@ -503,7 +503,7 @@ public class ClassSetup extends AppCompatActivity {
         private void displayTimePicker(final boolean startEnd) {
             TimePickerDialog mTimePicker;
             //Creating dialog
-            mTimePicker = new TimePickerDialog(ClassInputSlider.this, R.style.datePickerTheme, new TimePickerDialog.OnTimeSetListener() {
+            mTimePicker = new TimePickerDialog(ClassInputSlider.this, R.style.DatePickerTheme, new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     Log.d("Data", "Time received- Hour of " + hourOfDay + " Minute of " + minute);
@@ -535,6 +535,11 @@ public class ClassSetup extends AppCompatActivity {
             private ArrayList<Subject> subjects;
 
 
+            public SpinnerAdapter(ArrayList<Subject> subjects) {
+                super();
+                this.subjects = subjects;
+            }
+
             @Override
             public int getCount () {
                 return subjects.size();
@@ -553,11 +558,6 @@ public class ClassSetup extends AppCompatActivity {
             @Override
             public View getView (int position, View convertView, ViewGroup parent) {
                 return getCustomView(position, parent);
-            }
-
-            public SpinnerAdapter(ArrayList<Subject> subjects) {
-                super();
-                this.subjects = subjects;
             }
 
             @Override

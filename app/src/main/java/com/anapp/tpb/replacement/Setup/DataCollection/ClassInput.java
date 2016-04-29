@@ -172,7 +172,7 @@ public class ClassInput extends SlidingActivity {
     private void displayTimePicker(final boolean startEnd) {
         TimePickerDialog mTimePicker;
         //Creating dialog
-        mTimePicker = new TimePickerDialog(ClassInput.this, R.style.datePickerTheme, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(ClassInput.this, R.style.DatePickerTheme, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Log.d("Data", "Time received- Hour of " + hourOfDay + " Minute of " + minute);

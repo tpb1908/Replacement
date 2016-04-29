@@ -7,7 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="android:timePickerDialogTheme">@style/timePickerTheme</item>
+        <item name="android:timePickerDialogTheme">@style/TimePickerTheme</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -15,7 +15,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="ediTextTheme" parent="android:Widget.EditText">
+    <style name="EditTextTheme" parent="android:Widget.EditText">
         <item name="android:background">@color/colorAccent</item>
     </style>
 
@@ -29,14 +29,20 @@
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
     </style>
 
-    <style name="datePickerTheme" parent="Theme.AppCompat.Dialog">
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="timePickerTheme" parent="Theme.AppCompat.Dialog">
+    <style name="SheetItem">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="TimePickerTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>

@@ -13,7 +13,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.anapp.tpb.replacement.Home.Utilities.SubjectSpinnerAdapter;
-import com.anapp.tpb.replacement.Home.Utilities.TimeFormatter;
+import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
@@ -64,9 +64,9 @@ public class ClassInput extends SlidingActivity {
             end = current.getEnd();
             String time; //Recommended to perform string concatenation outside of setText() method
             //Time is stored in a 0000 2359 format. If hour < 10, then time < 100 -> String must be split differently
-            time = TimeFormatter.format(start);
+            time = TimeUtils.format(start);
             startTime.setText(time);
-            time = TimeFormatter.format(end);
+            time = TimeUtils.format(end);
             endTime.setText(time);
             for (Subject s : subjects) {
                 if (s.getId() == current.getSubjectID()) {
@@ -156,7 +156,7 @@ public class ClassInput extends SlidingActivity {
     private void displayTimePicker (final boolean startEnd) {
         TimePickerDialog mTimePicker;
         //Creating dialog
-        mTimePicker = new TimePickerDialog(ClassInput.this, R.style.datePickerTheme, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(ClassInput.this, R.style.DatePickerTheme, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet (TimePicker view, int hourOfDay, int minute) {
                 String output = hourOfDay + ":";

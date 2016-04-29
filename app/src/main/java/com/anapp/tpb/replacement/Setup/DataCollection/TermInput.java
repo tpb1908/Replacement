@@ -103,7 +103,7 @@ public class TermInput extends SlidingActivity {
             @Override
             public void onClick(View v) {
                 startEnd = true;
-                new DatePickerDialog(TermInput.this, R.style.datePickerTheme, dateSetListener, calendar
+                new DatePickerDialog(TermInput.this, R.style.DatePickerTheme, dateSetListener, calendar
                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
@@ -113,7 +113,7 @@ public class TermInput extends SlidingActivity {
             @Override
             public void onClick(View v) {
                 startEnd = false;
-                new DatePickerDialog(TermInput.this, R.style.datePickerTheme, dateSetListener, calendar
+                new DatePickerDialog(TermInput.this, R.style.DatePickerTheme, dateSetListener, calendar
                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }

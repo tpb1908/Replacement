@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.anapp.tpb.replacement.Home.Utilities.TimeFormatter;
+import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup2.Input.ClassInput;
 import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
@@ -99,7 +99,7 @@ public class TestClassRecycler extends RecyclerView.Adapter<TestClassRecycler.Cl
         holder.colourBar.setBackgroundColor(s.getColor());
         int start = ct.getStart();
         int end = ct.getEnd();
-        String timeRange = TimeFormatter.format(start) + " to " + TimeFormatter.format(end);
+        String timeRange = TimeUtils.format(start) + " to " + TimeUtils.format(end);
         holder.classTime.setText(timeRange);
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

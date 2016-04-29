@@ -37,7 +37,7 @@ public class SubjectInput extends SlidingActivity {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        setContent(R.layout.subject_input);
+        setContent(R.layout.input_subject);
         subjectName = (TextView) findViewById(R.id.subjectNameInput);
         classRoom = (TextView) findViewById(R.id.classroomInput);
         teacher = (TextView) findViewById(R.id.teacherInput);

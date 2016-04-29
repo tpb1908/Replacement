@@ -19,7 +19,7 @@ import com.anapp.tpb.replacement.Home.Fragments.Today.TodayClassFragment;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.IntroActivity;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;

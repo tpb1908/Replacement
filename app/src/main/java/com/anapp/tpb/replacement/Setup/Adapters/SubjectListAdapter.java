@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.SubjectInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.subject_listitem, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_subject, parent, false);
         ViewHolder vh = new ViewHolder(v, this);
         return vh;
     }

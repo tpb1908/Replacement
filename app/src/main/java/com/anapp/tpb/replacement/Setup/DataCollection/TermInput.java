@@ -74,7 +74,7 @@ public class TermInput extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         terms = (ArrayList<Term>) getIntent().getSerializableExtra("terms");
-        setContent(R.layout.term_input);
+        setContent(R.layout.input_term);
         calendar = Calendar.getInstance();
 
         startDateText = (EditText) findViewById(R.id.termStartDateTextView);

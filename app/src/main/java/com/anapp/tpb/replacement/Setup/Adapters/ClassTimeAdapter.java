@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
@@ -76,7 +76,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
     //Method inflates a new viewholder instance with the class_listitem layout
     @Override
     public ViewHolderClass onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.class_listitem, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_class, parent, false);
         ViewHolderClass vh = new ViewHolderClass(v, this);
         return vh;
     }

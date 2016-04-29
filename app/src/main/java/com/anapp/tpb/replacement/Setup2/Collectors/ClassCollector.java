@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup2.Input.ClassInput;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
@@ -51,7 +51,7 @@ public class ClassCollector extends AppCompatActivity {
     @Override
     protected void onCreate (@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_time_input);
+        setContentView(R.layout.activity_class_input);
         dataHelper = new DataHelper(this);
         mPagerAdapter = new DayPagerAdapter(this, getSupportFragmentManager());
         final ViewPager mPager = (ViewPager) findViewById(R.id.container);
@@ -190,7 +190,7 @@ public class ClassCollector extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_class_time_input, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_class_input, container, false);
             mAdapter = new ClassCollectorAdapter(parent, dataHelper,  day);
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
             mRecyclerView.setAdapter(mAdapter);
@@ -256,7 +256,7 @@ public class ClassCollector extends AppCompatActivity {
 
         @Override
         public ClassViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.class_listitem, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_class, parent, false);
             return new ClassViewHolder(v, this);
         }
 

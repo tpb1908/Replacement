@@ -17,7 +17,7 @@ import android.view.View;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.Adapters.TermListAdapter;
 import com.anapp.tpb.replacement.Setup.DataCollection.TermInput;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 
 import me.yugy.github.reveallayout.RevealLayout;
@@ -39,7 +39,7 @@ public class TermDateCollector extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_term_date_collector);
+        setContentView(R.layout.activity_term_collector);
         Toolbar t = (Toolbar) findViewById(R.id.toolbar);
         t.setTitle(Html.fromHtml("<font color='#FFFFFF'>Terms </font>"));
         setSupportActionBar(t);

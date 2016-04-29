@@ -21,6 +21,12 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     private ArrayList<Subject> subjects;
 
 
+    public SubjectSpinnerAdapter(Context context, ArrayList<Subject> subjects) {
+        super();
+        this.context = context;
+        this.subjects = subjects;
+    }
+
     @Override
     public int getCount () {
         return subjects.size();
@@ -41,12 +47,6 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         return getCustomView(position, parent);
     }
 
-    public SubjectSpinnerAdapter(Context context, ArrayList<Subject> subjects) {
-        super();
-        this.context = context;
-        this.subjects = subjects;
-    }
-
     @Override
     public View getDropDownView (int position, View convertView, ViewGroup parent) {
         return getCustomView(position, parent);
@@ -54,7 +54,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
 
     public View getCustomView(int position, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View row = inflater.inflate(R.layout.subject_spinner_layout, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
+        View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
         TextView name = (TextView) row.findViewById(R.id.subjectText);
         View colourBar = row.findViewById(R.id.colourBar);
         String text = this.subjects.get(position).getName() + ", " + this.subjects.get(position).getTeacher();

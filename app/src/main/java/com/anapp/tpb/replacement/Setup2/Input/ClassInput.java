@@ -47,7 +47,7 @@ public class ClassInput extends SlidingActivity {
 
     @Override
     public void init (Bundle savedInstanceState) {
-        setContent(R.layout.class_input);
+        setContent(R.layout.input_class);
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         enableFullscreen();
         lessonSpinner = (Spinner) findViewById(R.id.subjectSpinner);

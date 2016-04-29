@@ -1,34 +1,23 @@
 <resources>
     <string name="app_name">Replacement</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
-    <string name="title_activity_intro">IntroActivity</string>
 
-    <string name="name_collection_first_prompt">First name</string>
-    <string name="name_collection_last_prompt">Last name</string>
+    <string name="hint_name_first">First name</string>
+    <string name="hint_name_last">Last name</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="termNumberInputString">Number of terms</string>
-    <string name="nameEntryTitle">Enter your name</string>
-    <string name="title_activity_term_date_collector">Term dates</string>
-    <string name="title_activity_subject_input">SubjectInput</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="label_name_entry">Enter your name</string>
+    <string name="title_term_date_collector">Term dates</string>
+    <string name="title_subject_input">Subjects</string>
     <string name="title_activity_home">Home</string>
-    <string name="ok_button_text">OK</string>
-    <string name="action_edit">Edit</string>
+    <string name="label_ok_button">OK</string>
+    <string name="label_action_edit">Edit</string>
 
-    <string name="subject_collector_title">Subjects</string>
-    <string name="termDateNameHint">Name</string>
-    <string name="termCollectorTitle">Terms</string>
-    <string name="subjectNameInputHint">Subject name</string>
-    <string name="teacherInputHint">Teacher</string>
-    <string name="classRoomInputString">Classroom</string>
-    <string name="title_activity_subject_time_input">SubjectTimeInput</string>
-    <string name="colourLabel">Colour</string>
-    <string name="subject_spinner_label">Subject</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="title_activity_es">es</string>
+    <string name="title_subject_collector">Subjects</string>
+    <string name="hint_term_name">Term name</string>
+    <string name="title_term_collector">Terms</string>
+    <string name="hint_subject_name">Subject name</string>
+    <string name="hint_teacher_name">Teacher</string>
+    <string name="label_class_input">Classroom</string>
+    <string name="label_color_picker">Colour</string>
+    <string name="label_subject_spinner">Subject</string>
 </resources>

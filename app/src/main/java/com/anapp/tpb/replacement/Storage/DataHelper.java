@@ -1,4 +1,4 @@
-package com.anapp.tpb.replacement.Storage.StorageHelpers;
+package com.anapp.tpb.replacement.Storage;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -45,9 +45,6 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String KEY_END_TIME = "EndTime";
     private static final String KEY_DAY = "Day";
     private static final String CLASS_COLUMNS[] = {KEY_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY, KEY_SUBJECT_ID};
-    private static ArrayList<ClassTime> classTimeCache = new ArrayList<>();
-    private static boolean classTimeCacheValid = false;
-
     private static final String TABLE_TASKS = "Tasks";
     private static final String KEY_TYPE = "Type";
     private static final String KEY_TASK_TITLE = "Title";
@@ -59,9 +56,8 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String KEY_COMPLETE = "Complete";
     private static final String KEY_PERCENT_COMPLETE = "Percent_Complete";
     private static final String[] TASK_COLUMNS = new String[] {KEY_ID, KEY_TYPE, KEY_TASK_TITLE, KEY_TASK_DETAIL, KEY_TASK_START, KEY_TASK_END, KEY_SHOW_REMINDER, KEY_TIME, KEY_COMPLETE, KEY_PERCENT_COMPLETE};
-
-
-
+    private static ArrayList<ClassTime> classTimeCache = new ArrayList<>();
+    private static boolean classTimeCacheValid = false;
 
 
     public DataHelper(Context context) {
@@ -111,7 +107,6 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_SUBJECT_ID + " INTEGER, " +
                 "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(" + KEY_ID + ")) ";
         db.execSQL(CREATE_TABLE_TASKS);
-
     }
 
     @Override

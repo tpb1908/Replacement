@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.DataCollection.TermInput;
 import com.anapp.tpb.replacement.Setup.DataPresentation.TermDateCollector;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 
 import java.util.ArrayList;

@@ -34,6 +34,6 @@
     </LinearLayout>
 
 
-    <include layout="@layout/content_term_date_collector"/>
+    <include layout="@layout/content_term_collector"/>
 
 </RelativeLayout>

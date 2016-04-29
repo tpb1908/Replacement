@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup2.Input.ClassInput;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_time_input);
+        setContentView(R.layout.activity_class_input);
         dataHelper = new DataHelper(this);
         mPagerAdapter = new DayPager(getSupportFragmentManager(), this, dataHelper);
         mPager = (ViewPager) findViewById(R.id.container);
@@ -138,14 +138,6 @@ public class TestActivity extends AppCompatActivity {
 
         public DayFragment() {}
 
-        public void addClass(ClassTime ct) {
-            mAdapter.addClass(ct);
-        }
-
-        public void updateClass(ClassTime ct) {
-            mAdapter.updateClassValue(ct);
-        }
-
         public static DayFragment newInstance(TestActivity parent, DataHelper dataHelper, int day) {
             DayFragment dayFragment = new DayFragment();
             dayFragment.parent = parent;
@@ -154,10 +146,18 @@ public class TestActivity extends AppCompatActivity {
             return dayFragment;
         }
 
+        public void addClass(ClassTime ct) {
+            mAdapter.addClass(ct);
+        }
+
+        public void updateClass(ClassTime ct) {
+            mAdapter.updateClassValue(ct);
+        }
+
         @Nullable
         @Override
         public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_class_time_input, container, false);
+            return inflater.inflate(R.layout.fragment_class_input, container, false);
         }
 
         @Override

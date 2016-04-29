@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.anapp.tpb.replacement.R;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.klinker.android.sliding.SlidingActivity;
@@ -55,7 +55,7 @@ public class ClassSetup extends AppCompatActivity {
     @Override
     protected void onCreate (@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_time_input);
+        setContentView(R.layout.activity_class_input);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Class times");
         setSupportActionBar(toolbar);
@@ -186,7 +186,7 @@ public class ClassSetup extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_class_time_input, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_class_input, container, false);
             mAdapter = new ClassSetupAdapter(parent, dataHelper,  day);
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
             mRecyclerView.setAdapter(mAdapter);
@@ -244,7 +244,7 @@ public class ClassSetup extends AppCompatActivity {
 
         @Override
         public ClassViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.class_listitem, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_class, parent, false);
             return new ClassViewHolder(v, this);
         }
 
@@ -385,7 +385,7 @@ public class ClassSetup extends AppCompatActivity {
 
         @Override
         public void init (Bundle savedInstanceState) {
-            setContent(R.layout.class_input);
+            setContent(R.layout.input_class);
             setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
             enableFullscreen();
             lessonSpinner = (Spinner) findViewById(R.id.subjectSpinner);
@@ -567,7 +567,7 @@ public class ClassSetup extends AppCompatActivity {
 
             public View getCustomView(int position, ViewGroup parent) {
                 LayoutInflater inflater = getLayoutInflater();
-                View row = inflater.inflate(R.layout.subject_spinner_layout, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
+                View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
                 TextView name = (TextView) row.findViewById(R.id.subjectText);
                 View colourBar = row.findViewById(R.id.colourBar);
                 String text = this.subjects.get(position).getName() + ", " + this.subjects.get(position).getTeacher();

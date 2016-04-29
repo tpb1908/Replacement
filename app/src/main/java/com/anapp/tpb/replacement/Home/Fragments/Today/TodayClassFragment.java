@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.anapp.tpb.replacement.Home.Adapters.TodayClassAdapter;
 import com.anapp.tpb.replacement.R;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
@@ -110,12 +110,6 @@ public class TodayClassFragment extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
-
-    public void restart(DataHelper dataHelper) {
-        Log.i("Resuming", "New data helper is " + dataHelper);
-        this.dataHelper = dataHelper;
-        classAdapter.resume(dataHelper);
     }
 
     @Override

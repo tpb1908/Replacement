@@ -24,7 +24,7 @@ import android.view.animation.TranslateAnimation;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.Adapters.ClassTimeAdapter;
-import com.anapp.tpb.replacement.Storage.StorageHelpers.DataHelper;
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
@@ -49,7 +49,7 @@ public class ClassTimeCollector extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_time_input);
+        setContentView(R.layout.activity_class_input);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Class times");
@@ -237,7 +237,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_class_time_input, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_class_input, container, false);
             mAdapter = new ClassTimeAdapter(parent, storageHelper, subjects, sectionNumber);
             mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
             mRecyclerView.setAdapter(mAdapter);

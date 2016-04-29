@@ -47,7 +47,7 @@ public class ClassInput extends SlidingActivity {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        setContent(R.layout.class_input);
+        setContent(R.layout.input_class);
         lessonSpinner = (Spinner) findViewById(R.id.subjectSpinner);
         startTime = (EditText) findViewById(R.id.startTime);
         endTime = (EditText) findViewById(R.id.endTime);
@@ -91,7 +91,7 @@ public class ClassInput extends SlidingActivity {
             subjectNames[i++] = s.getName();
         }
 
-        lessonSpinner.setAdapter(new ClassArrayAdapter(getApplicationContext(), R.layout.subject_spinner_layout, subjectNames));
+        lessonSpinner.setAdapter(new ClassArrayAdapter(getApplicationContext(), R.layout.listitem_subject_spinner, subjectNames));
         lessonSpinner.setSelection(spinnerDefaultIndex);
         startTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -263,7 +263,7 @@ public class ClassInput extends SlidingActivity {
 
         public View getCustomView(int position, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
-            View row = inflater.inflate(R.layout.subject_spinner_layout, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
+            View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
             TextView name = (TextView) row.findViewById(R.id.subjectText);
             View colourBar = row.findViewById(R.id.colourBar);
             name.setText(subjects.get(position).getName() + ", " + subjects.get(position).getTeacher());

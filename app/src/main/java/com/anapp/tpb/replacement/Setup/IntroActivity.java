@@ -23,7 +23,7 @@ public class IntroActivity extends AppIntro {
         showSkipButton(false);
         showStatusBar(false);
         setSeparatorColor(getResources().getColor(R.color.colorDivider));
-        first = FragmentCreator.newInstance(R.layout.name_collection);
+        first = FragmentCreator.newInstance(R.layout.input_name);
         addSlide(first);
 
         addSlide(AppIntroFragment.newInstance("Test slide 1", "Change this", R.drawable.fab_plus_icon, R.color.colorAccent));

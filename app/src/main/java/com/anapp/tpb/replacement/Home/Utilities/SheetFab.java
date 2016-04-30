@@ -32,10 +32,4 @@ public class SheetFab extends FloatingActionButton implements AnimatedFab {
     public void show (float translationX, float translationY) {
 
     }
-
-
-
-
-
-
 }

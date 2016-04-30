@@ -20,4 +20,8 @@
     <string name="label_class_input">Classroom</string>
     <string name="label_color_picker">Colour</string>
     <string name="label_subject_spinner">Subject</string>
+    <string name="homework">Homework</string>
+    <string name="task">Task</string>
+    <string name="reminder">Reminder</string>
+    <string name="assessment">Assessment</string>
 </resources>

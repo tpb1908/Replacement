@@ -24,7 +24,6 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
-import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 
 import java.util.ArrayList;
 
@@ -72,28 +71,23 @@ public class Home extends AppCompatActivity implements TodayClassFragment.TodayI
 
             fab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
 
-            fab.setEventListener(new MaterialSheetFabEventListener() {
-                @Override
-                public void onShowSheet () {
-                    super.onShowSheet();
-                }
-
-                @Override
-                public void onSheetHidden () {
-                    super.onSheetHidden();
-                }
-
-                @Override
-                public void onHideSheet () {
-                    super.onHideSheet();
-                }
-
-                @Override
-                public void onSheetShown () {
-                    super.onSheetShown();
-                }
-            });
         }
+
+    }
+
+    public void newTask(View v) {
+
+    }
+
+    public void newHomework(View v) {
+
+    }
+
+    public void newReminder(View v) {
+
+    }
+
+    public void newAssessment(View v) {
 
     }
 

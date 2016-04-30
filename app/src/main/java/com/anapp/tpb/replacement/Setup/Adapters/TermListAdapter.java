@@ -60,7 +60,7 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         //Layout inflater comes from parent
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.term_date_listitem, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_term_date, parent, false);
         ViewHolder vh = new ViewHolder(v, this);
         return vh;
     }

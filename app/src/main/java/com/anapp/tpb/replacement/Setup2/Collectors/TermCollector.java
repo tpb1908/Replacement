@@ -196,7 +196,7 @@ public class TermCollector extends AppCompatActivity {
         @Override
         public TermViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
             //Layout inflater comes from parent
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.term_date_listitem, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_term_date, parent, false);
             return new TermViewHolder(v, this);
         }
 

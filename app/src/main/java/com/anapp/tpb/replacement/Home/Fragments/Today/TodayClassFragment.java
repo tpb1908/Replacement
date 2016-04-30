@@ -69,6 +69,7 @@ public class TodayClassFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
+        //DataHelper is created here so that the app doesn't force close when it is restarted
         dataHelper = new DataHelper(getContext());
         todayClassRecycler = (RecyclerView) inflated.findViewById(R.id.todayClassRecyclerView);
         classAdapter = new TodayClassAdapter(this, dataHelper);

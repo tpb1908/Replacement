@@ -13,7 +13,7 @@ public class Task {
     private String detail; //ALL
     private long startDate; //ALL
     private long endDate; //ALL
-    private boolean showReminder; //ALL
+    private boolean showReminder; //ALL, true on reminder
     private int subjectID; //Homework, general task
     private int time; //note
     private boolean complete; //Homework, general task

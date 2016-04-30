@@ -52,7 +52,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:background="#00ffffff"
-                android:src="@drawable/class_icon"/>
+                android:src="@drawable/icon_class"/>
 
             <ImageButton
                 android:id="@+id/deleteButton"
@@ -60,9 +60,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/subjectName"
-                android:layout_marginEnd="22dp"
+                android:layout_marginEnd="16dp"
                 android:background="#00ffffff"
-                android:src="@drawable/delete_icon"/>
+                android:src="@drawable/icon_delete"/>
 
 
         </RelativeLayout>

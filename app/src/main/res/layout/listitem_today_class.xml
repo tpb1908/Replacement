@@ -75,7 +75,7 @@
 
                 android:layout_marginTop="10dp"
                 android:background="#00ffffff"
-                android:src="@drawable/class_icon"/>
+                android:src="@drawable/icon_class"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"

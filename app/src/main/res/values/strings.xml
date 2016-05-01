@@ -11,9 +11,13 @@
     <string name="title_activity_home">Home</string>
     <string name="label_ok_button">OK</string>
     <string name="label_action_edit">Edit</string>
+    <string name="message_no_classes">No classes today</string>
 
     <string name="title_subject_collector">Subjects</string>
     <string name="hint_term_name">Term name</string>
+    <string name="hint_homework_title">Title</string>
+    <string name="hint_homework_detail">Detail</string>
+    <string name="label_homework_due_date">Due Date</string>
     <string name="title_term_collector">Terms</string>
     <string name="hint_subject_name">Subject name</string>
     <string name="hint_teacher_name">Teacher</string>
@@ -24,4 +28,5 @@
     <string name="task">Task</string>
     <string name="reminder">Reminder</string>
     <string name="assessment">Assessment</string>
+    <string name="show_reminder">Show Reminder</string>
 </resources>

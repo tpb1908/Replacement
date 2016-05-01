@@ -112,6 +112,5 @@ public class SubjectInput extends SlidingActivity {
         enableFullscreen();
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick, fabListener);
-
     }
 }

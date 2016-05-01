@@ -24,8 +24,26 @@
         <activity
             android:name=".Setup.DataPresentation.ClassTimeCollector"
             android:taskAffinity=""
-            android:theme="@style/AppTheme.NoActionBar"
-            ></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".Setup.DataPresentation.SubjectCollector"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <activity
+            android:name=".Setup.DataCollection.SubjectInput"
+            android:theme="@style/Theme.Sliding.Light">
+
+        </activity>
+
+        <activity
+            android:name=".Home.Input.HomeworkInput"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light">
+        </activity>
 
         <activity
             android:name=".Setup2.Collectors.ClassCollector"

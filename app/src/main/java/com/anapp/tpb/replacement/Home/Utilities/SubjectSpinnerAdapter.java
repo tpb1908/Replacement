@@ -1,6 +1,7 @@
 package com.anapp.tpb.replacement.Home.Utilities;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         View colourBar = row.findViewById(R.id.colourBar);
         String text = this.subjects.get(position).getName() + ", " + this.subjects.get(position).getTeacher();
         name.setText(text);
+        Log.i(TAG, "Colour is " + this.subjects.get(position).getColor());
         colourBar.setBackgroundColor(this.subjects.get(position).getColor());
         return row;
     }

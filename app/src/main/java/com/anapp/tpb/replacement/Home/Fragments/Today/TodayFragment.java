@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
+    private static final String TAG = "TodayFragment";
     private TaskOpener mTaskInterface;
     private ClassOpener mClassInterface;
 
@@ -114,7 +114,7 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
         //DataHelper is created here so that the app doesn't force close when it is restarted
         dataHelper = new DataHelper(getContext());
         todayClassRecycler = (RecyclerView) inflated.findViewById(R.id.todayClassRecyclerView);
-        classAdapter = new TodayClassAdapter(this, dataHelper);
+        classAdapter = new TodayClassAdapter(getContext(), this, dataHelper);
         layoutManager = new LinearLayoutManager(getContext());
         todayClassRecycler.setAdapter(classAdapter);
         todayClassRecycler.setLayoutManager(layoutManager);
@@ -150,7 +150,6 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         classAdapter.resume(dataHelper);
         if(currentDay != today) { //The app has been left overnight
-            Log.d("Day change", "Day has changed from " + currentDay + " to " + today);
             currentDay = today;
             setDayTermText();
             classAdapter.collectData();

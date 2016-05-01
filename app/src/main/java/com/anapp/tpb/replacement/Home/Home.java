@@ -10,16 +10,20 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment;
+import com.anapp.tpb.replacement.Home.Input.HomeworkInput;
 import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
 import com.anapp.tpb.replacement.R;
+import com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector;
+import com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector;
 import com.anapp.tpb.replacement.Setup.IntroActivity;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
@@ -83,7 +87,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     }
 
     public void newHomework(View v) {
-
+        Intent i = new Intent(this, HomeworkInput.class);
+        fab.hideSheet();
+        startActivity(i);
     }
 
     public void newReminder(View v) {
@@ -112,7 +118,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
     @Override
     public void openClass(ClassTime c) {
-
+        Log.i("ClassOpener", "Opening class " + c);
     }
 
     @Override
@@ -136,7 +142,8 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_settings:
-                Intent i = new Intent(getApplicationContext(), IntroActivity.class);
+                Intent i = new Intent(getApplicationContext(), SubjectCollector.class);
+                i.putExtra("nextWindow", ClassTimeCollector.class);
                 startActivity(i);
                 return true;
             case R.id.action_edit:
@@ -162,31 +169,31 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         s.setClassroom("L4.14");
         s.setTeacher("TMM");
         s.setName("Further maths");
-        s.setColor(39423);
+        s.setColor(0xff0000ff);
         s = dataHelper.addSubject(s);
         subIDs.add(s.getId());
         s.setClassroom("L0.25");
         s.setTeacher("RJS");
         s.setName("Maths");
-        s.setColor(13209);
+        s.setColor(0xff00ffff);
         s = dataHelper.addSubject(s);
         subIDs.add(s.getId());
         s.setClassroom("L2.09");
         s.setTeacher("MQL");
         s.setName("Computer science");
-        s.setColor(3381555);
+        s.setColor(0xffcccccc);
         s = dataHelper.addSubject(s);
         subIDs.add(s.getId());
         s.setClassroom("L4.08");
         s.setTeacher("SWG");
         s.setName("Physics");
-        s.setColor(16737792);
+        s.setColor(0xffff00ff);
         s = dataHelper.addSubject(s);
         subIDs.add(s.getId());
         s.setClassroom("L1.10");
         s.setTeacher("SJY");
         s.setName("Physics");
-        s.setColor(13382400);
+        s.setColor(0xffcdff00);
         s = dataHelper.addSubject(s);
         subIDs.add(s.getId());
         ClassTime classTime = new ClassTime();

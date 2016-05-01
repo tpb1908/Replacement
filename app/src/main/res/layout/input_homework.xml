@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/homework_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/input_padding"
+        android:layout_marginTop="@dimen/input_padding"
+        android:hint="@string/hint_homework_title"
+        android:inputType="textCapWords|textAutoCorrect"
+        android:lines="1"/>
+
+    <EditText
+        android:id="@+id/homework_detail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/homework_title"
+        android:layout_marginBottom="@dimen/input_padding"
+        android:layout_marginTop="@dimen/input_padding"
+        android:autoLink="web|email"
+        android:ems="10"
+        android:hint="@string/hint_homework_detail"
+        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"/>
+
+    <EditText
+        android:id="@+id/homework_due_date"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/homework_detail"
+        android:layout_marginBottom="@dimen/input_padding"
+        android:layout_marginTop="@dimen/input_padding"
+        android:hint="@string/label_homework_due_date"
+        android:inputType="date"/>
+
+
+    <Spinner
+        android:id="@+id/subject_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/show_reminder"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/input_padding"
+        android:clickable="true"
+        android:spinnerMode="dropdown"/>
+
+    <CheckBox
+        android:id="@+id/show_reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/homework_due_date"
+        android:layout_marginBottom="@dimen/input_padding"
+        android:layout_marginTop="@dimen/input_padding"
+        android:text="@string/show_reminder"/>
+
+
+</RelativeLayout>

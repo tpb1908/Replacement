@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.anapp.tpb.replacement.Home.Fragments.Today.TodayClassFragment;
+import com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment;
+import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
+import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Setup.IntroActivity;
@@ -27,7 +29,7 @@ import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
 import java.util.ArrayList;
 
-public class Home extends AppCompatActivity implements TodayClassFragment.TodayInterface {
+public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -51,6 +53,7 @@ public class Home extends AppCompatActivity implements TodayClassFragment.TodayI
             editor.apply();
             Intent i = new Intent(getApplicationContext(), IntroActivity.class);
             //startActivity(i);
+
         } else {
             setContentView(R.layout.activity_home);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -91,6 +94,27 @@ public class Home extends AppCompatActivity implements TodayClassFragment.TodayI
 
     }
 
+
+    @Override
+    public void openTask(Task t) {
+
+    }
+
+    @Override
+    public void openReminder(Task r) {
+
+    }
+
+    @Override
+    public void openHomework(Task h) {
+
+    }
+
+    @Override
+    public void openClass(ClassTime c) {
+
+    }
+
     @Override
     public void onBackPressed () {
         if(fab.isSheetVisible()) {
@@ -100,21 +124,6 @@ public class Home extends AppCompatActivity implements TodayClassFragment.TodayI
         }
     }
 
-    @Override
-    public void openClass (ClassTime t) {
-
-    }
-
-    @Override
-    public void openTask (Task t) {
-
-    }
-
-
-    @Override
-    public void openTest (Task t) {
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,7 +209,7 @@ public class Home extends AppCompatActivity implements TodayClassFragment.TodayI
 
         @Override
         public Fragment getItem(int position) {
-            return TodayClassFragment.newInstance();
+            return TodayFragment.newInstance();
         }
 
         @Override

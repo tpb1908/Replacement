@@ -692,7 +692,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + c.getId(),
                 null);
 
-        db.close();;
+        db.close();
         Log.d("Data", "Updating class to values of " + c.toString());
         classTimeCacheValid = false;
         return i;

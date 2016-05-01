@@ -1,6 +1,5 @@
 package com.anapp.tpb.replacement.Home.Fragments.Today;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.Home.Adapters.TodayClassAdapter;
+import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
+import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
@@ -26,8 +27,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TodayClassFragment extends Fragment {
-    private TodayInterface mInterface;
+public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
+    private TaskOpener mTaskInterface;
+    private ClassOpener mClassInterface;
+
+
     private TodayClassAdapter classAdapter;
     private RecyclerView todayClassRecycler;
     private RecyclerView.LayoutManager layoutManager;
@@ -37,12 +41,12 @@ public class TodayClassFragment extends Fragment {
     private int currentDay;
 
 
-    public TodayClassFragment () {
+    public TodayFragment() {
         // Required empty public constructor
     }
 
-    public static TodayClassFragment newInstance() {
-        TodayClassFragment fragment = new TodayClassFragment();
+    public static TodayFragment newInstance() {
+        TodayFragment fragment = new TodayFragment();
         //Nothing currently needs to be passed
 //        Bundle args = new Bundle();
 //        fragment.setArguments(args);
@@ -64,6 +68,44 @@ public class TodayClassFragment extends Fragment {
         };
         getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mClassInterface = (ClassOpener) context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement ClassOpener interface");
+        }
+
+        try {
+            mTaskInterface = (TaskOpener) context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement TaskOpener interface");
+        }
+
+    }
+
+    @Override
+    public void openClass(ClassTime c) {
+        mClassInterface.openClass(c);
+    }
+
+    @Override
+    public void openTask(Task t) {
+        mTaskInterface.openTask(t);
+    }
+
+    @Override
+    public void openReminder(Task r) {
+        mTaskInterface.openReminder(r);
+    }
+
+    @Override
+    public void openHomework(Task h) {
+        mTaskInterface.openHomework(h);
     }
 
     @Override
@@ -101,20 +143,9 @@ public class TodayClassFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            //Interface for opening classes
-            mInterface = (TodayInterface) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
-    public void onResume () {
+    public void onResume() {
         super.onResume();
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         classAdapter.resume(dataHelper);
@@ -131,21 +162,9 @@ public class TodayClassFragment extends Fragment {
     }
 
     @Override
-    public void onPause () {
+    public void onPause() {
         //Broadcast reciever must be unregistered
         getActivity().unregisterReceiver(broadcastReceiver);
         super.onPause();
     }
-
-    //Interface for opening items
-    public interface TodayInterface {
-
-        void openClass(ClassTime t);
-
-        void openTask(Task t);
-
-        void openTest(Task t);
-    }
-
-
 }

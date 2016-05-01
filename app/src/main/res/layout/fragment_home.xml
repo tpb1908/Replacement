@@ -15,7 +15,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.anapp.tpb.replacement.Home.Fragments.Today.TodayClassFragment"
+        android:name="com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/section_label"

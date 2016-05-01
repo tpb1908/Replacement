@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 
@@ -11,6 +12,12 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
  * Created by theo on 08/04/16.
  */
 public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private DataHelper dataHelper;
+
+
+    public TodayTaskAdapter() {
+
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
@@ -33,6 +40,9 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public TaskViewHolder(View v) {
             super(v);
+            if(task.getType() != 1) {
+                throw new IllegalArgumentException("Cannot create TaskViewHolder with non general task");
+            }
         }
     }
 
@@ -40,7 +50,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public HomeworkViewHolder(View v, Task task) {
             super(v);
-            if(task.getType() != 0) {
+            if(task.getType() != 2) {
                 throw new IllegalArgumentException("Cannot create HomeworkViewHolder with non homework task");
             }
         }
@@ -50,7 +60,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         public ReminderViewHolder(View v, Task task) {
             super(v);
-            if(task.getType() != 2) {
+            if(task.getType() != 3) {
                 throw new IllegalArgumentException("Cannot create ReminderViewHolder with non reminder task");
             }
         }

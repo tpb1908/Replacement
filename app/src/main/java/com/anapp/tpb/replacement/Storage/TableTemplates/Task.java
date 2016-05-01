@@ -5,7 +5,7 @@ package com.anapp.tpb.replacement.Storage.TableTemplates;
  */
 public class Task {
 
-    //Types of task: 0- Homework, 1-General task, 2-Reminder
+    //Types of task: 1- Task, 2-Homework, 3-Reminder
 
     private int id; //ALL
     private int type;  //Homework, general task, reminder

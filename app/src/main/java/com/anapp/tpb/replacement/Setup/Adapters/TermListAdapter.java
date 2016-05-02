@@ -106,9 +106,9 @@ public class TermListAdapter extends RecyclerView.Adapter<TermListAdapter.ViewHo
         public ViewHolder(View v, TermListAdapter p) {
             super(v);
             this.parent = p;
-            termNameTextView = (TextView) v.findViewById(R.id.term_date_list_name_textview);
-            termDateRangeTextView = (TextView) v.findViewById(R.id.term_date_list_date_range_textview);
-            deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
+            termNameTextView = (TextView) v.findViewById(R.id.text_term_name);
+            termDateRangeTextView = (TextView) v.findViewById(R.id.text_term_date_range);
+            deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

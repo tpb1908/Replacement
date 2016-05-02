@@ -30,15 +30,13 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
     private static final String TAG = "TodayFragment";
     private TaskOpener mTaskInterface;
     private ClassOpener mClassInterface;
-
-
-    private TodayClassAdapter classAdapter;
-    private RecyclerView todayClassRecycler;
-    private RecyclerView.LayoutManager layoutManager;
-    private BroadcastReceiver broadcastReceiver;
-    private DataHelper dataHelper;
-    private TextView dayTermText;
-    private int currentDay;
+    private TodayClassAdapter mClassAdapter;
+    private RecyclerView mClassRecycler;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private BroadcastReceiver mBroadcastReceiver;
+    private DataHelper mDataHelper;
+    private TextView mDayTermText;
+    private int mCurrentDay;
 
 
     public TodayFragment() {
@@ -56,17 +54,17 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        broadcastReceiver = new BroadcastReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive (Context context, Intent intent) {
                 if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
                     //Simplest way of causing timer bar to update
                     //TODO- Just update the correct viewholder/s
-                    classAdapter.notifyDataSetChanged();
+                    mClassAdapter.notifyDataSetChanged();
                 }
             }
         };
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+        getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
     }
 
@@ -112,34 +110,34 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
-        dataHelper = new DataHelper(getContext());
-        todayClassRecycler = (RecyclerView) inflated.findViewById(R.id.todayClassRecyclerView);
-        classAdapter = new TodayClassAdapter(getContext(), this, dataHelper);
-        layoutManager = new LinearLayoutManager(getContext());
-        todayClassRecycler.setAdapter(classAdapter);
-        todayClassRecycler.setLayoutManager(layoutManager);
-        dayTermText = (TextView) inflated.findViewById(R.id.dayTermText);
+        mDataHelper = new DataHelper(getContext());
+        mClassRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
+        mClassAdapter = new TodayClassAdapter(getContext(), this, mDataHelper);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mClassRecycler.setAdapter(mClassAdapter);
+        mClassRecycler.setLayoutManager(mLayoutManager);
+        mDayTermText = (TextView) inflated.findViewById(R.id.text_today_term);
         setDayTermText();
-        currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        mCurrentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 
         return inflated;
     }
 
     /**
-     * Sets the title message to the current day and term
+     * Sets the title mMessage to the current day and term
      */
     private void setDayTermText() {
         SimpleDateFormat day = new SimpleDateFormat("EEEE");
         SimpleDateFormat date = new SimpleDateFormat("dd-MMMM");
         Date d = new Date();
         String dayTerm = day.format(d) + "  " + date.format(d);
-        Term currentTerm = dataHelper.getCurrentTerm();
+        Term currentTerm = mDataHelper.getCurrentTerm();
         if(currentTerm.getName() != null) {
             dayTerm += " " + currentTerm.getName();
-            dayTermText.setText(dayTerm);
+            mDayTermText.setText(dayTerm);
         } else {
             dayTerm += " Holiday";
-            dayTermText.setText(dayTerm);
+            mDayTermText.setText(dayTerm);
         }
     }
 
@@ -148,22 +146,22 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
     public void onResume() {
         super.onResume();
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        classAdapter.resume(dataHelper);
-        if(currentDay != today) { //The app has been left overnight
-            currentDay = today;
+        mClassAdapter.resume(mDataHelper);
+        if(mCurrentDay != today) { //The app has been left overnight
+            mCurrentDay = today;
             setDayTermText();
-            classAdapter.collectData();
+            mClassAdapter.collectData();
         }
-        //Updating classAdapter and reregistering receiver
-        classAdapter.notifyDataSetChanged();
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+        //Updating mClassAdapter and reregistering receiver
+        mClassAdapter.notifyDataSetChanged();
+        getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
     }
 
     @Override
     public void onPause() {
         //Broadcast reciever must be unregistered
-        getActivity().unregisterReceiver(broadcastReceiver);
+        getActivity().unregisterReceiver(mBroadcastReceiver);
         super.onPause();
     }
 }

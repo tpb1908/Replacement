@@ -22,40 +22,43 @@ import java.util.Date;
  */
 public class DataHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "Work";
+    private static final String DATABASE_NAME = "WORK";
     private static final int VERSION = 1;
-    private static final String KEY_ID = "id";
-    private static final String KEY_SUBJECT_ID = "Subject_ID";
+    private static final String KEY_ID = "ID";
+    private static final String KEY_SUBJECT_ID = "SUBJECT_ID";
 
-    private static final String TABLE_TERMS = "Terms";
-    private static final String KEY_TERM_NAME = "TermName";
-    private static final String KEY_START_DATE = "StartDate";
-    private static final String KEY_END_DATE = "EndDate";
+    private static final String TABLE_TERMS = "TERMS";
+    private static final String KEY_TERM_NAME = "TERMNAME";
+    private static final String KEY_START_DATE = "STARTDATE";
+    private static final String KEY_END_DATE = "ENDDATE";
     private static final String[] TERM_COLUMNS = {KEY_ID, KEY_TERM_NAME, KEY_START_DATE, KEY_END_DATE};
 
-    private static final String TABLE_SUBJECTS = "Subjects";
-    private static final String KEY_SUBJECT_NAME = "SubjectName";
-    private static final String KEY_CLASSROOM = "Classroom";
-    private static final String KEY_TEACHER = "Teacher";
-    private static final String KEY_COLOR = "Color";
+    private static final String TABLE_SUBJECTS = "SUBJECTS";
+    private static final String KEY_SUBJECT_NAME = "SUBJECTNAME";
+    private static final String KEY_CLASSROOM = "CLASSROOM";
+    private static final String KEY_TEACHER = "TEACHER";
+    private static final String KEY_COLOR = "COLOR";
     private static final String[] SUBJECT_COLUMNS = {KEY_ID, KEY_SUBJECT_NAME, KEY_CLASSROOM, KEY_TEACHER, KEY_COLOR};
 
-    private static final String TABLE_CLASS_TIMES = "ClassTimes";
-    private static final String KEY_START_TIME = "StartTime";
-    private static final String KEY_END_TIME = "EndTime";
-    private static final String KEY_DAY = "Day";
+    private static final String TABLE_CLASS_TIMES = "CLASSTIMES";
+    private static final String KEY_START_TIME = "STARTTIME";
+    private static final String KEY_END_TIME = "ENDTIME";
+    private static final String KEY_DAY = "DAY";
     private static final String CLASS_COLUMNS[] = {KEY_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY, KEY_SUBJECT_ID};
-    private static final String TABLE_TASKS = "Tasks";
-    private static final String KEY_TYPE = "Type";
-    private static final String KEY_TASK_TITLE = "Title";
-    private static final String KEY_TASK_DETAIL = "Detail";
-    private static final String KEY_TASK_START = "StartDate";
-    private static final String KEY_TASK_END = "EndDate";
-    private static final String KEY_SHOW_REMINDER = "Reminder";
-    private static final String KEY_TIME = "Time";
-    private static final String KEY_COMPLETE = "Complete";
-    private static final String KEY_PERCENT_COMPLETE = "Percent_Complete";
+
+    private static final String TABLE_TASKS_CURRENT = "CURRENT_TASKS";
+    private static final String TABLE_TASKS_ARCHIVE = "ARCHIVED_TASKS";
+    private static final String KEY_TYPE = "TYPE";
+    private static final String KEY_TASK_TITLE = "TITLE";
+    private static final String KEY_TASK_DETAIL = "DETAIL";
+    private static final String KEY_TASK_START = "STARTDATE";
+    private static final String KEY_TASK_END = "ENDDATE";
+    private static final String KEY_SHOW_REMINDER = "REMINDER";
+    private static final String KEY_TIME = "TIME";
+    private static final String KEY_COMPLETE = "COMPLETE";
+    private static final String KEY_PERCENT_COMPLETE = "PERCENT_COMPLETE";
     private static final String[] TASK_COLUMNS = new String[] {KEY_ID, KEY_TYPE, KEY_TASK_TITLE, KEY_TASK_DETAIL, KEY_TASK_START, KEY_TASK_END, KEY_SHOW_REMINDER, KEY_TIME, KEY_COMPLETE, KEY_PERCENT_COMPLETE};
+
     private static ArrayList<ClassTime> classTimeCache = new ArrayList<>();
     private static boolean isClassTimeCacheValid = false;
 
@@ -92,9 +95,8 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_DAY + " INTEGER, " +
                 "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(" + KEY_ID + ")) ";
         db.execSQL(CREATE_TABLE_CLASS_TIMES);
-        final String CREATE_TABLE_TASKS = "CREATE TABLE IF NOT EXISTS " +
-                TABLE_TASKS +
-                "( " + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+
+        final String CREATE_TASK_COLUMNS = "( " + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 KEY_TYPE + " INTEGER, " +
                 KEY_TASK_TITLE + " VARCHAR, " +
                 KEY_TASK_DETAIL + " VARCHAR, " +
@@ -106,6 +108,13 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_PERCENT_COMPLETE + " INTEGER, " +
                 KEY_SUBJECT_ID + " INTEGER, " +
                 "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(" + KEY_ID + ")) ";
+
+        final String CREATE_TABLE_TASKS = "CREATE TABLE IF NOT EXISTS " +
+                TABLE_TASKS_CURRENT + CREATE_TASK_COLUMNS;
+        db.execSQL(CREATE_TABLE_TASKS);
+
+        final String CREATE_TABLE_TASKS_ARCHIVe = "CREATE TABLE IF NOT EXISTS " +
+                TABLE_TASKS_ARCHIVE + CREATE_TABLE_TASKS;
         db.execSQL(CREATE_TABLE_TASKS);
     }
 
@@ -132,7 +141,7 @@ public class DataHelper extends SQLiteOpenHelper {
         values.put(KEY_COMPLETE, task.isComplete());
         values.put(KEY_PERCENT_COMPLETE, task.getPercentageComplete());
         values.put(KEY_SUBJECT_ID, task.getSubjectID());
-        task.setId((int) db.insert(TABLE_TASKS, null, values));
+        task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
         Log.d("Data", "Adding task with values of " + task.toString());
         return task;
     }
@@ -145,7 +154,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public Task getTask(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.query(TABLE_TASKS,
+        Cursor cursor = db.query(TABLE_TASKS_CURRENT,
                 TASK_COLUMNS,
                 "id = ?",
                 new String[]{String.valueOf(id)},
@@ -180,7 +189,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public ArrayList<Task> getAllTasks() {
         ArrayList<Task> list = new ArrayList<>();
 
-        String query = "SELECT * FROM " + TABLE_TASKS;
+        String query = "SELECT * FROM " + TABLE_TASKS_CURRENT;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
@@ -215,7 +224,7 @@ public class DataHelper extends SQLiteOpenHelper {
     public ArrayList<Task> getTasksInRange(int range) {
         ArrayList<Task> result = new ArrayList<>();
 
-        String query = "SELECT * FROM " + TABLE_TASKS;
+        String query = "SELECT * FROM " + TABLE_TASKS_CURRENT;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         Task task;
@@ -265,7 +274,7 @@ public class DataHelper extends SQLiteOpenHelper {
         values.put(KEY_COMPLETE, task.isComplete());
         values.put(KEY_PERCENT_COMPLETE, task.getPercentageComplete());
         values.put(KEY_SUBJECT_ID, task.getSubjectID());
-        int i = db.update(TABLE_TASKS,
+        int i = db.update(TABLE_TASKS_CURRENT,
                 values,
                 KEY_ID + " = " + task.getId(),
                 null);
@@ -541,7 +550,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 null);
         Log.d("Data", "Deletion of subject resulted in deletion of " + numClass + " classes");
 
-        int numTask = db.delete(TABLE_TASKS,
+        int numTask = db.delete(TABLE_TASKS_CURRENT,
                 KEY_SUBJECT_ID + " = " + subject.getId(),
                 null);
         Log.d("Data", "Deletion of subject resulted in deletion of " + numTask + " tasks");

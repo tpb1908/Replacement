@@ -10,11 +10,11 @@ import com.anapp.tpb.replacement.R;
  * Created by theo on 30/04/16.
  */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
-    public TextView message;
+    public TextView mMessage;
 
     public MessageViewHolder(View v) {
         super(v);
-        message = (TextView) v.findViewById(R.id.errorText);
+        mMessage = (TextView) v.findViewById(R.id.text_message);
     }
 
 }

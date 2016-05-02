@@ -44,8 +44,8 @@ public class SubjectCollector extends AppCompatActivity {
         Toolbar t = (Toolbar) findViewById(R.id.toolbar);
         t.setTitle(Html.fromHtml("<font color='#FFFFFF'>Subjects </font>"));
 
-        nextFab = (FloatingActionButton) findViewById(R.id.subjectCollectorNextFab);
-        addSubjectFab = (FloatingActionButton) findViewById(R.id.subjectAddFab);
+        nextFab = (FloatingActionButton) findViewById(R.id.fab_finish_subject_add);
+        addSubjectFab = (FloatingActionButton) findViewById(R.id.fab_add_subject);
 
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_subject);
         mRevealView = findViewById(R.id.reveal_view_subject);
@@ -112,7 +112,7 @@ public class SubjectCollector extends AppCompatActivity {
 
         mAdapter = new SubjectListAdapter(this, storageHelper);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.subjectRecyclerView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_subjects);
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

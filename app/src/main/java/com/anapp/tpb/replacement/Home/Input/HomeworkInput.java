@@ -13,7 +13,7 @@ import com.klinker.android.sliding.SlidingActivity;
  * Created by theo on 01/05/16.
  */
 public class HomeworkInput extends SlidingActivity {
-    private Task current;
+    private Task mCurrentTask;
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class HomeworkInput extends SlidingActivity {
         enableFullscreen();
 
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick, null);
-        Spinner s = (Spinner) findViewById(R.id.subject_spinner);
+        Spinner s = (Spinner) findViewById(R.id.spinner_subject);
         DataHelper d = new DataHelper(this);
         s.setAdapter(new SubjectSpinnerAdapter(this, d.getAllSubjects()));
 

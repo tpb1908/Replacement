@@ -29,7 +29,7 @@
                 />
 
             <TextView
-                android:id="@+id/subject_name"
+                android:id="@+id/text_subject_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -41,27 +41,27 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/text_homework_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/subject_name"
+                android:layout_alignStart="@+id/text_subject_name"
                 android:layout_below="@+id/colour_bar"
                 android:textStyle="normal"/>
 
             <TextView
-                android:id="@+id/due_day"
+                android:id="@+id/text_homework_due_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
+                android:layout_below="@+id/text_homework_title"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/title"/>
+                android:layout_toStartOf="@+id/text_homework_title"/>
 
             <ImageButton
-                android:id="@+id/delete_button"
+                android:id="@+id/button_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_alignStart="@+id/subject_name"
+                android:layout_alignStart="@+id/text_subject_name"
                 android:background="#00ffffff"
                 android:src="@drawable/icon_delete_grey"/>
 
@@ -69,39 +69,39 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_above="@+id/delete_button"
+                android:layout_above="@+id/button_delete"
                 android:layout_alignParentStart="true"
                 android:background="?android:attr/listDivider">
             </View>
 
             <TextView
-                android:id="@+id/detail"
+                android:id="@+id/text_homework_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/due_day"
-                android:layout_below="@+id/due_day"
+                android:layout_alignStart="@+id/text_homework_due_day"
+                android:layout_below="@+id/text_homework_due_day"
                 android:layout_marginTop="@dimen/input_padding"/>
 
             <Button
-                android:id="@+id/done"
+                android:id="@+id/button_done"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/delete_button"
+                android:layout_alignTop="@+id/button_delete"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="DONE"
+                android:text="@string/label_done"
                 android:textColor="@color/colorPrimaryText"
                 android:textStyle="bold"/>
 
             <Button
-                android:id="@+id/edit"
+                android:id="@+id/button_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/done"
-                android:layout_toStartOf="@+id/done"
+                android:layout_alignTop="@+id/button_done"
+                android:layout_toStartOf="@+id/button_done"
                 android:background="?android:attr/selectableItemBackground"
-                android:text="EDIT"
+                android:text="@string/label_edit"
                 android:textColor="@color/colorSecondaryText"
                 android:textStyle="bold"/>
 

@@ -73,7 +73,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/new_task"
+                    android:id="@+id/button_text_new_task"
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                     android:textSize="24sp"/>
 
                 <TextView
-                    android:id="@+id/new_homework"
+                    android:id="@+id/button_text_new_homework"
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     android:textSize="24sp"/>
 
                 <TextView
-                    android:id="@+id/new_reminder"
+                    android:id="@+id/button_text_new_reminder"
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
                     android:textSize="24sp"/>
 
                 <TextView
-                    android:id="@+id/new_assessment"
+                    android:id="@+id/button_text_new_assessment"
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

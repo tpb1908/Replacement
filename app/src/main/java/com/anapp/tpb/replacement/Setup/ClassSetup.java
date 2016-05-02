@@ -82,7 +82,7 @@ public class ClassSetup extends AppCompatActivity {
             }
         });
 
-        nextFab = (FloatingActionButton) findViewById(R.id.addClassFinishFab);
+        nextFab = (FloatingActionButton) findViewById(R.id.fab_finish_add_class);
         nextFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
@@ -188,7 +188,7 @@ public class ClassSetup extends AppCompatActivity {
         public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_class_input, container, false);
             mAdapter = new ClassSetupAdapter(parent, dataHelper,  day);
-            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_class_today);
             mRecyclerView.setAdapter(mAdapter);
             mLayoutManager = new LinearLayoutManager(parent);
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -299,10 +299,10 @@ public class ClassSetup extends AppCompatActivity {
                 super(v);
                 setIsRecyclable(false);
                 parent = p;
-                className = (TextView) v.findViewById(R.id.subjectName);
-                classTime = (TextView) v.findViewById(R.id.classTime);
-                deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
-                colourBar = v.findViewById(R.id.colourBar);
+                className = (TextView) v.findViewById(R.id.text_subject_name);
+                classTime = (TextView) v.findViewById(R.id.text_class_time);
+                deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
+                colourBar = v.findViewById(R.id.colour_bar);
                 //Adding listener to the entire view, in order to allow editing
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -388,9 +388,9 @@ public class ClassSetup extends AppCompatActivity {
             setContent(R.layout.input_class);
             setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
             enableFullscreen();
-            lessonSpinner = (Spinner) findViewById(R.id.subjectSpinner);
-            startTime = (EditText) findViewById(R.id.startTime);
-            endTime = (EditText) findViewById(R.id.endTime);
+            lessonSpinner = (Spinner) findViewById(R.id.spinner_subject);
+            startTime = (EditText) findViewById(R.id.edittext_start_time);
+            endTime = (EditText) findViewById(R.id.editttext_end_time);
             subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
             classesForDay = (ArrayList<ClassTime>) getIntent().getSerializableExtra("classes");
             day = getIntent().getIntExtra("day", 0);
@@ -569,8 +569,8 @@ public class ClassSetup extends AppCompatActivity {
             public View getCustomView(int position, ViewGroup parent) {
                 LayoutInflater inflater = getLayoutInflater();
                 View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
-                TextView name = (TextView) row.findViewById(R.id.subjectText);
-                View colourBar = row.findViewById(R.id.colourBar);
+                TextView name = (TextView) row.findViewById(R.id.text_subject);
+                View colourBar = row.findViewById(R.id.colour_bar);
                 String text = this.subjects.get(position).getName() + ", " + this.subjects.get(position).getTeacher();
                 name.setText(text);
                 colourBar.setBackgroundColor(this.subjects.get(position).getColor());

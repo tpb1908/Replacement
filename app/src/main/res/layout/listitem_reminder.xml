@@ -5,7 +5,7 @@
               android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+        android:id="@+id/card_reminder_listitem"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
         android:layout_height="90dp"
@@ -21,7 +21,7 @@
             android:layout_height="fill_parent">
 
             <View
-                android:id="@+id/colourBar"
+                android:id="@+id/colour_bar"
                 android:layout_width="4dp"
                 android:layout_height="90dp"
                 android:layout_alignParentStart="true"
@@ -29,7 +29,7 @@
                 android:background="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/text_homework_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/reminderIcon"
@@ -55,11 +55,11 @@
                 android:src="@drawable/icon_reminder"/>
 
             <ImageButton
-                android:id="@+id/deleteButton"
+                android:id="@+id/button_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/title"
+                android:layout_below="@+id/text_homework_title"
                 android:layout_marginEnd="16dp"
                 android:background="#00ffffff"
                 android:src="@drawable/icon_delete"/>

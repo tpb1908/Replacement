@@ -29,7 +29,7 @@
     </me.yugy.github.reveallayout.RevealLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/subjectCollectorNextFab"
+        android:id="@+id/fab_finish_subject_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -41,10 +41,10 @@
         android:src="@drawable/fab_icon_next"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/subjectAddFab"
+        android:id="@+id/fab_add_subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/subjectCollectorNextFab"
+        android:layout_above="@+id/fab_finish_subject_add"
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/fab_margin"

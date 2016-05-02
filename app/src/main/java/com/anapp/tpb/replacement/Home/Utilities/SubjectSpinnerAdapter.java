@@ -1,7 +1,6 @@
 package com.anapp.tpb.replacement.Home.Utilities;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,29 +17,29 @@ import java.util.ArrayList;
  */
 public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget.SpinnerAdapter {
     private static final String TAG = "SubjectSpinnerAdapter";
-    private Context context;
-    private ArrayList<Subject> subjects;
+    private Context mContext;
+    private ArrayList<Subject> mSubjects;
 
 
     public SubjectSpinnerAdapter(Context context, ArrayList<Subject> subjects) {
         super();
-        this.context = context;
-        this.subjects = subjects;
+        this.mContext = context;
+        this.mSubjects = subjects;
     }
 
     @Override
     public int getCount () {
-        return subjects.size();
+        return mSubjects.size();
     }
 
     @Override
     public Object getItem (int position) {
-        return null;
+        return mSubjects.get(position);
     }
 
     @Override
     public long getItemId (int position) {
-        return 0;
+        return mSubjects.get(position).getId();
     }
 
     @Override
@@ -54,14 +53,13 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     }
 
     private View getCustomView(int position, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
-        TextView name = (TextView) row.findViewById(R.id.subjectText);
-        View colourBar = row.findViewById(R.id.colourBar);
-        String text = this.subjects.get(position).getName() + ", " + this.subjects.get(position).getTeacher();
+        TextView name = (TextView) row.findViewById(R.id.text_subject);
+        View colourBar = row.findViewById(R.id.colour_bar);
+        String text = this.mSubjects.get(position).getName() + ", " + this.mSubjects.get(position).getTeacher();
         name.setText(text);
-        Log.i(TAG, "Colour is " + this.subjects.get(position).getColor());
-        colourBar.setBackgroundColor(this.subjects.get(position).getColor());
+        colourBar.setBackgroundColor(this.mSubjects.get(position).getColor());
         return row;
     }
 }

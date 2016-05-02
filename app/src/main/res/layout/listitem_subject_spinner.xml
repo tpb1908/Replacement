@@ -5,19 +5,19 @@
                 android:orientation="horizontal">
 
     <View
-        android:id="@+id/colourBar"
+        android:id="@+id/colour_bar"
         android:layout_width="4dp"
         android:layout_height="32dp"
         android:background="@android:color/darker_gray"/>
 
     <TextView
-        android:id="@+id/subjectText"
+        android:id="@+id/text_subject"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
-        android:layout_alignBottom="@+id/colourBar"
+        android:layout_alignBottom="@+id/colour_bar"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="12dp"
-        android:layout_toEndOf="@+id/colourBar"
+        android:layout_toEndOf="@+id/colour_bar"
         android:textColor="@color/primary_text_default_material_light"/>
 
 

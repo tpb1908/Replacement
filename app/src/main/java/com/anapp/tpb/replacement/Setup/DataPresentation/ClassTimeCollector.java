@@ -84,8 +84,8 @@ public class ClassTimeCollector extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        addClassFab = (FloatingActionButton) findViewById(R.id.addClassFab);
-        nextFab = (FloatingActionButton) findViewById(R.id.addClassFinishFab);
+        addClassFab = (FloatingActionButton) findViewById(R.id.fab_add_class);
+        nextFab = (FloatingActionButton) findViewById(R.id.fab_finish_add_class);
         addClassFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -239,7 +239,7 @@ public class ClassTimeCollector extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_class_input, container, false);
             mAdapter = new ClassTimeAdapter(parent, storageHelper, subjects, sectionNumber);
-            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_class_today);
             mRecyclerView.setAdapter(mAdapter);
             mLayoutManager = new LinearLayoutManager(parent);
             mRecyclerView.setLayoutManager(mLayoutManager);

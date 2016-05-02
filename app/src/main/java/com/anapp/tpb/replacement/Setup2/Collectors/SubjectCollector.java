@@ -41,14 +41,14 @@ public class SubjectCollector extends AppCompatActivity {
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject_collector);
-        nextFab = (FloatingActionButton) findViewById(R.id.subjectCollectorNextFab);
-        addSubjectFab = (FloatingActionButton) findViewById(R.id.subjectAddFab);
+        nextFab = (FloatingActionButton) findViewById(R.id.fab_finish_subject_add);
+        addSubjectFab = (FloatingActionButton) findViewById(R.id.fab_add_subject);
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_subject);
         mRevealView = findViewById(R.id.reveal_view_subject);
         storageHelper = new DataHelper(this);
         nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
         mAdapter = new SubjectAdapter(this, storageHelper);
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.subjectRecyclerView);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_subjects);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -204,11 +204,11 @@ public class SubjectCollector extends AppCompatActivity {
             public SubjectViewHolder (View v, SubjectAdapter p) {
                 super(v);
                 this.parent = p;
-                this.subjectName = (TextView) v.findViewById(R.id.subjectName);
-                this.teacherName = (TextView) v.findViewById(R.id.teacherName);
-                this.classRoom = (TextView) v.findViewById(R.id.classroom);
-                this.deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
-                this.colourBar = v.findViewById(R.id.colourBar);
+                this.subjectName = (TextView) v.findViewById(R.id.text_subject_name);
+                this.teacherName = (TextView) v.findViewById(R.id.text_teacher_name);
+                this.classRoom = (TextView) v.findViewById(R.id.text_classroom);
+                this.deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
+                this.colourBar = v.findViewById(R.id.colour_bar);
 
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override

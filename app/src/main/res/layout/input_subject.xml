@@ -5,7 +5,7 @@
 
 
     <EditText
-        android:id="@+id/subjectNameInput"
+        android:id="@+id/edittext_subject_name"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
@@ -15,18 +15,18 @@
         android:inputType="textCapWords"/>
 
     <EditText
-        android:id="@+id/teacherInput"
+        android:id="@+id/edittext_teacher_input"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
 
-        android:layout_below="@+id/subjectNameInput"
+        android:layout_below="@+id/edittext_subject_name"
         android:layout_marginTop="40dp"
         android:hint="@string/hint_teacher_name"
         android:inputType="textCapWords"/>
 
     <EditText
-        android:id="@+id/classroomInput"
+        android:id="@+id/edittext_classroom_input"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
@@ -38,11 +38,11 @@
 
 
     <EditText
-        android:id="@+id/colourLabel"
+        android:id="@+id/label_colour_input"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/classroomInput"
+        android:layout_below="@+id/edittext_classroom_input"
         android:layout_marginTop="40dp"
         android:enabled="false"
         android:inputType="none"
@@ -50,10 +50,10 @@
         android:textColor="@color/colorPrimaryText"/>
 
     <View
-        android:id="@+id/colourBar"
+        android:id="@+id/colour_bar"
         android:layout_width="300dp"
         android:layout_height="32dp"
-        android:layout_alignBottom="@+id/colourLabel"
+        android:layout_alignBottom="@+id/label_colour_input"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="9dp"
         android:background="@color/colorPrimary"/>

@@ -90,7 +90,7 @@ public class ClassCollector extends AppCompatActivity {
             }
         });
 
-        nextFab = (FloatingActionButton) findViewById(R.id.addClassFinishFab);
+        nextFab = (FloatingActionButton) findViewById(R.id.fab_finish_add_class);
         nextFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View v) {
@@ -192,7 +192,7 @@ public class ClassCollector extends AppCompatActivity {
         public View onCreateView (LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_class_input, container, false);
             mAdapter = new ClassCollectorAdapter(parent, dataHelper,  day);
-            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.dayClassTimeRecycler);
+            mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_class_today);
             mRecyclerView.setAdapter(mAdapter);
             mLayoutManager = new LinearLayoutManager(parent);
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -305,10 +305,10 @@ public class ClassCollector extends AppCompatActivity {
                 super(v);
                 setIsRecyclable(false);
                 parent = p;
-                className = (TextView) v.findViewById(R.id.subjectName);
-                classTime = (TextView) v.findViewById(R.id.classTime);
-                deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
-                colourBar = v.findViewById(R.id.colourBar);
+                className = (TextView) v.findViewById(R.id.text_subject_name);
+                classTime = (TextView) v.findViewById(R.id.text_class_time);
+                deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
+                colourBar = v.findViewById(R.id.colour_bar);
                 //Adding listener to the entire view, in order to allow editing
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override

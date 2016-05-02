@@ -4,17 +4,17 @@
                 android:layout_height="match_parent">
 
     <Spinner
-        android:id="@+id/subjectSpinner"
+        android:id="@+id/spinner_subject"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/endTime"
+        android:layout_below="@+id/editttext_end_time"
         android:layout_marginTop="30dp"
         android:clickable="true"
         android:spinnerMode="dropdown"/>
 
     <EditText
-        android:id="@+id/startTime"
+        android:id="@+id/edittext_start_time"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -22,19 +22,19 @@
         android:layout_marginTop="35dp"
         android:ems="10"
         android:focusable="false"
-        android:hint="Start time"
+        android:hint="@string/start_time"
         android:inputType="none"/>
 
     <EditText
-        android:id="@+id/endTime"
+        android:id="@+id/editttext_end_time"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/startTime"
+        android:layout_below="@+id/edittext_start_time"
         android:layout_marginTop="30dp"
         android:ems="10"
         android:focusable="false"
-        android:hint="End time"
+        android:hint="@string/end_time"
         android:inputType="none"/>
 
 </RelativeLayout>

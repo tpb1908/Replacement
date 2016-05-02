@@ -46,8 +46,8 @@ public class TermDateCollector extends AppCompatActivity {
         this.getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
 
         storageHelper = new DataHelper(getApplicationContext());
-        nextFab = (FloatingActionButton) findViewById(R.id.termDataNextFab);
-        addTermFab = (FloatingActionButton) findViewById(R.id.termAddFab);
+        nextFab = (FloatingActionButton) findViewById(R.id.fab_term_add_finish);
+        addTermFab = (FloatingActionButton) findViewById(R.id.fab_add_term);
 
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_term);
         mRevealView = findViewById(R.id.reveal_view_term);
@@ -88,7 +88,7 @@ public class TermDateCollector extends AppCompatActivity {
         nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
 
         mAdapter = new TermListAdapter(this, storageHelper);
-        mRecyclerView = (RecyclerView) findViewById(R.id.termRecyclerView);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_terms);
         //mRecyclerView.setHasFixedSize(true); //Improves performance if the view doesn't expand
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);

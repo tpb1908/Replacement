@@ -46,13 +46,13 @@ public class TermCollector extends AppCompatActivity {
         setContentView(R.layout.activity_term_collector);
 
         DataHelper storageHelper = new DataHelper(getApplicationContext());
-        nextFab = (FloatingActionButton) findViewById(R.id.termDataNextFab);
-        addTermFab = (FloatingActionButton) findViewById(R.id.termAddFab);
+        nextFab = (FloatingActionButton) findViewById(R.id.fab_term_add_finish);
+        addTermFab = (FloatingActionButton) findViewById(R.id.fab_add_term);
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_term);
         mRevealView = findViewById(R.id.reveal_view_term);
         nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
         mAdapter = new TermAdapter(this, storageHelper);
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.termRecyclerView);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_terms);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -239,9 +239,9 @@ public class TermCollector extends AppCompatActivity {
             public TermViewHolder (View v, TermAdapter p) {
                 super(v);
                 this.parent = p;
-                termNameTextView = (TextView) v.findViewById(R.id.term_date_list_name_textview);
-                termDateRangeTextView = (TextView) v.findViewById(R.id.term_date_list_date_range_textview);
-                deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
+                termNameTextView = (TextView) v.findViewById(R.id.text_term_name);
+                termDateRangeTextView = (TextView) v.findViewById(R.id.text_term_date_range);
+                deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
 
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override

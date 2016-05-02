@@ -29,23 +29,23 @@
                 android:background="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/subject_name"
+                android:id="@+id/text_subject_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/homework_icon"
-                android:layout_toEndOf="@+id/homework_icon"
+                android:layout_alignTop="@+id/icon_homework"
+                android:layout_toEndOf="@+id/icon_homework"
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/due_day"
+                android:id="@+id/text_homework_due_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/homework_icon"
+                android:layout_alignBottom="@+id/icon_homework"
                 android:layout_marginRight="8dp"
-                android:layout_toEndOf="@+id/homework_icon"/>
+                android:layout_toEndOf="@+id/icon_homework"/>
 
             <ImageView
-                android:id="@+id/homework_icon"
+                android:id="@+id/icon_homework"
                 android:layout_width="58dp"
                 android:layout_height="58dp"
                 android:layout_marginBottom="16dp"
@@ -55,11 +55,11 @@
                 android:src="@drawable/icon_homework"/>
 
             <ImageButton
-                android:id="@+id/delete_button"
+                android:id="@+id/button_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/subject_name"
+                android:layout_below="@+id/text_subject_name"
                 android:layout_marginEnd="22dp"
                 android:background="#00ffffff"
                 android:src="@drawable/icon_delete"/>

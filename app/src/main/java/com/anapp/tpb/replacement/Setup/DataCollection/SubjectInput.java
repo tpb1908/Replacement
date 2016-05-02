@@ -38,10 +38,10 @@ public class SubjectInput extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_subject);
-        subjectName = (TextView) findViewById(R.id.subjectNameInput);
-        classRoom = (TextView) findViewById(R.id.classroomInput);
-        teacher = (TextView) findViewById(R.id.teacherInput);
-        colourBar = findViewById(R.id.colourBar);
+        subjectName = (TextView) findViewById(R.id.edittext_subject_name);
+        classRoom = (TextView) findViewById(R.id.edittext_classroom_input);
+        teacher = (TextView) findViewById(R.id.edittext_teacher_input);
+        colourBar = findViewById(R.id.colour_bar);
         colour = R.color.colorPrimary;
         try {
             current = (Subject) getIntent().getSerializableExtra("editingSubject");

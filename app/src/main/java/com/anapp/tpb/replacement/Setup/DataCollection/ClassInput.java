@@ -48,9 +48,9 @@ public class ClassInput extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_class);
-        lessonSpinner = (Spinner) findViewById(R.id.subjectSpinner);
-        startTime = (EditText) findViewById(R.id.startTime);
-        endTime = (EditText) findViewById(R.id.endTime);
+        lessonSpinner = (Spinner) findViewById(R.id.spinner_subject);
+        startTime = (EditText) findViewById(R.id.edittext_start_time);
+        endTime = (EditText) findViewById(R.id.editttext_end_time);
         subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
         classesForDay = (ArrayList<ClassTime>) getIntent().getSerializableExtra("classes");
         Log.d("Classes passed", "Classes passed " + classesForDay);
@@ -200,7 +200,7 @@ public class ClassInput extends SlidingActivity {
         mTimePicker.show();
     }
 
-    //Method displays an error message.
+    //Method displays an error mMessage.
     private void displayMessage(int messageID, ClassTime overlap) {
         AlertDialog.Builder builder = new AlertDialog.Builder(ClassInput.this, R.style.DialogTheme);
         switch (messageID) {
@@ -264,8 +264,8 @@ public class ClassInput extends SlidingActivity {
         public View getCustomView(int position, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
             View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
-            TextView name = (TextView) row.findViewById(R.id.subjectText);
-            View colourBar = row.findViewById(R.id.colourBar);
+            TextView name = (TextView) row.findViewById(R.id.text_subject_name);
+            View colourBar = row.findViewById(R.id.colour_bar);
             name.setText(subjects.get(position).getName() + ", " + subjects.get(position).getTeacher());
             colourBar.setBackgroundColor(subjects.get(position).getColor());
             return row;

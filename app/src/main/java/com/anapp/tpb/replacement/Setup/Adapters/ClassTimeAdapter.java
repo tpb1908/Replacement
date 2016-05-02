@@ -132,10 +132,10 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         public ViewHolderClass (View v, ClassTimeAdapter p) {
             super(v);
             parent = p;
-            className = (TextView) v.findViewById(R.id.subjectName);
-            classTime = (TextView) v.findViewById(R.id.classTime);
-            deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
-            colourBar = v.findViewById(R.id.colourBar);
+            className = (TextView) v.findViewById(R.id.text_subject_name);
+            classTime = (TextView) v.findViewById(R.id.text_class_time);
+            deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
+            colourBar = v.findViewById(R.id.colour_bar);
             //Adding listener to the entire view, in order to allow editing
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

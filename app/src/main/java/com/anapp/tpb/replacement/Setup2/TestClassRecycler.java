@@ -127,10 +127,10 @@ public class TestClassRecycler extends RecyclerView.Adapter<TestClassRecycler.Cl
         public ClassViewHolder(View v, final TestClassRecycler p) {
             super(v);
             setIsRecyclable(false);
-            className = (TextView) v.findViewById(R.id.subjectName);
-            classTime = (TextView) v.findViewById(R.id.classTime);
-            deleteButton = (ImageButton) v.findViewById(R.id.deleteButton);
-            colourBar = v.findViewById(R.id.colourBar);
+            className = (TextView) v.findViewById(R.id.text_subject_name);
+            classTime = (TextView) v.findViewById(R.id.text_class_time);
+            deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
+            colourBar = v.findViewById(R.id.colour_bar);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

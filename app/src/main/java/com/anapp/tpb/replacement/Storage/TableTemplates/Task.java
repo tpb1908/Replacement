@@ -1,9 +1,11 @@
 package com.anapp.tpb.replacement.Storage.TableTemplates;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Task {
+public class Task implements Comparable<Task> {
 
     //Types of task: 1- Task, 2-Homework, 3-Reminder
 
@@ -120,6 +122,24 @@ public class Task {
             return t.getId() == id;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    @Override
+    public int compareTo(@NonNull Task another) {
+        //Complete and non-complete tasks probably won't be compared, however there is still a check
+        if(complete) { //This task is complete
+            if(another.complete) { //If they are both complete, compare times
+                return startDate > another.startDate ? 1 : -1;
+            } else { //If the other task isn't complete, it has higher precedence
+                return -1;
+            }
+        } else { //The opposite
+            if(another.complete) {
+                return 1;
+            } else {
+                return startDate > another.startDate ? 1 : -1;
+            }
         }
     }
 

@@ -163,7 +163,7 @@ public class TestActivity extends AppCompatActivity {
         @Override
         public void onViewCreated (View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            mRecyclerView = (RecyclerView) view.findViewById(R.id.dayClassTimeRecycler);
+            mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_class_today);
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parent);
             mRecyclerView.setLayoutManager(linearLayoutManager);
             mAdapter = new TestClassRecycler(parent, dataHelper, day);

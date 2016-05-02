@@ -15,6 +15,7 @@ public class Task implements Comparable<Task> {
     private String detail; //ALL
     private long startDate; //ALL
     private long endDate; //ALL
+    private long completeDate; //Task, homework
     private boolean showReminder; //ALL, true on reminder
     private int subjectID; //Homework, general task
     private int time; //note
@@ -115,6 +116,14 @@ public class Task implements Comparable<Task> {
         this.percentageComplete = percentageComplete;
     }
 
+    public long getCompleteDate() {
+        return completeDate;
+    }
+
+    public void setCompleteDate(long completeDate) {
+        this.completeDate = completeDate;
+    }
+
     @Override
     public boolean equals (Object o) {
         try {
@@ -148,6 +157,6 @@ public class Task implements Comparable<Task> {
         return "Task {id="+id+", type="+type+", title="+title+ ", detail=" + detail+
                 ", startDate=" +startDate+", endDate="+endDate+", reminder="+showReminder+
                 ", subjectID=" +subjectID+", time="+time+", isComplete="+isComplete()+
-                "percentageComplete="+percentageComplete+" }";
+                ", percentageComplete=" + percentageComplete + " }";
     }
 }

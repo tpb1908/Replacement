@@ -332,7 +332,7 @@ public class ClassSetup extends AppCompatActivity {
             if(this.currentPosition != position) {
                 if (position == 4) {
                     parent.updateFab(true);
-                } else if(currentPosition == 4) { //The position before the update was Friday
+                } else if(currentPosition == 4) { //The position before the updateCurrent was Friday
                     parent.updateFab(false);
                 }
                 this.currentPosition = position;

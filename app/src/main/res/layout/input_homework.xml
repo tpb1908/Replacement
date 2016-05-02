@@ -13,7 +13,8 @@
         android:layout_marginTop="@dimen/input_padding"
         android:hint="@string/hint_homework_title"
         android:inputType="textCapWords|textAutoCorrect"
-        android:lines="1"/>
+        android:lines="1"
+        android:theme="@style/AppTheme"/>
 
     <EditText
         android:id="@+id/text_homework_detail"
@@ -26,7 +27,9 @@
         android:autoLink="web|email"
         android:ems="10"
         android:hint="@string/hint_homework_detail"
-        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"/>
+        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+        android:textIsSelectable="true"
+        android:theme="@style/AppTheme"/>
 
     <EditText
         android:id="@+id/text_homework_due_date"
@@ -37,7 +40,8 @@
         android:layout_marginBottom="@dimen/input_padding"
         android:layout_marginTop="@dimen/input_padding"
         android:hint="@string/label_homework_due_date"
-        android:inputType="date"/>
+        android:inputType="date"
+        android:theme="@style/AppTheme"/>
 
 
     <Spinner
@@ -59,7 +63,8 @@
         android:layout_below="@+id/text_homework_due_date"
         android:layout_marginBottom="@dimen/input_padding"
         android:layout_marginTop="@dimen/input_padding"
-        android:text="@string/show_reminder"/>
+        android:text="@string/show_reminder"
+        android:theme="@style/AppTheme"/>
 
 
 </RelativeLayout>

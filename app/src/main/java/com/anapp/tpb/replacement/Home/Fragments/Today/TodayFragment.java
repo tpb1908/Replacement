@@ -146,6 +146,9 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
     public void onResume() {
         super.onResume();
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        if(mClassAdapter == null) {
+            mClassAdapter = new TodayClassAdapter(getContext(), this, mDataHelper);
+        }
         mClassAdapter.resume(mDataHelper);
         if(mCurrentDay != today) { //The app has been left overnight
             mCurrentDay = today;

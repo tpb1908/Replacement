@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.anapp.tpb.replacement.Home.Fragments.Tasks.TaskFragment;
 import com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment;
 import com.anapp.tpb.replacement.Home.Input.HomeworkInput;
 import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
@@ -82,14 +83,25 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
     }
 
+
     public void newTask(View v) {
 
     }
 
+    //Adds arguments for SlidingActivity to start from a button
+    public void setExpandLocation(View v, Intent i) {
+        int[] location = new int[2];
+        v.getLocationInWindow(location);
+        i.putExtra("leftOffset", location[0]);
+        i.putExtra("topOffset", location[1]);
+        i.putExtra("viewWidth", v.getWidth());
+        i.putExtra("viewHeight", v.getHeight());
+    }
+
     public void newHomework(View v) {
         Intent i = new Intent(this, HomeworkInput.class);
-        fab.hideSheet();
-        startActivity(i);
+        setExpandLocation(v, i);
+        startActivityForResult(i, 1);
     }
 
     public void newReminder(View v) {
@@ -130,6 +142,11 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fab.hideSheet();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,13 +198,13 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         s.setClassroom("L2.09");
         s.setTeacher("MQL");
         s.setName("Computer science");
-        s.setColor(0xffcccccc);
+        s.setColor(0xffccebcc);
         s = dataHelper.addSubject(s);
         subIDs.add(s.getId());
         s.setClassroom("L4.08");
         s.setTeacher("SWG");
         s.setName("Physics");
-        s.setColor(0xffff00ff);
+        s.setColor(0xffdd00ff);
         s = dataHelper.addSubject(s);
         subIDs.add(s.getId());
         s.setClassroom("L1.10");
@@ -206,6 +223,19 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
                 dataHelper.addClass(classTime);
             }
         }
+        Task t = new Task(2);
+        t.setComplete(false);
+        t.setStartDate(1462205968139L);
+        t.setEndDate(1462209968139L);
+        t.setTitle("Test work");
+        t.setDetail("This is some text \n This is the second line\nThis is the third line\nThis is the fourth line\nThis is the fifth line");
+        t.setPercentageComplete(0);
+        t.setSubjectID(1);
+        dataHelper.addTask(t);
+        t.setTitle("Another piece of test work");
+        t.setSubjectID(2);
+        t.setDetail("A shorter piece of detail without new line");
+        dataHelper.addTask(t);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -216,7 +246,11 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
         @Override
         public Fragment getItem(int position) {
-            return TodayFragment.newInstance();
+            if(position == 0) {
+                return TodayFragment.newInstance();
+            } else {
+                return TaskFragment.newInstance();
+            }
         }
 
         @Override

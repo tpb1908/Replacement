@@ -60,7 +60,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder (RecyclerView.ViewHolder holder, int position) {
         Task task = mTasks.get(position);
-        Subject subject = mDataHelper.getSubject(task.getSubjectID());
+        Subject subject = task.getSubject();
         String timeRange = "Set on ";
         //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
         timeRange += new SimpleDateFormat("dd/MM").format(new Date(task.getStartDate()));
@@ -93,7 +93,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 hvh.mHomeWorkTitle.setText(task.getTitle());
                 hvh.mDueDay.setText(timeRange);
                 //Either the first 80 characters, or the first line
-                String detailChunk = task.getDetail().substring(0, Math.min(task.getDetail().length(), 80));
+                String detailChunk = task.getDetail().substring(0, Math.min(task.getDetail().length(), 100));
                 if(detailChunk.contains("\n")) {
                     detailChunk = detailChunk.split("\n", 2)[0];
                 }
@@ -118,7 +118,6 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private static class TaskViewHolder extends RecyclerView.ViewHolder {
         private Task task;
-        private Subject subject;
 
         public TaskViewHolder(View v) {
             super(v);

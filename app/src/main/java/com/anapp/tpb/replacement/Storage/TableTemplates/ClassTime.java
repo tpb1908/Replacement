@@ -13,6 +13,7 @@ public class ClassTime implements Serializable, Comparable<ClassTime> {
     private int subjectID;
     private int start;
     private int end;
+    private Subject subject;
 
     public int getId() {
         return id;
@@ -54,6 +55,9 @@ public class ClassTime implements Serializable, Comparable<ClassTime> {
         this.day = day;
     }
 
+    public Subject getSubject() { return subject; }
+
+    public void setSubject(Subject subject) { this.subject = subject; }
 
     /**
      * Checks whether a class occurs after another, ignoring day
@@ -80,7 +84,9 @@ public class ClassTime implements Serializable, Comparable<ClassTime> {
 
     @Override
     public String toString() {
-        return "Class {id=" + id + ", SubjectId=" + subjectID + ", start=" + start + ", end=" + end + ", day=" + day + "}";
+        String string = "Class {id=" + id + ", SubjectId=" + subjectID + ", start=" + start + ", end=" + end + ", day=" + day;
+        if(subject != null) string += ", subject " + subject.toString();
+        return string + "}";
     }
 
     /**

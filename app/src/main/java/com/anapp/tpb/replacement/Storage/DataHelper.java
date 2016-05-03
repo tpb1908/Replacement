@@ -185,7 +185,6 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public Task getCurrentTask(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor = db.query(TABLE_TASKS_CURRENT,
                 TASK_COLUMNS,
                 "id = ?",
@@ -209,6 +208,7 @@ public class DataHelper extends SQLiteOpenHelper {
             task.setPercentageComplete(cursor.getInt(9));
             task.setCompleteDate(cursor.getInt(10));
             task.setSubjectID(cursor.getInt(11));
+            task.setSubject(getSubjectForData(db, task.getSubjectID()));
             cursor.close();
         }
         return task;
@@ -239,6 +239,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 task.setPercentageComplete(cursor.getInt(9));
                 task.setCompleteDate(cursor.getInt(10));
                 task.setSubjectID(cursor.getInt(11));
+                task.setSubject(getSubjectForData(db, task.getSubjectID()));
                 list.add(task);
                 Log.i("GettingTasks", task.toString());
             } while(cursor.moveToNext());
@@ -279,6 +280,7 @@ public class DataHelper extends SQLiteOpenHelper {
                     task.setComplete(cursor.getInt(8) > 0);
                     task.setPercentageComplete(cursor.getInt(9));
                     task.setCompleteDate(cursor.getInt(10));
+                    task.setSubject(getSubjectForData(db, task.getSubjectID()));
                     result.add(task);
                 }
             } while(cursor.moveToNext());
@@ -527,7 +529,29 @@ public class DataHelper extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        Log.i("Searching", "Searching for id " + id + " found " + subject.toString());
+        return subject;
+    }
+
+    private Subject getSubjectForData(SQLiteDatabase db, int id) {
+        Cursor cursor = db.query(TABLE_SUBJECTS,
+                SUBJECT_COLUMNS,
+                "id = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null,
+                null);
+        Subject subject = new Subject();
+        if (cursor != null) {
+            if(cursor.moveToFirst()) {
+                subject.setId(cursor.getInt(0));
+                subject.setName(cursor.getString(1));
+                subject.setClassroom(cursor.getString(2));
+                subject.setTeacher(cursor.getString(3));
+                subject.setColor(cursor.getInt(4));
+                cursor.close();
+            }
+        }
         return subject;
     }
 
@@ -630,10 +654,11 @@ public class DataHelper extends SQLiteOpenHelper {
         }
         ClassTime time = new ClassTime();
         time.setId(cursor.getInt(0));
-        time.setSubjectID(cursor.getInt(1));
-        time.setStart(cursor.getInt(2));
-        time.setEnd(cursor.getInt(3));
-        time.setDay(cursor.getInt(4));
+        time.setStart(cursor.getInt(1));
+        time.setEnd(cursor.getInt(2));
+        time.setDay(cursor.getInt(3));
+        time.setSubjectID(cursor.getInt(4));
+        time.setSubject(getSubjectForData(db, time.getSubjectID()));
         cursor.close();
 
         Log.d("Data", "Returning class with values of " + time.toString());
@@ -660,6 +685,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 time.setStart(cursor.getInt(2));
                 time.setEnd(cursor.getInt(3));
                 time.setDay(cursor.getInt(4));
+                time.setSubject(getSubjectForData(db, time.getSubjectID()));
                 classes.add(time);
             } while (cursor.moveToNext());
         }
@@ -699,6 +725,7 @@ public class DataHelper extends SQLiteOpenHelper {
                     time.setStart(cursor.getInt(2));
                     time.setEnd(cursor.getInt(3));
                     time.setDay(cursor.getInt(4));
+                    time.setSubject(getSubjectForData(db, time.getSubjectID()));
                     result.add(time);
                 }
             } while(cursor.moveToNext());
@@ -737,7 +764,6 @@ public class DataHelper extends SQLiteOpenHelper {
         isClassTimeCacheValid = false;
         return i;
     }
-
 
     public void deleteClass(ClassTime time) {
         SQLiteDatabase db = this.getWritableDatabase();

@@ -35,6 +35,7 @@ import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import java.util.ArrayList;
 
 public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
+    private static final String TAG = "Home";
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -50,6 +51,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
+        ClassTime ct = dataHelper.getClass(2);
+        Log.i(TAG, "Class of  " + ct.toString());
+
         if(pref.getBoolean("firststart", true)) setUpTestData();
 
         if(pref.getBoolean("firststart", true)) {

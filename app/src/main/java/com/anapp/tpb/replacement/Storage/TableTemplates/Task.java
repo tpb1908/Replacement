@@ -21,6 +21,7 @@ public class Task implements Comparable<Task> {
     private int time; //note
     private boolean complete; //Homework, general task
     private int percentageComplete; //Homework
+    private Subject subject;
 
     public Task() {}
 
@@ -122,6 +123,14 @@ public class Task implements Comparable<Task> {
 
     public void setCompleteDate(long completeDate) {
         this.completeDate = completeDate;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     @Override

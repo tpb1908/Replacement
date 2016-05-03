@@ -104,7 +104,7 @@ public class SubjectListAdapter extends RecyclerView.Adapter<SubjectListAdapter.
         public ViewHolder(View v, SubjectListAdapter p) {
             super(v);
             this.parent = p;
-            this.subjectName = (TextView) v.findViewById(R.id.text_subject_name);
+            this.subjectName = (TextView) v.findViewById(R.id.text_class_past_info);
             this.teacherName = (TextView) v.findViewById(R.id.text_teacher_name);
             this.classRoom = (TextView) v.findViewById(R.id.text_classroom);
             this.deleteButton = (ImageButton) v.findViewById(R.id.button_delete);

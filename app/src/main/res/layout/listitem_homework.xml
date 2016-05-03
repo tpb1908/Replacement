@@ -29,7 +29,7 @@
                 android:background="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/text_subject_name"
+                android:id="@+id/text_class_past_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/icon_homework"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/text_subject_name"
+                android:layout_below="@+id/text_class_past_info"
                 android:layout_marginEnd="22dp"
                 android:background="#00ffffff"
                 android:src="@drawable/icon_delete"/>

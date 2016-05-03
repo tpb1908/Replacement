@@ -132,7 +132,7 @@ public class ClassTimeAdapter extends RecyclerView.Adapter<ClassTimeAdapter.View
         public ViewHolderClass (View v, ClassTimeAdapter p) {
             super(v);
             parent = p;
-            className = (TextView) v.findViewById(R.id.text_subject_name);
+            className = (TextView) v.findViewById(R.id.text_class_past_info);
             classTime = (TextView) v.findViewById(R.id.text_class_time);
             deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
             colourBar = v.findViewById(R.id.colour_bar);

@@ -79,14 +79,16 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                 hvh.mSubjectName.setText(subjectNameClass);
                 //Picking correct text color for the background
-                TextView title = (TextView) hvh.mHomeWorkTitle.findViewById(R.id.text_homework_title);
+                //TODO- Change this to an image drawable, and switch icon that way
                 if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
                     hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
-                    title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
+                    hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
+//                    title.getCompoundDrawables()[0].setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_IN);
                 } else {
                     hvh.mSubjectName.setTextColor(Color.parseColor("#FFFFFF"));
+ //                   title.getCompoundDrawables()[0].setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
                     //What the fuck is up with that method name??
-                    title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
+                    hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
                 }
                 hvh.mHomeWorkTitle.setText(task.getTitle());
                 hvh.mDueDay.setText(timeRange);
@@ -138,7 +140,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             super(v);
             setIsRecyclable(false);
             mColorBar = v.findViewById(R.id.colour_bar);
-            mSubjectName = (TextView) v.findViewById(R.id.text_subject_name);
+            mSubjectName = (TextView) v.findViewById(R.id.text_class_past_info);
             mHomeWorkTitle = (TextView) v.findViewById(R.id.text_homework_title);
             mDueDay = (TextView) v.findViewById(R.id.text_homework_due_day);
             mHomeWorkDetail = (TextView) v.findViewById(R.id.text_homework_detail);

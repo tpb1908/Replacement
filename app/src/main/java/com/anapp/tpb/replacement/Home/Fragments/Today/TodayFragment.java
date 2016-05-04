@@ -169,8 +169,8 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
         mClassRecycler.setLayoutManager(mLayoutManager);
 
         //Updating mClassAdapter and reregistering receiver
-        mClassAdapter.notifyDataSetChanged();
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+        mClassAdapter.collectData();
 
     }
 

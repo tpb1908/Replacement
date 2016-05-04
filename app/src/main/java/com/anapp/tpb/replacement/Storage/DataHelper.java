@@ -152,6 +152,7 @@ public class DataHelper extends SQLiteOpenHelper {
         values.put(KEY_SUBJECT_ID, task.getSubjectID());
         task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
         Log.i("AddingTask", getCurrentTask(task.getId()).toString());
+        db.close();
         return task;
     }
 
@@ -211,6 +212,7 @@ public class DataHelper extends SQLiteOpenHelper {
             task.setSubject(getSubjectForData(db, task.getSubjectID()));
             cursor.close();
         }
+        db.close();
         return task;
     }
 
@@ -245,6 +247,7 @@ public class DataHelper extends SQLiteOpenHelper {
             } while(cursor.moveToNext());
         }
         cursor.close();
+        db.close();
         return list;
     }
 
@@ -286,6 +289,7 @@ public class DataHelper extends SQLiteOpenHelper {
             } while(cursor.moveToNext());
         }
         cursor.close();
+        db.close();
         return result;
     }
 
@@ -378,6 +382,7 @@ public class DataHelper extends SQLiteOpenHelper {
         term.setStartDate(cursor.getInt(2));
         term.setEndDate(cursor.getInt(3));
         cursor.close();
+        db.close();
         Log.d("Data ", "Reading term with values of " + term.toString());
 
         return term;
@@ -408,6 +413,7 @@ public class DataHelper extends SQLiteOpenHelper {
         cursor.close();
         Collections.sort(list);
         Collections.reverse(list);
+        db.close();
         Log.d("Data", "Returning all terms " + list.toString());
         return list;
     }
@@ -470,6 +476,7 @@ public class DataHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        db.close();
         return t;
     }
 
@@ -491,6 +498,7 @@ public class DataHelper extends SQLiteOpenHelper {
 
         subject.setId((int) db.insert(TABLE_SUBJECTS, null, values));
         Log.d("Data", "Adding subject with values of " + subject.toString());
+        db.close();
         return subject;
     }
 
@@ -529,6 +537,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
+        db.close();
         return subject;
     }
 
@@ -635,6 +644,7 @@ public class DataHelper extends SQLiteOpenHelper {
         time.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
         Log.d("Data", "Adding class with values of " + time.toString());
         isClassTimeCacheValid = false;
+        db.close();
         return time;
     }
 
@@ -660,7 +670,7 @@ public class DataHelper extends SQLiteOpenHelper {
         time.setSubjectID(cursor.getInt(4));
         time.setSubject(getSubjectForData(db, time.getSubjectID()));
         cursor.close();
-
+        db.close();
         Log.d("Data", "Returning class with values of " + time.toString());
 
         return time;
@@ -694,6 +704,7 @@ public class DataHelper extends SQLiteOpenHelper {
         Collections.reverse(classes);
         classTimeCache = classes;
         isClassTimeCacheValid = true;
+        db.close();
         Log.d("Data", "Returning all classes" + classes.toString());
         return classes;
     }
@@ -732,6 +743,7 @@ public class DataHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         Collections.sort(result);
+        db.close();
         return  result;
     }
 

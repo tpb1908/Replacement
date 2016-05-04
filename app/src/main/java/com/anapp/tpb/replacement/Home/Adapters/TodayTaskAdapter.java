@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
@@ -75,7 +76,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case 2:
                 int color = subject.getColor();
                 HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
-                hvh.mColorBar.setBackgroundColor(color);
+                hvh.mTitleBar.setBackgroundColor(color);
                 final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                 hvh.mSubjectName.setText(subjectNameClass);
                 //Picking correct text color for the background
@@ -83,28 +84,26 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
                     hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
                     hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
-//                    title.getCompoundDrawables()[0].setColorFilter(Color.parseColor("#000000"), PorterDuff.Mode.SRC_IN);
                 } else {
                     hvh.mSubjectName.setTextColor(Color.parseColor("#FFFFFF"));
- //                   title.getCompoundDrawables()[0].setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_IN);
                     //What the fuck is up with that method name??
                     hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
                 }
                 hvh.mHomeWorkTitle.setText(task.getTitle());
                 hvh.mDueDay.setText(timeRange);
-                //Either the first 80 characters, or the first line
-                String detailChunk = task.getDetail().substring(0, Math.min(task.getDetail().length(), 100));
-                if(detailChunk.contains("\n")) {
-                    detailChunk = detailChunk.split("\n", 2)[0];
+                hvh.mDetail = task.getDetail();
+                hvh.mDetailHint = task.getDetail().split("\n", 2)[0];
+                if(hvh.mDetail.length() > hvh.mDetailHint.length()) {
+                    hvh.mDetailHint += "...";
                 }
-                detailChunk += "...";
-                hvh.mHomeworkDetailStrings = new String[] {detailChunk, task.getDetail()};
-                hvh.mHomeWorkDetail.setText(detailChunk);
+                hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
                 break;
             case 3:
                 break;
         }
     }
+
+
 
     @Override
     public int getItemCount () {
@@ -125,21 +124,23 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private static class HomeworkViewHolder extends TaskViewHolder {
-        private View mColorBar;
+        private RelativeLayout mTitleBar;
         private TextView mSubjectName;
         private TextView mHomeWorkDetail;
-        private String[] mHomeworkDetailStrings;
+        private String mDetail;
+        private String mDetailHint;
         private TextView mHomeWorkTitle;
         private TextView mDueDay;
         private Button mDoneButton;
         private Button mEditButton;
-        private boolean expanded = false;
+        private boolean mIsExpanded = false;
+
 
         public HomeworkViewHolder(View v) {
             super(v);
             setIsRecyclable(false);
-            mColorBar = v.findViewById(R.id.colour_bar);
-            mSubjectName = (TextView) v.findViewById(R.id.text_class_past_info);
+            mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
+            mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
             mHomeWorkTitle = (TextView) v.findViewById(R.id.text_homework_title);
             mDueDay = (TextView) v.findViewById(R.id.text_homework_due_day);
             mHomeWorkDetail = (TextView) v.findViewById(R.id.text_homework_detail);
@@ -148,12 +149,14 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(!expanded) {
-                        mHomeWorkDetail.setText(mHomeworkDetailStrings[0]);
+                    if(!mIsExpanded) {
+                        mHomeWorkDetail.setSingleLine(false);
+                        mHomeWorkDetail.setText(mDetail);
                     } else {
-                        mHomeWorkDetail.setText(mHomeworkDetailStrings[1]);
+                        mHomeWorkDetail.setText(mDetailHint);
+                        mHomeWorkDetail.setSingleLine(true);
                     }
-                    expanded = !expanded;
+                    mIsExpanded = !mIsExpanded;
                 }
             });
         }

@@ -3,18 +3,18 @@ package com.anapp.tpb.replacement.Setup.DataCollection;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.klinker.android.sliding.SlidingActivity;
-import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
+import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
 
@@ -89,19 +89,24 @@ public class SubjectInput extends SlidingActivity {
         colourBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                final ColorPicker cp = new ColorPicker(SubjectInput.this, Color.red(colour), Color.green(colour), Color.blue(colour));
-                cp.show();
-
-                Button ok = (Button) cp.findViewById(R.id.okColorButton);
-                ok.setOnClickListener(new View.OnClickListener() {
+                SpectrumDialog.Builder b = new SpectrumDialog.Builder(getApplicationContext());
+                Resources r = getResources();
+                int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),
+                        r.getColor(R.color.brown_500), r.getColor(R.color.cyan_500), r.getColor(R.color.deep_orange_500), r.getColor(R.color.deep_purple_500),
+                        r.getColor(R.color.green_500), r.getColor(R.color.indigo_500), r.getColor(R.color.lime_500), r.getColor(R.color.teal_500),
+                        r.getColor(R.color.yellow_500), r.getColor(R.color.red_500), r.getColor(R.color.pink_500), r.getColor(R.color.light_blue_500)};
+                b.setColors(colors);
+                b.setDismissOnColorSelected(false);
+                b.setOnColorSelectedListener(new SpectrumDialog.OnColorSelectedListener() {
                     @Override
-                    public void onClick(View v) {
-                        colour = cp.getColor();
-                        colourBar.setBackgroundColor(colour);
-                        cp.dismiss();
+                    public void onColorSelected(boolean positiveResult, @ColorInt int setColor) {
+                        colour = setColor;
+                        colourBar.setBackgroundColor(setColor);
                     }
                 });
+
+                b.build().show(getSupportFragmentManager(), "");
+
             }
         });
         if (editing) {

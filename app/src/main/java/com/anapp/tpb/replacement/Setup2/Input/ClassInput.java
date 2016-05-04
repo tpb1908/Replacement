@@ -47,6 +47,7 @@ public class ClassInput extends SlidingActivity {
 
     @Override
     public void init (Bundle savedInstanceState) {
+        //TODO- Use the new color picker
         setContent(R.layout.input_class);
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         enableFullscreen();

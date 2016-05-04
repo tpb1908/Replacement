@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/fab_plus_icon"/>
+        android:src="@drawable/fab_icon_plus_white"/>
 
     <!-- Overlay that dims the screen -->
     <com.gordonwong.materialsheetfab.DimOverlayFrameLayout

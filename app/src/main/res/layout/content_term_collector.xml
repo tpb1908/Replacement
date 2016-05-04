@@ -50,7 +50,7 @@
         android:layout_marginBottom="@dimen/fab_margin"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:src="@drawable/fab_plus_icon"/>
+        android:src="@drawable/fab_icon_plus"/>
 
 
 </RelativeLayout>

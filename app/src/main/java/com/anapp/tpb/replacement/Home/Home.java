@@ -2,7 +2,9 @@ package com.anapp.tpb.replacement.Home;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +33,7 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
+import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
 
@@ -49,10 +52,21 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Debug.startMethodTracing("ReplacementTrace");
+
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
-        ClassTime ct = dataHelper.getClass(2);
-        Log.i(TAG, "Class of  " + ct.toString());
+        SpectrumDialog.Builder b = new SpectrumDialog.Builder(getApplicationContext());
+        //TODO- Get material palette
+        Resources r = getResources();
+        int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),
+                r.getColor(R.color.brown_500), r.getColor(R.color.cyan_500), r.getColor(R.color.deep_orange_500), r.getColor(R.color.deep_purple_500),
+                r.getColor(R.color.green_500), r.getColor(R.color.indigo_500), r.getColor(R.color.lime_500), r.getColor(R.color.teal_500),
+                r.getColor(R.color.yellow_500), r.getColor(R.color.red_500), r.getColor(R.color.pink_500), r.getColor(R.color.light_blue_500)};
+        b.setColors(colors);
+        b.setDismissOnColorSelected(false);
+        b.build().show(getSupportFragmentManager(), "");
+
 
         if(pref.getBoolean("firststart", true)) setUpTestData();
 
@@ -84,7 +98,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             fab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
 
         }
-
+        Debug.stopMethodTracing();
     }
 
 

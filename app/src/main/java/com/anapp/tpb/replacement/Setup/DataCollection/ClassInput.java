@@ -264,7 +264,7 @@ public class ClassInput extends SlidingActivity {
         public View getCustomView(int position, ViewGroup parent) {
             LayoutInflater inflater = getLayoutInflater();
             View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
-            TextView name = (TextView) row.findViewById(R.id.text_class_past_info);
+            TextView name = (TextView) row.findViewById(R.id.text_homework_subject);
             View colourBar = row.findViewById(R.id.colour_bar);
             name.setText(subjects.get(position).getName() + ", " + subjects.get(position).getTeacher());
             colourBar.setBackgroundColor(subjects.get(position).getColor());

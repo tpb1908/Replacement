@@ -299,7 +299,7 @@ public class ClassSetup extends AppCompatActivity {
                 super(v);
                 setIsRecyclable(false);
                 parent = p;
-                className = (TextView) v.findViewById(R.id.text_class_past_info);
+                className = (TextView) v.findViewById(R.id.text_homework_subject);
                 classTime = (TextView) v.findViewById(R.id.text_class_time);
                 deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
                 colourBar = v.findViewById(R.id.colour_bar);

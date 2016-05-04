@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/fab_plus_icon"/>
+        android:src="@drawable/fab_icon_plus"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_finish_add_class"

@@ -26,8 +26,8 @@ public class IntroActivity extends AppIntro {
         first = FragmentCreator.newInstance(R.layout.input_name);
         addSlide(first);
 
-        addSlide(AppIntroFragment.newInstance("Test slide 1", "Change this", R.drawable.fab_plus_icon, R.color.colorAccent));
-        addSlide(AppIntroFragment.newInstance("Test slide 2", "Change this as well", R.drawable.fab_plus_icon, R.color.colorAccent));
+        addSlide(AppIntroFragment.newInstance("Test slide 1", "Change this", R.drawable.fab_icon_plus, R.color.colorAccent));
+        addSlide(AppIntroFragment.newInstance("Test slide 2", "Change this as well", R.drawable.fab_icon_plus, R.color.colorAccent));
     }
 
     @Override

@@ -204,7 +204,7 @@ public class SubjectCollector extends AppCompatActivity {
             public SubjectViewHolder (View v, SubjectAdapter p) {
                 super(v);
                 this.parent = p;
-                this.subjectName = (TextView) v.findViewById(R.id.text_class_past_info);
+                this.subjectName = (TextView) v.findViewById(R.id.text_homework_subject);
                 this.teacherName = (TextView) v.findViewById(R.id.text_teacher_name);
                 this.classRoom = (TextView) v.findViewById(R.id.text_classroom);
                 this.deleteButton = (ImageButton) v.findViewById(R.id.button_delete);

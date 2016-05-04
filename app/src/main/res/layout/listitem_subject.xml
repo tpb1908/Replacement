@@ -29,7 +29,7 @@
                 android:background="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/text_class_past_info"
+                android:id="@+id/text_homework_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/icon_class"
@@ -40,8 +40,8 @@
                 android:id="@+id/text_teacher_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/text_class_past_info"
-                android:layout_alignBottom="@+id/text_class_past_info"
+                android:layout_alignBaseline="@+id/text_homework_subject"
+                android:layout_alignBottom="@+id/text_homework_subject"
                 android:layout_alignStart="@+id/text_classroom"
                 android:layout_marginRight="8dp"/>
 
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/text_class_past_info"
+                android:layout_below="@+id/text_homework_subject"
                 android:layout_centerInParent="true"
                 android:layout_marginEnd="22dp"
                 android:background="#00ffffff"

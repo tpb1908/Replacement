@@ -127,7 +127,7 @@ public class TestClassRecycler extends RecyclerView.Adapter<TestClassRecycler.Cl
         public ClassViewHolder(View v, final TestClassRecycler p) {
             super(v);
             setIsRecyclable(false);
-            className = (TextView) v.findViewById(R.id.text_class_past_info);
+            className = (TextView) v.findViewById(R.id.text_homework_subject);
             classTime = (TextView) v.findViewById(R.id.text_class_time);
             deleteButton = (ImageButton) v.findViewById(R.id.button_delete);
             colourBar = v.findViewById(R.id.colour_bar);

@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,7 +62,7 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
                 if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
                     //Simplest way of causing timer bar to update
                     //TODO- Just update the correct viewholder/s
-                    mClassAdapter.notifyDataSetChanged();
+                    mClassAdapter.collectData();
                 }
             }
         };
@@ -68,23 +70,6 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            mClassInterface = (ClassOpener) context;
-        } catch(ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement ClassOpener interface");
-        }
-
-        try {
-            mTaskInterface = (TaskOpener) context;
-        } catch(ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement TaskOpener interface");
-        }
-
-    }
 
     @Override
     public void openClass(ClassTime c) {
@@ -143,6 +128,25 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
 
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mClassInterface = (ClassOpener) context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement ClassOpener interface");
+        }
+
+        try {
+            mTaskInterface = (TaskOpener) context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement TaskOpener interface");
+        }
+
+    }
+
+
+    @Override
     public void onResume() {
         super.onResume();
         int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
@@ -155,6 +159,15 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
             setDayTermText();
             mClassAdapter.collectData();
         }
+        //Rotation- Linear for vertical, two item width for horizontal
+        //TODO- Do the same thing in the setup process
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mLayoutManager = new LinearLayoutManager(getContext());
+        } else {
+            mLayoutManager = new GridLayoutManager(getContext(), 2);
+        }
+        mClassRecycler.setLayoutManager(mLayoutManager);
+
         //Updating mClassAdapter and reregistering receiver
         mClassAdapter.notifyDataSetChanged();
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));

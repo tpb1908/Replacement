@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.anapp.tpb.replacement.Home.Fragments.Tasks.TaskFragment;
 import com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment;
+import com.anapp.tpb.replacement.Home.Input.AssessmentInput;
 import com.anapp.tpb.replacement.Home.Input.HomeworkInput;
 import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
@@ -127,7 +128,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     }
 
     public void newAssessment(View v) {
-
+        Intent i = new Intent(this, AssessmentInput.class);
+        setExpandLocation(v, i);
+        startActivityForResult(i, 1);
     }
 
 

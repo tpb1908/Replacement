@@ -18,6 +18,9 @@
     <string name="hint_term_name">Term name</string>
     <string name="hint_homework_title">Title</string>
     <string name="hint_homework_detail">Detail</string>
+    <string name="hint_assessment_notes">Notes</string>
+    <string name="hint_assessment_title">Paper Title</string>
+    <string name="hint_assessment_date">Date</string>
     <string name="label_homework_due_date">Due Date</string>
     <string name="title_term_collector">Terms</string>
     <string name="hint_subject_name">Subject name</string>

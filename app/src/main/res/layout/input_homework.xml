@@ -45,22 +45,29 @@
 
     </android.support.design.widget.TextInputLayout>
 
-
-    <EditText
-        android:id="@+id/edittext_homework_due_date"
-        android:layout_width="fill_parent"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/wrapper_edittext_homework_detail"
-        android:layout_marginBottom="@dimen/input_padding"
-        android:layout_marginTop="@dimen/input_padding"
-        android:hint="@string/label_homework_due_date"
-        android:theme="@style/AppTheme"
-        android:onClick="showDatePicker"
-        android:inputType="none"
-        android:focusable="false"
-        android:enabled="true"
-        android:editable="false"/>
+        android:id="@+id/wrapper_edittext_homework_date"
+        android:layout_below="@+id/wrapper_edittext_homework_detail">
+
+        <EditText
+            android:id="@+id/edittext_homework_due_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="@dimen/input_padding"
+            android:layout_marginTop="@dimen/input_padding"
+            android:hint="@string/label_homework_due_date"
+            android:theme="@style/AppTheme"
+            android:onClick="showDatePicker"
+            android:inputType="none"
+            android:focusable="false"
+            android:enabled="true"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+
 
 
     <Spinner
@@ -79,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/edittext_homework_due_date"
+        android:layout_below="@+id/wrapper_edittext_homework_date"
         android:layout_marginBottom="@dimen/input_padding"
         android:layout_marginTop="@dimen/input_padding"
         android:text="@string/show_reminder"

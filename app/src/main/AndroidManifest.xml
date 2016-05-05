@@ -36,6 +36,10 @@
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light">
         </activity>
+        <activity android:name=".Home.Input.AssessmentInput"
+                  android:taskAffinity=""
+                  android:theme="@style/Theme.Sliding.Light">
+        </activity>
         <activity
             android:name=".Setup2.Collectors.ClassCollector"
             android:taskAffinity=""

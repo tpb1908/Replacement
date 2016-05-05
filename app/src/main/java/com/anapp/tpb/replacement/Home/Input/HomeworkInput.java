@@ -1,10 +1,10 @@
 package com.anapp.tpb.replacement.Home.Input;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -44,8 +44,11 @@ public class HomeworkInput extends SlidingActivity {
         expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         mCurrentTask = new Task(2);
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_homework_title);
+        final TextInputLayout mTitleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_title);
         final EditText mDetailInput = (EditText) findViewById(R.id.edittext_homework_detail);
+        final TextInputLayout mDetailWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_detail);
         mDateInput = (EditText) findViewById(R.id.edittext_homework_due_date);
+        final TextInputLayout mDateWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_date);
         final CheckBox mShowReminderInput = (CheckBox) findViewById(R.id.checkbox_show_reminder);
 
         final Spinner s = (Spinner) findViewById(R.id.spinner_subject);
@@ -55,45 +58,34 @@ public class HomeworkInput extends SlidingActivity {
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int errorFlag = -1;
+                boolean errorFlag = false;
                 if(mCurrentTask.getEndDate() == 0L) {
-                    errorFlag = 0;
-                } else if(mTitleInput.getText().toString().equals("")) {
-                    errorFlag = 1;
-                } else if(mDetailInput.getText().toString().equals("")) {
-                    errorFlag = 2;
+                    mDateWrapper.setError("Please set a date");
+                } else {
+                    mDateWrapper.setError(null);
                 }
 
-                if(errorFlag == -1) {
+                if(mTitleInput.getText().toString().equals("")) {
+                    errorFlag = true;
+                    mTitleWrapper.setError("Please set a title");
+                } else {
+                    mTitleWrapper.setError(null);
+                }
+
+                if(mDetailInput.getText().toString().equals("")) {
+                    errorFlag = true;
+                    mDetailWrapper.setError("Please add some detail");
+                } else {
+                    mDetailWrapper.setError(null);
+                }
+
+                if(!errorFlag) {
                     mCurrentTask.setSubjectID((int)s.getSelectedItemId());
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());
                     setResult(1);
                     finish();
-                } else {
-                    String errorTitle= "";
-                    String errorMessage = "";
-                    switch(errorFlag) {
-                        case 0:
-                            errorTitle = "Date";
-                            errorMessage = "You must input a due date";
-                            break;
-                        case 1:
-                            errorTitle = "Title";
-                            errorMessage = "You must input a title";
-                            break;
-
-                        case 2:
-                            errorTitle = "Detail";
-                            errorMessage = "You must input some detail";
-                            break;
-                    }
-                    new AlertDialog.Builder(HomeworkInput.this)
-                            .setTitle(errorTitle)
-                            .setMessage(errorMessage)
-                            .setPositiveButton("OK", null)
-                            .show();
                 }
             }
         });
@@ -122,5 +114,9 @@ public class HomeworkInput extends SlidingActivity {
         }
     };
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //TODO- Check if anything has been input
+    }
 }

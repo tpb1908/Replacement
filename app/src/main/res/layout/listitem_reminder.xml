@@ -29,7 +29,7 @@
                 android:background="@color/colorPrimary"/>
 
             <TextView
-                android:id="@+id/text_homework_title"
+                android:id="@+id/edittext_homework_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/reminderIcon"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/text_homework_title"
+                android:layout_below="@+id/edittext_homework_title"
                 android:layout_marginEnd="16dp"
                 android:background="#00ffffff"
                 android:src="@drawable/icon_delete"/>

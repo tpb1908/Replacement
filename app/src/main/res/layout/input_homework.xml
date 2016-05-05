@@ -3,45 +3,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/text_homework_title"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/input_padding"
-        android:layout_marginTop="@dimen/input_padding"
-        android:hint="@string/hint_homework_title"
-        android:inputType="textCapWords|textAutoCorrect"
-        android:lines="1"
-        android:theme="@style/AppTheme"/>
+        android:id="@+id/wrapper_edittext_homework_title">
+
+        <EditText
+            android:id="@+id/edittext_homework_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/input_padding"
+            android:layout_marginTop="@dimen/input_padding"
+            android:hint="@string/hint_homework_title"
+            android:inputType="textCapWords|textAutoCorrect"
+            android:lines="1"
+            android:theme="@style/AppTheme"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrapper_edittext_homework_detail"
+        android:layout_below="@+id/wrapper_edittext_homework_title">
+
+        <EditText
+            android:id="@+id/edittext_homework_detail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/wrapper_edittext_homework_title"
+            android:layout_marginBottom="@dimen/input_padding"
+            android:layout_marginTop="@dimen/input_padding"
+            android:autoLink="web|email"
+            android:ems="10"
+            android:hint="@string/hint_homework_detail"
+            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+            android:textIsSelectable="true"
+            android:theme="@style/AppTheme"/>
+
+    </android.support.design.widget.TextInputLayout>
+
 
     <EditText
-        android:id="@+id/text_homework_detail"
+        android:id="@+id/edittext_homework_due_date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/text_homework_title"
-        android:layout_marginBottom="@dimen/input_padding"
-        android:layout_marginTop="@dimen/input_padding"
-        android:autoLink="web|email"
-        android:ems="10"
-        android:hint="@string/hint_homework_detail"
-        android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-        android:textIsSelectable="true"
-        android:theme="@style/AppTheme"/>
-
-    <EditText
-        android:id="@+id/text_homework_due_date"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/text_homework_detail"
+        android:layout_below="@+id/wrapper_edittext_homework_detail"
         android:layout_marginBottom="@dimen/input_padding"
         android:layout_marginTop="@dimen/input_padding"
         android:hint="@string/label_homework_due_date"
-        android:inputType="date"
-        android:theme="@style/AppTheme"/>
+        android:theme="@style/AppTheme"
+        android:onClick="showDatePicker"
+        android:inputType="none"
+        android:focusable="false"
+        android:enabled="true"
+        android:editable="false"/>
 
 
     <Spinner
@@ -60,7 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/text_homework_due_date"
+        android:layout_below="@+id/edittext_homework_due_date"
         android:layout_marginBottom="@dimen/input_padding"
         android:layout_marginTop="@dimen/input_padding"
         android:text="@string/show_reminder"

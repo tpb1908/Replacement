@@ -57,7 +57,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
         SpectrumDialog.Builder b = new SpectrumDialog.Builder(getApplicationContext());
-        //TODO- Get material palette
         Resources r = getResources();
         int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),
                 r.getColor(R.color.brown_500), r.getColor(R.color.cyan_500), r.getColor(R.color.deep_orange_500), r.getColor(R.color.deep_purple_500),

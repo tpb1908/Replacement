@@ -80,7 +80,6 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                 hvh.mSubjectName.setText(subjectNameClass);
                 //Picking correct text color for the background
-                //TODO- Change this to an image drawable, and switch icon that way
                 if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
                     hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
                     hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
@@ -141,9 +140,9 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             setIsRecyclable(false);
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
             mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
-            mHomeWorkTitle = (TextView) v.findViewById(R.id.text_homework_title);
+            mHomeWorkTitle = (TextView) v.findViewById(R.id.edittext_homework_title);
             mDueDay = (TextView) v.findViewById(R.id.text_homework_due_day);
-            mHomeWorkDetail = (TextView) v.findViewById(R.id.text_homework_detail);
+            mHomeWorkDetail = (TextView) v.findViewById(R.id.edittext_homework_detail);
             mDoneButton = (Button) v.findViewById(R.id.button_done);
             mEditButton = (Button) v.findViewById(R.id.button_edit);
             v.setOnClickListener(new View.OnClickListener() {

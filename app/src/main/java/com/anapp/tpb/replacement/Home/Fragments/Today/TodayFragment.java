@@ -61,7 +61,6 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
             public void onReceive (Context context, Intent intent) {
                 if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0) {
                     //Simplest way of causing timer bar to update
-                    //TODO- Just update the correct viewholder/s
                     mClassAdapter.collectData();
                 }
             }
@@ -157,6 +156,7 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
         if(mCurrentDay != today) { //The app has been left overnight
             mCurrentDay = today;
             setDayTermText();
+            mClassAdapter.notifyDataSetChanged();
             mClassAdapter.collectData();
         }
         //Rotation- Linear for vertical, two item width for horizontal

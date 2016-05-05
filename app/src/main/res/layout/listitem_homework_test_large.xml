@@ -51,7 +51,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_homework_title"
+                    android:id="@+id/edittext_homework_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorPrimaryText"
@@ -66,7 +66,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/text_homework_detail"
+                    android:id="@+id/edittext_homework_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"

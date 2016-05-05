@@ -36,6 +36,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mTasks = mDataHelper.getAllCurrentTasks();
     }
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
         View v;

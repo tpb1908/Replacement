@@ -84,7 +84,9 @@ public class HomeworkInput extends SlidingActivity {
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());
-                    setResult(1);
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("task", mCurrentTask);
+                    setResult(0, returnIntent);
                     finish();
                 }
             }

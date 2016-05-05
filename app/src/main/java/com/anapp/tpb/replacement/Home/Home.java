@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Debug;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -45,6 +44,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     private ViewPager mViewPager;
     private DataHelper dataHelper;
 
+    private TodayFragment mTodayFragment;
+    private TaskFragment mTaskFragment;
+
     private MaterialSheetFab fab;
 
 
@@ -53,7 +55,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Debug.startMethodTracing("ReplacementTrace");
 
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
@@ -99,13 +100,10 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             fab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
             Log.i(TAG, "Time " + (System.nanoTime()-start)/1E9);
         }
-        Debug.stopMethodTracing();
     }
 
 
-    public void newTask(View v) {
 
-    }
 
     //Adds arguments for SlidingActivity to start from a button
     public void setExpandLocation(View v, Intent i) {
@@ -124,6 +122,10 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     }
 
     public void newReminder(View v) {
+
+    }
+
+    public void newTask(View v) {
 
     }
 
@@ -167,6 +169,33 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         fab.hideSheet();
+        /* Result codes
+          0-New task
+          1-Update task
+          2-Assessment
+         */
+        if(resultCode == 0 || resultCode == 1) {
+            try {
+                Task t = (Task) data.getSerializableExtra("task");
+                if(resultCode == 0) {
+                    mTaskFragment.addTask(t);
+                } else  {
+                    mTaskFragment.updateTask(t);
+                }
+            } catch(ClassCastException c) {
+                Log.e(TAG, "ClassCastException when returning task " + c.toString());
+            } catch(Exception e) {
+                Log.i(TAG, "Exception " + e.toString());
+            }
+        } else if(resultCode == 2) {
+            //TODO- Assessment
+        } else {
+            Log.i(TAG, "Invalid request code " + requestCode + " values of " + data.getExtras().toString());
+        }
+
+
+
+
     }
 
     @Override
@@ -268,15 +297,17 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         @Override
         public Fragment getItem(int position) {
             if(position == 0) {
-                return TodayFragment.newInstance();
-            } else {
-                return TaskFragment.newInstance();
-            }
+                mTodayFragment = TodayFragment.newInstance();
+                return mTodayFragment;
+            } else if(position == 1) {
+                mTaskFragment = TaskFragment.newInstance();
+                return mTaskFragment;
+            } else {return null;}
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override

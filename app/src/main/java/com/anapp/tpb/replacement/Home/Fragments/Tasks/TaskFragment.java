@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.anapp.tpb.replacement.Home.Adapters.TodayTaskAdapter;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 
 /**
  * Created by theo on 08/04/16.
@@ -49,5 +50,13 @@ public class TaskFragment extends Fragment {
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);
         return inflated;
+    }
+
+    public void addTask(Task task) {
+        mTaskAdapter.addTask(task);
+    }
+
+    public void updateTask(Task task) {
+        mTaskAdapter.updateTask(task);
     }
 }

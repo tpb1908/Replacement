@@ -2,10 +2,12 @@ package com.anapp.tpb.replacement.Storage.TableTemplates;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Task implements Comparable<Task> {
+public class Task implements Comparable<Task>, Serializable {
 
     //Types of task: 1- Task, 2-Homework, 3-Reminder
 

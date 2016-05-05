@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -34,6 +36,31 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         mContext = context;
         mDataHelper = new DataHelper(context);
         mTasks = mDataHelper.getAllCurrentTasks();
+    }
+
+    public void addTask(Task task) {
+        mDataHelper.addTask(task);
+        if(task.getSubject() == null) {
+            task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
+        }
+        mTasks.add(task);
+        Collections.sort(mTasks);
+        notifyItemInserted(mTasks.indexOf(task));
+    }
+
+    public void updateTask(Task task) {
+        mDataHelper.updateCurrent(task);
+        if(task.getSubject() == null) {
+            task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
+        }
+        int pos = mTasks.indexOf(task);
+        if(pos != -1) {
+            mTasks.set(pos, task);
+            Collections.sort(mTasks);
+            notifyItemChanged(mTasks.indexOf(task));
+        } else {
+            addTask(task);
+        }
     }
 
 
@@ -133,6 +160,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView mDueDay;
         private Button mDoneButton;
         private Button mEditButton;
+        private ImageButton mDeleteButton;
         private boolean mIsExpanded = false;
 
 

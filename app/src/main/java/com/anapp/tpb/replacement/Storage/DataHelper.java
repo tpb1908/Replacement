@@ -21,7 +21,7 @@ import java.util.Date;
  * Created by Theo on 20/02/2016.
  */
 public class DataHelper extends SQLiteOpenHelper {
-
+    private static final String TAG = "DataHelper";
     private static final String DATABASE_NAME = "WORK";
     private static final int VERSION = 1;
     private static final String KEY_ID = "ID";
@@ -138,7 +138,6 @@ public class DataHelper extends SQLiteOpenHelper {
     public Task addTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        Log.i("AddingTask", task.toString());
         values.put(KEY_TYPE, task.getType());
         values.put(KEY_TASK_TITLE, task.getTitle());
         values.put(KEY_TASK_DETAIL, task.getDetail());
@@ -151,7 +150,7 @@ public class DataHelper extends SQLiteOpenHelper {
         values.put(KEY_DATE_COMPLETE, task.getCompleteDate());
         values.put(KEY_SUBJECT_ID, task.getSubjectID());
         task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
-        Log.i("AddingTask", getCurrentTask(task.getId()).toString());
+        Log.i(TAG, "Adding task " + task.toString());
         db.close();
         return task;
     }
@@ -201,8 +200,8 @@ public class DataHelper extends SQLiteOpenHelper {
             task.setType(cursor.getInt(1));
             task.setTitle(cursor.getString(2));
             task.setDetail(cursor.getString(3));
-            task.setStartDate(cursor.getInt(4));
-            task.setEndDate(cursor.getInt(5));
+            task.setStartDate(cursor.getLong(4));
+            task.setEndDate(cursor.getLong(5));
             task.setShowReminder(cursor.getInt(6) > 0);
             task.setTime(cursor.getInt(7));
             task.setComplete(cursor.getInt(8) > 0);
@@ -212,6 +211,7 @@ public class DataHelper extends SQLiteOpenHelper {
             task.setSubject(getSubjectForData(db, task.getSubjectID()));
             cursor.close();
         }
+        Log.i(TAG, "Reading task, start of  " + task.getStartDate() + " end of " + task.getEndDate());
         db.close();
         return task;
     }
@@ -233,8 +233,8 @@ public class DataHelper extends SQLiteOpenHelper {
                 task.setType(cursor.getInt(1));
                 task.setTitle(cursor.getString(2));
                 task.setDetail(cursor.getString(3));
-                task.setStartDate(cursor.getInt(4));
-                task.setEndDate(cursor.getInt(5));
+                task.setStartDate(cursor.getLong(5));
+                task.setEndDate(cursor.getLong(5));
                 task.setShowReminder(cursor.getInt(6) > 0);
                 task.setTime(cursor.getInt(7));
                 task.setComplete(cursor.getInt(8) > 0);
@@ -243,7 +243,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 task.setSubjectID(cursor.getInt(11));
                 task.setSubject(getSubjectForData(db, task.getSubjectID()));
                 list.add(task);
-                Log.i("GettingTasks", task.toString());
+                Log.i(TAG, task.toString());
             } while(cursor.moveToNext());
         }
         cursor.close();
@@ -276,8 +276,8 @@ public class DataHelper extends SQLiteOpenHelper {
                     task.setType(cursor.getInt(1));
                     task.setTitle(cursor.getString(2));
                     task.setDetail(cursor.getString(3));
-                    task.setStartDate(cursor.getInt(4));
-                    task.setEndDate(cursor.getInt(5));
+                    task.setStartDate(cursor.getLong(4));
+                    task.setEndDate(cursor.getLong(5));
                     task.setShowReminder(cursor.getInt(6) > 0);
                     task.setTime(cursor.getInt(7));
                     task.setComplete(cursor.getInt(8) > 0);
@@ -379,8 +379,8 @@ public class DataHelper extends SQLiteOpenHelper {
         Term term = new Term();
         term.setId(cursor.getInt(0));
         term.setName(cursor.getString(1));
-        term.setStartDate(cursor.getInt(2));
-        term.setEndDate(cursor.getInt(3));
+        term.setStartDate(cursor.getLong(2));
+        term.setEndDate(cursor.getLong(3));
         cursor.close();
         db.close();
         Log.d("Data ", "Reading term with values of " + term.toString());
@@ -405,8 +405,8 @@ public class DataHelper extends SQLiteOpenHelper {
                 term = new Term();
                 term.setId(Integer.parseInt(cursor.getString(0)));
                 term.setName(cursor.getString(1));
-                term.setStartDate(Long.parseLong(cursor.getString(2)));
-                term.setEndDate(Long.parseLong(cursor.getString(3)));
+                term.setStartDate(cursor.getLong(2));
+                term.setEndDate(cursor.getLong(3));
                 list.add(term);
             } while (cursor.moveToNext());
         }
@@ -469,8 +469,8 @@ public class DataHelper extends SQLiteOpenHelper {
                 if(current.after(start) && current.before(end)) {
                     t.setId(Integer.parseInt(cursor.getString(0)));
                     t.setName(cursor.getString(1));
-                    t.setStartDate(Long.parseLong(cursor.getString(2)));
-                    t.setEndDate(Long.parseLong(cursor.getString(3)));
+                    t.setStartDate(cursor.getLong(2));
+                    t.setEndDate(cursor.getLong(3));
                     break;
                 }
             } while (cursor.moveToNext());

@@ -150,7 +150,7 @@ public class Task implements Comparable<Task>, Serializable {
         //Complete and non-complete tasks probably won't be compared, however there is still a check
         if(complete) { //This task is complete
             if(another.complete) { //If they are both complete, compare times
-                return startDate > another.startDate ? 1 : -1;
+                return endDate > another.endDate ? 1 : -1;
             } else { //If the other task isn't complete, it has higher precedence
                 return -1;
             }
@@ -158,7 +158,7 @@ public class Task implements Comparable<Task>, Serializable {
             if(another.complete) {
                 return 1;
             } else {
-                return startDate > another.startDate ? 1 : -1;
+                return endDate > another.endDate ? 1 : -1;
             }
         }
     }

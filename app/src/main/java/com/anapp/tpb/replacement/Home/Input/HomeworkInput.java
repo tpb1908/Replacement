@@ -42,7 +42,6 @@ public class HomeworkInput extends SlidingActivity {
         enableFullscreen();
         Intent i = getIntent();
         expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
-        mCurrentTask = new Task(2);
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_homework_title);
         final TextInputLayout mTitleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_title);
         final EditText mDetailInput = (EditText) findViewById(R.id.edittext_homework_detail);
@@ -51,9 +50,23 @@ public class HomeworkInput extends SlidingActivity {
         final TextInputLayout mDateWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_date);
         final CheckBox mShowReminderInput = (CheckBox) findViewById(R.id.checkbox_show_reminder);
 
-        final Spinner s = (Spinner) findViewById(R.id.spinner_subject);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner_subject);
         DataHelper d = new DataHelper(this);
-        s.setAdapter(new SubjectSpinnerAdapter(this, d.getAllSubjects()));
+        SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, d.getAllSubjects());
+        spinner.setAdapter(spinnerAdapter);
+
+        try {
+            mCurrentTask = (Task) i.getSerializableExtra("task");
+            mTitleInput.setText(mCurrentTask.getTitle());
+            mDetailInput.setText(mCurrentTask.getDetail());
+            mShowReminderInput.setChecked(mCurrentTask.showReminder());
+            int spinnerPos = spinnerAdapter.getPositionOfSubject(mCurrentTask.getSubjectID());
+            if(spinnerPos != -1) {
+                spinner.setSelection(spinnerPos, true);
+            }
+        } catch(Exception e) {
+            mCurrentTask = new Task(2);
+        }
 
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
@@ -80,7 +93,7 @@ public class HomeworkInput extends SlidingActivity {
                 }
 
                 if(!errorFlag) {
-                    mCurrentTask.setSubjectID((int)s.getSelectedItemId());
+                    mCurrentTask.setSubjectID((int)spinner.getSelectedItemId());
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());

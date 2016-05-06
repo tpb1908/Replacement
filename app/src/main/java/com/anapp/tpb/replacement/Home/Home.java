@@ -66,7 +66,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
                 r.getColor(R.color.yellow_500), r.getColor(R.color.red_500), r.getColor(R.color.pink_500), r.getColor(R.color.light_blue_500)};
         b.setColors(colors);
         b.setDismissOnColorSelected(false);
-        b.build().show(getSupportFragmentManager(), "");
+        //b.build().show(getSupportFragmentManager(), "");
 
 
         if(pref.getBoolean("firststart", true)) setUpTestData();
@@ -148,7 +148,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
     @Override
     public void openHomework(Task h) {
-
+        Intent i = new Intent(this, HomeworkInput.class);
+        i.putExtra("task", h);
+        startActivityForResult(i, 1);
     }
 
     @Override

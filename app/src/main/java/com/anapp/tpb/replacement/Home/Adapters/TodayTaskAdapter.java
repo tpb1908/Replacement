@@ -3,6 +3,7 @@ package com.anapp.tpb.replacement.Home.Adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
@@ -25,27 +27,37 @@ import java.util.Date;
 /**
  * Created by theo on 08/04/16.
  */
-public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "TodayTaskAdapter";
     private Context mContext;
+    private TaskOpener mTaskOpener;
     private DataHelper mDataHelper;
     private ArrayList<Task> mTasks;
 
 
-    public TodayTaskAdapter(Context context) {
+    public TodayTaskAdapter(Context context, TaskOpener taskInterface) {
         mContext = context;
         mDataHelper = new DataHelper(context);
         mTasks = mDataHelper.getAllCurrentTasks();
+        mTaskOpener = taskInterface;
+        Collections.sort(mTasks);
+
     }
+
+
 
     public void addTask(Task task) {
         mDataHelper.addTask(task);
         if(task.getSubject() == null) {
             task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
         }
-        mTasks.add(task);
-        Collections.sort(mTasks);
-        notifyItemInserted(mTasks.indexOf(task));
+        int pos;
+        for(pos = 0; pos < mTasks.size(); pos++) {
+            if(task.getEndDate() <= mTasks.get(pos).getEndDate()) break;
+        }
+        //mTasks.add(task);
+        mTasks.add(pos, task);
+        notifyItemInserted(pos);
     }
 
     public void updateTask(Task task) {
@@ -63,6 +75,20 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    private void deleteTask(int position) {
+        Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
+        mDataHelper.deleteCurrent(mTasks.get(position));
+        mTasks.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    private void editTask(int position) {
+        mTaskOpener.openHomework(mTasks.get(position));
+    }
+
+    public TodayTaskAdapter() {
+        super();
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
@@ -77,7 +103,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 return null;
             case 2: //Homework
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_homework_test_large, parent, false);
-                vh = new HomeworkViewHolder(v);
+                vh = new HomeworkViewHolder(v, this);
                 return vh;
             case 3: //Reminder
                 return null;
@@ -100,6 +126,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 mvh.mMessage.setText(R.string.message_no_tasks);
                 break;
             case 1:
+                Log.i(TAG, "Binding with viewholder type 1");
                 break;
             case 2:
                 int color = subject.getColor();
@@ -164,9 +191,8 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private boolean mIsExpanded = false;
 
 
-        public HomeworkViewHolder(View v) {
+        public HomeworkViewHolder(View v, final TodayTaskAdapter parent) {
             super(v);
-            setIsRecyclable(false);
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
             mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
             mHomeWorkTitle = (TextView) v.findViewById(R.id.edittext_homework_title);
@@ -174,6 +200,19 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mHomeWorkDetail = (TextView) v.findViewById(R.id.edittext_homework_detail);
             mDoneButton = (Button) v.findViewById(R.id.button_done);
             mEditButton = (Button) v.findViewById(R.id.button_edit);
+            mDeleteButton = (ImageButton) v.findViewById(R.id.button_delete);
+            mDeleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    parent.deleteTask(getAdapterPosition());
+                }
+            });
+            mEditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    parent.editTask(getAdapterPosition());
+                }
+            });
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,6 +226,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     mIsExpanded = !mIsExpanded;
                 }
             });
+
         }
     }
 
@@ -197,4 +237,6 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
     }
+
+
 }

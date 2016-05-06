@@ -27,6 +27,17 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         this.mSubjects = subjects;
     }
 
+    public int getPositionOfSubject(int subjectID) {
+        int pos = -1;
+        for(int i = 0; i < mSubjects.size(); i++) {
+            if(mSubjects.get(i).getId() == subjectID) {
+                pos = i;
+                break;
+            }
+        }
+        return pos;
+    }
+
     @Override
     public int getCount () {
         return mSubjects.size();

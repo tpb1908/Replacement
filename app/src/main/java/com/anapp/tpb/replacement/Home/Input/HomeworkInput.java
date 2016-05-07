@@ -33,6 +33,8 @@ public class HomeworkInput extends SlidingActivity {
     private Task mCurrentTask;
     private EditText mDateInput;
     private boolean mEditing;
+    private boolean mCancel;
+    private Intent returnIntent;
 
 
 
@@ -42,6 +44,8 @@ public class HomeworkInput extends SlidingActivity {
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         enableFullscreen();
         Intent i = getIntent();
+        returnIntent = new Intent();
+        mCancel = true;
         expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_homework_title);
         final TextInputLayout mTitleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_title);
@@ -72,6 +76,8 @@ public class HomeworkInput extends SlidingActivity {
             mEditing = false;
         }
 
+
+
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +103,7 @@ public class HomeworkInput extends SlidingActivity {
                 }
 
                 if(!errorFlag) {
+                    mCancel = false;
                     if(!mEditing) { //Don't change the time that a task is set
                         Calendar c = Calendar.getInstance();
                         mCurrentTask.setStartDate(c.getTimeInMillis());
@@ -105,19 +112,17 @@ public class HomeworkInput extends SlidingActivity {
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());
-                    Intent returnIntent = new Intent();
                     returnIntent.putExtra("task", mCurrentTask);
-                    if(mEditing) {
-                        setResult(1, returnIntent);
-                    } else {
-                        setResult(0, returnIntent);
-                    }
                     finish();
+                } else {
+                    mCancel = true;
                 }
             }
         });
 
     }
+
+
 
     public void showDatePicker(View v) {
         final Calendar calendar = Calendar.getInstance();
@@ -142,8 +147,17 @@ public class HomeworkInput extends SlidingActivity {
     };
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //TODO- Check if anything has been input
+    public void finish() {
+        //TODO- Find what happens on slide down
+        if(!mCancel) {
+            if(mEditing) {
+                setResult(1, returnIntent);
+            } else {
+                setResult(0, returnIntent);
+            }
+        } else {
+            setResult(-1, returnIntent);
+        }
+        super.finish();
     }
 }

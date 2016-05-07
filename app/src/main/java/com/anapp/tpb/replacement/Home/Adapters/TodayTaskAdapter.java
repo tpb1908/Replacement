@@ -119,7 +119,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         String timeRange = "Set on ";
         //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
         timeRange += TimeUtils.getDateString(new Date(task.getStartDate()));
-        timeRange += " Due by " + TimeUtils.getDateString(new Date(task.getEndDate()));
+        timeRange += ", Due by " + TimeUtils.getDateString(new Date(task.getEndDate()));
         switch(holder.getItemViewType()) {
             case 0:
                 MessageViewHolder mvh = (MessageViewHolder) holder;

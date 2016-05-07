@@ -55,7 +55,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
         SpectrumDialog.Builder b = new SpectrumDialog.Builder(getApplicationContext());
@@ -170,13 +169,13 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        fab.hideSheet();
         /* Result codes
           0-New task
           1-Update task
           2-Assessment
          */
         if(resultCode == 0 || resultCode == 1) {
+            fab.hideSheet();
             try {
                 Task t = (Task) data.getSerializableExtra("task");
                 if(resultCode == 0) {
@@ -192,11 +191,8 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         } else if(resultCode == 2) {
             //TODO- Assessment
         } else {
-            Log.i(TAG, "Invalid request code " + requestCode + " values of " + data.getExtras().toString());
+            Log.i(TAG, "Invalid resultCode " + resultCode);
         }
-
-
-
 
     }
 

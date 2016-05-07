@@ -14,12 +14,12 @@ import android.widget.TextView;
 
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
+import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -118,8 +118,8 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Subject subject = task.getSubject();
         String timeRange = "Set on ";
         //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
-        timeRange += new SimpleDateFormat("dd/MM").format(new Date(task.getStartDate()));
-        timeRange += " Due by " + new SimpleDateFormat("dd/MM").format(new Date(task.getEndDate()));
+        timeRange += TimeUtils.getDateString(new Date(task.getStartDate()));
+        timeRange += " Due by " + TimeUtils.getDateString(new Date(task.getEndDate()));
         switch(holder.getItemViewType()) {
             case 0:
                 MessageViewHolder mvh = (MessageViewHolder) holder;
@@ -129,6 +129,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Log.i(TAG, "Binding with viewholder type 1");
                 break;
             case 2:
+                Log.i(TAG, "Rebinding view");
                 int color = subject.getColor();
                 HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
                 hvh.mTitleBar.setBackgroundColor(color);

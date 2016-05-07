@@ -32,6 +32,7 @@ public class HomeworkInput extends SlidingActivity {
     private static final String TAG = "HomeworkInput";
     private Task mCurrentTask;
     private EditText mDateInput;
+    private boolean mEditing;
 
 
 
@@ -64,8 +65,11 @@ public class HomeworkInput extends SlidingActivity {
             if(spinnerPos != -1) {
                 spinner.setSelection(spinnerPos, true);
             }
+            mDateInput.setText(TimeUtils.getDateString(new Date(mCurrentTask.getEndDate())));
+            mEditing = true;
         } catch(Exception e) {
             mCurrentTask = new Task(2);
+            mEditing = false;
         }
 
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
@@ -93,13 +97,21 @@ public class HomeworkInput extends SlidingActivity {
                 }
 
                 if(!errorFlag) {
+                    if(!mEditing) { //Don't change the time that a task is set
+                        Calendar c = Calendar.getInstance();
+                        mCurrentTask.setStartDate(c.getTimeInMillis());
+                    }
                     mCurrentTask.setSubjectID((int)spinner.getSelectedItemId());
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("task", mCurrentTask);
-                    setResult(0, returnIntent);
+                    if(mEditing) {
+                        setResult(1, returnIntent);
+                    } else {
+                        setResult(0, returnIntent);
+                    }
                     finish();
                 }
             }

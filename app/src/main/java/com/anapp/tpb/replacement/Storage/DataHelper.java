@@ -300,7 +300,6 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public int updateCurrent(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(KEY_TYPE, task.getType());
         values.put(KEY_TASK_TITLE, task.getTitle());
@@ -317,6 +316,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 values,
                 KEY_ID + " = " + task.getId(),
                 null);
+        task.setSubject(getSubjectForData(db, task.getSubjectID()));
         db.close();
         Log.d("Data", "Updating task with values of " + task.toString());
 

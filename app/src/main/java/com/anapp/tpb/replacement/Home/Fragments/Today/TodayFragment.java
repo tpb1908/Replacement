@@ -18,13 +18,13 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.Home.Adapters.TodayClassAdapter;
 import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
+import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -66,6 +66,7 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
             }
         };
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+
 
     }
 
@@ -111,16 +112,13 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
      * Sets the title mMessage to the current day and term
      */
     private void setDayTermText() {
-        SimpleDateFormat day = new SimpleDateFormat("EEEE");
-        SimpleDateFormat date = new SimpleDateFormat("dd-MMMM");
-        Date d = new Date();
-        String dayTerm = day.format(d) + "  " + date.format(d);
+        String dayTerm = TimeUtils.getDateString(new Date());
         Term currentTerm = mDataHelper.getCurrentTerm();
         if(currentTerm.getName() != null) {
-            dayTerm += " " + currentTerm.getName();
+            dayTerm += "- " + currentTerm.getName();
             mDayTermText.setText(dayTerm);
         } else {
-            dayTerm += " Holiday";
+            dayTerm += "- Holiday";
             mDayTermText.setText(dayTerm);
         }
     }
@@ -159,15 +157,13 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
             mClassAdapter.notifyDataSetChanged();
             mClassAdapter.collectData();
         }
-        //Rotation- Linear for vertical, two item width for horizontal
-        //TODO- Do the same thing in the setup process
+        //Rotation- Linear for vertical, two item width for horizontal if there are classes
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mLayoutManager = new LinearLayoutManager(getContext());
-        } else {
+        } else if(mClassAdapter.numClassesToday() > 0) {
             mLayoutManager = new GridLayoutManager(getContext(), 2);
         }
         mClassRecycler.setLayoutManager(mLayoutManager);
-
         //Updating mClassAdapter and reregistering receiver
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         mClassAdapter.collectData();

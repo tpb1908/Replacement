@@ -43,10 +43,8 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private DataHelper dataHelper;
-
     private TodayFragment mTodayFragment;
     private TaskFragment mTaskFragment;
-
     private MaterialSheetFab fab;
 
 
@@ -166,20 +164,24 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         }
     }
 
+    //TODO- Fab disappears on update
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        /*FAB sheet should only be hidden if it was originally shown. For some reason
+        calling it again results in the fab disappearing
+         */
         /* Result codes
           0-New task
           1-Update task
           2-Assessment
          */
         if(resultCode == 0 || resultCode == 1) {
-            fab.hideSheet();
             try {
                 Task t = (Task) data.getSerializableExtra("task");
                 if(resultCode == 0) {
                     mTaskFragment.addTask(t);
+                    fab.hideSheet();
                 } else  {
                     mTaskFragment.updateTask(t);
                 }
@@ -190,10 +192,10 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             }
         } else if(resultCode == 2) {
             //TODO- Assessment
-        } else {
-            Log.i(TAG, "Invalid resultCode " + resultCode);
+            fab.hideSheet();
+        } else if(resultCode == -1){
+            Log.i(TAG, "Input cancelled");
         }
-
     }
 
     @Override
@@ -226,6 +228,34 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         dataHelper = new DataHelper(this);
         super.onStart();
 
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if(position == 0) {
+                mTodayFragment = TodayFragment.newInstance();
+                return mTodayFragment;
+            } else if(position == 1) {
+                mTaskFragment = TaskFragment.newInstance();
+                return mTaskFragment;
+            } else {return null;}
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
     }
 
     private void setUpTestData() {
@@ -285,34 +315,4 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         t.setDetail("A shorter piece of detail without new line");
         dataHelper.addTask(t);
     }
-
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if(position == 0) {
-                mTodayFragment = TodayFragment.newInstance();
-                return mTodayFragment;
-            } else if(position == 1) {
-                mTaskFragment = TaskFragment.newInstance();
-                return mTaskFragment;
-            } else {return null;}
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles[position];
-        }
-    }
-
-
 }

@@ -59,6 +59,7 @@ public class TaskFragment extends Fragment implements TaskOpener {
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TodayTaskAdapter(getContext(), this);
         mLayoutManager = new LinearLayoutManager(getContext());
+
         mRecycler.setAdapter(mTaskAdapter);
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);

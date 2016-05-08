@@ -1,5 +1,8 @@
 package com.anapp.tpb.replacement.Home.Adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
+import com.anapp.tpb.replacement.Home.Utilities.StringUtils;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
@@ -35,16 +40,15 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<Task> mTasks;
 
 
+    //TODO- Redo the interfaces for better use of views
+
     public TodayTaskAdapter(Context context, TaskOpener taskInterface) {
         mContext = context;
         mDataHelper = new DataHelper(context);
         mTasks = mDataHelper.getAllCurrentTasks();
         mTaskOpener = taskInterface;
         Collections.sort(mTasks);
-
     }
-
-
 
     public void addTask(Task task) {
         mDataHelper.addTask(task);
@@ -61,6 +65,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void updateTask(Task task) {
+        //TODO- For some reason, updating the task gets rid of the fab
         mDataHelper.updateCurrent(task);
         if(task.getSubject() == null) {
             task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
@@ -83,7 +88,16 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void editTask(int position) {
-        mTaskOpener.openHomework(mTasks.get(position));
+        switch(getItemViewType(position)) {
+            case 1: //Task
+                break;
+            case 2:
+                mTaskOpener.openHomework(mTasks.get(position));
+                break;
+            case 3: //Reminder
+                break;
+        }
+
     }
 
     public TodayTaskAdapter() {
@@ -111,6 +125,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 return null;
         }
     }
+
 
     @Override
     public void onBindViewHolder (RecyclerView.ViewHolder holder, int position) {
@@ -178,7 +193,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private static class HomeworkViewHolder extends TaskViewHolder {
+    private static class HomeworkViewHolder extends TaskViewHolder{
         private RelativeLayout mTitleBar;
         private TextView mSubjectName;
         private TextView mHomeWorkDetail;
@@ -190,6 +205,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private Button mEditButton;
         private ImageButton mDeleteButton;
         private boolean mIsExpanded = false;
+        private int mOriginalHeight = 0;
 
 
         public HomeworkViewHolder(View v, final TodayTaskAdapter parent) {
@@ -216,18 +232,51 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             });
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
+                    final View v = mHomeWorkDetail;
+                    Log.i(TAG, "ViewHolder click");
+                    if(mOriginalHeight == 0) {
+                        mOriginalHeight = v.getHeight();
+                    }
+                    ValueAnimator valueAnimator;
+
+                    int numLines = StringUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
+                    Log.i(TAG, "Number of lines " + numLines);
                     if(!mIsExpanded) {
                         mHomeWorkDetail.setSingleLine(false);
                         mHomeWorkDetail.setText(mDetail);
+                        valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
                     } else {
-                        mHomeWorkDetail.setText(mDetailHint);
-                        mHomeWorkDetail.setSingleLine(true);
+                        valueAnimator = ValueAnimator.ofInt(mOriginalHeight +  (mOriginalHeight * numLines), mOriginalHeight);
                     }
-                    mIsExpanded = !mIsExpanded;
+                    valueAnimator.setDuration(300);
+                    valueAnimator.setInterpolator(new LinearInterpolator());
+                    valueAnimator.addListener(new AnimatorListenerAdapter() {
+                        /*
+                            This listener is for changing the text back to a hint
+                            The text must only be changed once the animation is
+                            complete. Otherwise the text is updated, and the
+                            animation just shrinks white space
+                         */
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            if(mIsExpanded) {
+                                mHomeWorkDetail.setText(mDetailHint);
+                                mHomeWorkDetail.setSingleLine(true);
+                            }
+                            mIsExpanded = !mIsExpanded;
+                        }
+                    });
+
+                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        public void onAnimationUpdate(ValueAnimator animation) {
+                            v.getLayoutParams().height = (int) animation.getAnimatedValue();
+                            v.requestLayout();
+                        }
+                    });
+                    valueAnimator.start();
                 }
             });
-
         }
     }
 
@@ -238,6 +287,5 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
     }
-
 
 }

@@ -251,6 +251,7 @@ public class DataHelper extends SQLiteOpenHelper {
         return list;
     }
 
+
     /**
      * Returns all tasks within a range of the current data
      * @param range The range, in days, to return
@@ -258,40 +259,74 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public ArrayList<Task> getCurrentTasksInRange(int range) {
         ArrayList<Task> result = new ArrayList<>();
-
-        String query = "SELECT * FROM " + TABLE_TASKS_CURRENT;
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        Task task;
         Calendar rangeEnd = Calendar.getInstance();
-        rangeEnd.setTime(new Date());
         rangeEnd.add(Calendar.DATE, range);
-        Calendar taskEnd = Calendar.getInstance();
+        long end = rangeEnd.getTimeInMillis();
+        final String QUERY = "SELECT * FROM " + TABLE_TASKS_CURRENT +
+                " WHERE " + KEY_TASK_END + " < " +  end;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(QUERY, null);
+        Task task;
         if(cursor.moveToFirst()) {
             do {
-                taskEnd.setTime(new Date(cursor.getInt(5)));
-                if(taskEnd.before(rangeEnd)) {
-                    task = new Task();
-                    task.setId(cursor.getInt(0));
-                    task.setType(cursor.getInt(1));
-                    task.setTitle(cursor.getString(2));
-                    task.setDetail(cursor.getString(3));
-                    task.setStartDate(cursor.getLong(4));
-                    task.setEndDate(cursor.getLong(5));
-                    task.setShowReminder(cursor.getInt(6) > 0);
-                    task.setTime(cursor.getInt(7));
-                    task.setComplete(cursor.getInt(8) > 0);
-                    task.setPercentageComplete(cursor.getInt(9));
-                    task.setCompleteDate(cursor.getInt(10));
-                    task.setSubject(getSubjectForData(db, task.getSubjectID()));
-                    result.add(task);
-                }
+                task = new Task();
+                task.setId(cursor.getInt(0));
+                task.setType(cursor.getInt(1));
+                task.setTitle(cursor.getString(2));
+                task.setDetail(cursor.getString(3));
+                task.setStartDate(cursor.getLong(4));
+                task.setEndDate(cursor.getLong(5));
+                task.setShowReminder(cursor.getInt(6) > 0);
+                task.setTime(cursor.getInt(7));
+                task.setComplete(cursor.getInt(8) > 0);
+                task.setPercentageComplete(cursor.getInt(9));
+                task.setCompleteDate(cursor.getInt(10));
+                task.setSubject(getSubjectForData(db, task.getSubjectID()));
+                result.add(task);
+
             } while(cursor.moveToNext());
         }
         cursor.close();
         db.close();
+
         return result;
     }
+
+//    public ArrayList<Task> getCurrentTasksInRange(int range) {
+//        ArrayList<Task> result = new ArrayList<>();
+//        String query = "SELECT * FROM " + TABLE_TASKS_CURRENT;
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.rawQuery(query, null);
+//        Task task;
+//        Calendar rangeEnd = Calendar.getInstance();
+//        rangeEnd.setTime(new Date());
+//        rangeEnd.add(Calendar.DATE, range);
+//        Calendar taskEnd = Calendar.getInstance();
+//        if(cursor.moveToFirst()) {
+//            do {
+//                taskEnd.setTime(new Date(cursor.getInt(5)));
+//                if(taskEnd.before(rangeEnd)) {
+//                    task = new Task();
+//                    task.setId(cursor.getInt(0));
+//                    task.setType(cursor.getInt(1));
+//                    task.setTitle(cursor.getString(2));
+//                    task.setDetail(cursor.getString(3));
+//                    task.setStartDate(cursor.getLong(4));
+//                    task.setEndDate(cursor.getLong(5));
+//                    task.setShowReminder(cursor.getInt(6) > 0);
+//                    task.setTime(cursor.getInt(7));
+//                    task.setComplete(cursor.getInt(8) > 0);
+//                    task.setPercentageComplete(cursor.getInt(9));
+//                    task.setCompleteDate(cursor.getInt(10));
+//                    task.setSubject(getSubjectForData(db, task.getSubjectID()));
+//                    result.add(task);
+//                }
+//            } while(cursor.moveToNext());
+//        }
+//        cursor.close();
+//        db.close();
+//        return result;
+//    }
 
     /**
      * Updates the values of a task, t, in the database
@@ -682,9 +717,9 @@ public class DataHelper extends SQLiteOpenHelper {
             return classTimeCache;
         }
         ArrayList<ClassTime> classes = new ArrayList<>();
-        String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
+        final String QUERY = "SELECT * FROM " + TABLE_CLASS_TIMES;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(QUERY, null);
 
         ClassTime time;
         if (cursor.moveToFirst()) {
@@ -715,17 +750,10 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public ArrayList<ClassTime> getClassesForDay(int day) {
         ArrayList<ClassTime> result = new ArrayList<>();
-        if(isClassTimeCacheValid) {
-            for(ClassTime time : classTimeCache) {
-                if(time.getDay() == day) {
-                    result.add(time);
-                }
-            }
-            return result;
-        }
-        String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
+        final String QUERY = "SELECT * FROM " + TABLE_CLASS_TIMES +
+                " WHERE " + KEY_DAY + " = " + day;
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(QUERY, null);
         ClassTime time;
         if(cursor.moveToFirst()) {
             do {
@@ -745,7 +773,42 @@ public class DataHelper extends SQLiteOpenHelper {
         Collections.sort(result);
         db.close();
         return  result;
+
     }
+    //Previous method
+//    public ArrayList<ClassTime> getClassesForDay(int day) {
+//        ArrayList<ClassTime> result = new ArrayList<>();
+//        if(isClassTimeCacheValid) {
+//            for(ClassTime time : classTimeCache) {
+//                if(time.getDay() == day) {
+//                    result.add(time);
+//                }
+//            }
+//            return result;
+//        }
+//        String query = "SELECT * FROM " + TABLE_CLASS_TIMES;
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.rawQuery(query, null);
+//        ClassTime time;
+//        if(cursor.moveToFirst()) {
+//            do {
+//                if(cursor.getInt(4) == day) {
+//                    time = new ClassTime();
+//                    time.setId(cursor.getInt(0));
+//                    time.setSubjectID(cursor.getInt(1));
+//                    time.setStart(cursor.getInt(2));
+//                    time.setEnd(cursor.getInt(3));
+//                    time.setDay(cursor.getInt(4));
+//                    time.setSubject(getSubjectForData(db, time.getSubjectID()));
+//                    result.add(time);
+//                }
+//            } while(cursor.moveToNext());
+//        }
+//        cursor.close();
+//        Collections.sort(result);
+//        db.close();
+//        return  result;
+//    }
 
     /**
      * Uses getClassesForDay() to get today's classes

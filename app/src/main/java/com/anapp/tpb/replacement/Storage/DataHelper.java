@@ -21,6 +21,7 @@ import java.util.Date;
  * Created by Theo on 20/02/2016.
  */
 public class DataHelper extends SQLiteOpenHelper {
+    
     private static final String TAG = "DataHelper";
     private static final String DATABASE_NAME = "WORK";
     private static final int VERSION = 1;

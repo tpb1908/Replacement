@@ -1,16 +1,18 @@
 package com.anapp.tpb.replacement.Home.Fragments.Tasks;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.anapp.tpb.replacement.Home.Adapters.TodayTaskAdapter;
+import com.anapp.tpb.replacement.Home.Adapters.TaskAdapter;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
@@ -21,7 +23,7 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
  */
 public class TaskFragment extends Fragment implements TaskOpener {
     private static final String TAG = "TaskFragment";
-    private TodayTaskAdapter mTaskAdapter;
+    private TaskAdapter mTaskAdapter;
     private TaskOpener mTaskInterface;
     private RecyclerView mRecycler;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -42,6 +44,17 @@ public class TaskFragment extends Fragment implements TaskOpener {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mLayoutManager = new LinearLayoutManager(getContext());
+        } else {//if(mTaskAdapter.numTasksToday() > 0) {
+            mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        }
+        mRecycler.setLayoutManager(mLayoutManager);
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
@@ -57,7 +70,7 @@ public class TaskFragment extends Fragment implements TaskOpener {
         //DataHelper is created here so that the app doesn't force close when it is restarted
         mDataHelper = new DataHelper(getContext());
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
-        mTaskAdapter = new TodayTaskAdapter(getContext(), this);
+        mTaskAdapter = new TaskAdapter(getContext(), this);
         mLayoutManager = new LinearLayoutManager(getContext());
 
         mRecycler.setAdapter(mTaskAdapter);

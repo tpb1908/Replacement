@@ -32,8 +32,8 @@ import java.util.Date;
 /**
  * Created by theo on 08/04/16.
  */
-public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String TAG = "TodayTaskAdapter";
+public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = "TaskAdapter";
     private Context mContext;
     private TaskOpener mTaskOpener;
     private DataHelper mDataHelper;
@@ -42,13 +42,15 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     //TODO- Redo the interfaces for better use of views
 
-    public TodayTaskAdapter(Context context, TaskOpener taskInterface) {
+    public TaskAdapter(Context context, TaskOpener taskInterface) {
         mContext = context;
         mDataHelper = new DataHelper(context);
         mTasks = mDataHelper.getAllCurrentTasks();
         mTaskOpener = taskInterface;
         Collections.sort(mTasks);
     }
+
+
 
     public void addTask(Task task) {
         mDataHelper.addTask(task);
@@ -65,7 +67,6 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void updateTask(Task task) {
-        //TODO- For some reason, updating the task gets rid of the fab
         mDataHelper.updateCurrent(task);
         if(task.getSubject() == null) {
             task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
@@ -100,7 +101,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     }
 
-    public TodayTaskAdapter() {
+    public TaskAdapter() {
         super();
     }
 
@@ -175,8 +176,14 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
 
-    @Override
+
+
+    @Override //TODO
     public int getItemCount () {
+        return mTasks.size();
+    }
+
+    public int numTasksToday() {
         return mTasks.size();
     }
 
@@ -208,7 +215,7 @@ public class TodayTaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private int mOriginalHeight = 0;
 
 
-        public HomeworkViewHolder(View v, final TodayTaskAdapter parent) {
+        public HomeworkViewHolder(View v, final TaskAdapter parent) {
             super(v);
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
             mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);

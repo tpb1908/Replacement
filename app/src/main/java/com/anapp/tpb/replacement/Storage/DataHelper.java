@@ -233,7 +233,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 task.setType(cursor.getInt(1));
                 task.setTitle(cursor.getString(2));
                 task.setDetail(cursor.getString(3));
-                task.setStartDate(cursor.getLong(5));
+                task.setStartDate(cursor.getLong(4));
                 task.setEndDate(cursor.getLong(5));
                 task.setShowReminder(cursor.getInt(6) > 0);
                 task.setTime(cursor.getInt(7));
@@ -372,16 +372,16 @@ public class DataHelper extends SQLiteOpenHelper {
                 null, //having
                 null, //order by
                 null); //limit
+        Term term = new Term();
         if (cursor != null) {
             cursor.moveToFirst();
+            term.setId(cursor.getInt(0));
+            term.setName(cursor.getString(1));
+            term.setStartDate(cursor.getLong(2));
+            term.setEndDate(cursor.getLong(3));
+            cursor.close();
         }
 
-        Term term = new Term();
-        term.setId(cursor.getInt(0));
-        term.setName(cursor.getString(1));
-        term.setStartDate(cursor.getLong(2));
-        term.setEndDate(cursor.getLong(3));
-        cursor.close();
         db.close();
         Log.d("Data ", "Reading term with values of " + term.toString());
 
@@ -403,7 +403,7 @@ public class DataHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 term = new Term();
-                term.setId(Integer.parseInt(cursor.getString(0)));
+                term.setId(cursor.getInt(0));
                 term.setName(cursor.getString(1));
                 term.setStartDate(cursor.getLong(2));
                 term.setEndDate(cursor.getLong(3));
@@ -464,13 +464,13 @@ public class DataHelper extends SQLiteOpenHelper {
         Term t = new Term();
         if (cursor.moveToFirst()) {
             do {
-                start = new Date(Long.parseLong(cursor.getString(2)));
-                end = new Date(Long.parseLong(cursor.getString(3)));
+                start = new Date(cursor.getLong(2));
+                end = new Date(cursor.getLong(3));
                 if(current.after(start) && current.before(end)) {
                     t.setId(Integer.parseInt(cursor.getString(0)));
                     t.setName(cursor.getString(1));
-                    t.setStartDate(cursor.getLong(2));
-                    t.setEndDate(cursor.getLong(3));
+                    t.setStartDate(start.getTime());
+                    t.setEndDate(end.getTime());
                     break;
                 }
             } while (cursor.moveToNext());
@@ -578,7 +578,7 @@ public class DataHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 subject = new Subject();
-                subject.setId(Integer.parseInt(cursor.getString(0)));
+                subject.setId(cursor.getInt(0));
                 subject.setName(cursor.getString(1));
                 subject.setClassroom(cursor.getString(2));
                 subject.setTeacher(cursor.getString(3));
@@ -659,17 +659,17 @@ public class DataHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null);
+        ClassTime time = new ClassTime();
         if (cursor != null) {
             cursor.moveToFirst();
+            time.setId(cursor.getInt(0));
+            time.setStart(cursor.getInt(1));
+            time.setEnd(cursor.getInt(2));
+            time.setDay(cursor.getInt(3));
+            time.setSubjectID(cursor.getInt(4));
+            time.setSubject(getSubjectForData(db, time.getSubjectID()));
+            cursor.close();
         }
-        ClassTime time = new ClassTime();
-        time.setId(cursor.getInt(0));
-        time.setStart(cursor.getInt(1));
-        time.setEnd(cursor.getInt(2));
-        time.setDay(cursor.getInt(3));
-        time.setSubjectID(cursor.getInt(4));
-        time.setSubject(getSubjectForData(db, time.getSubjectID()));
-        cursor.close();
         db.close();
         Log.d("Data", "Returning class with values of " + time.toString());
 
@@ -690,7 +690,7 @@ public class DataHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 time = new ClassTime();
-                time.setId(Integer.parseInt(cursor.getString(0)));
+                time.setId(cursor.getInt(0));
                 time.setSubjectID(cursor.getInt(1));
                 time.setStart(cursor.getInt(2));
                 time.setEnd(cursor.getInt(3));
@@ -731,7 +731,7 @@ public class DataHelper extends SQLiteOpenHelper {
             do {
                 if(cursor.getInt(4) == day) {
                     time = new ClassTime();
-                    time.setId(Integer.parseInt(cursor.getString(0)));
+                    time.setId(cursor.getInt(0));
                     time.setSubjectID(cursor.getInt(1));
                     time.setStart(cursor.getInt(2));
                     time.setEnd(cursor.getInt(3));

@@ -21,7 +21,7 @@ import java.util.Date;
  * Created by Theo on 20/02/2016.
  */
 public class DataHelper extends SQLiteOpenHelper {
-    
+    //TODO- Remove some duplicate tags. E.G. tasks using task end and task start rather than start date and end date
     private static final String TAG = "DataHelper";
     private static final String DATABASE_NAME = "WORK";
     private static final int VERSION = 1;

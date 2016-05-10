@@ -55,12 +55,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
-        long qStart = System.nanoTime();
-        Log.i(TAG, "Test with comparator " + dataHelper.getClassesForDay(1) + " took " + (System.nanoTime()-qStart)/1E9);
-        qStart = System.nanoTime();
-        Log.i(TAG, "Test with sql " + dataHelper.getClassesForDay(1, true) + " took " + (System.nanoTime()-qStart)/1E9);
-        //One took 0.13, previous took 0.2
-
         SpectrumDialog.Builder b = new SpectrumDialog.Builder(getApplicationContext());
         Resources r = getResources();
         int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),

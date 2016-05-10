@@ -40,7 +40,6 @@
             android:ems="10"
             android:hint="@string/hint_homework_detail"
             android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
-            android:textIsSelectable="true"
             android:theme="@style/AppTheme"/>
 
     </android.support.design.widget.TextInputLayout>

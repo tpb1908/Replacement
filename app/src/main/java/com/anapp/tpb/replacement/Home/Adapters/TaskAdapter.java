@@ -61,9 +61,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         for(pos = 0; pos < mTasks.size(); pos++) {
             if(task.getEndDate() <= mTasks.get(pos).getEndDate()) break;
         }
-        //mTasks.add(task);
-        mTasks.add(pos, task);
-        notifyItemInserted(pos);
+        if(numTasksToday() == 0) {
+            mTasks.add(pos, task);
+            notifyDataSetChanged();
+        } else {
+            mTasks.add(pos, task);
+            notifyItemInserted(pos);
+        }
     }
 
     public void updateTask(Task task) {
@@ -98,7 +102,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 3: //Reminder
                 break;
         }
-
     }
 
     public TaskAdapter() {
@@ -123,6 +126,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 3: //Reminder
                 return null;
             default:
+                Log.i(TAG, "Returning null viewholder");
                 return null;
         }
     }
@@ -130,67 +134,66 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder (RecyclerView.ViewHolder holder, int position) {
-        Task task = mTasks.get(position);
-        Subject subject = task.getSubject();
-        String timeRange = "Set on ";
-        //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
-        timeRange += TimeUtils.getDateString(new Date(task.getStartDate()));
-        timeRange += ", Due by " + TimeUtils.getDateString(new Date(task.getEndDate()));
-        switch(holder.getItemViewType()) {
-            case 0:
-                MessageViewHolder mvh = (MessageViewHolder) holder;
-                mvh.mMessage.setText(R.string.message_no_tasks);
-                break;
-            case 1:
-                Log.i(TAG, "Binding with viewholder type 1");
-                break;
-            case 2:
-                Log.i(TAG, "Rebinding view");
-                int color = subject.getColor();
-                HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
-                hvh.mTitleBar.setBackgroundColor(color);
-                final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
-                hvh.mSubjectName.setText(subjectNameClass);
-                //Picking correct text color for the background
-                if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
-                    hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
-                    hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
-                } else {
-                    hvh.mSubjectName.setTextColor(Color.parseColor("#FFFFFF"));
-                    //What the fuck is up with that method name??
-                    hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
-                }
-                hvh.mHomeWorkTitle.setText(task.getTitle());
-                hvh.mDueDay.setText(timeRange);
-                hvh.mDetail = task.getDetail();
-                hvh.mDetailHint = task.getDetail().split("\n", 2)[0];
-                if(hvh.mDetail.length() > hvh.mDetailHint.length()) {
-                    hvh.mDetailHint += "...";
-                }
-                hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
-                break;
-            case 3:
-                break;
+        if(holder.getItemViewType() == 0) {
+            MessageViewHolder mvh = (MessageViewHolder) holder;
+            mvh.mMessage.setText(R.string.message_no_tasks);
+        } else {
+            Task task = mTasks.get(position);
+            Subject subject = task.getSubject();
+            String timeRange = "Set on ";
+            //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
+            timeRange += TimeUtils.getDateString(new Date(task.getStartDate()));
+            timeRange += ", Due by " + TimeUtils.getDateString(new Date(task.getEndDate()));
+            switch(holder.getItemViewType()) {
+                case 1:
+                    Log.i(TAG, "Binding with viewholder type 1");
+                    break;
+                case 2:
+                    Log.i(TAG, "Rebinding view");
+                    int color = subject.getColor();
+                    HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
+                    hvh.mTitleBar.setBackgroundColor(color);
+                    final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
+                    hvh.mSubjectName.setText(subjectNameClass);
+                    //Picking correct text color for the background
+                    if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
+                        hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
+                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
+                    } else {
+                        hvh.mSubjectName.setTextColor(Color.parseColor("#FFFFFF"));
+                        //What the fuck is up with that method name??
+                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
+                    }
+                    hvh.mHomeWorkTitle.setText(task.getTitle());
+                    hvh.mDueDay.setText(timeRange);
+                    hvh.mDetail = task.getDetail();
+                    hvh.mDetailHint = task.getDetail().split("\n", 2)[0];
+                    if(hvh.mDetail.length() > hvh.mDetailHint.length()) {
+                        hvh.mDetailHint += "...";
+                    }
+                    hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
+                    break;
+                case 3:
+                    break;
+            }
         }
     }
 
 
-
-
-
-    @Override //TODO
+    @Override
     public int getItemCount () {
-        return mTasks.size();
-    }
-
-    public int numTasksToday() {
-        return mTasks.size();
+        return mTasks.size() == 0 ? 1 : mTasks.size();
     }
 
     @Override
     public int getItemViewType(int position) {
         return mTasks.size() == 0 ? 0 : mTasks.get(position).getType();
     }
+
+    public int numTasksToday() {
+        return mTasks.size();
+    }
+
 
     private static class TaskViewHolder extends RecyclerView.ViewHolder {
         private Task task;

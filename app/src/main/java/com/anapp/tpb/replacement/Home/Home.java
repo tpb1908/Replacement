@@ -144,6 +144,25 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     }
 
     @Override
+    public void openTask(Task t, View v) {
+
+    }
+
+    @Override
+    public void openReminder(Task r, View v) {
+
+    }
+    //TODO- Remove un-needed methods
+
+    @Override
+    public void openHomework(Task h, View v) {
+        Intent i = new Intent(this, HomeworkInput.class);
+        setExpandLocation(v, i);
+        i.putExtra("task", h);
+        startActivityForResult(i, 1);
+    }
+
+    @Override
     public void openHomework(Task h) {
         Intent i = new Intent(this, HomeworkInput.class);
         i.putExtra("task", h);

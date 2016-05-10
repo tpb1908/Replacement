@@ -22,13 +22,12 @@ import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
-import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 
 import java.util.Calendar;
 import java.util.Date;
 
-public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
+public class TodayFragment extends Fragment implements ClassOpener {
     private static final String TAG = "TodayFragment";
     private TaskOpener mTaskInterface;
     private ClassOpener mClassInterface;
@@ -76,20 +75,9 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
         mClassInterface.openClass(c);
     }
 
-    @Override
-    public void openTask(Task t) {
-        mTaskInterface.openTask(t);
-    }
 
-    @Override
-    public void openReminder(Task r) {
-        mTaskInterface.openReminder(r);
-    }
 
-    @Override
-    public void openHomework(Task h) {
-        mTaskInterface.openHomework(h);
-    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -134,11 +122,6 @@ public class TodayFragment extends Fragment implements TaskOpener, ClassOpener {
             throw new ClassCastException(context.toString() + " must implement ClassOpener interface");
         }
 
-        try {
-            mTaskInterface = (TaskOpener) context;
-        } catch(ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement TaskOpener interface");
-        }
 
     }
 

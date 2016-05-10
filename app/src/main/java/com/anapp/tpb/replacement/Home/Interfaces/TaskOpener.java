@@ -1,5 +1,7 @@
 package com.anapp.tpb.replacement.Home.Interfaces;
 
+import android.view.View;
+
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 
 /**
@@ -13,5 +15,10 @@ public interface TaskOpener {
 
     void openHomework(Task h);
 
+    void openTask(Task t, View v);
+
+    void openReminder(Task r, View v);
+
+    void openHomework(Task h, View v);
 
 }

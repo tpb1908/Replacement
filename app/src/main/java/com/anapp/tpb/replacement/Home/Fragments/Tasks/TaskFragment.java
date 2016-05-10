@@ -81,17 +81,32 @@ public class TaskFragment extends Fragment implements TaskOpener {
 
     @Override
     public void openTask(Task t) {
-
+        mTaskInterface.openTask(t);
     }
 
     @Override
     public void openReminder(Task r) {
-
+        mTaskInterface.openReminder(r);
     }
 
     @Override
     public void openHomework(Task h) {
         mTaskInterface.openHomework(h);
+    }
+
+    @Override
+    public void openTask(Task t, View v) {
+        mTaskInterface.openTask(t, v);
+    }
+
+    @Override
+    public void openReminder(Task r, View v) {
+        mTaskInterface.openReminder(r, v);
+    }
+
+    @Override
+    public void openHomework(Task h, View v) {
+        mTaskInterface.openHomework(h, v);
     }
 
     public void addTask(Task task) {

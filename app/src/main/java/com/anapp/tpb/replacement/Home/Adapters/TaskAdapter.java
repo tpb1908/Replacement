@@ -92,12 +92,12 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyItemRemoved(position);
     }
 
-    private void editTask(int position) {
+    private void editTask(int position, View v) {
         switch(getItemViewType(position)) {
             case 1: //Task
                 break;
             case 2:
-                mTaskOpener.openHomework(mTasks.get(position));
+                mTaskOpener.openHomework(mTasks.get(position), v);
                 break;
             case 3: //Reminder
                 break;
@@ -237,7 +237,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parent.editTask(getAdapterPosition());
+                    parent.editTask(getAdapterPosition(), mEditButton);
+                }
+            });
+            mDoneButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
                 }
             });
             v.setOnClickListener(new View.OnClickListener() {

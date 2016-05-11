@@ -23,7 +23,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by theo on 01/05/16.
@@ -37,7 +36,6 @@ public class HomeworkInput extends SlidingActivity {
     private Intent returnIntent;
 
 
-
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_homework);
@@ -46,7 +44,9 @@ public class HomeworkInput extends SlidingActivity {
         Intent i = getIntent();
         returnIntent = new Intent();
         mCancel = true;
-        expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
+        if(i.getBooleanExtra("hasOpenPosition", false)) {
+            expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
+        }
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_homework_title);
         final TextInputLayout mTitleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_title);
         final EditText mDetailInput = (EditText) findViewById(R.id.edittext_homework_detail);
@@ -76,8 +76,6 @@ public class HomeworkInput extends SlidingActivity {
             mEditing = false;
         }
 
-
-
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +99,6 @@ public class HomeworkInput extends SlidingActivity {
                 } else {
                     mDetailWrapper.setError(null);
                 }
-
                 if(!errorFlag) {
                     mCancel = false;
                     if(!mEditing) { //Don't change the time that a task is set
@@ -139,7 +136,7 @@ public class HomeworkInput extends SlidingActivity {
                 Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                 String dString = TimeUtils.getDateString(d);
                 mDateInput.setText(dString);
-                mCurrentTask.setEndDate( new GregorianCalendar(year, monthOfYear, dayOfMonth).getTimeInMillis());
+                mCurrentTask.setEndDate(d.getTime());
             } catch (ParseException e) {
                 Log.e(TAG, "Parsing exception in OnDateSetListener",e);
             }
@@ -148,7 +145,6 @@ public class HomeworkInput extends SlidingActivity {
 
     @Override
     public void finish() {
-        //TODO- Find what happens on slide down
         if(!mCancel) {
             if(mEditing) {
                 setResult(1, returnIntent);

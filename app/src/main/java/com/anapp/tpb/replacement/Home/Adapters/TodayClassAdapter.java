@@ -32,7 +32,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private DataHelper mDataHelper;
     private Calendar mCalendar;
     private int currentTime;
-    private int currentPosition;
+    private int currentTimePosition;
     private int currentEndTime = Integer.MAX_VALUE;
 
     public TodayClassAdapter(Context context, ClassOpener mClassInterface, DataHelper dataHelper) {
@@ -140,7 +140,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mClasses = mDataHelper.getClassesForDay(mCalendar.get(Calendar.DAY_OF_WEEK));
         currentTime = (mCalendar.get(Calendar.HOUR_OF_DAY)*100) + mCalendar.get(Calendar.MINUTE);
         if(currentEndTime < currentTime) {
-            notifyItemChanged(currentPosition);
+            notifyItemChanged(currentTimePosition);
         } else {
             notifyDataSetChanged();
         }
@@ -194,7 +194,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if(currentTime > start && currentTime < end) {
                     //Setting up the timerBar
                     currentEndTime = ct.getEnd();
-                    currentPosition = h.getAdapterPosition();
+                    currentTimePosition = h.getAdapterPosition();
                     float scale = TimeUtils.getPercentageComplete(currentTime, start, end);
                     holder.timerBar.setVisibility(View.VISIBLE);
                     //Filters timer color by subject color

@@ -43,6 +43,7 @@ public class TaskFragment extends Fragment implements TaskOpener {
         super.onCreate(savedInstanceState);
     }
 
+    //TODO- Update if subjects have changed etc
     @Override
     public void onResume() {
         super.onResume();
@@ -80,21 +81,6 @@ public class TaskFragment extends Fragment implements TaskOpener {
     }
 
     @Override
-    public void openTask(Task t) {
-        mTaskInterface.openTask(t);
-    }
-
-    @Override
-    public void openReminder(Task r) {
-        mTaskInterface.openReminder(r);
-    }
-
-    @Override
-    public void openHomework(Task h) {
-        mTaskInterface.openHomework(h);
-    }
-
-    @Override
     public void openTask(Task t, View v) {
         mTaskInterface.openTask(t, v);
     }
@@ -116,4 +102,6 @@ public class TaskFragment extends Fragment implements TaskOpener {
     public void updateTask(Task task) {
         mTaskAdapter.updateTask(task);
     }
+
+
 }

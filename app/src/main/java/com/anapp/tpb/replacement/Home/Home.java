@@ -2,7 +2,6 @@ package com.anapp.tpb.replacement.Home;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,6 +20,7 @@ import com.anapp.tpb.replacement.Home.Fragments.Tasks.TaskFragment;
 import com.anapp.tpb.replacement.Home.Fragments.Today.TodayFragment;
 import com.anapp.tpb.replacement.Home.Input.AssessmentInput;
 import com.anapp.tpb.replacement.Home.Input.HomeworkInput;
+import com.anapp.tpb.replacement.Home.Input.ReminderInput;
 import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
@@ -33,7 +33,6 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
-import com.thebluealliance.spectrum.SpectrumDialog;
 
 import java.util.ArrayList;
 
@@ -48,23 +47,18 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     private MaterialSheetFab fab;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         dataHelper = new DataHelper(this);
-        SpectrumDialog.Builder b = new SpectrumDialog.Builder(getApplicationContext());
-        Resources r = getResources();
-        int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),
-                r.getColor(R.color.brown_500), r.getColor(R.color.cyan_500), r.getColor(R.color.deep_orange_500), r.getColor(R.color.deep_purple_500),
-                r.getColor(R.color.green_500), r.getColor(R.color.indigo_500), r.getColor(R.color.lime_500), r.getColor(R.color.teal_500),
-                r.getColor(R.color.yellow_500), r.getColor(R.color.red_500), r.getColor(R.color.pink_500), r.getColor(R.color.light_blue_500)};
-        b.setColors(colors);
-        b.setDismissOnColorSelected(false);
-        //b.build().show(getSupportFragmentManager(), "");
-
+//        Resources r = getResources();
+//        int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),
+//                r.getColor(R.color.brown_500), r.getColor(R.color.cyan_500), r.getColor(R.color.deep_orange_500), r.getColor(R.color.deep_purple_500),
+//                r.getColor(R.color.green_500), r.getColor(R.color.indigo_500), r.getColor(R.color.lime_500), r.getColor(R.color.teal_500),
+//                r.getColor(R.color.yellow_500), r.getColor(R.color.red_500), r.getColor(R.color.pink_500), r.getColor(R.color.light_blue_500)};
+//
 
         if(pref.getBoolean("firststart", true)) setUpTestData();
 
@@ -104,12 +98,17 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
     //Adds arguments for SlidingActivity to start from a button
     public void setExpandLocation(View v, Intent i) {
-        int[] location = new int[2];
-        v.getLocationInWindow(location);
-        i.putExtra("leftOffset", location[0]);
-        i.putExtra("topOffset", location[1]);
-        i.putExtra("viewWidth", v.getWidth());
-        i.putExtra("viewHeight", v.getHeight());
+        if(v != null) {
+            int[] location = new int[2];
+            v.getLocationInWindow(location);
+            i.putExtra("leftOffset", location[0]);
+            i.putExtra("topOffset", location[1]);
+            i.putExtra("viewWidth", v.getWidth());
+            i.putExtra("viewHeight", v.getHeight());
+            i.putExtra("hasOpenPosition", true);
+        } else {
+            i.putExtra("hasOpenPosition", false);
+        }
     }
 
     public void newHomework(View v) {
@@ -119,7 +118,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     }
 
     public void newReminder(View v) {
-
+        Intent i = new Intent(this, ReminderInput.class);
+        setExpandLocation(v, i);
+        startActivityForResult(i, 1);
     }
 
     public void newTask(View v) {
@@ -134,16 +135,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
 
     @Override
-    public void openTask(Task t) {
-
-    }
-
-    @Override
-    public void openReminder(Task r) {
-
-    }
-
-    @Override
     public void openTask(Task t, View v) {
 
     }
@@ -152,7 +143,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     public void openReminder(Task r, View v) {
 
     }
-    //TODO- Remove un-needed methods
 
     @Override
     public void openHomework(Task h, View v) {
@@ -162,12 +152,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         startActivityForResult(i, 1);
     }
 
-    @Override
-    public void openHomework(Task h) {
-        Intent i = new Intent(this, HomeworkInput.class);
-        i.putExtra("task", h);
-        startActivityForResult(i, 1);
-    }
 
     @Override
     public void openClass(ClassTime c) {
@@ -183,7 +167,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         }
     }
 
-    //TODO- Fab disappears on update
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -212,7 +195,8 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         } else if(resultCode == 2) {
             //TODO- Assessment
             fab.hideSheet();
-        } else if(resultCode == -1){
+        } else if(resultCode == -1) {
+            fab.hideSheet();
             Log.i(TAG, "Input cancelled");
         }
     }

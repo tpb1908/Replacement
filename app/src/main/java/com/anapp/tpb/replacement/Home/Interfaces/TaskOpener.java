@@ -1,5 +1,6 @@
 package com.anapp.tpb.replacement.Home.Interfaces;
 
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
@@ -9,16 +10,10 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
  */
 public interface TaskOpener {
 
-    void openTask(Task t);
+    void openTask(Task t, @Nullable View v);
 
-    void openReminder(Task r);
+    void openReminder(Task r, @Nullable View v);
 
-    void openHomework(Task h);
-
-    void openTask(Task t, View v);
-
-    void openReminder(Task r, View v);
-
-    void openHomework(Task h, View v);
+    void openHomework(Task h, @Nullable View v);
 
 }

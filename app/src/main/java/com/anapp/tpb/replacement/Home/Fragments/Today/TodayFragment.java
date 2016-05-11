@@ -121,8 +121,6 @@ public class TodayFragment extends Fragment implements ClassOpener {
         } catch(ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement ClassOpener interface");
         }
-
-
     }
 
 

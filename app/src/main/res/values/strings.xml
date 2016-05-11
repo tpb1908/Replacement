@@ -16,7 +16,7 @@
 
     <string name="title_subject_collector">Subjects</string>
     <string name="hint_term_name">Term name</string>
-    <string name="hint_homework_title">Title</string>
+    <string name="hint_title">Title</string>
     <string name="hint_homework_detail">Detail</string>
     <string name="hint_assessment_notes">Notes</string>
     <string name="hint_assessment_title">Paper Title</string>

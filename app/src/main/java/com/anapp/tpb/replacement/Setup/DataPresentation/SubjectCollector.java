@@ -50,7 +50,7 @@ public class SubjectCollector extends AppCompatActivity {
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_subject);
         mRevealView = findViewById(R.id.reveal_view_subject);
 
-        storageHelper = new DataHelper(this);
+        storageHelper = DataHelper.getInstance(this);
 
         addSubjectFab.setOnClickListener(new View.OnClickListener() {
             @Override

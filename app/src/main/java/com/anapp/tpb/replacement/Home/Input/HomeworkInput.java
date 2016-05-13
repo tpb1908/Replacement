@@ -52,13 +52,19 @@ public class HomeworkInput extends SlidingActivity {
         final EditText mDetailInput = (EditText) findViewById(R.id.edittext_homework_detail);
         final TextInputLayout mDetailWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_detail);
         mDateInput = (EditText) findViewById(R.id.edittext_homework_due_date);
-        final TextInputLayout mDateWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_date);
         final CheckBox mShowReminderInput = (CheckBox) findViewById(R.id.checkbox_show_reminder);
-
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_subject);
-        DataHelper d = new DataHelper(this);
+        DataHelper d = DataHelper.getInstance(this);
         SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, d.getAllSubjects());
         spinner.setAdapter(spinnerAdapter);
+
+        //TODO- Find out why this works, but definition in XML causes some strange crash
+        mDateInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(v);
+            }
+        });
 
         try {
             mCurrentTask = (Task) i.getSerializableExtra("task");
@@ -80,11 +86,6 @@ public class HomeworkInput extends SlidingActivity {
             @Override
             public void onClick(View v) {
                 boolean errorFlag = false;
-                if(mCurrentTask.getEndDate() == 0L) {
-                    mDateWrapper.setError("Please set a date");
-                } else {
-                    mDateWrapper.setError(null);
-                }
 
                 if(mTitleInput.getText().toString().equals("")) {
                     errorFlag = true;

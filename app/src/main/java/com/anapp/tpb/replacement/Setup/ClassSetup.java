@@ -60,7 +60,7 @@ public class ClassSetup extends AppCompatActivity {
         toolbar.setTitle("Class times");
         setSupportActionBar(toolbar);
 
-        dataHelper = new DataHelper(this);
+        dataHelper = DataHelper.getInstance(this);
 
         mPagerAdapter = new DayPagerAdapter(this, getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.container);

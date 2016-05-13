@@ -45,7 +45,7 @@ public class TermDateCollector extends AppCompatActivity {
         setSupportActionBar(t);
         this.getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
 
-        storageHelper = new DataHelper(getApplicationContext());
+        storageHelper = DataHelper.getInstance(getApplicationContext());
         nextFab = (FloatingActionButton) findViewById(R.id.fab_term_add_finish);
         addTermFab = (FloatingActionButton) findViewById(R.id.fab_add_term);
 

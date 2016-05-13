@@ -69,7 +69,7 @@ public class TaskFragment extends Fragment implements TaskOpener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
-        mDataHelper = new DataHelper(getContext());
+        mDataHelper = DataHelper.getInstance(getContext());
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TaskAdapter(getContext(), this);
         mLayoutManager = new LinearLayoutManager(getContext());

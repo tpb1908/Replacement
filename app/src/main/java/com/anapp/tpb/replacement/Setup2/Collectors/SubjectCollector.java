@@ -45,7 +45,7 @@ public class SubjectCollector extends AppCompatActivity {
         addSubjectFab = (FloatingActionButton) findViewById(R.id.fab_add_subject);
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_subject);
         mRevealView = findViewById(R.id.reveal_view_subject);
-        storageHelper = new DataHelper(this);
+        storageHelper = DataHelper.getInstance(getApplicationContext());
         nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
         mAdapter = new SubjectAdapter(this, storageHelper);
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_subjects);

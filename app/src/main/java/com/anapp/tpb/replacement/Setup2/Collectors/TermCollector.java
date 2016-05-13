@@ -45,7 +45,7 @@ public class TermCollector extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_collector);
 
-        DataHelper storageHelper = new DataHelper(getApplicationContext());
+        DataHelper storageHelper = DataHelper.getInstance(getApplicationContext());
         nextFab = (FloatingActionButton) findViewById(R.id.fab_term_add_finish);
         addTermFab = (FloatingActionButton) findViewById(R.id.fab_add_term);
         mRevealLayout = (RevealLayout) findViewById(R.id.reveal_layout_term);

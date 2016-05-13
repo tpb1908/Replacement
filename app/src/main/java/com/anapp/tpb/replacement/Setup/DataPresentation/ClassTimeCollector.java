@@ -108,7 +108,7 @@ public class ClassTimeCollector extends AppCompatActivity {
         });
 
         nextWindow = (Class) getIntent().getSerializableExtra("nextWindow");
-        storageHelper = new DataHelper(this);
+        storageHelper = DataHelper.getInstance(getApplicationContext());
         classes = storageHelper.getAllClasses();
         subjects = storageHelper.getAllSubjects();
     }

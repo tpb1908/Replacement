@@ -44,7 +44,7 @@ public class AssessmentInput extends SlidingActivity {
         final Spinner mSubjectSpinner = (Spinner) findViewById(R.id.spinner_subject);
         mDateInput = (EditText) findViewById(R.id.edittext_assessment_date);
         mMarkLayout = (LinearLayout) findViewById(R.id.layout_assessment_marks);
-        DataHelper d = new DataHelper(this);
+        DataHelper d = DataHelper.getInstance(this);
         mSubjectSpinner.setAdapter(new SubjectSpinnerAdapter(this, d.getAllSubjects()));
 
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {

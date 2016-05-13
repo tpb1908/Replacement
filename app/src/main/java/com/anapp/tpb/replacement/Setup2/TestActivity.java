@@ -40,7 +40,7 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_input);
-        dataHelper = new DataHelper(this);
+        dataHelper = DataHelper.getInstance(getApplicationContext());
         mPagerAdapter = new DayPager(getSupportFragmentManager(), this, dataHelper);
         mPager = (ViewPager) findViewById(R.id.container);
         mPager.setAdapter(mPagerAdapter);

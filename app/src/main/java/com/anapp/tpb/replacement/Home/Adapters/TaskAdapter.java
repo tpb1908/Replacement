@@ -38,13 +38,15 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private TaskOpener mTaskOpener;
     private DataHelper mDataHelper;
     private ArrayList<Task> mTasks;
+    private boolean currentOpen = false;
+    private int currentPosition = -1;
 
 
     //TODO- Redo the interfaces for better use of views
 
     public TaskAdapter(Context context, TaskOpener taskInterface) {
         mContext = context;
-        mDataHelper = new DataHelper(context);
+        mDataHelper = DataHelper.getInstance(context);
         mTasks = mDataHelper.getAllCurrentTasks();
         mTaskOpener = taskInterface;
         Collections.sort(mTasks);
@@ -172,6 +174,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         hvh.mDetailHint += "...";
                     }
                     hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
+                    if(hvh.getAdapterPosition() == currentPosition && currentOpen) {
+                        hvh.itemView.callOnClick();
+                    }
                     break;
                 case 3:
                     break;
@@ -237,6 +242,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    parent.currentPosition = getAdapterPosition();
+                    parent.currentOpen = mIsExpanded;
                     parent.editTask(getAdapterPosition(), mEditButton);
                 }
             });

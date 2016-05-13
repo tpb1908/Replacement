@@ -52,7 +52,7 @@ public class ClassCollector extends AppCompatActivity {
     protected void onCreate (@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_input);
-        dataHelper = new DataHelper(this);
+        dataHelper = DataHelper.getInstance(getApplicationContext());
         mPagerAdapter = new DayPagerAdapter(this, getSupportFragmentManager());
         final ViewPager mPager = (ViewPager) findViewById(R.id.container);
         mPager.setAdapter(mPagerAdapter);

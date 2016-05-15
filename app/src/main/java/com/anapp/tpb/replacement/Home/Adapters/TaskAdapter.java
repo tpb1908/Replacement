@@ -52,8 +52,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Collections.sort(mTasks);
     }
 
-
-
     public void addTask(Task task) {
         mDataHelper.addTask(task);
         if(task.getSubject() == null) {
@@ -67,6 +65,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mTasks.add(pos, task);
             notifyDataSetChanged();
         } else {
+            currentPosition = pos;
             mTasks.add(pos, task);
             notifyItemInserted(pos);
         }
@@ -83,7 +82,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Collections.sort(mTasks);
             notifyItemChanged(mTasks.indexOf(task));
         } else {
-            addTask(task);
+            Log.i(TAG, "Something went wrong when updating " + task.toString());
         }
     }
 
@@ -99,6 +98,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             case 1: //Task
                 break;
             case 2:
+                currentPosition = position;
                 mTaskOpener.openHomework(mTasks.get(position), v);
                 break;
             case 3: //Reminder
@@ -151,7 +151,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     Log.i(TAG, "Binding with viewholder type 1");
                     break;
                 case 2:
-                    Log.i(TAG, "Rebinding view");
                     int color = subject.getColor();
                     HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
                     hvh.mTitleBar.setBackgroundColor(color);
@@ -174,8 +173,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         hvh.mDetailHint += "...";
                     }
                     hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
-                    if(hvh.getAdapterPosition() == currentPosition && currentOpen) {
-                        hvh.itemView.callOnClick();
+                    Log.i(TAG, "View being bound at "  + position + ". Position of inserted task " + currentPosition + " and currentOpen " + currentOpen);
+                    if(position == currentPosition && currentOpen) {
+                        Log.i(TAG, "Reopening task view");
+                        hvh.openDetail();
                     }
                     break;
                 case 3:
@@ -242,7 +243,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parent.currentPosition = getAdapterPosition();
                     parent.currentOpen = mIsExpanded;
                     parent.editTask(getAdapterPosition(), mEditButton);
                 }
@@ -256,50 +256,52 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final View v = mHomeWorkDetail;
-                    Log.i(TAG, "ViewHolder click");
-                    if(mOriginalHeight == 0) {
-                        mOriginalHeight = v.getHeight();
-                    }
-                    ValueAnimator valueAnimator;
-
-                    int numLines = StringUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
-                    Log.i(TAG, "Number of lines " + numLines);
-                    if(!mIsExpanded) {
-                        mHomeWorkDetail.setSingleLine(false);
-                        mHomeWorkDetail.setText(mDetail);
-                        valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
-                    } else {
-                        valueAnimator = ValueAnimator.ofInt(mOriginalHeight +  (mOriginalHeight * numLines), mOriginalHeight);
-                    }
-                    valueAnimator.setDuration(300);
-                    valueAnimator.setInterpolator(new LinearInterpolator());
-                    valueAnimator.addListener(new AnimatorListenerAdapter() {
-                        /*
-                            This listener is for changing the text back to a hint
-                            The text must only be changed once the animation is
-                            complete. Otherwise the text is updated, and the
-                            animation just shrinks white space
-                         */
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            if(mIsExpanded) {
-                                mHomeWorkDetail.setText(mDetailHint);
-                                mHomeWorkDetail.setSingleLine(true);
-                            }
-                            mIsExpanded = !mIsExpanded;
-                        }
-                    });
-
-                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                        public void onAnimationUpdate(ValueAnimator animation) {
-                            v.getLayoutParams().height = (int) animation.getAnimatedValue();
-                            v.requestLayout();
-                        }
-                    });
-                    valueAnimator.start();
+                    openDetail();
                 }
             });
+        }
+
+        private void openDetail() {
+            final View v = mHomeWorkDetail;
+            if(mOriginalHeight == 0) {
+                mOriginalHeight = v.getHeight();
+            }
+            ValueAnimator valueAnimator;
+            int numLines = StringUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
+            Log.i(TAG, "Number of lines " + numLines);
+            if(!mIsExpanded) {
+                mHomeWorkDetail.setSingleLine(false);
+                mHomeWorkDetail.setText(mDetail);
+                valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
+            } else {
+                valueAnimator = ValueAnimator.ofInt(mOriginalHeight +  (mOriginalHeight * numLines), mOriginalHeight);
+            }
+            valueAnimator.setDuration(300);
+            valueAnimator.setInterpolator(new LinearInterpolator());
+            valueAnimator.addListener(new AnimatorListenerAdapter() {
+                /*
+                    This listener is for changing the text back to a hint
+                    The text must only be changed once the animation is
+                    complete. Otherwise the text is updated, and the
+                    animation just shrinks white space
+                 */
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if(mIsExpanded) {
+                        mHomeWorkDetail.setText(mDetailHint);
+                        mHomeWorkDetail.setSingleLine(true);
+                    }
+                    mIsExpanded = !mIsExpanded;
+                }
+            });
+
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    v.getLayoutParams().height = (int) animation.getAnimatedValue();
+                    v.requestLayout();
+                }
+            });
+            valueAnimator.start();
         }
     }
 

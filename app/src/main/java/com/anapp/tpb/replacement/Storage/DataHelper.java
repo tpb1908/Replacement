@@ -23,7 +23,6 @@ import java.util.Date;
 public class DataHelper extends SQLiteOpenHelper {
     private static DataHelper instance;
 
-    //TODO- Remove some duplicate tags. E.G. tasks using task end and task start rather than start date and end date
     private static final String TAG = "DataHelper";
     private static final String DATABASE_NAME = "WORK";
     private static final int VERSION = 1;
@@ -528,7 +527,7 @@ public class DataHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         final long CURRENT = new Date().getTime();
         final String QUERY = "SELECT  * FROM " + TABLE_TERMS +
-                "WHERE " + KEY_START_DATE + " > " + CURRENT +
+                " WHERE " + KEY_START_DATE + " > " + CURRENT +
                 " AND " + KEY_END_DATE + " < " + CURRENT;
         Cursor cursor = db.rawQuery(QUERY, null);
         Term t = new Term();
@@ -630,6 +629,24 @@ public class DataHelper extends SQLiteOpenHelper {
         return subject;
     }
 
+//    private Subject getSubjectForData(SQLiteDatabase db, int id) {
+//        final String QUERY = "SELECT * FROM " + TABLE_SUBJECTS +
+//                " WHERE " + KEY_ID + " = " + id;
+//        Cursor cursor = db.rawQuery(QUERY, null);
+//        Subject subject = new Subject();
+//        if (cursor != null) {
+//            if(cursor.moveToFirst()) {
+//                subject.setId(cursor.getInt(0));
+//                subject.setName(cursor.getString(1));
+//                subject.setClassroom(cursor.getString(2));
+//                subject.setTeacher(cursor.getString(3));
+//                subject.setColor(cursor.getInt(4));
+//            }
+//            cursor.close();
+//        }
+//        return subject;
+//    }
+
     /**
      * Get all of the subjects in the database
      * @return Returns an arraylist of all of the subjects in the database
@@ -662,7 +679,6 @@ public class DataHelper extends SQLiteOpenHelper {
 
     public int updateSubject(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT_NAME, subject.getName());
         values.put(KEY_CLASSROOM, subject.getClassroom());

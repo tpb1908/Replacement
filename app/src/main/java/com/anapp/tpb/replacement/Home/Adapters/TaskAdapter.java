@@ -24,6 +24,7 @@ import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
+import com.mattyork.colours.Colour;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -157,7 +158,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                     hvh.mSubjectName.setText(subjectNameClass);
                     //Picking correct text color for the background
-                    if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
+                    //if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
+                    if(Colour.blackOrWhiteContrastingColor(color) == 0) {
                         hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
                         hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
                     } else {

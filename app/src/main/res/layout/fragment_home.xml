@@ -6,7 +6,7 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="com.anapp.tpb.replacement.Home.Home$PlaceholderFragment">
+                tools:context="com.anapp.tpb.replacement.Home.Home">
 
     <TextView
         android:id="@+id/label_section"

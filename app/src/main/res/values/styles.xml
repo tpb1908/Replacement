@@ -48,7 +48,7 @@
         <item name="android:layout_marginBottom">@dimen/sheet_spacing</item>
         <item name="android:layout_marginLeft">@dimen/sheet_spacing</item>
         <item name="android:layout_marginRight">@dimen/sheet_spacing</item>
-        <item name="cardBackgroundColor">@color/materialcolorpicker__white</item>
+        <item name="cardBackgroundColor">@color/white</item>
         <item name="cardElevation">@dimen/fab_sheet_elevation</item>
         <item name="cardMaxElevation">@dimen/fab_sheet_elevation</item>
         <item name="contentPadding">-3dp</item>
@@ -58,7 +58,7 @@
         <item name="android:layout_width">@dimen/sheet_width</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">@dimen/sheet_item_spacing</item>
-        <item name="android:background">@color/materialcolorpicker__white</item>
+        <item name="android:background">@color/white</item>
         <item name="android:clickable">true</item>
         <item name="android:textSize">@dimen/sheet_item_textsize</item>
         <item name="android:textColor">@color/colorSecondaryText</item>

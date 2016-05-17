@@ -2,18 +2,15 @@ package com.anapp.tpb.replacement.Setup2.Input;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.klinker.android.sliding.SlidingActivity;
-import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
 /**
  * Created by pearson-brayt15 on 21/04/2016.
@@ -91,17 +88,17 @@ public class SubjectInput extends SlidingActivity {
         colourBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ColorPicker cp = new ColorPicker(SubjectInput.this, Color.red(colour), Color.green(colour), Color.blue(colour));
-                cp.show();
-                Button ok = (Button) cp.findViewById(R.id.okColorButton);
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        colour = cp.getColor();
-                        colourBar.setBackgroundColor(colour);
-                        cp.dismiss();
-                    }
-                });
+//                final ColorPicker cp = new ColorPicker(SubjectInput.this, Color.red(colour), Color.green(colour), Color.blue(colour));
+//                cp.show();
+//                Button ok = (Button) cp.findViewById(R.id.okColorButton);
+//                ok.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        colour = cp.getColor();
+//                        colourBar.setBackgroundColor(colour);
+//                        cp.dismiss();
+//                    }
+//                });
             }
         });
     }

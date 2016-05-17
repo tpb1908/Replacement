@@ -60,12 +60,12 @@ public class HomeworkInput extends SlidingActivity {
         spinner.setAdapter(spinnerAdapter);
 
         //TODO- Find out why this works, but definition in XML causes some strange crash
-        mDateInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDatePicker(v);
-            }
-        });
+//        mDateInput.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showDatePicker(v);
+//            }
+//        });
 
         try {
             mCurrentTask = (Task) i.getSerializableExtra("task");

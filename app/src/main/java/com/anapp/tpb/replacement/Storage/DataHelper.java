@@ -203,20 +203,21 @@ public class DataHelper extends SQLiteOpenHelper {
                 null);
         Task task = new Task();
         if(cursor != null) {
-            cursor.moveToFirst();
-            task.setId(cursor.getInt(0));
-            task.setType(cursor.getInt(1));
-            task.setTitle(cursor.getString(2));
-            task.setDetail(cursor.getString(3));
-            task.setStartDate(cursor.getLong(4));
-            task.setEndDate(cursor.getLong(5));
-            task.setShowReminder(cursor.getInt(6) > 0);
-            task.setTime(cursor.getInt(7));
-            task.setComplete(cursor.getInt(8) > 0);
-            task.setPercentageComplete(cursor.getInt(9));
-            task.setCompleteDate(cursor.getInt(10));
-            task.setSubjectID(cursor.getInt(11));
-            task.setSubject(getSubjectForData(db, task.getSubjectID()));
+            if(cursor.moveToFirst()) {
+                task.setId(cursor.getInt(0));
+                task.setType(cursor.getInt(1));
+                task.setTitle(cursor.getString(2));
+                task.setDetail(cursor.getString(3));
+                task.setStartDate(cursor.getLong(4));
+                task.setEndDate(cursor.getLong(5));
+                task.setShowReminder(cursor.getInt(6) > 0);
+                task.setTime(cursor.getInt(7));
+                task.setComplete(cursor.getInt(8) > 0);
+                task.setPercentageComplete(cursor.getInt(9));
+                task.setCompleteDate(cursor.getInt(10));
+                task.setSubjectID(cursor.getInt(11));
+                task.setSubject(getSubjectForData(db, task.getSubjectID()));
+            }
             cursor.close();
         }
         Log.i(TAG, "Reading current task " + task.toString());
@@ -728,9 +729,9 @@ public class DataHelper extends SQLiteOpenHelper {
         values.put(KEY_DAY, time.getDay());
 
         time.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
-        Log.i(TAG, "Adding class " + time.toString());
         isClassTimeCacheValid = false;
         db.close();
+        Log.i(TAG, "Adding class " + time.toString());
         return time;
     }
 
@@ -811,22 +812,21 @@ public class DataHelper extends SQLiteOpenHelper {
         if(cursor != null) {
             if(cursor.moveToFirst()) {
                 do {
-                    if(cursor.getInt(4) == day) {
-                        time = new ClassTime();
-                        time.setId(cursor.getInt(0));
-                        time.setSubjectID(cursor.getInt(1));
-                        time.setStart(cursor.getInt(2));
-                        time.setEnd(cursor.getInt(3));
-                        time.setDay(cursor.getInt(4));
-                        time.setSubject(getSubjectForData(db, time.getSubjectID()));
-                        result.add(time);
-                    }
+                    time = new ClassTime();
+                    time.setId(cursor.getInt(0));
+                    time.setSubjectID(cursor.getInt(1));
+                    time.setStart(cursor.getInt(2));
+                    time.setEnd(cursor.getInt(3));
+                    time.setDay(cursor.getInt(4));
+                    time.setSubject(getSubjectForData(db, time.getSubjectID()));
+                    result.add(time);
                 } while(cursor.moveToNext());
             }
             cursor.close();
         }
         Collections.sort(result);
         db.close();
+        Log.i(TAG, "Returning classes for " + day + " " + result.toString());
         return  result;
 
     }

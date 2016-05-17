@@ -36,6 +36,11 @@ import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
 import java.util.ArrayList;
 
+/*TODO https://android-arsenal.com/details/1/3086
+* https://android-arsenal.com/details/1/94
+* https://android-arsenal.com/details/1/2323
+ */
+
 public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     private static final String TAG = "Home";
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};

@@ -75,7 +75,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             //startActivity(i);
 
         } else {
-            long start = System.nanoTime();
             setContentView(R.layout.activity_home);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -94,8 +93,14 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             int fabColor = getResources().getColor(R.color.colorAccent);
 
             fab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
-            Log.i(TAG, "Time " + (System.nanoTime()-start)/1E9);
         }
+        long time = System.nanoTime();
+        ArrayList<ClassTime> classTimes = dataHelper.getAllClasses();
+        Log.i(TAG, "Time of " + (System.nanoTime()-time)/1E9);
+        time = System.nanoTime();
+        ArrayList<ClassTime> classTimes1 = dataHelper.getAllClasses();
+        Log.i(TAG, "Time of " + (System.nanoTime()-time)/1E9);
+
     }
 
 

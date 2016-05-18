@@ -12,6 +12,10 @@ public class TimeUtils {
     
     private TimeUtils () {}
 
+    public static int hmToInt(int hour, int minute) {
+        return (hour * 100) + minute;
+    }
+
     /**
      * Formats a numeric time in the format HHMM
      * @param time The time to format
@@ -67,7 +71,7 @@ public class TimeUtils {
      * @return A formatted string of the time hour:minute
      */
     public static String format(int hour, int minute) {
-        return format((hour*100)+minute);
+        return format(hmToInt(hour, minute));
     }
 
     /**

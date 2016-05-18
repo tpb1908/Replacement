@@ -60,6 +60,10 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String KEY_DATE_COMPLETE = "DATE_COMPLETE";
     private static final String[] TASK_COLUMNS = new String[] {KEY_ID, KEY_TYPE, KEY_TASK_TITLE, KEY_TASK_DETAIL, KEY_START_DATE, KEY_END_DATE, KEY_SHOW_REMINDER, KEY_TIME, KEY_COMPLETE, KEY_PERCENT_COMPLETE, KEY_DATE_COMPLETE, KEY_SUBJECT_ID};
 
+    private static ArrayList<Task> currentTaskCache = new ArrayList<>();
+    private static boolean isCurrentTaskCacheValid = false;
+    private static ArrayList<Subject> subjectCache = new ArrayList<>();
+    private static boolean isSubjectCacheValid = false;
     private static ArrayList<ClassTime> classTimeCache = new ArrayList<>();
     private static boolean isClassTimeCacheValid = false;
 
@@ -159,6 +163,7 @@ public class DataHelper extends SQLiteOpenHelper {
         task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
         Log.i(TAG, "Adding task " + task.toString());
         db.close();
+        currentTaskCache.add(task);
         return task;
     }
 
@@ -183,6 +188,12 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + task.getId(),
                 null);
         db.close();
+        int index = currentTaskCache.indexOf(task);
+        if(index == -1) {
+            isCurrentTaskCacheValid = false;
+        } else {
+            currentTaskCache.remove(task);
+        }
         Log.i(TAG, "Archiving task " + task.toString());
     }
 
@@ -230,6 +241,7 @@ public class DataHelper extends SQLiteOpenHelper {
      * @return An arraylist of every task in the database. In the order that they were added
      */
     public ArrayList<Task> getAllCurrentTasks() {
+        if(isCurrentTaskCacheValid) return currentTaskCache;
         ArrayList<Task> result = new ArrayList<>();
         final String QUERY = "SELECT * FROM " + TABLE_TASKS_CURRENT;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -257,6 +269,8 @@ public class DataHelper extends SQLiteOpenHelper {
             }
             cursor.close();
         }
+        currentTaskCache = result;
+        isCurrentTaskCacheValid = true;
         db.close();
         Log.i(TAG, "Reading current tasks " + result.toString());
         return result;
@@ -268,6 +282,7 @@ public class DataHelper extends SQLiteOpenHelper {
      * @param range The range, in days, to return
      * @return An arraylist of all the tasks in range
      */
+    //TODO- Use the task cache
     public ArrayList<Task> getCurrentTasksInRange(int range) {
         ArrayList<Task> result = new ArrayList<>();
         Calendar rangeEnd = Calendar.getInstance();
@@ -365,6 +380,13 @@ public class DataHelper extends SQLiteOpenHelper {
                 null);
         task.setSubject(getSubjectForData(db, task.getSubjectID()));
         db.close();
+        int index = currentTaskCache.indexOf(task);
+        if(index == -1) {
+            isCurrentTaskCacheValid = false;
+        } else {
+            currentTaskCache.set(index, task);
+        }
+
         Log.i(TAG, "Updating task" + task.toString());
         return  i;
     }
@@ -379,7 +401,12 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + task.getId(),
                 null);
         db.close();
-
+        int index = currentTaskCache.indexOf(task);
+        if(index == -1) {
+            isCurrentTaskCacheValid = false;
+        } else {
+            currentTaskCache.remove(index);
+        }
         Log.i(TAG, "Deleting a task " + task.toString());
     }
 
@@ -565,6 +592,7 @@ public class DataHelper extends SQLiteOpenHelper {
         subject.setId((int) db.insert(TABLE_SUBJECTS, null, values));
         Log.i(TAG, "Adding subject  " + subject.toString());
         db.close();
+        subjectCache.add(subject);
         return subject;
     }
 
@@ -653,6 +681,7 @@ public class DataHelper extends SQLiteOpenHelper {
      * @return Returns an arraylist of all of the subjects in the database
      */
     public ArrayList<Subject> getAllSubjects() {
+        if(isSubjectCacheValid) return subjectCache;
         ArrayList<Subject> result = new ArrayList<>();
         final String QUERY = "SELECT * FROM " + TABLE_SUBJECTS;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -675,6 +704,8 @@ public class DataHelper extends SQLiteOpenHelper {
         }
         db.close();
         Log.i(TAG, "All subjects " + result.toString());
+        subjectCache = result;
+        isSubjectCacheValid = true;
         return result;
     }
 
@@ -693,9 +724,16 @@ public class DataHelper extends SQLiteOpenHelper {
 
         db.close();
         Log.i(TAG, "Updating subject " + subject.toString());
+        int index = subjectCache.indexOf(subject);
+        if(index == -1) {
+            isSubjectCacheValid = false;
+        } else {
+            subjectCache.set(index, subject);
+        }
         return i;
     }
 
+    //TODO- Integrate with caching
     public void deleteSubject(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.i(TAG, "Deleting subject " + subject.toString());
@@ -721,7 +759,6 @@ public class DataHelper extends SQLiteOpenHelper {
 
     public ClassTime addClass(ClassTime time) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT_ID, time.getSubjectID());
         values.put(KEY_START_TIME, time.getStart());
@@ -731,6 +768,7 @@ public class DataHelper extends SQLiteOpenHelper {
         time.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
         isClassTimeCacheValid = false;
         db.close();
+        classTimeCache.add(time);
         Log.i(TAG, "Adding class " + time.toString());
         return time;
     }
@@ -764,10 +802,8 @@ public class DataHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<ClassTime> getAllClasses() {
-        if(isClassTimeCacheValid) {
-            Log.i(TABLE_CLASS_TIMES, "Returning cached classes " + classTimeCache);
-            return classTimeCache;
-        }
+        if(isClassTimeCacheValid) return classTimeCache;
+
         ArrayList<ClassTime> result = new ArrayList<>();
         final String QUERY = "SELECT * FROM " + TABLE_CLASS_TIMES;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -791,9 +827,9 @@ public class DataHelper extends SQLiteOpenHelper {
         }
         Collections.sort(result);
         Collections.reverse(result);
+        db.close();
         classTimeCache = result;
         isClassTimeCacheValid = true;
-        db.close();
         Log.i(TAG, "Returning all classes" + result.toString());
         return result;
     }
@@ -804,6 +840,15 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public ArrayList<ClassTime> getClassesForDay(int day) {
         ArrayList<ClassTime> result = new ArrayList<>();
+        if(isClassTimeCacheValid) {
+            for(ClassTime ct : classTimeCache) {
+                if(ct.getDay() == day) {
+                    result.add(ct);
+                }
+            }
+            return result;
+        }
+
         final String QUERY = "SELECT * FROM " + TABLE_CLASS_TIMES +
                 " WHERE " + KEY_DAY + " = " + day;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -890,6 +935,13 @@ public class DataHelper extends SQLiteOpenHelper {
                 null);
 
         db.close();
+        int index = classTimeCache.indexOf(time);
+        if(index == -1) {
+            isClassTimeCacheValid = false;
+        } else {
+            classTimeCache.set(index, time);
+        }
+
         Log.i(TAG, "Updating class  " + time.toString());
         isClassTimeCacheValid = false;
         return i;
@@ -901,7 +953,12 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + time.getId(),
                 null);
         db.close();
-        isClassTimeCacheValid = false;
+        int index = classTimeCache.indexOf(time);
+        if(index == -1) {
+            isClassTimeCacheValid = false;
+        } else {
+            classTimeCache.remove(index);
+        }
         Log.i(TAG, "Deleting class " + time.toString());
     }
 }

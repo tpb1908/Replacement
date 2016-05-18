@@ -58,7 +58,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         @Override
         protected Void doInBackground(Void... params) {
-            mClasses = mDataHelper.getClassesForDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+            mClasses = mDataHelper.getClassesToday();
             return null;
         }
     }

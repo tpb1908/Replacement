@@ -3,38 +3,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrapper_edittext_class_start_time">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edittext_class_start_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/start_time"
+            android:inputType="none"/>
+    </android.support.design.widget.TextInputLayout>
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrapper_edittext_class_end_time"
+        android:layout_below="@+id/wrapper_edittext_class_start_time">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edittext_class_end_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="@string/end_time"
+            android:inputType="none"/>
+    </android.support.design.widget.TextInputLayout>
+
     <Spinner
         android:id="@+id/spinner_subject"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/editttext_end_time"
+        android:layout_below="@+id/wrapper_edittext_class_end_time"
         android:layout_marginTop="30dp"
         android:clickable="true"
         android:spinnerMode="dropdown"/>
-
-    <EditText
-        android:id="@+id/edittext_start_time"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="35dp"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="@string/start_time"
-        android:inputType="none"/>
-
-    <EditText
-        android:id="@+id/editttext_end_time"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/edittext_start_time"
-        android:layout_marginTop="30dp"
-        android:ems="10"
-        android:focusable="false"
-        android:hint="@string/end_time"
-        android:inputType="none"/>
 
 </RelativeLayout>

@@ -49,8 +49,8 @@ public class ClassInput extends SlidingActivity {
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_class);
         lessonSpinner = (Spinner) findViewById(R.id.spinner_subject);
-        startTime = (EditText) findViewById(R.id.edittext_start_time);
-        endTime = (EditText) findViewById(R.id.editttext_end_time);
+        startTime = (EditText) findViewById(R.id.edittext_class_start_time);
+        endTime = (EditText) findViewById(R.id.edittext_class_end_time);
         subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
         classesForDay = (ArrayList<ClassTime>) getIntent().getSerializableExtra("classes");
         Log.d("Classes passed", "Classes passed " + classesForDay);

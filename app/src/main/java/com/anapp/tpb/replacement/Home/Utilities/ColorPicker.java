@@ -51,6 +51,20 @@ public class ColorPicker {
         return currentColors;
     }
 
+    public static int getPrimary(Context context) {
+        if(currentColors == null) {
+            getCurrentColors(context);
+        }
+        return currentColors[0];
+    }
+
+    public static int getPrimaryDark(Context context) {
+        if(currentColors == null) {
+            getCurrentColors(context);
+        }
+        return currentColors[1];
+    }
+
 
 
 

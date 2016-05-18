@@ -54,7 +54,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void addTask(Task task) {
-        mDataHelper.addTask(task);
         if(task.getSubject() == null) {
             task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
         }
@@ -69,7 +68,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             currentPosition = pos;
             mTasks.add(pos, task);
             notifyItemInserted(pos);
+            Log.i(TAG, "Inserted task at position " + pos + " task " + mTasks.toString());
         }
+        mDataHelper.addTask(task);
     }
 
     public void updateTask(Task task) {
@@ -81,7 +82,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(pos != -1) {
             mTasks.set(pos, task);
             Collections.sort(mTasks);
-            notifyItemChanged(mTasks.indexOf(task));
+            notifyItemMoved(currentPosition, pos);
         } else {
             Log.i(TAG, "Something went wrong when updating " + task.toString());
         }
@@ -90,7 +91,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void deleteTask(int position) {
         Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
         mDataHelper.deleteCurrent(mTasks.get(position));
-        mTasks.remove(position);
         notifyItemRemoved(position);
     }
 

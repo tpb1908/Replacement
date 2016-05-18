@@ -52,8 +52,8 @@ public class ClassInput extends SlidingActivity {
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         enableFullscreen();
         lessonSpinner = (Spinner) findViewById(R.id.spinner_subject);
-        startTime = (EditText) findViewById(R.id.edittext_start_time);
-        endTime = (EditText) findViewById(R.id.editttext_end_time);
+        startTime = (EditText) findViewById(R.id.edittext_class_start_time);
+        endTime = (EditText) findViewById(R.id.edittext_class_end_time);
         subjects = (ArrayList<Subject>) getIntent().getSerializableExtra("subjects");
         classesForDay = (ArrayList<ClassTime>) getIntent().getSerializableExtra("classes");
         day = getIntent().getIntExtra("day", 0);

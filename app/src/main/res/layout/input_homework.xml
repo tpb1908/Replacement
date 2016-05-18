@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/wrapper_edittext_homework_detail"
         android:layout_below="@+id/wrapper_edittext_homework_title">
-
         <android.support.design.widget.TextInputEditText
             android:id="@+id/edittext_homework_detail"
             android:layout_width="fill_parent"

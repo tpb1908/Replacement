@@ -163,7 +163,7 @@ public class DataHelper extends SQLiteOpenHelper {
         task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
         Log.i(TAG, "Adding task " + task.toString());
         db.close();
-        currentTaskCache.add(task);
+        if(!currentTaskCache.contains(task)) currentTaskCache.add(task);
         return task;
     }
 
@@ -405,7 +405,7 @@ public class DataHelper extends SQLiteOpenHelper {
         if(index == -1) {
             isCurrentTaskCacheValid = false;
         } else {
-            currentTaskCache.remove(index);
+            if(currentTaskCache.contains(task)) currentTaskCache.remove(index);
         }
         Log.i(TAG, "Deleting a task " + task.toString());
     }
@@ -592,7 +592,7 @@ public class DataHelper extends SQLiteOpenHelper {
         subject.setId((int) db.insert(TABLE_SUBJECTS, null, values));
         Log.i(TAG, "Adding subject  " + subject.toString());
         db.close();
-        subjectCache.add(subject);
+        if(!subjectCache.contains(subject)) subjectCache.add(subject);
         return subject;
     }
 
@@ -768,7 +768,7 @@ public class DataHelper extends SQLiteOpenHelper {
         time.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
         isClassTimeCacheValid = false;
         db.close();
-        classTimeCache.add(time);
+        if(!classTimeCache.contains(time)) classTimeCache.add(time);
         Log.i(TAG, "Adding class " + time.toString());
         return time;
     }

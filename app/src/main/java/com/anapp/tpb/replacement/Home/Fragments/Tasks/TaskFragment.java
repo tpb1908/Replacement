@@ -43,7 +43,7 @@ public class TaskFragment extends Fragment implements TaskOpener {
         super.onCreate(savedInstanceState);
     }
 
-    //TODO- Update if subjects have changed etc
+    //TODO- DataUpdateListener if subjects have changed etc
     @Override
     public void onResume() {
         super.onResume();

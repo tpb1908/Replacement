@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
+import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
 import com.anapp.tpb.replacement.Home.Utilities.StringUtils;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
@@ -26,8 +27,6 @@ import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.mattyork.colours.Colour;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -38,7 +37,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private TaskOpener mTaskOpener;
     private DataHelper mDataHelper;
-    private ArrayList<Task> mTasks;
+    private DataWrapper<Task> mTasks;
     private boolean currentOpen = false;
     private int currentPosition = -1;
 
@@ -50,7 +49,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mDataHelper = DataHelper.getInstance(context);
         mTasks = mDataHelper.getAllCurrentTasks();
         mTaskOpener = taskInterface;
-        Collections.sort(mTasks);
+        mTasks.sort();
     }
 
     public void addTask(Task task) {
@@ -81,7 +80,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int pos = mTasks.indexOf(task);
         if(pos != -1) {
             mTasks.set(pos, task);
-            Collections.sort(mTasks);
+            mTasks.sort();
             notifyItemMoved(currentPosition, pos);
         } else {
             Log.i(TAG, "Something went wrong when updating " + task.toString());

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Subject implements Serializable {
+public class Subject implements Serializable, Comparable<Subject> {
 
     private int id;
     private String name;
@@ -75,5 +75,10 @@ public class Subject implements Serializable {
 
     public void setColor(int color) {
         this.color = color;
+    }
+
+    @Override
+    public int compareTo(Subject another) {
+        return 0;
     }
 }

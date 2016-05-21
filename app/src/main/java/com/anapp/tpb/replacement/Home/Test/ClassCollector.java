@@ -14,14 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Created by theo on 18/05/16.
@@ -66,14 +66,14 @@ public class ClassCollector extends AppCompatActivity {
         private static final String TAG = "ClassCollectorAdapter";
         private ClassCollector mParent;
         private DataHelper mDataHelper;
-        private ArrayList<Subject> mSubjects;
-        private ArrayList<ClassTime> mClasses;
+        private DataWrapper<Subject> mSubjects;
+        private DataWrapper<ClassTime> mClasses;
 
         public ClassCollectorAdapter (ClassCollector parent,int day) {
             this.mParent = parent;
             this.mDataHelper = parent.mDataHelper;
             this.mSubjects = mDataHelper.getAllSubjects();
-            this.mClasses = mDataHelper.getClassesForDay(day);
+            //this.mClasses = mDataHelper.getClassesForDay(day);
             Log.i(TAG, "Adapter created for day " + day);
         }
 
@@ -86,25 +86,23 @@ public class ClassCollector extends AppCompatActivity {
         }
 
         public void updateClassValue(ClassTime c) {
-            mDataHelper.updateClass(c);
+            mDataHelper.update(c);
             Log.i(TAG, "Updating class with values of " + c);
+            //TODO- proper repositioning
             mClasses.set(mClasses.indexOf(c), c);
-            Collections.sort(mClasses);
+            mClasses.sort();
             notifyItemChanged(mClasses.indexOf(c));
         }
 
         public void addClass(ClassTime c) {
-            c = mDataHelper.addClass(c);
-            mClasses.add(c);
-            Collections.sort(mClasses);
+            mDataHelper.addClass(c);
+            mClasses.sort();
             notifyItemInserted(mClasses.indexOf(c));
         }
 
         public void delete(int position) {
             mDataHelper.deleteClass(mClasses.get(position));
-            mClasses.remove(position);
             Log.i(TAG, "Deleting item at position " + position);
-            Log.i(TAG, "Classes are now " + mClasses);
             notifyItemRemoved(position);
         }
 
@@ -120,12 +118,14 @@ public class ClassCollector extends AppCompatActivity {
             holder.ct = ct;
             Subject s = new Subject();
             Log.i(TAG, "Subjects: " + mSubjects);
-            for (Subject si : mSubjects) {
-                if (ct.getSubjectID() == si.getId()) {
-                    s = si;
+            Iterator<Subject> iter = mSubjects.iterator();
+            while(iter.hasNext()) {
+                s = iter.next();
+                if(s.getId() == ct.getSubjectID()) {
                     break;
                 }
             }
+
             Log.i(TAG, "Binding viewholder for class " + ct.toString() + " and subject " + s.toString());
             holder.className.setText(s.getName());
             holder.colourBar.setBackgroundColor(s.getColor());

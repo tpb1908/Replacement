@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.anapp.tpb.replacement.Home.Utilities.ColorPicker;
+import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Home.Utilities.Pair;
 import com.anapp.tpb.replacement.Home.Utilities.SubjectSpinnerAdapter;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
@@ -19,14 +20,14 @@ import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.klinker.android.sliding.SlidingActivity;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by theo on 17/05/16.
  */
 public class ClassInput extends SlidingActivity {
     private static final String TAG = "ClassInput";
-    private ArrayList<ClassTime> mClasses;
+    private DataWrapper<ClassTime> mClasses;
     private ClassTime mCurrentClass;
     private int mStartTime = -1;
     private int mEndTime = -1;
@@ -132,11 +133,15 @@ public class ClassInput extends SlidingActivity {
     };
 
     public Pair<Boolean, ClassTime> checkRangeOverlap(ClassTime toCheck) {
-        for(ClassTime ct : mClasses) {
+        Iterator<ClassTime> iter = mClasses.iterator();
+        ClassTime ct;
+        while(iter.hasNext()) {
+            ct = iter.next();
             if(toCheck.overlaps(ct)) {
-                return new Pair<>(true, toCheck);
+                return new Pair<>(true, ct);
             }
         }
+
         return new Pair<>(false, null);
     }
 

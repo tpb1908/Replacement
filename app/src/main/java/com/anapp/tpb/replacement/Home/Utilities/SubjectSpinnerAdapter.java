@@ -10,18 +10,16 @@ import android.widget.TextView;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
-import java.util.ArrayList;
-
 /**
  * Created by theo on 20/04/16.
  */
 public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget.SpinnerAdapter {
     private static final String TAG = "SubjectSpinnerAdapter";
     private Context mContext;
-    private ArrayList<Subject> mSubjects;
+    private DataWrapper<Subject> mSubjects;
 
 
-    public SubjectSpinnerAdapter(Context context, ArrayList<Subject> subjects) {
+    public SubjectSpinnerAdapter(Context context, DataWrapper<Subject> subjects) {
         super();
         this.mContext = context;
         this.mSubjects = subjects;

@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.anapp.tpb.replacement.Home.Interfaces.DataUpdateListener;
+import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
@@ -20,7 +22,7 @@ import java.util.Date;
 /**
  * Created by Theo on 20/02/2016.
  */
-public class DataHelper extends SQLiteOpenHelper {
+public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<Object> {
     private static DataHelper instance;
 
     private static final String TAG = "DataHelper";
@@ -60,12 +62,15 @@ public class DataHelper extends SQLiteOpenHelper {
     private static final String KEY_DATE_COMPLETE = "DATE_COMPLETE";
     private static final String[] TASK_COLUMNS = new String[] {KEY_ID, KEY_TYPE, KEY_TASK_TITLE, KEY_TASK_DETAIL, KEY_START_DATE, KEY_END_DATE, KEY_SHOW_REMINDER, KEY_TIME, KEY_COMPLETE, KEY_PERCENT_COMPLETE, KEY_DATE_COMPLETE, KEY_SUBJECT_ID};
 
-    private static ArrayList<Task> currentTaskCache = new ArrayList<>();
+
+    private static DataWrapper<Task> currentTaskWrapper = new DataWrapper<>();
     private static boolean isCurrentTaskCacheValid = false;
-    private static ArrayList<Subject> subjectCache = new ArrayList<>();
+    private static DataWrapper<Subject> subjectDataWrapper = new DataWrapper<>();
     private static boolean isSubjectCacheValid = false;
-    private static ArrayList<ClassTime> classTimeCache = new ArrayList<>();
+    private static DataWrapper<ClassTime> classWrapper = new DataWrapper<>();
     private static boolean isClassTimeCacheValid = false;
+    private static DataWrapper<ClassTime> todayClassWrapper = new DataWrapper<>();
+    private static boolean isTodayClassTimeChacheValid;
 
 
     public static synchronized DataHelper getInstance(Context context) {
@@ -163,7 +168,7 @@ public class DataHelper extends SQLiteOpenHelper {
         task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
         Log.i(TAG, "Adding task " + task.toString());
         db.close();
-        if(!currentTaskCache.contains(task)) currentTaskCache.add(task);
+        if(!currentTaskWrapper.contains(task)) currentTaskWrapper.add(task);
         return task;
     }
 
@@ -188,12 +193,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + task.getId(),
                 null);
         db.close();
-        int index = currentTaskCache.indexOf(task);
-        if(index == -1) {
-            isCurrentTaskCacheValid = false;
-        } else {
-            currentTaskCache.remove(task);
-        }
+        currentTaskWrapper.remove(task);
         Log.i(TAG, "Archiving task " + task.toString());
     }
 
@@ -240,9 +240,9 @@ public class DataHelper extends SQLiteOpenHelper {
      * Returns all of the tasks in the database
      * @return An arraylist of every task in the database. In the order that they were added
      */
-    public ArrayList<Task> getAllCurrentTasks() {
-        if(isCurrentTaskCacheValid) return currentTaskCache;
-        ArrayList<Task> result = new ArrayList<>();
+    public DataWrapper<Task> getAllCurrentTasks() {
+        if(isCurrentTaskCacheValid) return currentTaskWrapper;
+        ArrayList<Task> tasks = new ArrayList<>();
         final String QUERY = "SELECT * FROM " + TABLE_TASKS_CURRENT;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(QUERY, null);
@@ -264,16 +264,16 @@ public class DataHelper extends SQLiteOpenHelper {
                     task.setCompleteDate(cursor.getInt(10));
                     task.setSubjectID(cursor.getInt(11));
                     task.setSubject(getSubjectForData(db, task.getSubjectID()));
-                    result.add(task);
+                    tasks.add(task);
                 } while(cursor.moveToNext());
             }
             cursor.close();
         }
-        currentTaskCache = result;
+        currentTaskWrapper.setData(tasks);
         isCurrentTaskCacheValid = true;
         db.close();
-        Log.i(TAG, "Reading current tasks " + result.toString());
-        return result;
+        Log.i(TAG, "Reading current tasks " + tasks.toString());
+        return currentTaskWrapper;
     }
 
 
@@ -380,13 +380,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 null);
         task.setSubject(getSubjectForData(db, task.getSubjectID()));
         db.close();
-        int index = currentTaskCache.indexOf(task);
-        if(index == -1) {
-            isCurrentTaskCacheValid = false;
-        } else {
-            currentTaskCache.set(index, task);
-        }
-
+        currentTaskWrapper.update(task);
         Log.i(TAG, "Updating task" + task.toString());
         return  i;
     }
@@ -401,12 +395,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + task.getId(),
                 null);
         db.close();
-        int index = currentTaskCache.indexOf(task);
-        if(index == -1) {
-            isCurrentTaskCacheValid = false;
-        } else {
-            if(currentTaskCache.contains(task)) currentTaskCache.remove(index);
-        }
+        currentTaskWrapper.remove(task);
         Log.i(TAG, "Deleting a task " + task.toString());
     }
 
@@ -453,7 +442,6 @@ public class DataHelper extends SQLiteOpenHelper {
             term.setEndDate(cursor.getLong(3));
             cursor.close();
         }
-
         db.close();
         Log.i(TAG, "Reading term " + term.toString());
 
@@ -582,7 +570,6 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public Subject addSubject(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT_NAME, subject.getName());
         values.put(KEY_CLASSROOM, subject.getClassroom());
@@ -592,7 +579,8 @@ public class DataHelper extends SQLiteOpenHelper {
         subject.setId((int) db.insert(TABLE_SUBJECTS, null, values));
         Log.i(TAG, "Adding subject  " + subject.toString());
         db.close();
-        if(!subjectCache.contains(subject)) subjectCache.add(subject);
+        if(!subjectDataWrapper.contains(subject)) subjectDataWrapper.add(subject);
+        //if(!subjectCache.contains(subject)) subjectCache.add(subject);
         return subject;
     }
 
@@ -611,7 +599,6 @@ public class DataHelper extends SQLiteOpenHelper {
      */
     public Subject getSubject(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor = db.query(TABLE_SUBJECTS,
                 SUBJECT_COLUMNS,
                 KEY_ID + " = ?",
@@ -680,9 +667,9 @@ public class DataHelper extends SQLiteOpenHelper {
      * Get all of the subjects in the database
      * @return Returns an arraylist of all of the subjects in the database
      */
-    public ArrayList<Subject> getAllSubjects() {
-        if(isSubjectCacheValid) return subjectCache;
-        ArrayList<Subject> result = new ArrayList<>();
+    public DataWrapper<Subject> getAllSubjects() {
+        if(isSubjectCacheValid) return subjectDataWrapper;
+        ArrayList<Subject> subjects = new ArrayList<>();
         final String QUERY = "SELECT * FROM " + TABLE_SUBJECTS;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(QUERY, null);
@@ -697,19 +684,19 @@ public class DataHelper extends SQLiteOpenHelper {
                     subject.setClassroom(cursor.getString(2));
                     subject.setTeacher(cursor.getString(3));
                     subject.setColor(cursor.getInt(4));
-                    result.add(subject);
+                    subjects.add(subject);
                 } while(cursor.moveToNext());
             }
             cursor.close();
         }
         db.close();
-        Log.i(TAG, "All subjects " + result.toString());
-        subjectCache = result;
+        Log.i(TAG, "All subjects " + subjects.toString());
+        subjectDataWrapper.setData(subjects);
         isSubjectCacheValid = true;
-        return result;
+        return subjectDataWrapper;
     }
 
-    public int updateSubject(Subject subject) {
+    public int update(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT_NAME, subject.getName());
@@ -721,37 +708,32 @@ public class DataHelper extends SQLiteOpenHelper {
                 values,
                 KEY_ID + " = " + subject.getId(),
                 null);
-
         db.close();
         Log.i(TAG, "Updating subject " + subject.toString());
-        int index = subjectCache.indexOf(subject);
-        if(index == -1) {
-            isSubjectCacheValid = false;
-        } else {
-            subjectCache.set(index, subject);
-        }
+        subjectDataWrapper.update(subject);
         return i;
     }
 
-    //TODO- Integrate with caching
+    //TODO- Integrate fully with caching
     public void deleteSubject(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.i(TAG, "Deleting subject " + subject.toString());
-        int numClass = db.delete(TABLE_CLASS_TIMES,
+        db.delete(TABLE_CLASS_TIMES,
                 KEY_SUBJECT_ID + " = " + subject.getId(),
                 null);
-        Log.i(TAG, "Deletion of subject resulted in deletion of " + numClass + " classes");
+        getAllClasses();
 
         int numTask = db.delete(TABLE_TASKS_CURRENT,
                 KEY_SUBJECT_ID + " = " + subject.getId(),
                 null);
-        numTask += db.delete(TABLE_TASKS_ARCHIVE,
+        getAllCurrentTasks();
+        db.delete(TABLE_TASKS_ARCHIVE,
                 KEY_SUBJECT_ID + " = " + subject.getId(), null);
-        Log.i(TAG, "Deletion of subject resulted in deletion of " + numTask + " tasks");
 
         db.delete(TABLE_SUBJECTS,
                 KEY_ID + " = " + subject.getId(),
                 null);
+        getAllSubjects();
         db.close();
     }
 
@@ -768,7 +750,7 @@ public class DataHelper extends SQLiteOpenHelper {
         time.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
         isClassTimeCacheValid = false;
         db.close();
-        if(!classTimeCache.contains(time)) classTimeCache.add(time);
+        if(!classWrapper.contains(time)) classWrapper.add(time);
         Log.i(TAG, "Adding class " + time.toString());
         return time;
     }
@@ -801,10 +783,10 @@ public class DataHelper extends SQLiteOpenHelper {
         return time;
     }
 
-    public ArrayList<ClassTime> getAllClasses() {
-        if(isClassTimeCacheValid) return classTimeCache;
+    public DataWrapper<ClassTime> getAllClasses() {
+        if(isClassTimeCacheValid) return classWrapper;
 
-        ArrayList<ClassTime> result = new ArrayList<>();
+        ArrayList<ClassTime> classes = new ArrayList<>();
         final String QUERY = "SELECT * FROM " + TABLE_CLASS_TIMES;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(QUERY, null);
@@ -820,33 +802,29 @@ public class DataHelper extends SQLiteOpenHelper {
                     time.setEnd(cursor.getInt(3));
                     time.setDay(cursor.getInt(4));
                     time.setSubject(getSubjectForData(db, time.getSubjectID()));
-                    result.add(time);
+                    classes.add(time);
                 } while(cursor.moveToNext());
             }
             cursor.close();
         }
-        Collections.sort(result);
-        Collections.reverse(result);
+        Collections.sort(classes);
+        Collections.reverse(classes);
         db.close();
-        classTimeCache = result;
+        classWrapper.setData(classes);
         isClassTimeCacheValid = true;
-        Log.i(TAG, "Returning all classes" + result.toString());
-        return result;
+        Log.i(TAG, "Returning all classes" + classes.toString());
+        return classWrapper;
     }
 
     /**
      * @param day The day, from Monday as 0, to Friday as 4
      * @return An arraylist of the classes on the current day
      */
-    public ArrayList<ClassTime> getClassesForDay(int day) {
+    //TODO- Multiple data wrappers
+    public DataWrapper<ClassTime> getClassesForDay(int day) {
         ArrayList<ClassTime> result = new ArrayList<>();
-        if(isClassTimeCacheValid) {
-            for(ClassTime ct : classTimeCache) {
-                if(ct.getDay() == day) {
-                    result.add(ct);
-                }
-            }
-            return result;
+        if(isTodayClassTimeChacheValid) {
+            return todayClassWrapper;
         }
 
         final String QUERY = "SELECT * FROM " + TABLE_CLASS_TIMES +
@@ -872,7 +850,9 @@ public class DataHelper extends SQLiteOpenHelper {
         Collections.sort(result);
         db.close();
         Log.i(TAG, "Returning classes for " + day + " " + result.toString());
-        return  result;
+        todayClassWrapper.setData(result);
+        isTodayClassTimeChacheValid = true;
+        return todayClassWrapper;
 
     }
     //Previous method
@@ -914,13 +894,14 @@ public class DataHelper extends SQLiteOpenHelper {
      * Uses getClassesForDay() to get today's classes
      * @return An arraylist of the classes for the current day
      */
-    public ArrayList<ClassTime> getClassesToday() {
+    //TODO- Check day
+    public DataWrapper<ClassTime> getClassesToday() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         return getClassesForDay(day);
     }
 
-    public int updateClass(ClassTime time) {
+    public int update(ClassTime time) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -935,13 +916,7 @@ public class DataHelper extends SQLiteOpenHelper {
                 null);
 
         db.close();
-        int index = classTimeCache.indexOf(time);
-        if(index == -1) {
-            isClassTimeCacheValid = false;
-        } else {
-            classTimeCache.set(index, time);
-        }
-
+        classWrapper.update(time);
         Log.i(TAG, "Updating class  " + time.toString());
         isClassTimeCacheValid = false;
         return i;
@@ -953,12 +928,97 @@ public class DataHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + time.getId(),
                 null);
         db.close();
-        int index = classTimeCache.indexOf(time);
-        if(index == -1) {
-            isClassTimeCacheValid = false;
-        } else {
-            classTimeCache.remove(index);
-        }
+        classWrapper.remove(time);
         Log.i(TAG, "Deleting class " + time.toString());
+    }
+
+    @Override
+    public void updateAll() {
+        //TODO- Find a way to check what thing has changed
+    }
+
+    @Override
+    public void add(Object o) {
+        if(o instanceof Task) {
+            Task t = (Task) o;
+            addTask(t);
+        } else if(o instanceof Subject) {
+            Subject s = (Subject) o;
+            addSubject(s);
+        } else if(o instanceof ClassTime) {
+            ClassTime ct = (ClassTime) o;
+            addClass(ct);
+        } else {
+            Log.i(TAG, "Object passed to add doesn't have valid type. " + o.getClass());
+        }
+    }
+
+    @Override
+    public void add(int index, Object o) {
+        if(o instanceof Task) {
+            Task t = (Task) o;
+            addTask(t);
+        } else if(o instanceof Subject) {
+            Subject s = (Subject) o;
+            addSubject(s);
+        } else if(o instanceof ClassTime) {
+            ClassTime ct = (ClassTime) o;
+            addClass(ct);
+        } else {
+            Log.i(TAG, "Object passed to add doesn't have valid type. " + o.getClass());
+        }
+    }
+
+    @Override
+    public void remove(Object o) {
+        if(o instanceof Task) {
+            Task t = (Task) o;
+            deleteCurrent(t);
+        } else if(o instanceof Subject) {
+            Subject s = (Subject) o;
+            deleteSubject(s);
+        } else if(o instanceof ClassTime) {
+            ClassTime ct = (ClassTime) o;
+            deleteClass(ct);
+        } else {
+            Log.i(TAG, "Object passed to add doesn't have valid type. " + o.getClass());
+        }
+    }
+
+    @Override
+    public void remove(int index, Object o) {
+        if(o instanceof Task) {
+            Task t = (Task) o;
+            deleteCurrent(t);
+        } else if(o instanceof Subject) {
+            Subject s = (Subject) o;
+            deleteSubject(s);
+        } else if(o instanceof ClassTime) {
+            ClassTime ct = (ClassTime) o;
+            deleteClass(ct);
+        } else {
+            Log.i(TAG, "Object passed to add doesn't have valid type. " + o.getClass());
+        }
+    }
+
+    @Override
+    public void update(Object o) {
+        if(o instanceof Task) {
+            Task t = (Task) o;
+            updateCurrent(t);
+        } else if(o instanceof Subject) {
+            Subject s = (Subject) o;
+            update(s);
+        } else if(o instanceof ClassTime) {
+            ClassTime ct = (ClassTime) o;
+            update(ct);
+        } else {
+            Log.i(TAG, "Object passed to add doesn't have valid type. " + o.getClass());
+        }
+    }
+
+    @Override
+    public void move(Object o, int oldPos, int newPos) {
+        //This doesn't matter to the DataHelper
     }
 }

@@ -2,7 +2,6 @@ package com.anapp.tpb.replacement.Home.Adapters;
 
 import android.content.Context;
 import android.graphics.LightingColorFilter;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
+import com.anapp.tpb.replacement.Home.Interfaces.DataUpdateListener;
+import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
@@ -18,17 +19,16 @@ import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * Created by pearson-brayt15 on 03/03/2016.
  */
-public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DataUpdateListener<ClassTime> {
     private static final String TAG = "TodayClassAdapter";
     private Context mContext;
     private ClassOpener mClassInterface;
-    private ArrayList<ClassTime> mClasses;
+    private DataWrapper<ClassTime> mClasses;
     private DataHelper mDataHelper;
     private Calendar mCalendar;
     private int currentTime;
@@ -40,34 +40,52 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mDataHelper = dataHelper;
         this.mCalendar = Calendar.getInstance();
         this.mClassInterface = mClassInterface;
-        DataLoader loader = new DataLoader(dataHelper);
-        loader.doInBackground();
-
+        this.mClasses = dataHelper.getClassesToday();
+        mClasses.addListener(this);
     }
 
+    //TODO- DataHelper methods to get the data in a wrapper
 
-    private class DataLoader extends AsyncTask<Void, Void, Void> {
-        //private final Context mContext;
-        private final DataHelper mDataHelper;
 
-        public DataLoader(DataHelper dataHelper) {
-            super();
-            this.mDataHelper = dataHelper;
-            //this.mContext = context;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            mClasses = mDataHelper.getClassesToday();
-            return null;
-        }
-    }
 
     public int numClassesToday() {
         return  mClasses.size();
     }
 
+    @Override
+    public void updateAll() {
+        notifyDataSetChanged();
+    }
 
+    @Override
+    public void add(ClassTime classTime) {
+        notifyItemInserted(mClasses.indexOf(classTime));
+    }
+
+    @Override
+    public void add(int index, ClassTime classTime) {
+        notifyItemInserted(index);
+    }
+
+    @Override
+    public void remove(ClassTime classTime) {
+        notifyItemRemoved(mClasses.indexOf(classTime));
+    }
+
+    @Override
+    public void remove(int index, ClassTime classTime) {
+        notifyItemRemoved(index);
+    }
+
+    @Override
+    public void update(ClassTime classTime) {
+        notifyItemChanged(mClasses.indexOf(classTime));
+    }
+
+    @Override
+    public void move(ClassTime classTime, int oldPos, int newPos) {
+        notifyItemMoved(oldPos, newPos);
+    }
 
     /**
      * ViewHolder class for a class in the current day which is yet to pass
@@ -137,7 +155,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public void collectData() {
         mCalendar = Calendar.getInstance();
-        this.mClasses = mDataHelper.getClassesForDay(mCalendar.get(Calendar.DAY_OF_WEEK));
+        //this.mClasses = mDataHelper.getClassesForDay(mCalendar.get(Calendar.DAY_OF_WEEK));
         currentTime = (mCalendar.get(Calendar.HOUR_OF_DAY)*100) + mCalendar.get(Calendar.MINUTE);
         if(currentEndTime < currentTime) {
             notifyItemChanged(currentTimePosition);

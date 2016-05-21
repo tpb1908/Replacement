@@ -25,9 +25,6 @@ import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
 import com.anapp.tpb.replacement.R;
-import com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector;
-import com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector;
-import com.anapp.tpb.replacement.Setup.IntroActivity;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
@@ -71,7 +68,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("firststart", false);
             editor.apply();
-            Intent i = new Intent(getApplicationContext(), IntroActivity.class);
+            //Intent i = new Intent(getApplicationContext(), IntroActivity.class);
             //startActivity(i);
 
         } else {
@@ -94,12 +91,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
             fab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
         }
-        long time = System.nanoTime();
-        ArrayList<ClassTime> classTimes = dataHelper.getAllClasses();
-        Log.i(TAG, "Time of " + (System.nanoTime()-time)/1E9);
-        time = System.nanoTime();
-        ArrayList<ClassTime> classTimes1 = dataHelper.getAllClasses();
-        Log.i(TAG, "Time of " + (System.nanoTime()-time)/1E9);
 
     }
 
@@ -185,7 +176,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
          */
         /* Result codes
           0-New task
-          1-Update task
+          1-DataUpdateListener task
           2-Assessment
          */
         if(resultCode == 0 || resultCode == 1) {
@@ -222,9 +213,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_settings:
-                Intent i = new Intent(getApplicationContext(), SubjectCollector.class);
-                i.putExtra("nextWindow", ClassTimeCollector.class);
-                startActivity(i);
+                //Intent i = new Intent(getApplicationContext(), SubjectCollector.class);
+                //i.putExtra("nextWindow", ClassTimeCollector.class);
+                //startActivity(i);
                 return true;
             case R.id.action_edit:
                 Toast.makeText(getApplicationContext(),

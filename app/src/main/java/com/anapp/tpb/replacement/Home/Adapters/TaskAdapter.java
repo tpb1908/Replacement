@@ -108,29 +108,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         notifyItemMoved(oldPos, newPos);
     }
 
-    public void addTask(Task task) {
-        if(task.getSubject() == null) {
-            task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
-        }
-        int pos;
-        for(pos = 0; pos < mTasks.size(); pos++) {
-            if(task.getEndDate() <= mTasks.get(pos).getEndDate()) break;
-        }
-        if(numTasksToday() == 0) {
-            mTasks.add(pos, task);
-            notifyDataSetChanged();
-        } else {
-            currentPosition = pos;
-            mTasks.add(pos, task);
-            notifyItemInserted(pos);
-            Log.i(TAG, "Inserted task at position " + pos + " task " + mTasks.toString());
-        }
-    }
-
-
     private void deleteTask(int position) {
         Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
         mTasks.remove(position);
+        //TODO- Check if this is going to be called again by the listener
         notifyItemRemoved(position);
     }
 

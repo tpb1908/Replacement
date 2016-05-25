@@ -10,6 +10,7 @@ import android.util.Log;
 import com.anapp.tpb.replacement.Home.Interfaces.DataUpdateListener;
 import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
+import com.anapp.tpb.replacement.Storage.TableTemplates.DataTemplate;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Task;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
@@ -22,7 +23,7 @@ import java.util.Date;
 /**
  * Created by Theo on 20/02/2016.
  */
-public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<Object> {
+public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<DataTemplate> {
     private static DataHelper instance;
 
     private static final String TAG = "DataHelper";
@@ -70,12 +71,13 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
     private static DataWrapper<ClassTime> classWrapper = new DataWrapper<>();
     private static boolean isClassTimeCacheValid = false;
     private static DataWrapper<ClassTime> todayClassWrapper = new DataWrapper<>();
-    private static boolean isTodayClassTimeChacheValid;
+    private static boolean isTodayClassTimeCacheValid;
 
 
     public static synchronized DataHelper getInstance(Context context) {
         if(instance == null) {
             instance = new DataHelper(context.getApplicationContext());
+            currentTaskWrapper.addListener(instance);
         }
         return instance;
     }
@@ -380,7 +382,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
                 null);
         task.setSubject(getSubjectForData(db, task.getSubjectID()));
         db.close();
-        currentTaskWrapper.update(task);
+        if(!currentTaskWrapper.contains(task)) currentTaskWrapper.update(task);
         Log.i(TAG, "Updating task" + task.toString());
         return  i;
     }
@@ -823,7 +825,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
     //TODO- Multiple data wrappers
     public DataWrapper<ClassTime> getClassesForDay(int day) {
         ArrayList<ClassTime> result = new ArrayList<>();
-        if(isTodayClassTimeChacheValid) {
+        if(isTodayClassTimeCacheValid) {
             return todayClassWrapper;
         }
 
@@ -851,7 +853,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
         db.close();
         Log.i(TAG, "Returning classes for " + day + " " + result.toString());
         todayClassWrapper.setData(result);
-        isTodayClassTimeChacheValid = true;
+        isTodayClassTimeCacheValid = true;
         return todayClassWrapper;
 
     }
@@ -938,7 +940,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
     }
 
     @Override
-    public void add(Object o) {
+    public void add(DataTemplate o) {
         if(o instanceof Task) {
             Task t = (Task) o;
             addTask(t);
@@ -954,7 +956,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
     }
 
     @Override
-    public void add(int index, Object o) {
+    public void add(int index, DataTemplate o) {
         if(o instanceof Task) {
             Task t = (Task) o;
             addTask(t);
@@ -970,7 +972,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
     }
 
     @Override
-    public void remove(Object o) {
+    public void remove(int index, DataTemplate o) {
         if(o instanceof Task) {
             Task t = (Task) o;
             deleteCurrent(t);
@@ -986,26 +988,12 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
     }
 
     @Override
-    public void remove(int index, Object o) {
-        if(o instanceof Task) {
-            Task t = (Task) o;
-            deleteCurrent(t);
-        } else if(o instanceof Subject) {
-            Subject s = (Subject) o;
-            deleteSubject(s);
-        } else if(o instanceof ClassTime) {
-            ClassTime ct = (ClassTime) o;
-            deleteClass(ct);
-        } else {
-            Log.i(TAG, "Object passed to add doesn't have valid type. " + o.getClass());
-        }
-    }
-
-    @Override
-    public void update(Object o) {
+    public void update(DataTemplate o) {
+        Log.i(TAG, "DataHelper update method called");
         if(o instanceof Task) {
             Task t = (Task) o;
             updateCurrent(t);
+            Log.i(TAG, "Updating current task " + t.toString());
         } else if(o instanceof Subject) {
             Subject s = (Subject) o;
             update(s);
@@ -1018,7 +1006,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<O
     }
 
     @Override
-    public void move(Object o, int oldPos, int newPos) {
+    public void move(DataTemplate o, int oldPos, int newPos) {
         //This doesn't matter to the DataHelper
     }
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 19/02/2016.
  */
-public class ClassTime implements Serializable, Comparable<ClassTime> {
+public class ClassTime extends DataTemplate implements Serializable{
     private int id;
     private int day;
     private int subjectID;
@@ -65,12 +65,12 @@ public class ClassTime implements Serializable, Comparable<ClassTime> {
      * @return 1 if the class starts after the argument class ends, -1 otherwise
      */
     @Override
-    public int compareTo (@NonNull ClassTime another) {
-        if(start >= another.getEnd()) {
-            return 1;
-        } else {
-            return -1;
+    public int compareTo (@NonNull DataTemplate another) {
+        if(another instanceof ClassTime) {
+            ClassTime ct = (ClassTime) another;
+            return start >= ct.getEnd() ? 1 : -1;
         }
+        return 0;
     }
 
     /**

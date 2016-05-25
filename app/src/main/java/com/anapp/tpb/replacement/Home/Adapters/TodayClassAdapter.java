@@ -68,11 +68,6 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     @Override
-    public void remove(ClassTime classTime) {
-        notifyItemRemoved(mClasses.indexOf(classTime));
-    }
-
-    @Override
     public void remove(int index, ClassTime classTime) {
         notifyItemRemoved(index);
     }

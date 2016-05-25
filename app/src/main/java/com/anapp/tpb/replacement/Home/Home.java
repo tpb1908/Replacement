@@ -38,6 +38,20 @@ import java.util.ArrayList;
 * https://android-arsenal.com/details/1/2323
  */
 
+
+    /*Where I got to-
+        The code runs, but none of the listeners are activated
+        I need to got through and change the inputs to use the data change methods
+        rather than updating through the onActivityResult method.
+        Then redo the fucked up setup classes.
+
+        Edit-
+        The TaskAdapter listener works just fine, but the data helper listener is more difficult
+        What I need to do is create an abstract class that ALL of my TableTemplate classes extend from
+        and then get rid of the use of generics in the DataUpdateListener
+
+     */
+
 public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     private static final String TAG = "Home";
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
@@ -179,27 +193,27 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
           1-DataUpdateListener task
           2-Assessment
          */
-        if(resultCode == 0 || resultCode == 1) {
-            try {
-                Task t = (Task) data.getSerializableExtra("task");
-                if(resultCode == 0) {
-                    mTaskFragment.addTask(t);
-                    fab.hideSheet();
-                } else  {
-                    mTaskFragment.updateTask(t);
-                }
-            } catch(ClassCastException c) {
-                Log.e(TAG, "ClassCastException when returning task " + c.toString());
-            } catch(Exception e) {
-                Log.i(TAG, "Exception " + e.toString());
-            }
-        } else if(resultCode == 2) {
-            //TODO- Assessment
-            fab.hideSheet();
-        } else if(resultCode == -1) {
-            fab.hideSheet();
-            Log.i(TAG, "Input cancelled");
-        }
+//        if(resultCode == 0 || resultCode == 1) {
+//            try {
+//                Task t = (Task) data.getSerializableExtra("task");
+//                if(resultCode == 0) {
+//                    mTaskFragment.addTask(t);
+//                    fab.hideSheet();
+//                } else  {
+//                    mTaskFragment.updateTask(t);
+//                }
+//            } catch(ClassCastException c) {
+//                Log.e(TAG, "ClassCastException when returning task " + c.toString());
+//            } catch(Exception e) {
+//                Log.i(TAG, "Exception " + e.toString());
+//            }
+//        } else if(resultCode == 2) {
+//            //TODO- Assessment
+//            fab.hideSheet();
+//        } else if(resultCode == -1) {
+//            fab.hideSheet();
+//            Log.i(TAG, "Input cancelled");
+//        }
     }
 
     @Override

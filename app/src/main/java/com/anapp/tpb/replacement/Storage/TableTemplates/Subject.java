@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Subject implements Serializable, Comparable<Subject> {
+public class Subject extends DataTemplate implements Serializable{
 
     private int id;
     private String name;
@@ -78,7 +78,7 @@ public class Subject implements Serializable, Comparable<Subject> {
     }
 
     @Override
-    public int compareTo(Subject another) {
+    public int compareTo(DataTemplate another) {
         return 0;
     }
 }

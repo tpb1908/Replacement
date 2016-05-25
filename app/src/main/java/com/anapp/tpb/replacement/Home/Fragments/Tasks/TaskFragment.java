@@ -95,13 +95,8 @@ public class TaskFragment extends Fragment implements TaskOpener {
         mTaskInterface.openHomework(h, v);
     }
 
-    public void addTask(Task task) {
-        mTaskAdapter.addTask(task);
-    }
 
-    public void updateTask(Task task) {
-        mTaskAdapter.updateTask(task);
-    }
+
 
 
 }

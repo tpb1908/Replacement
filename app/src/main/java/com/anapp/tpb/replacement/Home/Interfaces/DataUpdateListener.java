@@ -11,8 +11,6 @@ public interface DataUpdateListener<T> {
 
     void add(int index, T t);
 
-    void remove(T t);
-
     void remove(int index, T t);
 
     void update(T t);

@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.anapp.tpb.replacement.Home.Interfaces.DataUpdateListener;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
@@ -32,7 +33,7 @@ import java.util.Date;
 /**
  * Created by theo on 08/04/16.
  */
-public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DataUpdateListener<Task> {
     private static final String TAG = "TaskAdapter";
     private Context mContext;
     private TaskOpener mTaskOpener;
@@ -42,14 +43,69 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int currentPosition = -1;
 
 
-    //TODO- Redo the interfaces for better use of views
-
     public TaskAdapter(Context context, TaskOpener taskInterface) {
         mContext = context;
         mDataHelper = DataHelper.getInstance(context);
         mTasks = mDataHelper.getAllCurrentTasks();
         mTaskOpener = taskInterface;
         mTasks.sort();
+        mTasks.addListener(this);
+    }
+
+    @Override
+    public void updateAll() {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void add(Task task) {
+        notifyItemInserted(mTasks.indexOf(task));
+        if(task.getSubject() == null) {
+            task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
+        }
+        int pos;
+        for(pos = 0; pos < mTasks.size(); pos++) {
+            if(task.getEndDate() <= mTasks.get(pos).getEndDate()) break;
+        }
+        if(numTasksToday() == 0) {
+            mTasks.add(pos, task);
+            notifyDataSetChanged();
+        } else {
+            currentPosition = pos;
+            mTasks.add(pos, task);
+            notifyItemInserted(pos);
+            Log.i(TAG, "Inserted task at position " + pos + " task " + mTasks.toString());
+        }
+    }
+
+    @Override
+    public void add(int index, Task task) {
+        notifyItemInserted(index);
+    }
+
+    @Override
+    public void remove(int index, Task task) {
+        notifyItemRemoved(index);
+    }
+
+    @Override
+    public void update(Task task) {
+        if(task.getSubject() == null) {
+            task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
+        }
+        int pos = mTasks.indexOf(task);
+        if(pos != -1) {
+            mTasks.set(pos, task);
+            mTasks.sort();
+            notifyItemMoved(currentPosition, pos);
+        } else {
+            Log.i(TAG, "Something went wrong when updating " + task.toString());
+        }
+    }
+
+    @Override
+    public void move(Task task, int oldPos, int newPos) {
+        notifyItemMoved(oldPos, newPos);
     }
 
     public void addTask(Task task) {
@@ -69,27 +125,12 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             notifyItemInserted(pos);
             Log.i(TAG, "Inserted task at position " + pos + " task " + mTasks.toString());
         }
-        mDataHelper.addTask(task);
     }
 
-    public void updateTask(Task task) {
-        mDataHelper.updateCurrent(task);
-        if(task.getSubject() == null) {
-            task.setSubject(mDataHelper.getSubject(task.getSubjectID()));
-        }
-        int pos = mTasks.indexOf(task);
-        if(pos != -1) {
-            mTasks.set(pos, task);
-            mTasks.sort();
-            notifyItemMoved(currentPosition, pos);
-        } else {
-            Log.i(TAG, "Something went wrong when updating " + task.toString());
-        }
-    }
 
     private void deleteTask(int position) {
         Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
-        mDataHelper.deleteCurrent(mTasks.get(position));
+        mTasks.remove(position);
         notifyItemRemoved(position);
     }
 

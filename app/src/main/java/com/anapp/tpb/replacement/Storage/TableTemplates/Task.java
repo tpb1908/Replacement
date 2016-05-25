@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Task implements Comparable<Task>, Serializable {
+public class Task extends DataTemplate implements Serializable {
 
     //Types of task: 1- Task, 2-Homework, 3-Reminder
 
@@ -146,21 +146,26 @@ public class Task implements Comparable<Task>, Serializable {
     }
 
     @Override
-    public int compareTo(@NonNull Task another) {
-        //Complete and non-complete tasks probably won't be compared, however there is still a check
-        if(complete) { //This task is complete
-            if(another.complete) { //If they are both complete, compare times
-                return endDate > another.endDate ? 1 : -1;
-            } else { //If the other task isn't complete, it has higher precedence
-                return -1;
-            }
-        } else { //The opposite
-            if(another.complete) {
-                return 1;
-            } else {
-                return endDate > another.endDate ? 1 : -1;
+    public int compareTo(@NonNull DataTemplate another) {
+
+        if(another instanceof Task) {
+            Task task = (Task) another;
+            if(complete) { //This task is complete
+                if(task.complete) { //If they are both complete, compare times
+                    return endDate > task.endDate ? 1 : -1;
+                } else { //If the other task isn't complete, it has higher precedence
+                    return -1;
+                }
+            } else { //The opposite
+                if(task.complete) {
+                    return 1;
+                } else {
+                    return endDate > task.endDate ? 1 : -1;
+                }
             }
         }
+        //Complete and non-complete tasks probably won't be compared, however there is still a check
+        return  1;
     }
 
     @Override

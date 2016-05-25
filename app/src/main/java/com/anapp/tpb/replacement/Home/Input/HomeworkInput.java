@@ -55,7 +55,7 @@ public class HomeworkInput extends SlidingActivity {
         mDateInput = (EditText) findViewById(R.id.edittext_homework_due_date);
         final CheckBox mShowReminderInput = (CheckBox) findViewById(R.id.checkbox_show_reminder);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_subject);
-        DataHelper d = DataHelper.getInstance(this);
+        final DataHelper d = DataHelper.getInstance(this);
         SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, d.getAllSubjects());
         spinner.setAdapter(spinnerAdapter);
 
@@ -112,6 +112,11 @@ public class HomeworkInput extends SlidingActivity {
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());
                     returnIntent.putExtra("task", mCurrentTask);
+                    if(mEditing) {
+                        d.getAllCurrentTasks().update(mCurrentTask);
+                    } else {
+                        d.getAllCurrentTasks().add(mCurrentTask);
+                    }
                     finish();
                 } else {
                     mCancel = true;

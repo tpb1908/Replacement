@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by Theo on 25/01/2016.
  */
-public class Term implements Serializable, Comparable<Term> {
+public class Term extends DataTemplate implements Serializable {
     private int id;
     private String name;
     private long startDate;
@@ -40,14 +40,18 @@ public class Term implements Serializable, Comparable<Term> {
     }
 
     @Override
-    public int compareTo (@NonNull Term another) {
-        if(startDate > another.getStartDate()) {
-            return 1;
-        } else if(startDate == another.getStartDate()) {
-            return 0;
-        } else {
-            return -1;
+    public int compareTo (@NonNull DataTemplate another) {
+        if(another instanceof Term) {
+            Term t = (Term) another;
+            if(startDate > t.getStartDate()) {
+                return 1;
+            } else if(startDate == t.getStartDate()) {
+                return 0;
+            } else {
+                return -1;
+            }
         }
+        return 0;
     }
 
     public boolean overlaps(Term toCheck) {

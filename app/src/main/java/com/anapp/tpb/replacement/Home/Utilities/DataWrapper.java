@@ -1,6 +1,7 @@
 package com.anapp.tpb.replacement.Home.Utilities;
 
 import com.anapp.tpb.replacement.Home.Interfaces.DataUpdateListener;
+import com.anapp.tpb.replacement.Storage.TableTemplates.DataTemplate;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,27 +11,27 @@ import java.util.Iterator;
 /**
  * Created by theo on 19/05/16.
  */
-public class DataWrapper<T extends Comparable<T>> implements Serializable {
+public class DataWrapper<T extends DataTemplate> implements Serializable {
     private ArrayList<T> data;
-    private ArrayList<DataUpdateListener<T>> listeners;
+    private ArrayList<DataUpdateListener> listeners;
 
     public DataWrapper() {
         data = new ArrayList<>();
         listeners = new ArrayList<>();
     }
 
-    public DataWrapper(DataUpdateListener<T>... initialListeners) {
+    public DataWrapper(DataUpdateListener... initialListeners) {
         data = new ArrayList<>();
         listeners = new ArrayList<>();
         Collections.addAll(listeners, initialListeners);
 
     }
 
-    public void addListener(DataUpdateListener<T> newListener) {
+    public void addListener(DataUpdateListener newListener) {
         if(!listeners.contains(newListener)) listeners.add(newListener);
     }
 
-    public void removeListener(DataUpdateListener<T> listener) {
+    public void removeListener(DataUpdateListener listener) {
         listeners.remove(listener);
     }
 
@@ -86,7 +87,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
     public void setData(ArrayList<T> toSet) {
         data = toSet;
         clearNullListeners();
-        for(DataUpdateListener<T> listener : listeners) {
+        for(DataUpdateListener listener : listeners) {
             listener.updateAll();
         }
     }
@@ -95,7 +96,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
         data.addAll(toAdd);
         //TODO- Add another method?
         clearNullListeners();
-        for(DataUpdateListener<T> listener : listeners) {
+        for(DataUpdateListener listener : listeners) {
             listener.updateAll();
         }
     }
@@ -103,7 +104,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
     public void add(T t) {
         data.add(t);
         clearNullListeners();
-        for(DataUpdateListener<T> listener : listeners) {
+        for(DataUpdateListener listener : listeners) {
             listener.add(t);
         }
     }
@@ -114,7 +115,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
         }
         data.add(index, t);
         clearNullListeners();
-        for(DataUpdateListener<T> listener : listeners) {
+        for(DataUpdateListener listener : listeners) {
             listener.add(index, t);
         }
         return true;
@@ -136,7 +137,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
             data.add(newPos-1, toMove);
         }
         clearNullListeners();
-        for(DataUpdateListener<T> listener : listeners) {
+        for(DataUpdateListener listener : listeners) {
             listener.move(toMove, oldPos, newPos);
         }
         return true;
@@ -147,7 +148,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
         if(index != -1) {
             data.set(index, t);
             clearNullListeners();
-            for(DataUpdateListener<T> listener : listeners) {
+            for(DataUpdateListener listener : listeners) {
                 listener.update(t);
             }
             return true;
@@ -157,11 +158,15 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
 
     //Removers
     public boolean remove(T t) {
-        boolean isRemoved = data.remove(t);
-        for(DataUpdateListener<T> listener : listeners) {
-            listener.remove(t);
+        int index = data.indexOf(t);
+        if(index != -1) {
+            data.remove(index);
+            for(DataUpdateListener listener : listeners) {
+                listener.remove(index, t);
+            }
+            return true;
         }
-        return isRemoved;
+        return false;
     }
 
     public boolean remove(int index) {
@@ -169,7 +174,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
             T t = data.get(index);
             data.remove(index);
             clearNullListeners();
-            for(DataUpdateListener<T> listener : listeners) {
+            for(DataUpdateListener listener : listeners) {
                 listener.remove(index, t);
             }
             return true;
@@ -180,7 +185,7 @@ public class DataWrapper<T extends Comparable<T>> implements Serializable {
     public void clear() {
         data.clear();
         clearNullListeners();
-        for(DataUpdateListener<T> listener : listeners) {
+        for(DataUpdateListener listener : listeners) {
             listener.updateAll();
         }
     }

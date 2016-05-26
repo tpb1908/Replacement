@@ -83,7 +83,9 @@ public class HomeworkInput extends SlidingActivity {
             mEditing = false;
         }
 
-        setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
+        setFab(getResources().getColor(R.color.colorAccent),
+                R.drawable.fab_icon_tick_white,
+                new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean errorFlag = false;

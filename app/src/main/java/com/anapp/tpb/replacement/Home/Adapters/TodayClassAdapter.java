@@ -136,13 +136,6 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     /**
-     * Used to reset the data helper if it is cleared from memory
-     */
-    public void resume(DataHelper dataHelper) {
-        this.mDataHelper = dataHelper;
-    }
-
-    /**
      * Collects the correct data for the adapter
      * This is the classes, subjects, and the current minute
      * Assuming that the class data hasn't been changed, the DataHelper will just

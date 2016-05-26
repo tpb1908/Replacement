@@ -52,7 +52,7 @@ import java.util.ArrayList;
         and then get rid of the use of generics in the DataUpdateListener
 
 
-        //TODO- Change some of the inputs to use a single edittext layout for each of the paired inputs
+        //TODO- Move all error messages to string resources
      */
 
 public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {

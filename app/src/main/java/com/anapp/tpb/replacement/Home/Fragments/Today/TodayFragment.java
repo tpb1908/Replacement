@@ -38,6 +38,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
     private DataHelper mDataHelper;
     private TextView mDayTermText;
     private int mCurrentDay;
+    private int mCurrentRotation;
 
 
     public TodayFragment() {
@@ -65,7 +66,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
             }
         };
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
-
+        mCurrentRotation = getResources().getConfiguration().orientation;
 
     }
 
@@ -115,7 +116,6 @@ public class TodayFragment extends Fragment implements ClassOpener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         try {
             mClassInterface = (ClassOpener) context;
         } catch(ClassCastException e) {
@@ -131,7 +131,6 @@ public class TodayFragment extends Fragment implements ClassOpener {
         if(mClassAdapter == null) {
             mClassAdapter = new TodayClassAdapter(getContext(), this, mDataHelper);
         }
-        mClassAdapter.resume(mDataHelper);
         if(mCurrentDay != today) { //The app has been left overnight
             mCurrentDay = today;
             setDayTermText();
@@ -139,16 +138,19 @@ public class TodayFragment extends Fragment implements ClassOpener {
             mClassAdapter.collectData();
         }
         //Rotation- Linear for vertical, two item width for horizontal if there are classes
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mLayoutManager = new LinearLayoutManager(getContext());
-        } else if(mClassAdapter.numClassesToday() > 0) {
-            mLayoutManager = new GridLayoutManager(getContext(), 2);
+        int newRotation = getResources().getConfiguration().orientation;
+        if(newRotation != mCurrentRotation) {
+            mCurrentRotation = newRotation;
+            if(mCurrentRotation == Configuration.ORIENTATION_PORTRAIT) {
+                mLayoutManager = new LinearLayoutManager(getContext());
+            } else if(mClassAdapter.numClassesToday() > 0) {
+                mLayoutManager = new GridLayoutManager(getContext(), 2);
+            }
+            mClassRecycler.setLayoutManager(mLayoutManager);
         }
-        mClassRecycler.setLayoutManager(mLayoutManager);
         //Updating mClassAdapter and reregistering receiver
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         mClassAdapter.collectData();
-
     }
 
     @Override

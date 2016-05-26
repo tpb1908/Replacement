@@ -38,6 +38,7 @@
             <!--Top line of textviews. Subject and teacher -->
             <TextView
                 android:id="@+id/text_homework_subject"
+                android:textColor="@color/colorSecondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/icon_class"

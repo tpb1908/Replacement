@@ -7,7 +7,9 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/wrapper_edittext_assessment_title">
+        android:id="@+id/wrapper_edittext_assessment_title"
+        android:layout_marginTop="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/input_padding">
 
         <EditText
             android:id="@+id/edittext_assessment_title"
@@ -27,7 +29,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/wrapper_edittext_assessment_notes"
-        android:layout_below="@+id/wrapper_edittext_assessment_title">
+        android:layout_below="@+id/wrapper_edittext_assessment_title"
+        android:layout_marginTop="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/input_padding">
 
         <EditText
             android:id="@+id/edittext_assessment_notes"

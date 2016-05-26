@@ -68,8 +68,6 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void open(int index) {}
 
 
-
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == 0) {
@@ -108,7 +106,6 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class TermViewHolder extends RecyclerView.ViewHolder {
-        private TermAdapter parent;
         private TextView mTermName;
         private TextView mDateRange;
         private ImageButton mDeleteButton;
@@ -130,9 +127,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     parent.open(getAdapterPosition());
                 }
             });
-
         }
-
     }
 
 }

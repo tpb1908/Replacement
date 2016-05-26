@@ -34,6 +34,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private int currentTime;
     private int currentTimePosition;
     private int currentEndTime = Integer.MAX_VALUE;
+    private static final boolean darkTheme = false;
 
     public TodayClassAdapter(Context context, ClassOpener mClassInterface, DataHelper dataHelper) {
         this.mContext = context;
@@ -43,8 +44,6 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mClasses = dataHelper.getClassesToday();
         mClasses.addListener(this);
     }
-
-    //TODO- DataHelper methods to get the data in a wrapper
 
 
 
@@ -104,6 +103,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             teacherName = (TextView) v.findViewById(R.id.text_teacher_name);
             colourBar = v.findViewById(R.id.colour_bar);
             timerBar = (ProgressBar) v.findViewById(R.id.progressbar_class_timer);
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick (View v) {
@@ -200,12 +200,10 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 holder.teacherName.setText(s.getTeacher());
                 holder.timerBar.setScaleY(3f);
                 mCalendar = Calendar.getInstance();
-
                 int start = ct.getStart();
                 int end = ct.getEnd();
                 //If the class is currently running
                 if(currentTime > start && currentTime < end) {
-                    //Setting up the timerBar
                     currentEndTime = ct.getEnd();
                     currentTimePosition = h.getAdapterPosition();
                     float scale = TimeUtils.getPercentageComplete(currentTime, start, end);
@@ -227,6 +225,9 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         " to " + TimeUtils.format(ct.getEnd());
                 holder.info.setText(info);
             }
+
+
+
         }
     }
 

@@ -25,6 +25,7 @@ import com.anapp.tpb.replacement.Home.Interfaces.ClassOpener;
 import com.anapp.tpb.replacement.Home.Interfaces.TaskOpener;
 import com.anapp.tpb.replacement.Home.Utilities.SheetFab;
 import com.anapp.tpb.replacement.R;
+import com.anapp.tpb.replacement.Setup.Input.TermInput;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.ClassTime;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
@@ -50,6 +51,8 @@ import java.util.ArrayList;
         What I need to do is create an abstract class that ALL of my TableTemplate classes extend from
         and then get rid of the use of generics in the DataUpdateListener
 
+
+        //TODO- Change some of the inputs to use a single edittext layout for each of the paired inputs
      */
 
 public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
@@ -75,6 +78,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 //                r.getColor(R.color.green_500), r.getColor(R.color.indigo_500), r.getColor(R.color.lime_500), r.getColor(R.color.teal_500),
 //                r.getColor(R.color.yellow_500), r.getColor(R.color.red_500), r.getColor(R.color.pink_500), r.getColor(R.color.light_blue_500)};
 //
+
+        Intent i = new Intent(this, TermInput.class);
+        startActivity(i);
 
         if(pref.getBoolean("firststart", true)) setUpTestData();
 

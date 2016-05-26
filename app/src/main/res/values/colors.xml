@@ -19,6 +19,7 @@
     <color name="colorPrimaryLight">#CFD8DC</color>
     <color name="colorIconsText">#FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>
+    <color name="colorLightText">#FFFFFF</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorDivider">#B6B6B6</color>
 

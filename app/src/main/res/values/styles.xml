@@ -1,12 +1,24 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- Base application theme.
+    What I need to do is declare all of the other themes in here, and then just switch one theme
+    -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:dialogTheme">@style/DialogTheme</item>
         <item name="android:timePickerDialogTheme">@style/TimePickerTheme</item>
+        <item name="cardTheme">@style/CardLight</item>
+    </style>
+
+    <style name="AppTheme.Dark" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:dialogTheme">@style/DialogTheme.Dark</item>
+        <item name="android:timePickerDialogTheme">@style/TimePickerTheme</item>
+        <item name="cardTheme">@style/CardDark</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -15,16 +27,31 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="CardLight" parent="CardView.Light">
+    </style>
+    <style name="CardDark" parent="CardView.Dark">
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="EditTextTheme" parent="android:Widget.EditText">
+    <style name="EditTextLight" parent="android:Widget.EditText">
         <item name="android:background">@color/colorAccent</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+    </style>
+
+    <style name="DialogTheme.Dark" parent="Theme.AppCompat.Dialog">
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -64,8 +91,6 @@
         <item name="android:textColor">@color/colorSecondaryText</item>
         <item name="android:drawablePadding">@dimen/sheet_item_image_spacing</item>
     </style>
-
-
 
 
 

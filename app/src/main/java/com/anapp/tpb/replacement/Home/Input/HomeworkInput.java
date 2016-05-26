@@ -126,8 +126,6 @@ public class HomeworkInput extends SlidingActivity {
 
     }
 
-
-
     public void showDatePicker(View v) {
         final Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(HomeworkInput.this, R.style.DatePickerTheme, dateSetListener,

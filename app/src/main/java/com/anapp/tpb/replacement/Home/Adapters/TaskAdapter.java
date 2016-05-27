@@ -72,7 +72,12 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             notifyDataSetChanged();
         } else {
             currentPosition = pos;
-            mTasks.add(pos, task);
+//            int possiblePos = mTasks.indexOf(task);
+//            if(possiblePos != -1) {
+//                mTasks.move(possiblePos, pos);
+//            } else {
+//                mTasks.add(pos, task);
+//            }
             notifyItemInserted(pos);
             Log.i(TAG, "Inserted task at position " + pos + " task " + mTasks.toString());
         }
@@ -164,6 +169,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         } else {
             Task task = mTasks.get(position);
             Subject subject = task.getSubject();
+            if(subject == null) {
+                subject = mDataHelper.getSubject(task.getSubjectID());
+            }
             String timeRange = "Set on ";
             //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
             timeRange += TimeUtils.getDateString(new Date(task.getStartDate()));

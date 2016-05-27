@@ -9,14 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Home.Utilities.MessageViewHolder;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
 import com.anapp.tpb.replacement.Storage.DataHelper;
 import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -24,7 +23,7 @@ import java.util.Date;
  */
 public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "TermAdapter";
-    private ArrayList<Term> mTerms;
+    private DataWrapper<Term> mTerms;
     private DataHelper mDataHelper;
     private Context mContext;
 
@@ -48,7 +47,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int pos = mTerms.indexOf(term);
         if(pos != -1) {
             mTerms.set(pos, term);
-            Collections.sort(mTerms);
+            mTerms.sort();
             int newPos = mTerms.indexOf(term);
             if(newPos == pos) {
                 notifyItemChanged(pos);

@@ -1,5 +1,7 @@
 package com.anapp.tpb.replacement.Home.Utilities;
 
+import android.util.Log;
+
 import com.anapp.tpb.replacement.Home.Interfaces.DataUpdateListener;
 import com.anapp.tpb.replacement.Storage.TableTemplates.DataTemplate;
 
@@ -12,6 +14,7 @@ import java.util.Iterator;
  * Created by theo on 19/05/16.
  */
 public class DataWrapper<T extends DataTemplate> implements Serializable {
+    private static final String TAG = "DataWrapper";
     private ArrayList<T> data;
     private ArrayList<DataUpdateListener> listeners;
 
@@ -29,6 +32,10 @@ public class DataWrapper<T extends DataTemplate> implements Serializable {
 
     public void addListener(DataUpdateListener newListener) {
         if(!listeners.contains(newListener)) listeners.add(newListener);
+    }
+
+    public void addFirstListener(DataUpdateListener newListener) {
+        listeners.add(0, newListener);
     }
 
     public void removeListener(DataUpdateListener listener) {
@@ -99,6 +106,18 @@ public class DataWrapper<T extends DataTemplate> implements Serializable {
         for(DataUpdateListener listener : listeners) {
             listener.updateAll();
         }
+    }
+
+    public void addToPos(T t) {
+        int pos;
+        for(pos = 0; pos < data.size(); pos++) {
+            if(t.compareTo(data.get(pos)) < 1) break;
+        }
+        data.add(pos, t);
+        for(DataUpdateListener listener : listeners) {
+            listener.add(pos, t);
+        }
+        Log.i(TAG, "Listeners " + listeners.toString());
     }
 
     public void add(T t) {

@@ -117,7 +117,8 @@ public class HomeworkInput extends SlidingActivity {
                     if(mEditing) {
                         d.getAllCurrentTasks().update(mCurrentTask);
                     } else {
-                        d.getAllCurrentTasks().add(mCurrentTask);
+                        d.getAllCurrentTasks().addToPos(mCurrentTask);
+                        //d.getAllCurrentTasks().add(mCurrentTask);
                     }
                     finish();
                 } else {

@@ -72,12 +72,14 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
     private static boolean isClassTimeCacheValid = false;
     private static DataWrapper<ClassTime> todayClassWrapper = new DataWrapper<>();
     private static boolean isTodayClassTimeCacheValid;
+    private static DataWrapper<Term> termWrapper = new DataWrapper<>();
+    private static boolean isTermCacheValid = false;
 
 
     public static synchronized DataHelper getInstance(Context context) {
         if(instance == null) {
             instance = new DataHelper(context.getApplicationContext());
-            currentTaskWrapper.addListener(instance);
+            currentTaskWrapper.addFirstListener(instance);
         }
         return instance;
     }
@@ -156,19 +158,26 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
     public Task addTask(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_TYPE, task.getType());
-        values.put(KEY_TASK_TITLE, task.getTitle());
-        values.put(KEY_TASK_DETAIL, task.getDetail());
-        values.put(KEY_START_DATE, task.getStartDate());
-        values.put(KEY_END_DATE, task.getEndDate());
-        values.put(KEY_SHOW_REMINDER, task.showReminder());
-        values.put(KEY_TIME, task.getTime());
-        values.put(KEY_COMPLETE, task.isComplete());
-        values.put(KEY_PERCENT_COMPLETE, task.getPercentageComplete());
-        values.put(KEY_DATE_COMPLETE, task.getCompleteDate());
-        values.put(KEY_SUBJECT_ID, task.getSubjectID());
-        task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
-        Log.i(TAG, "Adding task " + task.toString());
+
+        final String CHECKALREADYINSERTED = "SELECT * FROM " + TABLE_TASKS_CURRENT +
+                " WHERE " + KEY_ID + " = " + task.getId();
+        Cursor cursor = db.rawQuery(CHECKALREADYINSERTED, null);
+        if(cursor.getCount() <= 0) {
+            values.put(KEY_TYPE, task.getType());
+            values.put(KEY_TASK_TITLE, task.getTitle());
+            values.put(KEY_TASK_DETAIL, task.getDetail());
+            values.put(KEY_START_DATE, task.getStartDate());
+            values.put(KEY_END_DATE, task.getEndDate());
+            values.put(KEY_SHOW_REMINDER, task.showReminder());
+            values.put(KEY_TIME, task.getTime());
+            values.put(KEY_COMPLETE, task.isComplete());
+            values.put(KEY_PERCENT_COMPLETE, task.getPercentageComplete());
+            values.put(KEY_DATE_COMPLETE, task.getCompleteDate());
+            values.put(KEY_SUBJECT_ID, task.getSubjectID());
+            task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
+            Log.i(TAG, "Adding task " + task.toString());
+        }
+        cursor.close();
         db.close();
         if(!currentTaskWrapper.contains(task)) currentTaskWrapper.add(task);
         return task;
@@ -411,11 +420,18 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
      */
     public Term addTerm(Term term) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_TERM_NAME, term.getName());
-        values.put(KEY_START_DATE, term.getStartDate());
-        values.put(KEY_END_DATE, term.getEndDate());
-        term.setId((int) db.insert(TABLE_TERMS, null, values));
+        final String CHECKALREADYINSERTED = "SELECT * FROM " + TABLE_TERMS+
+                " WHERE " + KEY_ID + " = " + term.getId();
+        Cursor cursor = db.rawQuery(CHECKALREADYINSERTED, null);
+        if(cursor.getCount() <= 0) {
+            ContentValues values = new ContentValues();
+            values.put(KEY_TERM_NAME, term.getName());
+            values.put(KEY_START_DATE, term.getStartDate());
+            values.put(KEY_END_DATE, term.getEndDate());
+            term.setId((int) db.insert(TABLE_TERMS, null, values));
+        }
+        if(!termWrapper.contains(term)) termWrapper.add(term);
+        cursor.close();
         Log.i(TAG, "Adding term " + term.toString());
         return term;
     }
@@ -454,7 +470,8 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
      * Returns all of the terms in the database
      * @return An arraylist of all of the terms in the database
      */
-    public ArrayList<Term> getAllTerms() {
+    public DataWrapper<Term> getAllTerms() {
+        if(isTermCacheValid) return termWrapper;
         ArrayList<Term> result = new ArrayList<>();
         String query = "SELECT  * FROM " + TABLE_TERMS;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -477,7 +494,9 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
         Collections.reverse(result);
         db.close();
         Log.i(TAG, "All terms " + result.toString());
-        return result;
+        termWrapper.setData(result);
+        isTermCacheValid = true;
+        return termWrapper;
     }
 
     /**
@@ -497,6 +516,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
                 null);
         db.close();
         Log.i(TAG, "Updating term " + t.toString());
+        if(!termWrapper.contains(t)) termWrapper.add(t);
         return i;
     }
 
@@ -510,7 +530,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
                 KEY_ID + " = " + t.getId(),
                 null);
         db.close();
-
+        if(termWrapper.contains(t)) termWrapper.remove(t);
         Log.i(TAG, "Deleting term " + t.toString());
     }
 
@@ -572,13 +592,20 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
      */
     public Subject addSubject(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_SUBJECT_NAME, subject.getName());
-        values.put(KEY_CLASSROOM, subject.getClassroom());
-        values.put(KEY_TEACHER, subject.getTeacher());
-        values.put(KEY_COLOR, subject.getColor());
 
-        subject.setId((int) db.insert(TABLE_SUBJECTS, null, values));
+        final String CHECKALREADYINSERTED = "SELECT * FROM " + TABLE_SUBJECTS+
+                " WHERE " + KEY_ID + " = " + subject.getId();
+        Cursor cursor = db.rawQuery(CHECKALREADYINSERTED, null);
+        if(cursor.getCount() <= 0) {
+            ContentValues values = new ContentValues();
+            values.put(KEY_SUBJECT_NAME, subject.getName());
+            values.put(KEY_CLASSROOM, subject.getClassroom());
+            values.put(KEY_TEACHER, subject.getTeacher());
+            values.put(KEY_COLOR, subject.getColor());
+
+            subject.setId((int) db.insert(TABLE_SUBJECTS, null, values));
+        }
+        cursor.close();
         Log.i(TAG, "Adding subject  " + subject.toString());
         db.close();
         if(!subjectDataWrapper.contains(subject)) subjectDataWrapper.add(subject);
@@ -941,6 +968,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
 
     @Override
     public void add(DataTemplate o) {
+        Log.i(TAG, "DataHelper add called");
         if(o instanceof Task) {
             Task t = (Task) o;
             addTask(t);
@@ -957,6 +985,7 @@ public class DataHelper extends SQLiteOpenHelper implements DataUpdateListener<D
 
     @Override
     public void add(int index, DataTemplate o) {
+        Log.i(TAG, "DataHelper add at index called");
         if(o instanceof Task) {
             Task t = (Task) o;
             addTask(t);

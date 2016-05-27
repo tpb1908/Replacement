@@ -13,7 +13,8 @@ import android.widget.DatePicker;
 import com.anapp.tpb.replacement.Home.Utilities.DataWrapper;
 import com.anapp.tpb.replacement.Home.Utilities.TimeUtils;
 import com.anapp.tpb.replacement.R;
-import com.anapp.tpb.replacement.Storage.TableTemplates.Subject;
+import com.anapp.tpb.replacement.Storage.DataHelper;
+import com.anapp.tpb.replacement.Storage.TableTemplates.Term;
 import com.klinker.android.sliding.SlidingActivity;
 
 import java.text.ParseException;
@@ -26,7 +27,7 @@ import java.util.Date;
  */
 public class TermInput extends SlidingActivity {
     private static final String TAG = "TermInput";
-    private DataWrapper<Subject> mSubjects;
+    private DataWrapper<Term> mTerms;
     private boolean mEditing;
     private boolean mDatePosition;
     private TextInputEditText startDateInput;
@@ -53,6 +54,8 @@ public class TermInput extends SlidingActivity {
         final TextInputLayout titleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_term_name);
         final TextInputLayout startWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_term_start_date);
         final TextInputLayout endWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_term_end_date);
+        assert startDateInput != null && endDateInput != null && titleInput != null
+                && titleWrapper != null && startWrapper != null && endWrapper != null;
 
         startDateInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +71,12 @@ public class TermInput extends SlidingActivity {
                 showDatePicker();
             }
         });
+        DataHelper dataHelper = DataHelper.getInstance(this);
+
+
+        if(mEditing) {
+
+        }
 
         setFab(getResources().getColor(R.color.colorAccent),
                 R.drawable.fab_icon_tick_white,
@@ -108,9 +117,6 @@ public class TermInput extends SlidingActivity {
                         endWrapper.setError(null);
                     }
                 }
-
-
-
             }
         });
 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrapper_edittext_assessment_title"
+        android:layout_marginTop="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/input_padding">
+
+        <EditText
+            android:id="@+id/edittext_assessment_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/input_padding"
+            android:layout_marginTop="@dimen/input_padding"
+            android:hint="@string/hint_assessment_title"
+            android:inputType="textCapWords|textAutoCorrect"
+            android:lines="1"
+            android:theme="@style/AppTheme"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrapper_edittext_assessment_notes"
+        android:layout_below="@+id/wrapper_edittext_assessment_title"
+        android:layout_marginTop="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/input_padding">
+
+        <EditText
+            android:id="@+id/edittext_assessment_notes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/wrapper_edittext_assessment_title"
+            android:layout_marginBottom="@dimen/input_padding"
+            android:layout_marginTop="@dimen/input_padding"
+            android:autoLink="web|email"
+            android:ems="10"
+            android:hint="@string/hint_assessment_notes"
+            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+            android:textIsSelectable="true"
+            android:theme="@style/AppTheme"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <EditText
+        android:id="@+id/edittext_assessment_date"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wrapper_edittext_assessment_notes"
+        android:layout_marginBottom="@dimen/input_padding"
+        android:layout_marginTop="@dimen/input_padding"
+        android:hint="@string/hint_assessment_date"
+        android:theme="@style/AppTheme"
+        android:onClick="showDatePicker"
+        android:inputType="none"
+        android:focusable="false"
+        android:enabled="true"/>
+
+    <Spinner
+        android:id="@+id/spinner_subject"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/input_padding"
+        android:clickable="true"
+        android:spinnerMode="dropdown"
+        android:layout_below="@+id/edittext_assessment_date"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/spinner_subject"
+        android:id="@+id/layout_assessment_marks">
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

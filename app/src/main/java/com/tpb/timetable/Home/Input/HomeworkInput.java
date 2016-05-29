@@ -33,9 +33,6 @@ public class HomeworkInput extends SlidingActivity {
     private Task mCurrentTask;
     private EditText mDateInput;
     private boolean mEditing;
-    private boolean mCancel;
-    private Intent returnIntent;
-
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -43,8 +40,6 @@ public class HomeworkInput extends SlidingActivity {
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         enableFullscreen();
         Intent i = getIntent();
-        returnIntent = new Intent();
-        mCancel = true;
         if(i.getBooleanExtra("hasOpenPosition", false)) {
             expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         }
@@ -52,20 +47,19 @@ public class HomeworkInput extends SlidingActivity {
         final TextInputLayout mTitleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_title);
         final EditText mDetailInput = (EditText) findViewById(R.id.edittext_homework_detail);
         final TextInputLayout mDetailWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_detail);
+        final TextInputLayout mDateWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_due_date);
         mDateInput = (EditText) findViewById(R.id.edittext_homework_due_date);
         final CheckBox mShowReminderInput = (CheckBox) findViewById(R.id.checkbox_show_reminder);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_subject);
         final DBHelper db = DBHelper.getInstance(this);
         SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, db.getAllSubjects());
         spinner.setAdapter(spinnerAdapter);
-
-        //TODO- Find out why this works, but definition in XML causes some strange crash
-//        mDateInput.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDatePicker(v);
-//            }
-//        });
+        mDateInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(v);
+            }
+        });
 
         try {
             mCurrentTask = (Task) i.getSerializableExtra("task");
@@ -103,17 +97,21 @@ public class HomeworkInput extends SlidingActivity {
                 } else {
                     mDetailWrapper.setError(null);
                 }
+                if(mDateInput.getText().toString().equals("")) {
+                    errorFlag = true;
+                    mDateWrapper.setError("Please set a date");
+                } else {
+                    mDateWrapper.setError(null);
+                }
+                if(!mEditing) { //Don't change the time that a task is set
+                    Calendar c = Calendar.getInstance();
+                    mCurrentTask.setStartDate(c.getTimeInMillis());
+                }
                 if(!errorFlag) {
-                    mCancel = false;
-                    if(!mEditing) { //Don't change the time that a task is set
-                        Calendar c = Calendar.getInstance();
-                        mCurrentTask.setStartDate(c.getTimeInMillis());
-                    }
-                    mCurrentTask.setSubjectID((int)spinner.getSelectedItemId());
+                    mCurrentTask.setSubjectID((int) spinner.getSelectedItemId());
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());
-                    returnIntent.putExtra("task", mCurrentTask);
                     if(mEditing) {
                         db.getAllTasks().update(mCurrentTask);
                     } else {
@@ -121,9 +119,8 @@ public class HomeworkInput extends SlidingActivity {
                         //d.getAllCurrentTasks().add(mCurrentTask);
                     }
                     finish();
-                } else {
-                    mCancel = true;
                 }
+
             }
         });
 

@@ -29,7 +29,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     public int getPositionOfSubject(int subjectID) {
         int pos = -1;
         for(int i = 0; i < mSubjects.size(); i++) {
-            if(mSubjects.get(i).getId() == subjectID) {
+            if(mSubjects.get(i).getID() == subjectID) {
                 pos = i;
                 break;
             }
@@ -49,7 +49,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
 
     @Override
     public long getItemId (int position) {
-        return mSubjects.get(position).getId();
+        return mSubjects.get(position).getID();
     }
 
     @Override

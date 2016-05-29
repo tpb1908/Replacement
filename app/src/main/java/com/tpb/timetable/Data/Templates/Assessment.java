@@ -57,7 +57,7 @@ public class Assessment extends Data implements Comparable<Assessment>, Serializ
 
     public void setSubject(Subject subject) {
         this.subject = subject;
-        this.subjectID = subject.getId();
+        this.subjectID = subject.getID();
     }
 
     public String getRevision() {

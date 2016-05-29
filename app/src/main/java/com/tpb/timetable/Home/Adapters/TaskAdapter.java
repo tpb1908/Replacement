@@ -68,6 +68,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private void deleteTask(int position) {
         Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
         mTasks.remove(position);
+        runQueuedUpdates();
     }
 
     private void editTask(int position, View v) {
@@ -371,7 +372,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             @Override
             public void run() {
                 if(wasEmpty) {
-                    notifyDataSetChanged();
+                    notifyItemChanged(0);
                     wasEmpty = false;
                 } else {
                     notifyItemInserted(mTasks.indexOf(task));

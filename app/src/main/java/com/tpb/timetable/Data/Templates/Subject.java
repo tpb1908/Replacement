@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by theo on 27/05/16.
  */
-public class Subject implements Comparable<Subject>, Serializable {
+public class Subject extends Data implements Comparable<Subject>, Serializable {
     private int id;
     private String name;
     private String teacher;
@@ -14,13 +14,16 @@ public class Subject implements Comparable<Subject>, Serializable {
 
     public Subject(){}
 
-    public int getId() {
+    @Override
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public int getID() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -58,7 +61,7 @@ public class Subject implements Comparable<Subject>, Serializable {
     public boolean equals(Object o) {
         if(o instanceof Subject) {
             Subject s = (Subject) o;
-            return id == s.getId();
+            return id == s.getID();
         }
         return false;
     }

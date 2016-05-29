@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by theo on 27/05/16.
  */
-public class ClassTime implements Comparable<ClassTime>, Serializable {
+public class ClassTime extends Data implements Comparable<ClassTime>, Serializable {
     private int id = -1;
     private int day;
     private int subjectID;
@@ -15,12 +15,14 @@ public class ClassTime implements Comparable<ClassTime>, Serializable {
 
     public ClassTime() {}
 
-    public int getId() {
-        return id;
+    @Override
+    public void setID(int id) {
+        this.id = id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public int getID() {
+        return id;
     }
 
     public int getDay() {
@@ -61,6 +63,7 @@ public class ClassTime implements Comparable<ClassTime>, Serializable {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+        this.subjectID = subject.getID();
     }
 
     @Override
@@ -84,7 +87,7 @@ public class ClassTime implements Comparable<ClassTime>, Serializable {
     public boolean equals(Object o) {
         if(o instanceof ClassTime) {
             ClassTime ct = (ClassTime) o;
-            return  id == ct.getId();
+            return  id == ct.getID();
         }
         return false;
     }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by theo on 27/05/16.
  */
-public class Task implements Comparable<Task>, Serializable {
+public class Task extends Data implements Comparable<Task>, Serializable {
     private int id;
     private int type;
     private String title;
@@ -26,13 +26,16 @@ public class Task implements Comparable<Task>, Serializable {
 
     public Task() {}
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    @Override
+    public void setID(int id) {
         this.id = id;
     }
+
+    @Override
+    public int getID() {
+        return id;
+    }
+    
 
     public int getType() {
         return type;
@@ -120,6 +123,7 @@ public class Task implements Comparable<Task>, Serializable {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+        this.subjectID = subject.getID();
     }
 
     public long getDateComplete() {
@@ -152,7 +156,7 @@ public class Task implements Comparable<Task>, Serializable {
     public boolean equals(Object o) {
         if(o instanceof Task) {
             Task t = (Task) o;
-            return id == t.getId();
+            return id == t.getID();
         }
         return false;
     }

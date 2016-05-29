@@ -5,8 +5,9 @@ import java.io.Serializable;
 /**
  * Created by theo on 27/05/16.
  */
-public class Assessment implements Comparable<Assessment>, Serializable {
+public class Assessment extends Data implements Comparable<Assessment>, Serializable {
     private int id;
+    private String name;
     private long date;
     private int subjectID;
     private Subject subject;
@@ -14,12 +15,24 @@ public class Assessment implements Comparable<Assessment>, Serializable {
     private int percentage;
     private boolean complete;
 
-    public int getId() {
+    @Override
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public int getID() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getDate() {
@@ -44,6 +57,7 @@ public class Assessment implements Comparable<Assessment>, Serializable {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+        this.subjectID = subject.getId();
     }
 
     public String getRevision() {
@@ -74,7 +88,7 @@ public class Assessment implements Comparable<Assessment>, Serializable {
     public boolean equals(Object o) {
         if(o instanceof Assessment) {
             Assessment a = (Assessment) o;
-            return id == a.getId();
+            return id == a.getID();
         }
         return false;
     }

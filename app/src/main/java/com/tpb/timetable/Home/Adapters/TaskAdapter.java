@@ -53,103 +53,17 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     public void runQueuedUpdates() {
-        for(Runnable r : mQueuedUpdates) {
-            r.run();
+        if(mQueuedUpdates.size() > 3) {
+            notifyDataSetChanged();
+        } else {
+            for(Runnable r : mQueuedUpdates) {
+                r.run();
+            }
         }
         mQueuedUpdates.clear();
     }
 
-    @Override
-    public void allDataChanged() {
-        notifyDataSetChanged();
-    }
 
-    @Override
-    public void dataSorted() {
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void addAll(ArrayList<Task> valuesAdded) {
-        mQueuedUpdates.add(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
-            }
-        });
-    }
-
-    @Override
-    public void set(final int index, Task task) {
-        mQueuedUpdates.add(new Runnable() {
-            @Override
-            public void run() {
-                notifyItemChanged(index);
-            }
-        });
-    }
-
-    @Override
-    public void moved(int oldIndex, int newIndex) {
-        notifyItemMoved(oldIndex, newIndex);
-    }
-
-    @Override
-    public void updated(final int index, final Task task) {
-        if(task.getSubject() == null) {
-            task.setSubject(mDB.getSubject(task.getSubjectID()));
-        }
-        mQueuedUpdates.add(new Runnable() {
-            @Override
-            public void run() {
-                notifyItemMoved(index, mTasks.indexOf(task));
-            }
-        });
-
-    }
-
-    @Override
-    public void removed(final int index, Task task) {
-        mQueuedUpdates.add(new Runnable() {
-            @Override
-            public void run() {
-                notifyItemRemoved(index);
-            }
-        });
-        if(mTasks.size() == 0) wasEmpty = true;
-    }
-
-    @Override
-    public void cleared() {
-        notifyDataSetChanged();
-        wasEmpty = true;
-    }
-
-    @Override
-    public void add(final Task task) {
-        mQueuedUpdates.add(new Runnable() {
-            @Override
-            public void run() {
-                if(wasEmpty) {
-                    notifyDataSetChanged();
-                    wasEmpty = false;
-                } else {
-                    notifyItemInserted(mTasks.indexOf(task));
-                }
-            }
-        });
-    }
-
-    @Override
-    public void add(int index, Task task) {
-        Log.i(TAG, "Adding a task");
-        if(wasEmpty) {
-            notifyDataSetChanged();
-            wasEmpty = false;
-        } else {
-            notifyItemInserted(index);
-        }
-    }
 
     private void deleteTask(int position) {
         Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
@@ -382,6 +296,98 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public ReminderViewHolder(View v) {
             super(v);
 
+        }
+    }
+
+    @Override
+    public void allDataChanged() {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void dataSorted() {
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void addAll(ArrayList<Task> valuesAdded) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void set(final int index, Task task) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(index);
+            }
+        });
+    }
+
+    @Override
+    public void moved(int oldIndex, int newIndex) {
+        notifyItemMoved(oldIndex, newIndex);
+    }
+
+    @Override
+    public void updated(final int index, final Task task) {
+        if(task.getSubject() == null) {
+            task.setSubject(mDB.getSubject(task.getSubjectID()));
+        }
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemMoved(index, mTasks.indexOf(task));
+            }
+        });
+
+    }
+
+    @Override
+    public void removed(final int index, Task task) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemRemoved(index);
+            }
+        });
+        if(mTasks.size() == 0) wasEmpty = true;
+    }
+
+    @Override
+    public void cleared() {
+        notifyDataSetChanged();
+        wasEmpty = true;
+    }
+
+    @Override
+    public void add(final Task task) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                if(wasEmpty) {
+                    notifyDataSetChanged();
+                    wasEmpty = false;
+                } else {
+                    notifyItemInserted(mTasks.indexOf(task));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void add(int index, Task task) {
+        Log.i(TAG, "Adding a task");
+        if(wasEmpty) {
+            notifyDataSetChanged();
+            wasEmpty = false;
+        } else {
+            notifyItemInserted(index);
         }
     }
 

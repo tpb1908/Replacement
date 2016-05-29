@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by theo on 27/05/16.
  */
-public class Term implements Comparable<Term>, Serializable {
+public class Term extends Data implements Comparable<Term>, Serializable {
     private int id = -1;
     private String name;
     private long startDate;
@@ -13,12 +13,14 @@ public class Term implements Comparable<Term>, Serializable {
 
     public Term() {}
 
-    public int getId() {
-        return id;
+    @Override
+    public void setID(int id) {
+        this.id = id;
     }
 
-    public void setId(int id) {
-        this.id = this.id == -1 ? id : this.id;
+    @Override
+    public int getID() {
+        return id;
     }
 
     public String getName() {
@@ -64,7 +66,7 @@ public class Term implements Comparable<Term>, Serializable {
     public boolean equals(Object o) {
         if(o instanceof Term) {
             Term t = (Term) o;
-            return id == t.getId();
+            return id == t.getID();
         }
         return false;
     }

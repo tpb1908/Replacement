@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.tpb.timetable.Data.Templates.Assessment;
 import com.tpb.timetable.Data.Templates.ClassTime;
+import com.tpb.timetable.Data.Templates.Data;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Data.Templates.Term;
@@ -62,6 +63,14 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_PERCENT_COMPLETE = "PERCENT_COMPLETE";
     private static final String KEY_DATE_COMPLETE = "DATE_COMPLETE";
     private static final String[] TASK_COLUMNS = new String[] {KEY_ID, KEY_TYPE, KEY_TASK_TITLE, KEY_TASK_DETAIL, KEY_START_DATE, KEY_END_DATE, KEY_SHOW_REMINDER, KEY_TIME, KEY_COMPLETE, KEY_PERCENT_COMPLETE, KEY_DATE_COMPLETE, KEY_SUBJECT_ID};
+
+    private static final String TABLE_ASSESSMENTS = "ASSESSMENTS";
+    private static final String KEY_ASSESSMENT_NAME = "ASSESSMENT_NAME";
+    private static final String KEY_ASSESSMENT_DATE = "DATE";
+    private static final String KEY_ASSESSMENT_REVISION = "REVISION";
+    private static final String KEY_ASSESSMENT_PERCENTAGE = "PERCENTAGE";
+    private static final String KEY_ASSESSMENT_COMPLETE = "COMPLETE";
+    private static final String[] ASSESSMENT_COLUMNS = new String[] {KEY_ID, KEY_ASSESSMENT_NAME, KEY_ASSESSMENT_DATE, KEY_ASSESSMENT_REVISION, KEY_ASSESSMENT_COMPLETE, KEY_ASSESSMENT_PERCENTAGE, KEY_SUBJECT_ID};
 
     private final ArrayWrapper<Term> termWrapper = new ArrayWrapper<>(this);
     private final ArrayWrapper<Subject> subjectWrapper = new ArrayWrapper<>(this);
@@ -140,6 +149,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(" + KEY_ID + " INTEGER PRIMARY KEY, " +
                 CREATE_TASK_COLUMNS;
         db.execSQL(CREATE_TABLE_TASKS_ARCHIVE);
+
+
+        final String CREATE_TABLE_ASSESSMENTS = "CREATE TABLE IF NOT EXITS " +
+                TABLE_ASSESSMENTS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                KEY_ASSESSMENT_NAME + " VARCHAR, " +
+                KEY_ASSESSMENT_DATE + " INTEGER, " +
+                KEY_ASSESSMENT_REVISION + " VARCHAR, " +
+                KEY_ASSESSMENT_COMPLETE + " BOOLEAN, " +
+                KEY_ASSESSMENT_PERCENTAGE + " INTEGER, " +
+                "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(" + KEY_ID + ")) ";
+        db.execSQL(CREATE_TABLE_ASSESSMENTS);
     }
 
 
@@ -160,16 +180,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     //Term methods
-    private Term add(Term term) {
+    private int add(Term term) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TERM_NAME, term.getName());
         values.put(KEY_START_DATE, term.getStartDate());
         values.put(KEY_END_DATE, term.getEndDate());
-        term.setId((int) db.insert(TABLE_TERMS, null, values));
+        int id = ((int) db.insert(TABLE_TERMS, null, values));
         db.close();
         Log.i(TAG, "Adding term " + term.toString());
-        return term;
+        return id;
     }
 
     private int update(Term t) {
@@ -180,7 +200,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_END_DATE, t.getEndDate());
         int i = db.update(TABLE_TERMS,
                 values,
-                KEY_ID + " = " + t.getId(),
+                KEY_ID + " = " + t.getID(),
                 null);
         db.close();
         Log.i(TAG, "Updating term " + t.toString());
@@ -190,7 +210,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private void remove(Term t) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TERMS,
-                KEY_ID + " = " + t.getId(),
+                KEY_ID + " = " + t.getID(),
                 null);
         db.close();
         Log.i(TAG, "Deleting term " + t.toString());
@@ -209,7 +229,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Term term = new Term();
         if (cursor != null) {
             cursor.moveToFirst();
-            term.setId(cursor.getInt(0));
+            term.setID(cursor.getInt(0));
             term.setName(cursor.getString(1));
             term.setStartDate(cursor.getLong(2));
             term.setEndDate(cursor.getLong(3));
@@ -232,7 +252,7 @@ public class DBHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 do {
                     term = new Term();
-                    term.setId(cursor.getInt(0));
+                    term.setID(cursor.getInt(0));
                     term.setName(cursor.getString(1));
                     term.setStartDate(cursor.getLong(2));
                     term.setEndDate(cursor.getLong(3));
@@ -259,7 +279,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Term t = new Term();
         if(cursor != null) {
             if(cursor.moveToFirst()) {
-                t.setId(cursor.getInt(0));
+                t.setID(cursor.getInt(0));
                 t.setName(cursor.getString(1));
                 t.setStartDate(cursor.getLong(2));
                 t.setEndDate(cursor.getLong(3));
@@ -274,18 +294,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     //Start subject methods
-    private Subject add(Subject subject) {
+    private int add(Subject subject) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT_NAME, subject.getName());
         values.put(KEY_CLASSROOM, subject.getClassroom());
         values.put(KEY_TEACHER, subject.getTeacher());
         values.put(KEY_COLOR, subject.getColor());
-        subject.setId((int) db.insert(TABLE_SUBJECTS, null, values));;
+        int id = ((int) db.insert(TABLE_SUBJECTS, null, values));;
         Log.i(TAG, "Adding subject  " + subject.toString());
         db.close();
 
-        return subject;
+        return id;
     }
 
     public Subject getSubject(int id) {
@@ -301,7 +321,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Subject subject = new Subject();
         if (cursor != null) {
             if(cursor.moveToFirst()) {
-                subject.setId(cursor.getInt(0));
+                subject.setID(cursor.getInt(0));
                 subject.setName(cursor.getString(1));
                 subject.setClassroom(cursor.getString(2));
                 subject.setTeacher(cursor.getString(3));
@@ -325,7 +345,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Subject subject = new Subject();
         if (cursor != null) {
             if(cursor.moveToFirst()) {
-                subject.setId(cursor.getInt(0));
+                subject.setID(cursor.getInt(0));
                 subject.setName(cursor.getString(1));
                 subject.setClassroom(cursor.getString(2));
                 subject.setTeacher(cursor.getString(3));
@@ -348,7 +368,7 @@ public class DBHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 do {
                     subject = new Subject();
-                    subject.setId(cursor.getInt(0));
+                    subject.setID(cursor.getInt(0));
                     subject.setName(cursor.getString(1));
                     subject.setClassroom(cursor.getString(2));
                     subject.setTeacher(cursor.getString(3));
@@ -374,7 +394,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         int i = db.update(TABLE_SUBJECTS,
                 values,
-                KEY_ID + " = " + subject.getId(),
+                KEY_ID + " = " + subject.getID(),
                 null);
         db.close();
         Log.i(TAG, "Updating subject " + subject.toString());
@@ -385,18 +405,18 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.i(TAG, "Deleting subject " + s.toString());
         db.delete(TABLE_CLASS_TIMES,
-                KEY_SUBJECT_ID + " = " + s.getId(),
+                KEY_SUBJECT_ID + " = " + s.getID(),
                 null);
         getAllClasses();
 
         db.delete(TABLE_TASKS_CURRENT,
-                KEY_SUBJECT_ID + " = " + s.getId(),
+                KEY_SUBJECT_ID + " = " + s.getID(),
                 null);
         db.delete(TABLE_TASKS_ARCHIVE,
-                KEY_SUBJECT_ID + " = " + s.getId(), null);
+                KEY_SUBJECT_ID + " = " + s.getID(), null);
 
         db.delete(TABLE_SUBJECTS,
-                KEY_ID + " = " + s.getId(),
+                KEY_ID + " = " + s.getID(),
                 null);
 
         db.close();
@@ -409,17 +429,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     //Start class methods
-    private ClassTime add(ClassTime time) {
+    private int add(ClassTime time) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_SUBJECT_ID, time.getSubjectID());
         values.put(KEY_START_TIME, time.getStartTime());
         values.put(KEY_END_TIME, time.getEndTime());
         values.put(KEY_DAY, time.getDay());
-        time.setId((int) db.insert(TABLE_CLASS_TIMES, null, values));
+        int id = ((int) db.insert(TABLE_CLASS_TIMES, null, values));
         db.close();
         Log.i(TAG, "Adding class " + time.toString());
-        return time;
+        return id;
     }
 
     public ClassTime getCLass(int id) {
@@ -436,7 +456,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ClassTime time = new ClassTime();
         if (cursor != null) {
             cursor.moveToFirst();
-            time.setId(cursor.getInt(0));
+            time.setID(cursor.getInt(0));
             time.setStartTime(cursor.getInt(1));
             time.setEndTime(cursor.getInt(2));
             time.setDay(cursor.getInt(3));
@@ -461,7 +481,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         int i = db.update(TABLE_CLASS_TIMES,
                 values,
-                KEY_ID + " = " +  ct.getId(),
+                KEY_ID + " = " +  ct.getID(),
                 null);
 
         db.close();
@@ -472,7 +492,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private void remove(ClassTime ct) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CLASS_TIMES,
-                KEY_ID + " = " + ct.getId(),
+                KEY_ID + " = " + ct.getID(),
                 null);
         db.close();
         Log.i(TAG, "Removing class " + ct.toString());
@@ -490,7 +510,7 @@ public class DBHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 do {
                     time = new ClassTime();
-                    time.setId(cursor.getInt(0));
+                    time.setID(cursor.getInt(0));
                     time.setSubjectID(cursor.getInt(1));
                     time.setStartTime(cursor.getInt(2));
                     time.setEndTime(cursor.getInt(3));
@@ -533,7 +553,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     //Begin task methods
-    private Task add(Task task) {
+    private int add(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_TYPE, task.getType());
@@ -547,9 +567,9 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_PERCENT_COMPLETE, task.getPercentageComplete());
         values.put(KEY_DATE_COMPLETE, task.getDateComplete());
         values.put(KEY_SUBJECT_ID, task.getSubjectID());
-        task.setId((int) db.insert(TABLE_TASKS_CURRENT, null, values));
+        int id = ((int) db.insert(TABLE_TASKS_CURRENT, null, values));
         Log.i(TAG, "Adding task " + task.toString());
-        return task;
+        return id;
     }
 
     private Task getCurrentTask(int id) {
@@ -565,7 +585,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Task task = new Task();
         if(cursor != null) {
             if(cursor.moveToFirst()) {
-                task.setId(cursor.getInt(0));
+                task.setID(cursor.getInt(0));
                 task.setType(cursor.getInt(1));
                 task.setTitle(cursor.getString(2));
                 task.setDetail(cursor.getString(3));
@@ -597,7 +617,7 @@ public class DBHelper extends SQLiteOpenHelper {
             if(cursor.moveToFirst()) {
                 do {
                     task = new Task();
-                    task.setId(cursor.getInt(0));
+                    task.setID(cursor.getInt(0));
                     task.setType(cursor.getInt(1));
                     task.setTitle(cursor.getString(2));
                     task.setDetail(cursor.getString(3));
@@ -637,7 +657,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(KEY_DATE_COMPLETE, task.getDateComplete());
         int i = db.update(TABLE_TASKS_CURRENT,
                 values,
-                KEY_ID + " = " + task.getId(),
+                KEY_ID + " = " + task.getID(),
                 null);
         task.setSubject(getSubjectForData(db, task.getSubjectID()));
         db.close();
@@ -647,35 +667,48 @@ public class DBHelper extends SQLiteOpenHelper {
     private void remove(Task task) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TASKS_CURRENT,
-                KEY_ID + " = " + task.getId(),
+                KEY_ID + " = " + task.getID(),
                 null);
         db.close();
         Log.i(TAG, "Deleting a task " + task.toString());
     }
     //End task methods
 
+    private int add(Assessment a) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_ASSESSMENT_NAME, a.getName());
+        values.put(KEY_ASSESSMENT_DATE, a.getDate());
+        values.put(KEY_ASSESSMENT_REVISION, a.getRevision());
+        values.put(KEY_ASSESSMENT_COMPLETE, a.isComplete());
+        values.put(KEY_ASSESSMENT_PERCENTAGE, a.getPercentage());
+        values.put(KEY_SUBJECT_ID, a.getSubjectID());
+        int id = ((int) db.insert(TABLE_ASSESSMENTS, null, values));
+        Log.i(TAG, "Adding assessment " + a.toString());
+        return id;
+    }
+
 
     //Begin assessment methods
 
-    private void add(Object o) {
+    private int add(Object o) {
         if(o instanceof Task) {
             Task t = (Task) o;
-            add(t);
+            return add(t);
         } else if(o instanceof ClassTime) {
             ClassTime ct = (ClassTime) o;
-            add(ct);
+            return add(ct);
         } else if(o instanceof Subject) {
             Subject s = (Subject) o;
-            add(s);
+            return add(s);
         } else if(o instanceof Assessment) {
             Assessment a = (Assessment) o;
         } else if(o instanceof Term) {
             Term t = (Term) o;
-            add(t);
+            return add(t);
         }
-
+        return -1;
     }
-
 
 
     private void addAll(ArrayList<? extends Object> o) {
@@ -692,6 +725,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private void update(Object o) {
         if(o instanceof Task) {
             Task t = (Task) o;
+            update(t);
         } else if(o instanceof ClassTime) {
             ClassTime ct = (ClassTime) o;
             update(ct);
@@ -723,8 +757,6 @@ public class DBHelper extends SQLiteOpenHelper {
             remove(t);
         }
     }
-
-
 
 
     /**
@@ -762,7 +794,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public class ArrayWrapper<T extends Comparable<T>> {
+    public class ArrayWrapper<T extends Data & Comparable<T>> {
         private DBHelper mDBHelper;
         private boolean mDataValid;
         private ArrayList<T> mData = new ArrayList<>();
@@ -843,7 +875,7 @@ public class DBHelper extends SQLiteOpenHelper {
             for(ArrayChangeListener<T> l : mListeners) {
                 l.add(t);
             }
-            mDBHelper.add(t);
+            t.setID(mDBHelper.add(t));
         }
 
         public void add(int index, T t) {
@@ -851,7 +883,7 @@ public class DBHelper extends SQLiteOpenHelper {
             for(ArrayChangeListener<T> l : mListeners) {
                 l.add(index, t);
             }
-            mDBHelper.add(t);
+            t.setID(mDBHelper.add(t));
         }
 
         public void addAll(ArrayList<T> toAdd) {

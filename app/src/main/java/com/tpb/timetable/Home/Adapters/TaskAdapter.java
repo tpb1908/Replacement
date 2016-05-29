@@ -41,6 +41,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private boolean currentOpen = false;
     private int currentPosition = -1;
     private boolean wasEmpty = false; //this is needed so that adding a value doesn't cause an inconsistency
+    private ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
 
 
     public TaskAdapter(Context context, TaskOpener taskInterface) {
@@ -49,6 +50,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mTaskOpener = taskInterface;
         mTasks.sort();
         mTasks.addListener(this);
+    }
+
+    public void runQueuedUpdates() {
+        for(Runnable r : mQueuedUpdates) {
+            r.run();
+        }
+        mQueuedUpdates.clear();
     }
 
     @Override
@@ -63,12 +71,22 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void addAll(ArrayList<Task> valuesAdded) {
-        notifyDataSetChanged();
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
-    public void set(int index, Task task) {
-        notifyItemChanged(index);
+    public void set(final int index, Task task) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(index);
+            }
+        });
     }
 
     @Override
@@ -77,31 +95,49 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void updated(int index, Task task) {
+    public void updated(final int index, final Task task) {
         if(task.getSubject() == null) {
             task.setSubject(mDB.getSubject(task.getSubjectID()));
         }
-        notifyItemMoved(index, mTasks.indexOf(task));
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemMoved(index, mTasks.indexOf(task));
+            }
+        });
+
     }
 
     @Override
-    public void removed(int index, Task task) {
-        notifyItemRemoved(index);
+    public void removed(final int index, Task task) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemRemoved(index);
+            }
+        });
+        if(mTasks.size() == 0) wasEmpty = true;
     }
 
     @Override
     public void cleared() {
         notifyDataSetChanged();
+        wasEmpty = true;
     }
 
     @Override
-    public void add(Task task) {
-        if(wasEmpty) {
-            notifyDataSetChanged();
-            wasEmpty = false;
-        } else {
-            notifyItemInserted(mTasks.indexOf(task));
-        }
+    public void add(final Task task) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                if(wasEmpty) {
+                    notifyDataSetChanged();
+                    wasEmpty = false;
+                } else {
+                    notifyItemInserted(mTasks.indexOf(task));
+                }
+            }
+        });
     }
 
     @Override
@@ -217,6 +253,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
 
+
+
     @Override
     public int getItemCount () {
         if(mTasks.size() == 0) {
@@ -237,7 +275,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
 
     private static class TaskViewHolder extends RecyclerView.ViewHolder {
-        private Task task;
 
         public TaskViewHolder(View v) {
             super(v);

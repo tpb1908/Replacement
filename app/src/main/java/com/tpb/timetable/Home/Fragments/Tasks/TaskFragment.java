@@ -54,6 +54,7 @@ public class TaskFragment extends Fragment implements TaskOpener {
             mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         }
         mRecycler.setLayoutManager(mLayoutManager);
+        mTaskAdapter.runQueuedUpdates();
     }
 
     @Override

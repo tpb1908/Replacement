@@ -27,7 +27,6 @@ import com.tpb.timetable.Home.Input.ReminderInput;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskOpener;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.SheetFab;
 
 /*TODO https://android-arsenal.com/details/1/3086
 * https://android-arsenal.com/details/1/94
@@ -55,10 +54,10 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    private DBHelper db;
+    private DBHelper mDB;
     private TodayFragment mTodayFragment;
     private TaskFragment mTaskFragment;
-    private MaterialSheetFab fab;
+    private MaterialSheetFab mFab;
 
 
     @Override
@@ -66,7 +65,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         super.onCreate(savedInstanceState);
 
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
-        db = DBHelper.getInstance(this);
+        mDB = DBHelper.getInstance(this);
 //        Resources r = getResources();
 //        int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),
 //                r.getColor(R.color.brown_500), r.getColor(R.color.cyan_500), r.getColor(R.color.deep_orange_500), r.getColor(R.color.deep_purple_500),
@@ -100,7 +99,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             int sheetColor = getResources().getColor(R.color.colorAccent);
             int fabColor = getResources().getColor(R.color.colorAccent);
 
-            fab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
+            mFab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
         //}
 
     }
@@ -172,17 +171,19 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
     @Override
     public void onBackPressed () {
-        if(fab.isSheetVisible()) {
-            fab.hideSheet();
+        if(mFab.isSheetVisible()) {
+            mFab.hideSheet();
         } else {
             super.onBackPressed();
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
+    protected void onResume() {
+        super.onResume();
+        if(mFab.isSheetVisible()) {
+            mFab.hideSheet();
+        }
     }
 
     @Override
@@ -199,8 +200,12 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
     @Override
     protected void onStart () {
-        //DBHelper may be null when application is restarted
-        db = DBHelper.getInstance(this);
+        /*DBHelper may be null when application is restarted
+        *If the DBHelper is not null, all this will do is return
+        * the already instantiated singleton, so there's no real
+        * performance concerns
+         */
+        mDB = DBHelper.getInstance(this);
         super.onStart();
 
     }

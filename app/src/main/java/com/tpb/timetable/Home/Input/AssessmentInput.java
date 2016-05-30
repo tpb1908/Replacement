@@ -16,8 +16,7 @@ import android.widget.Spinner;
 import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.SubjectSpinnerAdapter;
-import com.tpb.timetable.Utils.TimeUtils;
+import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +69,7 @@ public class AssessmentInput extends SlidingActivity {
             Date d = new Date();
             try {
                 d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                String dString = TimeUtils.getDateString(d);
+                String dString = FormattingUtils.dateToString(d);
                 mDateInput.setText(dString);
             } catch (ParseException e) {
                 Log.e(TAG, "Parsing exception in OnDateSetListener",e);

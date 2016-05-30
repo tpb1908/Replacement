@@ -22,9 +22,7 @@ import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Interfaces.TaskOpener;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.MessageViewHolder;
-import com.tpb.timetable.Utils.StringUtils;
-import com.tpb.timetable.Utils.TimeUtils;
+import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -125,8 +123,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
             String timeRange = "Set on ";
             //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
-            timeRange += TimeUtils.getDateString(new Date(task.getStartDate()));
-            timeRange += ", Due by " + TimeUtils.getDateString(new Date(task.getEndDate()));
+            timeRange += FormattingUtils.dateToString(new Date(task.getStartDate()));
+            timeRange += ", Due by " + FormattingUtils.dateToString(new Date(task.getEndDate()));
             switch(holder.getItemViewType()) {
                 case 1:
                     Log.i(TAG, "Binding with viewholder type 1");
@@ -254,7 +252,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 mOriginalHeight = v.getHeight();
             }
             ValueAnimator valueAnimator;
-            int numLines = StringUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
+            int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
             Log.i(TAG, "Number of lines " + numLines);
             if(!mIsExpanded) {
                 mHomeWorkDetail.setSingleLine(false);
@@ -301,7 +299,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void allDataChanged() {
+    public void dataSetChanged() {
         notifyDataSetChanged();
     }
 

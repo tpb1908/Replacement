@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
+import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.MessageViewHolder;
 
 import java.util.ArrayList;
 
@@ -63,7 +63,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void allDataChanged() {
+    public void dataSetChanged() {
         notifyDataSetChanged();
     }
 

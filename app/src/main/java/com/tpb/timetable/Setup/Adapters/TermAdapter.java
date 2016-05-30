@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
+import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.MessageViewHolder;
-import com.tpb.timetable.Utils.TimeUtils;
+import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,7 +33,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void allDataChanged() {
+    public void dataSetChanged() {
         notifyDataSetChanged();
     }
 
@@ -106,8 +106,8 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if(holder.getItemViewType() == 1) {
             TermViewHolder termHolder = (TermViewHolder) holder;
             Term term = mTerms.get(position);
-            final String DATERANGE = TimeUtils.getDateString(new Date(term.getStartDate())) +
-                    " to " + TimeUtils.getDateString(new Date(term.getEndDate()));
+            final String DATERANGE = FormattingUtils.dateToString(new Date(term.getStartDate())) +
+                    " to " + FormattingUtils.dateToString(new Date(term.getEndDate()));
             termHolder.mTermName.setText(term.getName());
             termHolder.mDateRange.setText(DATERANGE);
         } else {

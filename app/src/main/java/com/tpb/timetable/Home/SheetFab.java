@@ -1,4 +1,4 @@
-package com.tpb.timetable.Utils;
+package com.tpb.timetable.Home;
 
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;

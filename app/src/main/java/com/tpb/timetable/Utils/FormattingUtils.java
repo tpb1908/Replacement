@@ -1,6 +1,7 @@
 package com.tpb.timetable.Utils;
 
 import android.text.format.DateFormat;
+import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -8,9 +9,9 @@ import java.util.Date;
 /**
  * Created by theo on 21/04/16.
  */
-public class TimeUtils {
+public class FormattingUtils {
     
-    private TimeUtils() {}
+    private FormattingUtils() {}
 
     public static int hmToInt(int hour, int minute) {
         return (hour * 100) + minute;
@@ -54,7 +55,6 @@ public class TimeUtils {
      * @return The formatted time string
      */
     /**
-     *
      * @param hour The hour of the time
      * @param minute The minute of the time
      * @param separator The string to place between the hour and minute
@@ -65,7 +65,6 @@ public class TimeUtils {
     }
 
     /**
-     *
      * @param hour The hour of the time
      * @param minute The minute of the time
      * @return A formatted string of the time hour:minute
@@ -75,7 +74,6 @@ public class TimeUtils {
     }
 
     /**
-     *
      * @param time An integer time in the format hhmm
      * @return The hour of the time, as a string
      */
@@ -88,7 +86,6 @@ public class TimeUtils {
     }
 
     /**
-     *
      * @param time An integer time in the format hhmm
      * @return The minute of the time, as a string
      */
@@ -100,7 +97,6 @@ public class TimeUtils {
         }
     }
 
-
     public static float getPercentageComplete(int time, int start, int end) {
         int timeHour = (int) Math.floor((float) time/100);
         int startHour = (int) Math.floor((float)start/100);
@@ -109,10 +105,14 @@ public class TimeUtils {
         int startMinute = start - (startHour*100);
         int endMinute = end - (endHour*100);
 
-        return ((float) ((timeHour*60+timeMinute)-(startHour*60+startMinute))) / ((float)((endHour*60+endMinute) -(startHour*60+startMinute)));
+        return ((float) ((timeHour*60+timeMinute)-(startHour*60+startMinute))) / ((float)((endHour*60+endMinute)-(startHour*60+startMinute)));
 
     }
 
+    /**
+     * @param day The day, of a week, month, year, etc
+     * @return The correct suffix for the value
+     */
     public static String getSuffix(int day) {
         if (day >= 11 && day <= 13) {
             return "th";
@@ -129,16 +129,33 @@ public class TimeUtils {
         }
     }
 
-    public static String getDateString(Date d) {
+    public static String dateToString(Date d) {
         Calendar  cal = Calendar.getInstance();
         cal.setTime(d);
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         return DateFormat.format("EEEE", d) + " " +
                 DateFormat.format("MMMM",d) + " " +
-                day + TimeUtils.getSuffix(day);
+                day + getSuffix(day);
     }
 
+    /**
+     * Calculates how many lines are needed to fit a given string into a text
+     * -view of a given width
+     * @param textView A reference to the text view being fitted
+     * @param text The text to be fitted into the textview
+     * @return The number of lines need to fit the text in the textview
+     */
+    public static int numLinesForTextView(TextView textView, String text) {
+        String[] lines = text.split("\n");
+        int numLines = lines.length-1;
+        for(String s : lines) {
+            if(textView.getPaint().breakText(s,  0, s.length(),
+                    true, textView.getWidth(), null) > s.length()) {
+                numLines ++;
+            }
+        }
+        return numLines;
+    }
 
-    
 }

@@ -22,7 +22,7 @@ import com.tpb.timetable.Home.Adapters.TodayClassAdapter;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskOpener;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.TimeUtils;
+import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -101,7 +101,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
      * Sets the title mMessage to the current day and term
      */
     private void setDayTermText() {
-        String dayTerm = TimeUtils.getDateString(new Date());
+        String dayTerm = FormattingUtils.dateToString(new Date());
         Term currentTerm = mDB.getCurrentTerm();
         if(currentTerm.getName() != null) {
             dayTerm += "- " + currentTerm.getName();

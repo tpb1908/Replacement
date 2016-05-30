@@ -14,7 +14,7 @@ import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.TimeUtils;
+import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -136,7 +136,7 @@ public class TermInput extends SlidingActivity {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                String dString = TimeUtils.getDateString(d);
+                String dString = FormattingUtils.dateToString(d);
                 if(mDatePosition) {
                     mStartDate = d.getTime();
                     startDateInput.setText(dString);

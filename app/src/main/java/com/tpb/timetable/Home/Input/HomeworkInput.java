@@ -17,8 +17,7 @@ import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.SubjectSpinnerAdapter;
-import com.tpb.timetable.Utils.TimeUtils;
+import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +69,7 @@ public class HomeworkInput extends SlidingActivity {
             if(spinnerPos != -1) {
                 spinner.setSelection(spinnerPos, true);
             }
-            mDateInput.setText(TimeUtils.getDateString(new Date(mCurrentTask.getEndDate())));
+            mDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTask.getEndDate())));
             mEditing = true;
         } catch(Exception e) {
             mCurrentTask = new Task(2);
@@ -139,7 +138,7 @@ public class HomeworkInput extends SlidingActivity {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                String dString = TimeUtils.getDateString(d);
+                String dString = FormattingUtils.dateToString(d);
                 mDateInput.setText(dString);
                 mCurrentTask.setEndDate(d.getTime());
             } catch (ParseException e) {

@@ -14,8 +14,7 @@ import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.MessageViewHolder;
-import com.tpb.timetable.Utils.TimeUtils;
+import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,7 +45,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     @Override
-    public void allDataChanged() {
+    public void dataSetChanged() {
         notifyDataSetChanged();
     }
 
@@ -218,7 +217,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if(currentTime > start && currentTime < end) {
                     currentEndTime = ct.getEndTime();
                     currentTimePosition = h.getAdapterPosition();
-                    float scale = TimeUtils.getPercentageComplete(currentTime, start, end);
+                    float scale = FormattingUtils.getPercentageComplete(currentTime, start, end);
                     holder.timerBar.setVisibility(View.VISIBLE);
                     //Filters timer color by subject color
                     holder.timerBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, s.getColor()));
@@ -227,14 +226,14 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     holder.timerBar.setVisibility(View.INVISIBLE);
                 }
                 holder.colourBar.setBackgroundColor(s.getColor());
-                timeRange = TimeUtils.format(start);
-                timeRange += " to " + TimeUtils.format(end);
+                timeRange = FormattingUtils.format(start);
+                timeRange += " to " + FormattingUtils.format(end);
                 holder.classTime.setText(timeRange);
             } else {
                 ClassPastViewHolder holder = (ClassPastViewHolder) h;
                 String info = s.getName() + " with " + s.getTeacher() +
-                        " from " + TimeUtils.format(ct.getStartTime()) +
-                        " to " + TimeUtils.format(ct.getEndTime());
+                        " from " + FormattingUtils.format(ct.getStartTime()) +
+                        " to " + FormattingUtils.format(ct.getEndTime());
                 holder.info.setText(info);
             }
 

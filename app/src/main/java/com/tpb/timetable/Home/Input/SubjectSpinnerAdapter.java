@@ -67,9 +67,9 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
         TextView name = (TextView) row.findViewById(R.id.text_subject);
         View colourBar = row.findViewById(R.id.colour_bar);
-        String text = this.mSubjects.get(position).getName() + ", " + this.mSubjects.get(position).getTeacher();
-        name.setText(text);
-        colourBar.setBackgroundColor(this.mSubjects.get(position).getColor());
+        final String TEXT = mSubjects.get(position).getName() + " " + mSubjects.get(position).getTeacher();
+        name.setText(TEXT);
+        colourBar.setBackgroundColor(mSubjects.get(position).getColor());
         return row;
     }
 }

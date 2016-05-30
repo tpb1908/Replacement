@@ -11,8 +11,6 @@ import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.R;
 
-import java.util.ArrayList;
-
 /**
  * Created by theo on 25/05/16.
  */
@@ -80,11 +78,6 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void add(int index, Subject subject) {
         notifyItemInserted(index);
-    }
-
-    @Override
-    public void addAll(ArrayList<Subject> valuesAdded) {
-        notifyDataSetChanged();
     }
 
     @Override

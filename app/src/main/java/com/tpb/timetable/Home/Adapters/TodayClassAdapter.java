@@ -16,7 +16,6 @@ import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.FormattingUtils;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -51,11 +50,6 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public void dataSorted() {
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public void addAll(ArrayList<ClassTime> valuesAdded) {
         notifyDataSetChanged();
     }
 

@@ -82,7 +82,7 @@ public class HomeworkInput extends SlidingActivity {
             @Override
             public void onClick(View v) {
                 boolean errorFlag = false;
-
+                final long CURRENT = Calendar.getInstance().getTimeInMillis();
                 if(mTitleInput.getText().toString().equals("")) {
                     errorFlag = true;
                     mTitleWrapper.setError("Please set a title");
@@ -99,23 +99,25 @@ public class HomeworkInput extends SlidingActivity {
                 if(mDateInput.getText().toString().equals("")) {
                     errorFlag = true;
                     mDateWrapper.setError("Please set a date");
-                } else {
+                } else if(mCurrentTask.getEndDate() < CURRENT ) {
+                    errorFlag = true;
+                    mDateWrapper.setError("Due date must be after the current date");
+                }else {
                     mDateWrapper.setError(null);
                 }
                 if(!mEditing) { //Don't change the time that a task is set
-                    Calendar c = Calendar.getInstance();
-                    mCurrentTask.setStartDate(c.getTimeInMillis());
+                    mCurrentTask.setStartDate(CURRENT);
                 }
                 if(!errorFlag) {
                     mCurrentTask.setSubjectID((int) spinner.getSelectedItemId());
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
                     mCurrentTask.setDetail(mDetailInput.getText().toString());
                     mCurrentTask.setShowReminder(mShowReminderInput.isChecked());
+                    Log.i(TAG, "Adding homework " + mCurrentTask.toString());
                     if(mEditing) {
                         db.getAllTasks().update(mCurrentTask);
                     } else {
                         db.getAllTasks().addToPos(mCurrentTask);
-                        //d.getAllCurrentTasks().add(mCurrentTask);
                     }
                     finish();
                 }

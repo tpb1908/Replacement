@@ -14,7 +14,6 @@ import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.FormattingUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -50,11 +49,6 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     @Override
     public void add(Term term) {
         notifyItemInserted(mTerms.indexOf(term));
-    }
-
-    @Override
-    public void addAll(ArrayList<Term> valuesAdded) {
-        notifyDataSetChanged();
     }
 
     @Override

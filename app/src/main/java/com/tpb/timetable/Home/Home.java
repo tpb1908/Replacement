@@ -18,6 +18,7 @@ import android.view.View;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.ClassTime;
+import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Fragments.Tasks.TaskFragment;
 import com.tpb.timetable.Home.Fragments.Today.TodayFragment;
@@ -27,6 +28,8 @@ import com.tpb.timetable.Home.Input.ReminderInput;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskOpener;
 import com.tpb.timetable.R;
+
+import java.util.ArrayList;
 
 /*TODO https://android-arsenal.com/details/1/3086
 * https://android-arsenal.com/details/1/94
@@ -66,21 +69,14 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
 
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         mDB = DBHelper.getInstance(this);
-//        Resources r = getResources();
-//        int[] colors = new int[] {r.getColor(R.color.amber_500), r.getColor(R.color.blue_500), r.getColor(R.color.blue_grey_500),
-//                r.getColor(R.color.brown_500), r.getColor(R.color.cyan_500), r.getColor(R.color.deep_orange_500), r.getColor(R.color.deep_purple_500),
-//                r.getColor(R.color.green_500), r.getColor(R.color.indigo_500), r.getColor(R.color.lime_500), r.getColor(R.color.teal_500),
-//                r.getColor(R.color.yellow_500), r.getColor(R.color.red_500), r.getColor(R.color.pink_500), r.getColor(R.color.light_blue_500)};
-//
-
-
-        //if(pref.getBoolean("firststart", true)) {
+        if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("firststart", false);
             editor.apply();
+            testSubjects();
             //Intent i = new Intent(getApplicationContext(), IntroActivity.class);
             //startActivity(i);
-
+        }
         //} else {
             setContentView(R.layout.activity_home);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -236,6 +232,30 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         public CharSequence getPageTitle(int position) {
             return titles[position];
         }
+    }
+
+    private void testSubjects() {
+        ArrayList<Subject> subjects = new ArrayList<>();
+        Subject s = new Subject();
+        s.setName("Maths");
+        s.setTeacher("Maths teacher");
+        s.setClassroom("Maths classroom");
+        s.setColor(getResources().getColor(R.color.blue_600));
+        subjects.add(s);
+        s =  new Subject();
+        s.setName("Physics");
+        s.setTeacher("Physics teacher");
+        s.setClassroom("Physics classroom");
+        s.setColor(getResources().getColor(R.color.red_700));
+        subjects.add(s);
+        s = new Subject();
+        s.setName("Computer science");
+        s.setTeacher("Computer science teacher");
+        s.setClassroom("Computer science classroom");
+        s.setColor(getResources().getColor(R.color.green_400));
+        subjects.add(s);
+        mDB.getAllSubjects().addAll(subjects);
+
     }
 
 }

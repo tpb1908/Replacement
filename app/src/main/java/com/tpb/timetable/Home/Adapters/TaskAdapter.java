@@ -309,16 +309,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void addAll(ArrayList<Task> valuesAdded) {
-        mQueuedUpdates.add(new Runnable() {
-            @Override
-            public void run() {
-                notifyDataSetChanged();
-            }
-        });
-    }
-
-    @Override
     public void set(final int index, Task task) {
         mQueuedUpdates.add(new Runnable() {
             @Override
@@ -341,7 +331,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {
-                notifyItemMoved(index, mTasks.indexOf(task));
+                int newIndex = mTasks.indexOf(task);
+                notifyItemMoved(index, newIndex);
+                notifyItemChanged(newIndex);
             }
         });
 

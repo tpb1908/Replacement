@@ -151,13 +151,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TASKS_ARCHIVE);
 
 
-        final String CREATE_TABLE_ASSESSMENTS = "CREATE TABLE IF NOT EXITS " +
+        final String CREATE_TABLE_ASSESSMENTS = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_ASSESSMENTS + "(" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 KEY_ASSESSMENT_NAME + " VARCHAR, " +
                 KEY_ASSESSMENT_DATE + " INTEGER, " +
                 KEY_ASSESSMENT_REVISION + " VARCHAR, " +
                 KEY_ASSESSMENT_COMPLETE + " BOOLEAN, " +
                 KEY_ASSESSMENT_PERCENTAGE + " INTEGER, " +
+                KEY_SUBJECT_ID + " INTEGER, " +
                 "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(" + KEY_ID + ")) ";
         db.execSQL(CREATE_TABLE_ASSESSMENTS);
     }
@@ -264,7 +265,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return t;
     }
 
-    private void add(ArrayList<Term> toAdd) {
+    private void addTerms(ArrayList<Term> toAdd) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         db.beginTransaction();
@@ -389,6 +390,27 @@ public class DBHelper extends SQLiteOpenHelper {
         getAllClasses();
         getAllSubjects();
         getAllTasks();
+    }
+
+    private void addSubjects(ArrayList<Subject> toAdd) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        db.beginTransaction();
+        try {
+            for(Subject s : toAdd) {
+                values.put(KEY_SUBJECT_NAME, s.getName());
+                values.put(KEY_CLASSROOM, s.getClassroom());
+                values.put(KEY_TEACHER, s.getTeacher());
+                values.put(KEY_COLOR, s.getColor());
+                db.insert(TABLE_SUBJECTS, null, values);
+                values.clear();
+            }
+            db.setTransactionSuccessful();
+        } catch(Exception e) {
+            Log.i(TAG, "Error when bulk inserting subjects");
+        } finally {
+            db.endTransaction();
+        }
 
     }
     //End subject methods
@@ -695,11 +717,23 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    private void addAll(ArrayList<? extends Object> o) {
+    /*TODO- When this is used, the ID isn't set until the app is reloaded
+        as there is no callback to the ArrayWrapper
+    */
+    private void addAll(ArrayList<?> o) {
+
         if(!o.isEmpty()) {
             if(o.get(0) instanceof Task) {
             } else if(o.get(0) instanceof ClassTime) {
             } else if(o.get(0) instanceof Subject) {
+                try {
+                    addSubjects((ArrayList<Subject>) o);
+                    subjectWrapper.clear();
+                    getAllSubjects();
+                } catch(Exception e) {
+                    Log.e(TAG, "Cast to subject arraylist failed");
+                }
+
             } else if(o.get(0) instanceof Assessment) {
             } else if(o.get(0) instanceof Term) {
             }
@@ -812,8 +846,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         void add(int index, T t);
 
-        void addAll(ArrayList<T> valuesAdded);
-
         void set(int index, T t);
 
         void moved(int oldIndex, int newIndex);
@@ -923,11 +955,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         public void addAll(ArrayList<T> toAdd) {
             mData.addAll(toAdd);
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.addAll(toAdd);
-            }
             mDBHelper.addAll(toAdd);
-
         }
 
         public void addToPos(T t) {

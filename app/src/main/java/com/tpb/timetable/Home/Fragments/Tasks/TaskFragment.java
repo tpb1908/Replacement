@@ -15,17 +15,18 @@ import android.view.ViewGroup;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Adapters.TaskAdapter;
-import com.tpb.timetable.Home.Interfaces.TaskOpener;
+import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ColorResources;
 
 
 /**
  * Created by theo on 08/04/16.
  */
-public class TaskFragment extends Fragment implements TaskOpener {
+public class TaskFragment extends Fragment implements TaskManager {
     private static final String TAG = "TaskFragment";
     private TaskAdapter mTaskAdapter;
-    private TaskOpener mTaskInterface;
+    private TaskManager mTaskInterface;
     private RecyclerView mRecycler;
     private RecyclerView.LayoutManager mLayoutManager;
     private DBHelper mDB;
@@ -61,9 +62,9 @@ public class TaskFragment extends Fragment implements TaskOpener {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mTaskInterface = (TaskOpener) context;
+            mTaskInterface = (TaskManager) context;
         } catch(ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement TaskOpener interface");
+            throw new ClassCastException(context.toString() + " must implement TaskManager interface");
         }
     }
 
@@ -79,6 +80,9 @@ public class TaskFragment extends Fragment implements TaskOpener {
         mRecycler.setAdapter(mTaskAdapter);
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);
+        if(ColorResources.darkTheme) {
+            inflated.setBackgroundColor(getResources().getColor(R.color.dark_background));
+        }
         return inflated;
     }
 
@@ -97,8 +101,8 @@ public class TaskFragment extends Fragment implements TaskOpener {
         mTaskInterface.openHomework(h, v);
     }
 
-
-
-
-
+    @Override
+    public void showDeleteSnackBar(Task t) {
+        mTaskInterface.showDeleteSnackBar(t);
+    }
 }

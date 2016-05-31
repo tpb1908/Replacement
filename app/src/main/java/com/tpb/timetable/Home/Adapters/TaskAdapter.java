@@ -21,8 +21,9 @@ import com.mattyork.colours.Colour;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Data.Templates.Task;
-import com.tpb.timetable.Home.Interfaces.TaskOpener;
+import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ColorResources;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import java.util.Date;
  */
 public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DBHelper.ArrayChangeListener<Task> {
     private static final String TAG = "TaskAdapter";
-    private TaskOpener mTaskOpener;
+    private TaskManager mTaskManager;
     private DBHelper mDB;
     private DBHelper.ArrayWrapper<Task> mTasks;
     private boolean currentOpen = false;
@@ -42,10 +43,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
 
 
-    public TaskAdapter(Context context, TaskOpener taskInterface) {
+    public TaskAdapter(Context context, TaskManager taskInterface) {
         mDB = DBHelper.getInstance(context);
         mTasks = mDB.getAllTasks();
-        mTaskOpener = taskInterface;
+        mTaskManager = taskInterface;
         mTasks.sort();
         mTasks.addListener(this);
     }
@@ -61,12 +62,12 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mQueuedUpdates.clear();
     }
 
-
-
     private void deleteTask(int position) {
         Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
+        final Task mDeletedTask = mTasks.get(position);
         mTasks.remove(position);
         runQueuedUpdates();
+        mTaskManager.showDeleteSnackBar(mDeletedTask);
     }
 
     private void editTask(int position, View v) {
@@ -75,7 +76,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 break;
             case 2:
                 currentPosition = position;
-                mTaskOpener.openHomework(mTasks.get(position), v);
+                mTaskManager.openHomework(mTasks.get(position), v);
                 break;
             case 3: //Reminder
                 break;
@@ -98,7 +99,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             case 1: //Task
                 return null;
             case 2: //Homework
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_homework_test_large, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_homework, parent, false);
                 vh = new HomeworkViewHolder(v, this);
                 return vh;
             case 3: //Reminder
@@ -117,10 +118,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mvh.mMessage.setText(R.string.message_no_tasks);
         } else {
             Task task = mTasks.get(position);
-            Subject subject = task.getSubject();
-            if(subject == null) {
-                subject = mDB.getSubject(task.getSubjectID());
-            }
+            Subject subject = mDB.getSubject(task.getSubjectID());
+
             String timeRange = "Set on ";
             //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
             timeRange += FormattingUtils.dateToString(new Date(task.getStartDate()));
@@ -131,6 +130,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 case 2:
                     int color = subject.getColor();
                     final HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
+                    ColorResources.theme((ViewGroup) hvh.itemView);
                     hvh.mTitleBar.setBackgroundColor(color);
                     final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                     hvh.mSubjectName.setText(subjectNameClass);
@@ -150,7 +150,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         hvh.mDetailHint += "...";
                     }
                     hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
-                    Log.i(TAG, "View being bound at "  + position + ". Position of inserted task " + currentPosition + " and currentOpen " + currentOpen);
+                    Log.i(TAG, "View being bound at "  + position);
                     if(position == currentPosition && currentOpen) {
                         final Runnable r = new Runnable() {
                             @Override
@@ -193,7 +193,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
     }
 
-    private static class HomeworkViewHolder extends TaskViewHolder{
+    private static class HomeworkViewHolder extends TaskViewHolder {
         private RelativeLayout mTitleBar;
         private TextView mSubjectName;
         private TextView mHomeWorkDetail;
@@ -212,9 +212,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             super(v);
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
             mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
-            mHomeWorkTitle = (TextView) v.findViewById(R.id.edittext_homework_title);
+            mHomeWorkTitle = (TextView) v.findViewById(R.id.text_homework_title);
             mDueDay = (TextView) v.findViewById(R.id.text_homework_due_day);
-            mHomeWorkDetail = (TextView) v.findViewById(R.id.edittext_homework_detail);
+            mHomeWorkDetail = (TextView) v.findViewById(R.id.text_homework_detail);
             mDoneButton = (Button) v.findViewById(R.id.button_done);
             mEditButton = (Button) v.findViewById(R.id.button_edit);
             mDeleteButton = (ImageButton) v.findViewById(R.id.button_delete);

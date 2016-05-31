@@ -39,13 +39,8 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <com.tpb.timetable.Home.SheetFab
-        android:id="@+id/sheetFab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/fab_icon_plus_white"/>
+
+
 
     <!-- Overlay that dims the screen -->
     <com.gordonwong.materialsheetfab.DimOverlayFrameLayout
@@ -113,6 +108,21 @@
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </io.codetail.widget.RevealLinearLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/snackbarPosition">
+        <com.tpb.timetable.Home.SheetFab
+            android:id="@+id/sheetFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/fab_icon_plus_white"/>
+    </android.support.design.widget.CoordinatorLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

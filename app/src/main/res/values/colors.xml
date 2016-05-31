@@ -21,8 +21,8 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorLightText">#FFFFFF</color>
     <color name="colorSecondaryText">#727272</color>
+    <color name="colorSecondaryTextLight">#BCBCBC</color>
     <color name="colorDivider">#B6B6B6</color>
-
     <color name="icon_grey">#727272</color>
     <color name="white">#FFFFFF</color>
 

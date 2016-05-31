@@ -42,6 +42,10 @@ public class HomeworkInput extends SlidingActivity {
         setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
         enableFullscreen();
         Intent i = getIntent();
+        if(ColorResources.darkTheme) {
+            RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
+            background.setBackgroundColor(getResources().getColor(R.color.dark_background));
+        }
         if(i.getBooleanExtra("hasOpenPosition", false)) {
             expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         }
@@ -126,10 +130,6 @@ public class HomeworkInput extends SlidingActivity {
                 }
             }
         });
-        if(ColorResources.darkTheme) {
-            RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
-            background.setBackgroundColor(getResources().getColor(R.color.dark_background));
-        }
         ColorResources.theme((ViewGroup) spinner.getParent());
     }
 

@@ -8,12 +8,14 @@ import com.tpb.timetable.Data.Templates.Task;
 /**
  * Created by theo on 01/05/16.
  */
-public interface TaskOpener {
+public interface TaskManager {
 
     void openTask(Task t, @Nullable View v);
 
     void openReminder(Task r, @Nullable View v);
 
     void openHomework(Task h, @Nullable View v);
+
+    void showDeleteSnackBar(Task t);
 
 }

@@ -26,6 +26,19 @@ public class Task extends Data implements Comparable<Task>, Serializable {
 
     public Task() {}
 
+    public String getTypeName() {
+        switch(type) {
+            case 0:
+                return "Task";
+            case 1:
+                return "Homework";
+            case 2:
+                return "Reminder";
+            default:
+                return "";
+        }
+    }
+
     @Override
     public void setID(int id) {
         this.id = id;

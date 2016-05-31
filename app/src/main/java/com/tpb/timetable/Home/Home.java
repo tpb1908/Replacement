@@ -3,6 +3,8 @@ package com.tpb.timetable.Home;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,7 +29,7 @@ import com.tpb.timetable.Home.Input.AssessmentInput;
 import com.tpb.timetable.Home.Input.HomeworkInput;
 import com.tpb.timetable.Home.Input.ReminderInput;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
-import com.tpb.timetable.Home.Interfaces.TaskOpener;
+import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.ColorResources;
@@ -55,7 +57,7 @@ import java.util.ArrayList;
         //TODO- Move all error messages to string resources
      */
 
-public class Home extends AppCompatActivity implements ClassOpener, TaskOpener, Themable {
+public class Home extends AppCompatActivity implements ClassOpener, TaskManager, Themable {
     private static final String TAG = "Home";
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -92,12 +94,15 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener, 
             //SheetFab for adding items
         SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
         View sheetView = findViewById(R.id.fabSheet);
+        ColorResources.theme((ViewGroup)sheetView);
         View overlay = findViewById(R.id.overlay);
         int sheetColor = getResources().getColor(R.color.colorAccent);
         int fabColor = getResources().getColor(R.color.colorAccent);
         mFab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
 
+
     }
+
 
 
     @Override
@@ -147,6 +152,20 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener, 
         startActivityForResult(i, 1);
     }
 
+
+    @Override
+    public void showDeleteSnackBar(final Task t) {
+        final CoordinatorLayout snackBarLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
+        Snackbar snackbar = Snackbar
+                .make(snackBarLayout, t.getTypeName() + " deleted",Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDB.getAllTasks().addToPos(t);
+                    }
+                });
+        snackbar.show();
+    }
 
     @Override
     public void openTask(Task t, View v) {

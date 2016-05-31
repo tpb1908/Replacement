@@ -20,8 +20,9 @@ import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.Home.Adapters.TodayClassAdapter;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
-import com.tpb.timetable.Home.Interfaces.TaskOpener;
+import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ColorResources;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.Calendar;
@@ -29,7 +30,7 @@ import java.util.Date;
 
 public class TodayFragment extends Fragment implements ClassOpener {
     private static final String TAG = "TodayFragment";
-    private TaskOpener mTaskInterface;
+    private TaskManager mTaskInterface;
     private ClassOpener mClassInterface;
     private TodayClassAdapter mClassAdapter;
     private RecyclerView mClassRecycler;
@@ -46,11 +47,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
     }
 
     public static TodayFragment newInstance() {
-        TodayFragment fragment = new TodayFragment();
-        //Nothing currently needs to be passed
-//        Bundle args = new Bundle();
-//        fragment.setArguments(args);
-        return fragment;
+        return new TodayFragment();
     }
 
     @Override
@@ -76,10 +73,6 @@ public class TodayFragment extends Fragment implements ClassOpener {
         mClassInterface.openClass(c);
     }
 
-
-
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
@@ -93,7 +86,9 @@ public class TodayFragment extends Fragment implements ClassOpener {
         mDayTermText = (TextView) inflated.findViewById(R.id.text_today_term);
         setDayTermText();
         mCurrentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-
+        if(ColorResources.darkTheme) {
+            inflated.setBackgroundColor(getResources().getColor(R.color.dark_background));
+        }
         return inflated;
     }
 
@@ -109,6 +104,11 @@ public class TodayFragment extends Fragment implements ClassOpener {
         } else {
             dayTerm += "- Holiday";
             mDayTermText.setText(dayTerm);
+        }
+        if(ColorResources.darkTheme) {
+            mDayTermText.setTextColor(getResources().getColor(R.color.colorLightText));
+        } else {
+            mDayTermText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
         }
     }
 

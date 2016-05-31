@@ -169,7 +169,7 @@ public class Task extends Data implements Comparable<Task>, Serializable {
     public boolean equals(Object o) {
         if(o instanceof Task) {
             Task t = (Task) o;
-            return id == t.getID();
+            return id == t.id;
         }
         return false;
     }
@@ -178,7 +178,7 @@ public class Task extends Data implements Comparable<Task>, Serializable {
     public String toString() {
         return "Task {id="+id+", type="+type+", title="+title+ ", detail=" + detail+
                 ", startDate=" +startDate+", endDate="+endDate+", reminder="+showReminder+
-                ", subjectID=" +subjectID+", time="+time+", isComplete="+isComplete() +
+                ", subjectID=" +subjectID+", time="+time+", isComplete="+ complete +
                 ", dateComplete="+ dateComplete +", percentageComplete=" + percentageComplete + " }";
     }
 }

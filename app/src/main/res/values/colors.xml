@@ -19,10 +19,14 @@
     <color name="colorPrimaryLight">#B2DFDB</color>
     <color name="colorIconsText">#FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>
-    <color name="colorLightText">#FFFFFF</color>
+    <color name="colorPrimaryTextLight">#FFFFFF</color>
     <color name="colorSecondaryText">#727272</color>
     <color name="colorSecondaryTextLight">#BCBCBC</color>
     <color name="colorDivider">#B6B6B6</color>
+    <color name="background">#FAFAFA</color>
+    <color name="card">#FFFFFF</color>
+    <color name="backgroundDark">#303030</color>
+    <color name="cardDark">#424242</color>
     <color name="icon_grey">#727272</color>
     <color name="white">#FFFFFF</color>
 

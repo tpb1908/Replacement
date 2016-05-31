@@ -17,11 +17,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     public MessageViewHolder(View v) {
         super(v);
         mMessage = (TextView) v.findViewById(R.id.text_message);
-        if(ColorResources.darkTheme) {
-            mMessage.setTextColor(v.getResources().getColor(R.color.colorLightText));
-        } else {
-            mMessage.setTextColor(v.getResources().getColor(R.color.colorPrimaryText));
-        }
+        mMessage.setTextColor(ColorResources.getPrimaryText());
     }
 
 }

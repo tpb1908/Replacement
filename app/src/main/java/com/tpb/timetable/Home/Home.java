@@ -88,6 +88,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         //Setting up pager
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setBackgroundColor(ColorResources.getPrimary());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -96,19 +97,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         View sheetView = findViewById(R.id.fabSheet);
         ColorResources.theme((ViewGroup)sheetView);
         View overlay = findViewById(R.id.overlay);
-        int sheetColor = getResources().getColor(R.color.colorAccent);
-        int fabColor = getResources().getColor(R.color.colorAccent);
-        mFab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
-
-
+        mFab = new MaterialSheetFab(sFab, sheetView, overlay, ColorResources.getPrimary(), ColorResources.getAccent());
     }
 
-
-
-    @Override
-    public void setDarkTheme(boolean used) {
-
-    }
 
     @Override
     public ViewGroup getViews() {

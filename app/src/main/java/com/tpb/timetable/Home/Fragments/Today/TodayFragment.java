@@ -105,11 +105,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
             dayTerm += "- Holiday";
             mDayTermText.setText(dayTerm);
         }
-        if(ColorResources.darkTheme) {
-            mDayTermText.setTextColor(getResources().getColor(R.color.colorLightText));
-        } else {
-            mDayTermText.setTextColor(getResources().getColor(R.color.colorPrimaryText));
-        }
+        mDayTermText.setTextColor(ColorResources.getPrimaryText());
     }
 
 

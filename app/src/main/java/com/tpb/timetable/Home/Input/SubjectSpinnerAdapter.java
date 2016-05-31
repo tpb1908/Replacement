@@ -71,10 +71,8 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         final String TEXT = mSubjects.get(position).getName() + " " + mSubjects.get(position).getTeacher();
         name.setText(TEXT);
         colourBar.setBackgroundColor(mSubjects.get(position).getColor());
-        if(ColorResources.darkTheme) {
-            row.setBackgroundColor(mContext.getResources().getColor(R.color.grey_800));
-            name.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
-        }
+        row.setBackgroundColor(ColorResources.getCardBackground());
+        name.setTextColor(ColorResources.getPrimaryText());
 
         return row;
     }

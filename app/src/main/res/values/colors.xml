@@ -13,10 +13,10 @@
      Amoled theme???
      -->
 
-    <color name="colorPrimary">#607D8B</color>
-    <color name="colorPrimaryDark">#455A64</color>
-    <color name="colorAccent">#009688</color>
-    <color name="colorPrimaryLight">#CFD8DC</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796B</color>
+    <color name="colorAccent">#FF9800</color>
+    <color name="colorPrimaryLight">#B2DFDB</color>
     <color name="colorIconsText">#FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorLightText">#FFFFFF</color>
@@ -299,5 +299,7 @@
     <color name="grey_700">#616161</color>
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
+
+    <color name="dark_background">#303030</color>
 
 </resources>

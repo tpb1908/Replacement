@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.tpb.timetable.Data.DBHelper;
@@ -27,7 +28,9 @@ import com.tpb.timetable.Home.Input.HomeworkInput;
 import com.tpb.timetable.Home.Input.ReminderInput;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskOpener;
+import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ColorResources;
 
 import java.util.ArrayList;
 
@@ -52,7 +55,7 @@ import java.util.ArrayList;
         //TODO- Move all error messages to string resources
      */
 
-public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
+public class Home extends AppCompatActivity implements ClassOpener, TaskOpener, Themable {
     private static final String TAG = "Home";
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -66,8 +69,8 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
+        ColorResources.getColorResources(this, null);
         mDB = DBHelper.getInstance(this);
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();
@@ -77,31 +80,35 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
             //Intent i = new Intent(getApplicationContext(), IntroActivity.class);
             //startActivity(i);
         }
-        //} else {
-            setContentView(R.layout.activity_home);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            //Setting up pager
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-            mViewPager = (ViewPager) findViewById(R.id.container);
-            mViewPager.setAdapter(mSectionsPagerAdapter);
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(mViewPager);
-
+        setContentView(R.layout.activity_home);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //Setting up pager
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
             //SheetFab for adding items
-            SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
-            View sheetView = findViewById(R.id.fabSheet);
-            View overlay = findViewById(R.id.overlay);
-            int sheetColor = getResources().getColor(R.color.colorAccent);
-            int fabColor = getResources().getColor(R.color.colorAccent);
-
-            mFab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
-        //}
+        SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
+        View sheetView = findViewById(R.id.fabSheet);
+        View overlay = findViewById(R.id.overlay);
+        int sheetColor = getResources().getColor(R.color.colorAccent);
+        int fabColor = getResources().getColor(R.color.colorAccent);
+        mFab = new MaterialSheetFab(sFab, sheetView, overlay, sheetColor, fabColor);
 
     }
 
 
+    @Override
+    public void setDarkTheme(boolean used) {
 
+    }
+
+    @Override
+    public ViewGroup getViews() {
+        return (ViewGroup) getWindow().getDecorView();
+    }
 
     //Adds arguments for SlidingActivity to start from a button
     public void setExpandLocation(View v, Intent i) {
@@ -257,5 +264,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskOpener {
         mDB.getAllSubjects().addAll(subjects);
 
     }
+
+
 
 }

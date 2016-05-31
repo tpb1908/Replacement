@@ -716,10 +716,6 @@ public class DBHelper extends SQLiteOpenHelper {
         return id;
     }
 
-
-    /*TODO- When this is used, the ID isn't set until the app is reloaded
-        as there is no callback to the ArrayWrapper
-    */
     private void addAll(ArrayList<?> o) {
 
         if(!o.isEmpty()) {

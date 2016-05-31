@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,7 +33,6 @@ import java.util.Date;
  */
 public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DBHelper.ArrayChangeListener<Task> {
     private static final String TAG = "TaskAdapter";
-
     private TaskOpener mTaskOpener;
     private DBHelper mDB;
     private DBHelper.ArrayWrapper<Task> mTasks;
@@ -127,16 +127,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             timeRange += ", Due by " + FormattingUtils.dateToString(new Date(task.getEndDate()));
             switch(holder.getItemViewType()) {
                 case 1:
-                    Log.i(TAG, "Binding with viewholder type 1");
                     break;
                 case 2:
                     int color = subject.getColor();
-                    HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
+                    final HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
                     hvh.mTitleBar.setBackgroundColor(color);
                     final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                     hvh.mSubjectName.setText(subjectNameClass);
-                    //Picking correct text color for the background
-                    //if((Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114) > 186) {
                     if(Colour.blackOrWhiteContrastingColor(color) == 0) {
                         hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
                         hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
@@ -155,8 +152,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
                     Log.i(TAG, "View being bound at "  + position + ". Position of inserted task " + currentPosition + " and currentOpen " + currentOpen);
                     if(position == currentPosition && currentOpen) {
-                        Log.i(TAG, "Reopening task view");
-                        hvh.openDetail();
+                        final Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                hvh.openDetail();
+                            }
+                        };
+                        new Handler().postDelayed(r, 50);
                     }
                     break;
                 case 3:
@@ -164,9 +166,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
         }
     }
-
-
-
 
     @Override
     public int getItemCount () {
@@ -248,9 +247,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         private void openDetail() {
             final View v = mHomeWorkDetail;
-            if(mOriginalHeight == 0) {
-                mOriginalHeight = v.getHeight();
-            }
+            if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
             ValueAnimator valueAnimator;
             int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
             Log.i(TAG, "Number of lines " + numLines);
@@ -279,7 +276,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     mIsExpanded = !mIsExpanded;
                 }
             });
-
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     v.getLayoutParams().height = (int) animation.getAnimatedValue();

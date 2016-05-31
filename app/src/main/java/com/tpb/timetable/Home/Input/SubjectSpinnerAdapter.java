@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ColorResources;
 
 /**
  * Created by theo on 20/04/16.
@@ -64,12 +65,17 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
 
     private View getCustomView(int position, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
-        TextView name = (TextView) row.findViewById(R.id.text_subject);
-        View colourBar = row.findViewById(R.id.colour_bar);
+        final View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
+        final TextView name = (TextView) row.findViewById(R.id.text_subject);
+        final View colourBar = row.findViewById(R.id.colour_bar);
         final String TEXT = mSubjects.get(position).getName() + " " + mSubjects.get(position).getTeacher();
         name.setText(TEXT);
         colourBar.setBackgroundColor(mSubjects.get(position).getColor());
+        if(ColorResources.darkTheme) {
+            row.setBackgroundColor(mContext.getResources().getColor(R.color.grey_800));
+            name.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
+        }
+
         return row;
     }
 }

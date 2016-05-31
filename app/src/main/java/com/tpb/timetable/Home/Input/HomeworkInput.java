@@ -5,18 +5,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ColorResources;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.text.ParseException;
@@ -48,7 +51,7 @@ public class HomeworkInput extends SlidingActivity {
         final TextInputLayout mDetailWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_detail);
         final TextInputLayout mDateWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_due_date);
         mDateInput = (EditText) findViewById(R.id.edittext_homework_due_date);
-        final CheckBox mShowReminderInput = (CheckBox) findViewById(R.id.checkbox_show_reminder);
+        final AppCompatCheckBox mShowReminderInput = (AppCompatCheckBox) findViewById(R.id.checkbox_show_reminder);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_subject);
         final DBHelper db = DBHelper.getInstance(this);
         SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, db.getAllSubjects());
@@ -59,7 +62,6 @@ public class HomeworkInput extends SlidingActivity {
                 showDatePicker(v);
             }
         });
-
         try {
             mCurrentTask = (Task) i.getSerializableExtra("task");
             mTitleInput.setText(mCurrentTask.getTitle());
@@ -71,14 +73,15 @@ public class HomeworkInput extends SlidingActivity {
             }
             mDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTask.getEndDate())));
             mEditing = true;
+            setTitle("Editing homework");
         } catch(Exception e) {
             mCurrentTask = new Task(2);
             mEditing = false;
+            setTitle("New homework");
         }
 
         setFab(getResources().getColor(R.color.colorAccent),
-                R.drawable.fab_icon_tick_white,
-                new FloatingActionButton.OnClickListener() {
+                R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean errorFlag = false;
@@ -121,11 +124,15 @@ public class HomeworkInput extends SlidingActivity {
                     }
                     finish();
                 }
-
             }
         });
-
+        if(ColorResources.darkTheme) {
+            RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
+            background.setBackgroundColor(getResources().getColor(R.color.dark_background));
+        }
+        ColorResources.theme((ViewGroup) spinner.getParent());
     }
+
 
     public void showDatePicker(View v) {
         final Calendar calendar = Calendar.getInstance();

@@ -39,9 +39,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-
-
-
     <!-- Overlay that dims the screen -->
     <com.gordonwong.materialsheetfab.DimOverlayFrameLayout
         android:id="@+id/overlay"

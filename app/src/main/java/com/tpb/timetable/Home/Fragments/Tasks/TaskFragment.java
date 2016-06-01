@@ -71,6 +71,7 @@ public class TaskFragment extends Fragment implements TaskManager {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
+        ColorResources.theme((ViewGroup) inflated);
         //DataHelper is created here so that the app doesn't force close when it is restarted
         mDB = DBHelper.getInstance(getContext());
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
@@ -80,9 +81,6 @@ public class TaskFragment extends Fragment implements TaskManager {
         mRecycler.setAdapter(mTaskAdapter);
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);
-        if(ColorResources.darkTheme) {
-            inflated.setBackgroundColor(getResources().getColor(R.color.dark_background));
-        }
         return inflated;
     }
 

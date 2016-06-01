@@ -64,7 +64,6 @@ public class TodayFragment extends Fragment implements ClassOpener {
         };
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
         mCurrentRotation = getResources().getConfiguration().orientation;
-
     }
 
 
@@ -77,6 +76,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
+        ColorResources.theme((ViewGroup) inflated);
         mDB =  DBHelper.getInstance(getContext());
         mClassRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
         mClassAdapter = new TodayClassAdapter(getContext(), this, mDB);
@@ -86,9 +86,6 @@ public class TodayFragment extends Fragment implements ClassOpener {
         mDayTermText = (TextView) inflated.findViewById(R.id.text_today_term);
         setDayTermText();
         mCurrentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        if(ColorResources.darkTheme) {
-            inflated.setBackgroundColor(getResources().getColor(R.color.dark_background));
-        }
         return inflated;
     }
 

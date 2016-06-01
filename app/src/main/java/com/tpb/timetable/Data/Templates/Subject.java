@@ -61,7 +61,7 @@ public class Subject extends Data implements Comparable<Subject>, Serializable {
     public boolean equals(Object o) {
         if(o instanceof Subject) {
             Subject s = (Subject) o;
-            return id == s.getID();
+            return id == s.id;
         }
         return false;
     }

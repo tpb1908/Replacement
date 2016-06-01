@@ -9,12 +9,16 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/sliding/android-slidingactivity/library" />
+            <option value="$PROJECT_DIR$/sliding/android-slidingactivity/sample" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/sliding/android-slidingactivity/library" />
+            <option value="$PROJECT_DIR$/sliding/android-slidingactivity/sample" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -140,7 +140,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     public void newAssessment(View v) {
         Intent i = new Intent(this, AssessmentInput.class);
         setExpandLocation(v, i);
-        startActivityForResult(i, 1);
+        startActivity(i);
     }
 
 
@@ -274,7 +274,4 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         mDB.getAllSubjects().addAll(subjects);
 
     }
-
-
-
 }

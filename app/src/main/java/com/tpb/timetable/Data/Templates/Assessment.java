@@ -88,16 +88,16 @@ public class Assessment extends Data implements Comparable<Assessment>, Serializ
     public boolean equals(Object o) {
         if(o instanceof Assessment) {
             Assessment a = (Assessment) o;
-            return id == a.getID();
+            return id == a.id;
         }
         return false;
     }
 
     @Override
     public int compareTo(Assessment another) {
-        if(date < another.getDate()) {
+        if(date < another.date) {
             return 1;
-        } else if(date == another.getDate()) {
+        } else if(date == another.date) {
             return 0;
         } else {
             return -1;

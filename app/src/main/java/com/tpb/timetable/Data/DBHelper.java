@@ -802,7 +802,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void remove(Object o) {
-        SQLiteDatabase db = this.getWritableDatabase();
         if(o instanceof Task) {
             Task t = (Task) o;
             remove(t);

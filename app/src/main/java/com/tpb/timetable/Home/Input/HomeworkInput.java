@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import com.klinker.android.sliding.SlidingActivity;
@@ -27,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+
 /**
  * Created by theo on 01/05/16.
  */
@@ -39,13 +39,11 @@ public class HomeworkInput extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_homework);
-        setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
+        setPrimaryColors(
+                ColorResources.getPrimary(),
+                ColorResources.getPrimaryDark());
         enableFullscreen();
         Intent i = getIntent();
-        if(ColorResources.darkTheme) {
-            RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
-            background.setBackgroundColor(getResources().getColor(R.color.dark_background));
-        }
         if(i.getBooleanExtra("hasOpenPosition", false)) {
             expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         }
@@ -130,7 +128,7 @@ public class HomeworkInput extends SlidingActivity {
                 }
             }
         });
-        ColorResources.theme((ViewGroup) spinner.getParent());
+        ColorResources.theme((ViewGroup) findViewById(R.id.background));
     }
 
 

@@ -1,21 +1,26 @@
 package com.tpb.timetable.Home;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+
+import com.tpb.timetable.Utils.ColorResources;
 
 public class Splash extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ColorResources.getColorResources(this, null);
+        getWindow().getDecorView().getBackground().setColorFilter(
+                ColorResources.getPrimary(),
+                PorterDuff.Mode.SRC_ATOP);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(Splash.this, Home.class);
-                startActivity(i);
+                startActivity(new Intent(Splash.this, Home.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }

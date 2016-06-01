@@ -59,14 +59,14 @@ public class Term extends Data implements Comparable<Term>, Serializable {
     }
 
     public boolean overlaps(Term toCheck) {
-        return (startDate < toCheck.getEndDate() && endDate > toCheck.getStartDate());
+        return (startDate < toCheck.endDate && endDate > toCheck.startDate);
     }
 
     @Override
     public boolean equals(Object o) {
         if(o instanceof Term) {
             Term t = (Term) o;
-            return id == t.getID();
+            return id == t.id;
         }
         return false;
     }

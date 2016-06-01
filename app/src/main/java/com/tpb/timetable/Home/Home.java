@@ -95,9 +95,11 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
             //SheetFab for adding items
         SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
         View sheetView = findViewById(R.id.fabSheet);
-        ColorResources.theme((ViewGroup)sheetView);
         View overlay = findViewById(R.id.overlay);
         mFab = new MaterialSheetFab(sFab, sheetView, overlay, ColorResources.getPrimary(), ColorResources.getAccent());
+        final View mainContent = findViewById(R.id.main_content);
+        ColorResources.theme((ViewGroup) mainContent);
+
     }
 
 

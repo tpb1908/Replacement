@@ -58,12 +58,9 @@ public class ColorResources {
     private static int cardBackground;
     private static int cardBackgroundDark;
 
-
-
     private ColorResources(Context context) {
         mContext = context;
     }
-
 
     public static ColorResources getColorResources(Context context, Themable listener) {
         if(instance == null) {
@@ -89,9 +86,7 @@ public class ColorResources {
             darkTheme = true;
             editor.apply();
         }
-        if(listener != null) {
-            mListeners.add(listener);
-        }
+        if(listener != null) mListeners.add(listener);
         return instance;
     }
 
@@ -270,22 +265,31 @@ public class ColorResources {
 
                             //Setting up the selection handles to be the correct color
                             //TODO- Get the drawables only once?
+                            Field fHandleRes = TextView.class.getDeclaredField("mTextSelectHandleRes");
+                            Field fHandleLeftRes = TextView.class.getDeclaredField("mTextSelectHandleLeftRes");
+                            Field fHandleRightRes = TextView.class.getDeclaredField("mTextSelectHandleRightRes");
+                            fHandleRes.setAccessible(true);
+                            fHandleLeftRes.setAccessible(true);
+                            fHandleRightRes.setAccessible(true);
+                            int centreHandleRes = fHandleRes.getInt(t);
+                            int leftHandleRes = fHandleLeftRes.getInt(t);
+                            int rightHandleRes = fHandleRightRes.getInt(t);
                             Field fSelectHandleCenter = editor.getClass().getDeclaredField("mSelectHandleCenter");
                             Field fSelectHandleLeft = editor.getClass().getDeclaredField("mSelectHandleLeft");
                             Field fSelectHandleRight = editor.getClass().getDeclaredField("mSelectHandleRight");
                             fSelectHandleCenter.setAccessible(true);
                             fSelectHandleLeft.setAccessible(true);
                             fSelectHandleRight.setAccessible(true);
-                            final Drawable centreHandle = mContext.getResources().getDrawable(R.drawable.text_select_handle_middle_material);
-                            final Drawable leftHandle = mContext.getResources().getDrawable(R.drawable.text_select_handle_left_material);
-                            final Drawable rightDrawable = mContext.getResources().getDrawable(R.drawable.text_select_handle_right_material);
-                            centreHandle.setColorFilter(accent, PorterDuff.Mode.SRC_IN);
-                            leftHandle.setColorFilter(accent, PorterDuff.Mode.SRC_IN);
-                            rightDrawable.setColorFilter(accent, PorterDuff.Mode.SRC_IN);
-                            fSelectHandleCenter.set(editor, centreHandle);
-                            fSelectHandleLeft.set(editor, leftHandle);
-                            fSelectHandleRight.set(editor, rightDrawable);
+                            Drawable[] handles = new Drawable[3];
+                            handles[0] = t.getContext().getResources().getDrawable(centreHandleRes);
+                            handles[1] = t.getContext().getResources().getDrawable(leftHandleRes);
+                            handles[2] = t.getContext().getResources().getDrawable(rightHandleRes);
+                            for(Drawable d : handles) d.setColorFilter(accent, PorterDuff.Mode.SRC_IN);
+                            fSelectHandleCenter.set(editor, handles[0]);
+                            fSelectHandleLeft.set(editor, handles[1]);
+                            fSelectHandleRight.set(editor, handles[2]);
                         } catch(Throwable ignored) {
+                            Log.e(TAG, ignored.toString());
                         }
                     } else if(v instanceof AppCompatCheckBox) {
                         AppCompatCheckBox c = (AppCompatCheckBox) v;

@@ -331,18 +331,18 @@ public class ColorResources {
     }
 
     private static Drawable getRippleMask(int color) {
-        float[] outerRadii = new float[8];
+        final float[] outerRadii = new float[8];
         // 3 is radius of final ripple,
         // instead of 3 you can give required final radius
         Arrays.fill(outerRadii, 3);
-        RoundRectShape r = new RoundRectShape(outerRadii, null, null);
-        ShapeDrawable shapeDrawable = new ShapeDrawable(r);
+        final RoundRectShape r = new RoundRectShape(outerRadii, null, null);
+        final ShapeDrawable shapeDrawable = new ShapeDrawable(r);
         shapeDrawable.getPaint().setColor(color);
         return shapeDrawable;
     }
 
     private static StateListDrawable getStateListDrawable(int normalColor, int pressedColor) {
-        StateListDrawable states = new StateListDrawable();
+        final StateListDrawable states = new StateListDrawable();
         states.addState(new int[]{android.R.attr.state_pressed},
                 new ColorDrawable(pressedColor));
         states.addState(new int[]{android.R.attr.state_focused},

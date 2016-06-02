@@ -99,7 +99,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
             dayTerm += "- " + currentTerm.getName();
             mDayTermText.setText(dayTerm);
         } else {
-            dayTerm += "- Holiday";
+            dayTerm += " - Holiday";
             mDayTermText.setText(dayTerm);
         }
         mDayTermText.setTextColor(ColorResources.getPrimaryText());

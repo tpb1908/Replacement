@@ -68,6 +68,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mTasks.remove(position);
         runQueuedUpdates();
         mTaskManager.showDeleteSnackBar(mDeletedTask);
+        currentPosition = position;
     }
 
     private void editTask(int position, View v) {
@@ -111,6 +112,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
 
+
     @Override
     public void onBindViewHolder (RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == 0) {
@@ -149,12 +151,11 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         hvh.mDetailHint += "...";
                     }
                     hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
-                    Log.i(TAG, "View being bound at "  + position);
                     if(position == currentPosition && currentOpen) {
                         final Runnable r = new Runnable() {
                             @Override
                             public void run() {
-                                hvh.openDetail(0);
+                                hvh.openDetail(50);
                             }
                         };
                         new Handler().postDelayed(r, 50);
@@ -163,6 +164,14 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 case 3:
                     break;
             }
+        }
+    }
+
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        if(holder instanceof HomeworkViewHolder) {
+            ((HomeworkViewHolder) holder).mIsExpanded = false;
         }
     }
 
@@ -203,12 +212,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private Button mDoneButton;
         private Button mEditButton;
         private ImageButton mDeleteButton;
-        private boolean mIsExpanded = false;
+        private boolean mIsExpanded;
         private int mOriginalHeight = 0;
 
 
         public HomeworkViewHolder(View v, final TaskAdapter parent) {
             super(v);
+            mIsExpanded = false;
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
             mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
             mHomeWorkTitle = (TextView) v.findViewById(R.id.text_homework_title);
@@ -220,6 +230,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    parent.currentOpen = mIsExpanded;
                     parent.deleteTask(getAdapterPosition());
                 }
             });
@@ -244,12 +255,16 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             });
         }
 
+
+
         private void openDetail(int duration) {
+            Log.i(TAG, "Beginning expansion- IsExpanded " + mIsExpanded);
             final View v = mHomeWorkDetail;
             if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
             ValueAnimator valueAnimator;
             final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
             if(!mIsExpanded) {
+                Log.i(TAG, "Expanding");
                 mHomeWorkDetail.setSingleLine(false);
                 mHomeWorkDetail.setText(mDetail);
                 valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
@@ -267,11 +282,12 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                  */
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    if(mIsExpanded) {
+                    mIsExpanded = !mIsExpanded;
+                    Log.i(TAG, "End of animation. Expanded " + mIsExpanded );
+                    if(!mIsExpanded) {
                         mHomeWorkDetail.setText(mDetailHint);
                         mHomeWorkDetail.setSingleLine(true);
                     }
-                    mIsExpanded = !mIsExpanded;
                 }
             });
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

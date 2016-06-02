@@ -53,15 +53,18 @@ public class TaskFragment extends Fragment implements TaskManager {
         final int newRotation = getResources().getConfiguration().orientation;
         if(newRotation != mCurrentRotation) {
             mCurrentRotation = newRotation;
-            if(mCurrentRotation == Configuration.ORIENTATION_PORTRAIT) {
-                mLayoutManager = new LinearLayoutManager(getContext());
-            } else {//if(mTaskAdapter.numTasksToday() > 0) {
-                mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-            }
+            mLayoutManager = getLayoutManager();
             mRecycler.setLayoutManager(mLayoutManager);
         }
-
         mTaskAdapter.runQueuedUpdates();
+    }
+
+    private RecyclerView.LayoutManager getLayoutManager() {
+        if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTaskAdapter.numTasksToday() > 0) {
+            return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        } else {
+            return new LinearLayoutManager(getContext());
+        }
     }
 
     @Override
@@ -82,7 +85,7 @@ public class TaskFragment extends Fragment implements TaskManager {
         mDB = DBHelper.getInstance(getContext());
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TaskAdapter(getContext(), this);
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = getLayoutManager();
 
         mRecycler.setAdapter(mTaskAdapter);
         mRecycler.setHasFixedSize(false);

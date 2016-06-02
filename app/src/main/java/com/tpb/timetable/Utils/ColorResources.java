@@ -229,9 +229,15 @@ public class ColorResources {
                         try {
                             //Setting focused text color
                             final Field fFocusedTextColor = TextInputLayout.class.getDeclaredField("mFocusedTextColor");
+                            final Field fDefaultTextColor = TextInputLayout.class.getDeclaredField("mDefaultTextColor");
                             fFocusedTextColor.setAccessible(true);
+                            fDefaultTextColor.setAccessible(true);
                             fFocusedTextColor.set(t, ColorStateList.valueOf(primary));
-                        } catch(Throwable ignored) {}
+                            fDefaultTextColor.set(t, ColorStateList.valueOf(getPrimaryText()));
+                            Log.i(TAG, "Setting default text color to " + getPrimaryText());
+                        } catch(Throwable ignored) {
+                            Log.i(TAG, "Setting textinput layout " + ignored.toString());
+                        }
                     }
                     Log.i(TAG, "Pushing view " + v.toString() + " to the stack");
                     //The ViewGroup is pushed to the stack so that it's views can be themed later

@@ -228,7 +228,6 @@ public class ColorResources {
             group = viewStack.pop(); //The current ViewGroup
             for(int i = 0; i < group.getChildCount(); i++) { //All the views in the current Group
                 v = group.getChildAt(i);
-                Log.i(TAG, "View " + v.toString());
                 //We don't want to do anything to any of these views
                 if(v instanceof RelativeLayout ||
                         v instanceof LinearLayout ||
@@ -246,10 +245,8 @@ public class ColorResources {
                             fFocusedTextColor.set(t, ColorStateList.valueOf(primary));
                             fDefaultTextColor.set(t, ColorStateList.valueOf(getSecondaryText()));
                         } catch(Throwable ignored) {
-                            Log.i(TAG, "Setting textinput layout " + ignored.toString());
                         }
                     }
-                    Log.i(TAG, "Pushing view " + v.toString() + " to the stack");
                     //The ViewGroup is pushed to the stack so that it's views can be themed later
                     viewStack.push((ViewGroup) v);
                 } else { //The view is to be themed
@@ -331,7 +328,6 @@ public class ColorResources {
                             t.setBackgroundColor(getCardBackground());
                        }
                     } else if(v instanceof ColoredSpace) {
-                        Log.i(TAG, "Theming colored space");
                         ((ColoredSpace) v).setColor(getDivider());
                     }
                 }

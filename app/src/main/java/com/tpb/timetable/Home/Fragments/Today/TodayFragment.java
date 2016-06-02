@@ -74,7 +74,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
+        final View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
         ColorResources.theme((ViewGroup) inflated);
         mDB =  DBHelper.getInstance(getContext());
@@ -94,7 +94,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
      */
     private void setDayTermText() {
         String dayTerm = FormattingUtils.dateToString(new Date());
-        Term currentTerm = mDB.getCurrentTerm();
+        final Term currentTerm = mDB.getCurrentTerm();
         if(currentTerm.getName() != null) {
             dayTerm += "- " + currentTerm.getName();
             mDayTermText.setText(dayTerm);
@@ -120,7 +120,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
     @Override
     public void onResume() {
         super.onResume();
-        int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        final int today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         if(mClassAdapter == null) {
             mClassAdapter = new TodayClassAdapter(getContext(), this, mDB);
         }
@@ -131,7 +131,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
             mClassAdapter.collectData();
         }
         //Rotation- Linear for vertical, two item width for horizontal if there are classes
-        int newRotation = getResources().getConfiguration().orientation;
+        final int newRotation = getResources().getConfiguration().orientation;
         if(newRotation != mCurrentRotation) {
             mCurrentRotation = newRotation;
             if(mCurrentRotation == Configuration.ORIENTATION_PORTRAIT) {

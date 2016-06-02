@@ -114,12 +114,11 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     @Override
     public void onBindViewHolder (RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == 0) {
-            MessageViewHolder mvh = (MessageViewHolder) holder;
+            final MessageViewHolder mvh = (MessageViewHolder) holder;
             mvh.mMessage.setText(R.string.message_no_tasks);
         } else {
-            Task task = mTasks.get(position);
-            Subject subject = mDB.getSubject(task.getSubjectID());
-
+            final Task task = mTasks.get(position);
+            final Subject subject = mDB.getSubject(task.getSubjectID());
             String timeRange = "Set on ";
             //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
             timeRange += FormattingUtils.dateToString(new Date(task.getStartDate()));
@@ -128,7 +127,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 case 1:
                     break;
                 case 2:
-                    int color = subject.getColor();
+                    final int color = subject.getColor();
                     final HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
                     ColorResources.theme((ViewGroup) hvh.itemView);
                     hvh.mTitleBar.setBackgroundColor(color);
@@ -155,7 +154,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         final Runnable r = new Runnable() {
                             @Override
                             public void run() {
-                                hvh.openDetail();
+                                hvh.openDetail(0);
                             }
                         };
                         new Handler().postDelayed(r, 50);
@@ -240,17 +239,16 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openDetail();
+                    openDetail(300);
                 }
             });
         }
 
-        private void openDetail() {
+        private void openDetail(int duration) {
             final View v = mHomeWorkDetail;
             if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
             ValueAnimator valueAnimator;
-            int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
-            Log.i(TAG, "Number of lines " + numLines);
+            final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
             if(!mIsExpanded) {
                 mHomeWorkDetail.setSingleLine(false);
                 mHomeWorkDetail.setText(mDetail);
@@ -258,7 +256,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             } else {
                 valueAnimator = ValueAnimator.ofInt(mOriginalHeight +  (mOriginalHeight * numLines), mOriginalHeight);
             }
-            valueAnimator.setDuration(300);
+            valueAnimator.setDuration(duration);
             valueAnimator.setInterpolator(new LinearInterpolator());
             valueAnimator.addListener(new AnimatorListenerAdapter() {
                 /*
@@ -327,7 +325,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {
-                int newIndex = mTasks.indexOf(task);
+                final int newIndex = mTasks.indexOf(task);
                 notifyItemMoved(index, newIndex);
                 notifyItemChanged(newIndex);
             }

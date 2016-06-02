@@ -30,7 +30,7 @@ public class TaskFragment extends Fragment implements TaskManager {
     private RecyclerView mRecycler;
     private RecyclerView.LayoutManager mLayoutManager;
     private DBHelper mDB;
-
+    private int mCurrentRotation;
 
     public TaskFragment() {
     }
@@ -43,18 +43,24 @@ public class TaskFragment extends Fragment implements TaskManager {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCurrentRotation = getResources().getConfiguration().orientation;
     }
 
     //TODO- DataUpdateListener if subjects have changed etc
     @Override
     public void onResume() {
         super.onResume();
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mLayoutManager = new LinearLayoutManager(getContext());
-        } else {//if(mTaskAdapter.numTasksToday() > 0) {
-            mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        final int newRotation = getResources().getConfiguration().orientation;
+        if(newRotation != mCurrentRotation) {
+            mCurrentRotation = newRotation;
+            if(mCurrentRotation == Configuration.ORIENTATION_PORTRAIT) {
+                mLayoutManager = new LinearLayoutManager(getContext());
+            } else {//if(mTaskAdapter.numTasksToday() > 0) {
+                mLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+            }
+            mRecycler.setLayoutManager(mLayoutManager);
         }
-        mRecycler.setLayoutManager(mLayoutManager);
+
         mTaskAdapter.runQueuedUpdates();
     }
 
@@ -70,7 +76,7 @@ public class TaskFragment extends Fragment implements TaskManager {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
+        final View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
         ColorResources.theme((ViewGroup) inflated);
         //DataHelper is created here so that the app doesn't force close when it is restarted
         mDB = DBHelper.getInstance(getContext());

@@ -71,7 +71,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
+        final SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         ColorResources.getColorResources(this, null);
         mDB = DBHelper.getInstance(this);
         if(pref.getBoolean("firststart", true)) {
@@ -111,7 +111,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     //Adds arguments for SlidingActivity to start from a button
     public void setExpandLocation(View v, Intent i) {
         if(v != null) {
-            int[] location = new int[2];
+            final int[] location = new int[2];
             v.getLocationInWindow(location);
             i.putExtra("leftOffset", location[0]);
             i.putExtra("topOffset", location[1]);
@@ -124,13 +124,13 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     }
 
     public void newHomework(View v) {
-        Intent i = new Intent(this, HomeworkInput.class);
+        final Intent i = new Intent(this, HomeworkInput.class);
         setExpandLocation(v, i);
         startActivityForResult(i, 1);
     }
 
     public void newReminder(View v) {
-        Intent i = new Intent(this, ReminderInput.class);
+        final Intent i = new Intent(this, ReminderInput.class);
         setExpandLocation(v, i);
         startActivityForResult(i, 1);
     }
@@ -140,7 +140,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     }
 
     public void newAssessment(View v) {
-        Intent i = new Intent(this, AssessmentInput.class);
+        final Intent i = new Intent(this, AssessmentInput.class);
         setExpandLocation(v, i);
         startActivity(i);
     }
@@ -149,7 +149,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     @Override
     public void showDeleteSnackBar(final Task t) {
         final CoordinatorLayout snackBarLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
-        Snackbar snackbar = Snackbar
+        final Snackbar snackbar = Snackbar
                 .make(snackBarLayout, t.getTypeName() + " deleted",Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
@@ -172,7 +172,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
 
     @Override
     public void openHomework(Task h, View v) {
-        Intent i = new Intent(this, HomeworkInput.class);
+        final Intent i = new Intent(this, HomeworkInput.class);
         setExpandLocation(v, i);
         i.putExtra("task", h);
         startActivityForResult(i, 1);
@@ -254,7 +254,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     }
 
     private void testSubjects() {
-        ArrayList<Subject> subjects = new ArrayList<>();
+        final ArrayList<Subject> subjects = new ArrayList<>();
         Subject s = new Subject();
         s.setName("Maths");
         s.setTeacher("Maths teacher");

@@ -98,12 +98,12 @@ public class FormattingUtils {
     }
 
     public static float getPercentageComplete(int time, int start, int end) {
-        int timeHour = (int) Math.floor((float) time/100);
-        int startHour = (int) Math.floor((float)start/100);
-        int endHour = (int) Math.floor((float)end/100);
-        int timeMinute = time - (timeHour*100);
-        int startMinute = start - (startHour*100);
-        int endMinute = end - (endHour*100);
+        final int timeHour = (int) Math.floor((float) time/100);
+        final int startHour = (int) Math.floor((float)start/100);
+        final int endHour = (int) Math.floor((float)end/100);
+        final int timeMinute = time - (timeHour*100);
+        final int startMinute = start - (startHour*100);
+        final int endMinute = end - (endHour*100);
 
         return ((float) ((timeHour*60+timeMinute)-(startHour*60+startMinute))) / ((float)((endHour*60+endMinute)-(startHour*60+startMinute)));
 
@@ -130,9 +130,9 @@ public class FormattingUtils {
     }
 
     public static String dateToString(Date d) {
-        Calendar  cal = Calendar.getInstance();
+        final Calendar  cal = Calendar.getInstance();
         cal.setTime(d);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        final int day = cal.get(Calendar.DAY_OF_MONTH);
 
         return DateFormat.format("EEEE", d) + " " +
                 DateFormat.format("MMMM",d) + " " +
@@ -147,7 +147,7 @@ public class FormattingUtils {
      * @return The number of lines need to fit the text in the textview
      */
     public static int numLinesForTextView(TextView textView, String text) {
-        String[] lines = text.split("\n");
+        final String[] lines = text.split("\n");
         int numLines = lines.length-1;
         for(String s : lines) {
             if(textView.getPaint().breakText(s,  0, s.length(),

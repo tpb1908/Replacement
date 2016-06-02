@@ -43,7 +43,7 @@ public class HomeworkInput extends SlidingActivity {
                 ColorResources.getPrimary(),
                 ColorResources.getPrimaryDark());
         enableFullscreen();
-        Intent i = getIntent();
+        final Intent i = getIntent();
         if(i.getBooleanExtra("hasOpenPosition", false)) {
             expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         }
@@ -144,9 +144,8 @@ public class HomeworkInput extends SlidingActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
-                Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                String dString = FormattingUtils.dateToString(d);
-                mDateInput.setText(dString);
+                final Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                mDateInput.setText(FormattingUtils.dateToString(d));
                 mCurrentTask.setEndDate(d.getTime());
             } catch (ParseException e) {
                 Log.e(TAG, "Parsing exception in OnDateSetListener",e);
@@ -157,7 +156,7 @@ public class HomeworkInput extends SlidingActivity {
     @Override
     public void finish() {
         if(getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
         super.finish();

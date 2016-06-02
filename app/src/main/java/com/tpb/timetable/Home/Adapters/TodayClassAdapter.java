@@ -192,26 +192,26 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder h, int position) {
         if(h.getItemViewType() == 0) {
-            MessageViewHolder holder = (MessageViewHolder) h;
+            final MessageViewHolder holder = (MessageViewHolder) h;
             holder.mMessage.setText(mContext.getResources().getString(R.string.message_no_classes));
         } else {
-            ClassTime ct = mClasses.get(position);
-            Subject s = ct.getSubject();
+            final ClassTime ct = mClasses.get(position);
+            final Subject s = ct.getSubject();
             if(h.getItemViewType() == 1) {
-                ClassViewHolder holder = (ClassViewHolder) h ;
+                final ClassViewHolder holder = (ClassViewHolder) h ;
                 String timeRange;
                 holder.className.setText(s.getName());
                 holder.classRoom.setText(s.getClassroom());
                 holder.teacherName.setText(s.getTeacher());
                 holder.timerBar.setScaleY(3f);
                 mCalendar = Calendar.getInstance();
-                int start = ct.getStartTime();
-                int end = ct.getEndTime();
+                final int start = ct.getStartTime();
+                final int end = ct.getEndTime();
                 //If the class is currently running
                 if(currentTime > start && currentTime < end) {
                     currentEndTime = ct.getEndTime();
                     currentTimePosition = h.getAdapterPosition();
-                    float scale = FormattingUtils.getPercentageComplete(currentTime, start, end);
+                    final float scale = FormattingUtils.getPercentageComplete(currentTime, start, end);
                     holder.timerBar.setVisibility(View.VISIBLE);
                     //Filters timer color by subject color
                     holder.timerBar.getProgressDrawable().setColorFilter(new LightingColorFilter(0xFF000000, s.getColor()));

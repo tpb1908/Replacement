@@ -64,7 +64,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     }
 
     private View getCustomView(int position, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
         final TextView name = (TextView) row.findViewById(R.id.text_subject);
         final View colourBar = row.findViewById(R.id.colour_bar);

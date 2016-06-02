@@ -38,17 +38,16 @@ public class AssessmentInput extends SlidingActivity {
         setContent(R.layout.input_assessment);
         setPrimaryColors(ColorResources.getPrimary(), ColorResources.getPrimaryDark());
         enableFullscreen();
-        Intent i = getIntent();
+        final Intent i = getIntent();
         expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         final RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
         ColorResources.theme(background);
-
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_assessment_title);
         final EditText mNotesInputs = (EditText) findViewById(R.id.edittext_assessment_notes);
         final Spinner mSubjectSpinner = (Spinner) findViewById(R.id.spinner_subject);
         mDateInput = (EditText) findViewById(R.id.edittext_assessment_date);
         mMarkLayout = (LinearLayout) findViewById(R.id.layout_assessment_marks);
-        DBHelper db = DBHelper.getInstance(this);
+        final DBHelper db = DBHelper.getInstance(this);
         mSubjectSpinner.setAdapter(new SubjectSpinnerAdapter(this, db.getAllSubjects()));
 
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
@@ -69,7 +68,7 @@ public class AssessmentInput extends SlidingActivity {
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             Date d = new Date();
             try {
                 d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);

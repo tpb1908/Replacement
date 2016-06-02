@@ -23,7 +23,7 @@ public class Pair<L, R> {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Pair)) return false;
-        Pair p = (Pair) o;
+        final Pair p = (Pair) o;
         return this.left.equals(p.left) &&
                 this.right.equals(p.right);
     }

@@ -63,7 +63,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     private void deleteTask(int position) {
-        Log.i(TAG, "Task being deleted at position " + position + "  " + mTasks.get(position));
         final Task mDeletedTask = mTasks.get(position);
         mTasks.remove(position);
         runQueuedUpdates();
@@ -118,6 +117,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if(holder.getItemViewType() == 0) {
             final MessageViewHolder mvh = (MessageViewHolder) holder;
             mvh.mMessage.setText(R.string.message_no_tasks);
+            ColorResources.theme((ViewGroup) holder.itemView);
         } else {
             final Task task = mTasks.get(position);
             final Subject subject = mDB.getSubject(task.getSubjectID());
@@ -354,7 +354,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 notifyItemRemoved(index);
             }
         });
-        if(mTasks.size() == 0) wasEmpty = true;
+        if(mTasks.size() == 0) {
+            wasEmpty = true;
+            mTaskManager.countChange(1, 0);
+        }
     }
 
     @Override
@@ -371,6 +374,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 if(wasEmpty) {
                     notifyItemChanged(0);
                     wasEmpty = false;
+                    mTaskManager.countChange(0, 1);
                 } else {
                     notifyItemInserted(mTasks.indexOf(task));
                 }
@@ -380,9 +384,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void add(int index, Task task) {
-        Log.i(TAG, "Adding a task");
         if(wasEmpty) {
-            notifyDataSetChanged();
+            notifyItemChanged(0);
+            mTaskManager.countChange(0, 1);
             wasEmpty = false;
         } else {
             notifyItemInserted(index);

@@ -16,6 +16,8 @@ public interface TaskManager {
 
     void openHomework(Task h, @Nullable View v);
 
+    void countChange(int previousCount, int newCount);
+
     void showDeleteSnackBar(Task t);
 
 }

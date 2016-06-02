@@ -37,9 +37,11 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/wrapper_edittext_homework_title"
             android:autoLink="web|email"
+            android:linksClickable="true"
             android:ems="10"
             android:hint="@string/hint_homework_detail"
             android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+
             android:theme="@style/AppTheme"/>
 
     </android.support.design.widget.TextInputLayout>

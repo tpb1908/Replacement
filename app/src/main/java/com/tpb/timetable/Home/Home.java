@@ -178,11 +178,13 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         startActivityForResult(i, 1);
     }
 
-
     @Override
     public void openClass(ClassTime c) {
-        Log.i("ClassOpener", "Opening class " + c);
+        Log.i(TAG, "Opening class " + c);
     }
+
+    @Override
+    public void countChange(int previousCount, int newCount) {}
 
     @Override
     public void onBackPressed () {

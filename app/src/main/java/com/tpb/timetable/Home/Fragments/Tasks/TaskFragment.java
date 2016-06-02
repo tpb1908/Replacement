@@ -86,7 +86,6 @@ public class TaskFragment extends Fragment implements TaskManager {
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TaskAdapter(getContext(), this);
         mLayoutManager = getLayoutManager();
-
         mRecycler.setAdapter(mTaskAdapter);
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);
@@ -111,5 +110,12 @@ public class TaskFragment extends Fragment implements TaskManager {
     @Override
     public void showDeleteSnackBar(Task t) {
         mTaskInterface.showDeleteSnackBar(t);
+    }
+
+    @Override
+    public void countChange(int previousCount, int newCount) {
+        if(previousCount <= 1 || newCount == 1) {
+            mRecycler.setLayoutManager(getLayoutManager());
+        }
     }
 }

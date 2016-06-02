@@ -15,6 +15,7 @@ import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -57,6 +58,8 @@ public class ColorResources {
     private static int backgroundDark;
     private static int cardBackground;
     private static int cardBackgroundDark;
+    private static int divider;
+    private static int dividerDark;
 
     private ColorResources(Context context) {
         mContext = context;
@@ -83,6 +86,8 @@ public class ColorResources {
             backgroundDark = prefs.getInt("backgroundDark", res.getColor(R.color.backgroundDark));
             cardBackground = prefs.getInt("card", res.getColor(R.color.card));
             cardBackgroundDark = prefs.getInt("cardDark", res.getColor(R.color.cardDark));
+            divider = prefs.getInt("divider", res.getColor(R.color.divider));
+            dividerDark = prefs.getInt("dividerDark", res.getColor(R.color.dividerDark));
             darkTheme = true;
             editor.apply();
         }
@@ -106,6 +111,8 @@ public class ColorResources {
         editor.putInt("backgroundDark", res.getColor(R.color.backgroundDark));
         editor.putInt("card", res.getColor(R.color.card));
         editor.putInt("cardDark", res.getColor(R.color.cardDark));
+        editor.putInt("divider", res.getColor(R.color.divider));
+        editor.putInt("dividerDark", res.getColor(R.color.dividerDark));
         editor.commit();
     }
 
@@ -201,6 +208,10 @@ public class ColorResources {
         return darkTheme ? cardBackgroundDark : cardBackground;
     }
 
+    public static int getDivider() {
+        return darkTheme ? dividerDark : divider;
+    }
+
     public static int getBackground() {
         return darkTheme ? backgroundDark : background;
     }
@@ -233,8 +244,7 @@ public class ColorResources {
                             fFocusedTextColor.setAccessible(true);
                             fDefaultTextColor.setAccessible(true);
                             fFocusedTextColor.set(t, ColorStateList.valueOf(primary));
-                            fDefaultTextColor.set(t, ColorStateList.valueOf(getPrimaryText()));
-                            Log.i(TAG, "Setting default text color to " + getPrimaryText());
+                            fDefaultTextColor.set(t, ColorStateList.valueOf(getSecondaryText()));
                         } catch(Throwable ignored) {
                             Log.i(TAG, "Setting textinput layout " + ignored.toString());
                         }
@@ -267,8 +277,8 @@ public class ColorResources {
                             final Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
                             fCursorDrawable.setAccessible(true);
                             final Drawable[] drawables = new Drawable[5];
-                            drawables[0] = t.getContext().getResources().getDrawable(mCursorDrawableRes);
-                            drawables[1] = t.getContext().getResources().getDrawable(mCursorDrawableRes);
+                            drawables[0] = ContextCompat.getDrawable(t.getContext(), mCursorDrawableRes);
+                            drawables[1] = ContextCompat.getDrawable(t.getContext(), mCursorDrawableRes);
                             drawables[0].setColorFilter(accent, PorterDuff.Mode.SRC_IN);
                             drawables[1].setColorFilter(accent, PorterDuff.Mode.SRC_IN);
                             fCursorDrawable.set(editor, drawables);
@@ -290,9 +300,9 @@ public class ColorResources {
                             fSelectHandleCenter.setAccessible(true);
                             fSelectHandleLeft.setAccessible(true);
                             fSelectHandleRight.setAccessible(true);
-                            drawables[2] = t.getContext().getResources().getDrawable(centreHandleRes);
-                            drawables[3] = t.getContext().getResources().getDrawable(leftHandleRes);
-                            drawables[4] = t.getContext().getResources().getDrawable(rightHandleRes);
+                            drawables[2] = ContextCompat.getDrawable(t.getContext(), centreHandleRes);
+                            drawables[3] = ContextCompat.getDrawable(t.getContext(), leftHandleRes);
+                            drawables[4] = ContextCompat.getDrawable(t.getContext(), rightHandleRes);
                             for(Drawable d : drawables) d.setColorFilter(accent, PorterDuff.Mode.SRC_IN);
                             fSelectHandleCenter.set(editor, drawables[2]);
                             fSelectHandleLeft.set(editor, drawables[3]);
@@ -320,6 +330,9 @@ public class ColorResources {
                         if(t.getParent().getParent() instanceof CardView) {
                             t.setBackgroundColor(getCardBackground());
                        }
+                    } else if(v instanceof ColoredSpace) {
+                        Log.i(TAG, "Theming colored space");
+                        ((ColoredSpace) v).setColor(getDivider());
                     }
                 }
             }

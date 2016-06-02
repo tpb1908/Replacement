@@ -258,13 +258,11 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
 
         private void openDetail(int duration) {
-            Log.i(TAG, "Beginning expansion- IsExpanded " + mIsExpanded);
             final View v = mHomeWorkDetail;
             if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
             ValueAnimator valueAnimator;
             final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
             if(!mIsExpanded) {
-                Log.i(TAG, "Expanding");
                 mHomeWorkDetail.setSingleLine(false);
                 mHomeWorkDetail.setText(mDetail);
                 valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
@@ -283,7 +281,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     mIsExpanded = !mIsExpanded;
-                    Log.i(TAG, "End of animation. Expanded " + mIsExpanded );
                     if(!mIsExpanded) {
                         mHomeWorkDetail.setText(mDetailHint);
                         mHomeWorkDetail.setSingleLine(true);

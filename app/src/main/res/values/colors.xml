@@ -27,6 +27,9 @@
     <color name="card">#FFFFFF</color>
     <color name="backgroundDark">#303030</color>
     <color name="cardDark">#424242</color>
+    <color name="divider">#E5E5E5</color>
+    <color name="dividerDark">#4C4C4C</color>
+
     <color name="icon_grey">#727272</color>
     <color name="white">#FFFFFF</color>
 

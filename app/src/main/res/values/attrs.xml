@@ -5,4 +5,7 @@
     <attr name="sheetTheme"/>
     <attr name="sheetItemTheme"/>
 
+    <declare-styleable name="ColoredSpace">
+        <attr name="backgroundColor" format="color"/>
+    </declare-styleable>
 </resources>

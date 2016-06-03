@@ -71,7 +71,7 @@ public class Task extends Data implements Comparable<Task>, Serializable {
     }
 
     public void setDetail(String detail) {
-        this.detail = detail;
+        this.detail = detail.trim();
     }
 
     public long getStartDate() {

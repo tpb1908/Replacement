@@ -22,6 +22,7 @@
             android:layout_marginBottom="@dimen/input_padding"
             android:layout_marginTop="@dimen/input_padding"
             android:hint="@string/hint_assessment_title"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="textCapWords|textAutoCorrect"
             android:lines="1"
             android:theme="@style/AppTheme"/>
@@ -43,6 +44,7 @@
             android:layout_below="@+id/wrapper_edittext_assessment_title"
             android:layout_marginBottom="@dimen/input_padding"
             android:layout_marginTop="@dimen/input_padding"
+            android:imeOptions="flagNoExtractUi"
             android:autoLink="web|email"
             android:ems="10"
             android:hint="@string/hint_assessment_notes"

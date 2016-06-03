@@ -74,7 +74,7 @@
                     android:singleLine="true"
                     android:inputType="none"
                     android:textSize="@dimen/text_body_size"
-                    android:autoLink="web|email"
+                    android:autoLink="web"
                     />
 
             </LinearLayout>

@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -258,9 +258,15 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
 
 
-
+        /*
+            For some reason, when the view is closed after clicking on a link below the top line
+            the textview is pushed up rather than being resized.
+            It works fine if I don't wait to set the text
+         */
         private void openDetail(int duration) {
             if(!mIsAnimating) {
+                final String[] lines = mDetail.split("\n");
+                final StringBuilder builder = new StringBuilder();
                 final View v = mHomeWorkDetail;
                 if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
                 ValueAnimator valueAnimator;
@@ -273,28 +279,41 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     valueAnimator = ValueAnimator.ofInt(mOriginalHeight + (mOriginalHeight * numLines), mOriginalHeight);
                 }
                 valueAnimator.setDuration(duration);
-                valueAnimator.setInterpolator(new LinearInterpolator());
+                valueAnimator.setInterpolator(new AccelerateInterpolator());
                 valueAnimator.addListener(new AnimatorListenerAdapter() {
-                    /*
-                        This listener is for changing the text back to a hint
-                        The text must only be changed once the animation is
-                        complete. Otherwise the text is updated, and the
-                        animation just shrinks white space
-                     */
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         mIsAnimating = false;
                         mIsExpanded = !mIsExpanded;
                         if(!mIsExpanded) {
-                            mHomeWorkDetail.setText(mDetailHint);
                             mHomeWorkDetail.setSingleLine(true);
+                            mHomeWorkDetail.setText(mDetailHint);
+                        } else  {
+                            mHomeWorkDetail.setText(mDetail);
                         }
                     }
                 });
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public void onAnimationUpdate(ValueAnimator animation) {
+                        /**
+                         * Something of a hack. What this does, is builds up the correct fraction
+                         * of the full detail. The index formula ensures that there is no juddering
+                         * at the start by always adding 1 to the fraction of the possible number
+                         * of lines. The min call just ensure that nothing can go wrong
+                         */
+                        if(mIsExpanded && animation.getAnimatedFraction() != 1.0) {
+                            final int index = (int) Math.min(lines.length,
+                                    1+Math.floor((1-animation.getAnimatedFraction()) * lines.length));
+                            for(int i = 0; i < index; i++) {
+                                builder.append(lines[i]);
+                                builder.append("\n");
+                            }
+                            mHomeWorkDetail.setText(builder.toString());
+                            builder.setLength(0); //set length keeps the string buffer
+                        }
                         v.getLayoutParams().height = (int) animation.getAnimatedValue();
                         v.requestLayout();
+
                     }
                 });
                 mIsAnimating = true;

@@ -213,12 +213,14 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private Button mEditButton;
         private ImageButton mDeleteButton;
         private boolean mIsExpanded;
+        private boolean mIsAnimating;
         private int mOriginalHeight = 0;
 
 
         public HomeworkViewHolder(View v, final TaskAdapter parent) {
             super(v);
             mIsExpanded = false;
+            mIsAnimating = false;
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
             mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
             mHomeWorkTitle = (TextView) v.findViewById(R.id.text_homework_title);
@@ -258,42 +260,46 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
 
         private void openDetail(int duration) {
-            final View v = mHomeWorkDetail;
-            if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
-            ValueAnimator valueAnimator;
-            final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
-            if(!mIsExpanded) {
-                mHomeWorkDetail.setSingleLine(false);
-                mHomeWorkDetail.setText(mDetail);
-                valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
-            } else {
-                valueAnimator = ValueAnimator.ofInt(mOriginalHeight +  (mOriginalHeight * numLines), mOriginalHeight);
-            }
-            valueAnimator.setDuration(duration);
-            valueAnimator.setInterpolator(new LinearInterpolator());
-            valueAnimator.addListener(new AnimatorListenerAdapter() {
-                /*
-                    This listener is for changing the text back to a hint
-                    The text must only be changed once the animation is
-                    complete. Otherwise the text is updated, and the
-                    animation just shrinks white space
-                 */
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mIsExpanded = !mIsExpanded;
-                    if(!mIsExpanded) {
-                        mHomeWorkDetail.setText(mDetailHint);
-                        mHomeWorkDetail.setSingleLine(true);
+            if(!mIsAnimating) {
+                final View v = mHomeWorkDetail;
+                if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
+                ValueAnimator valueAnimator;
+                final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
+                if(!mIsExpanded) {
+                    mHomeWorkDetail.setSingleLine(false);
+                    mHomeWorkDetail.setText(mDetail);
+                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
+                } else {
+                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight + (mOriginalHeight * numLines), mOriginalHeight);
+                }
+                valueAnimator.setDuration(duration);
+                valueAnimator.setInterpolator(new LinearInterpolator());
+                valueAnimator.addListener(new AnimatorListenerAdapter() {
+                    /*
+                        This listener is for changing the text back to a hint
+                        The text must only be changed once the animation is
+                        complete. Otherwise the text is updated, and the
+                        animation just shrinks white space
+                     */
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mIsAnimating = false;
+                        mIsExpanded = !mIsExpanded;
+                        if(!mIsExpanded) {
+                            mHomeWorkDetail.setText(mDetailHint);
+                            mHomeWorkDetail.setSingleLine(true);
+                        }
                     }
-                }
-            });
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    v.getLayoutParams().height = (int) animation.getAnimatedValue();
-                    v.requestLayout();
-                }
-            });
-            valueAnimator.start();
+                });
+                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        v.getLayoutParams().height = (int) animation.getAnimatedValue();
+                        v.requestLayout();
+                    }
+                });
+                mIsAnimating = true;
+                valueAnimator.start();
+            }
         }
     }
 

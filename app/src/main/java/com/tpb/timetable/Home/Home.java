@@ -2,7 +2,9 @@ package com.tpb.timetable.Home;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
+import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Subject;
@@ -83,20 +86,39 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
             //startActivity(i);
         }
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //Setting up pager
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setBackgroundColor(ColorResources.getPrimary());
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
             //SheetFab for adding items
-        SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
-        View sheetView = findViewById(R.id.fabSheet);
-        View overlay = findViewById(R.id.overlay);
+        final SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
+        final View sheetView = findViewById(R.id.fabSheet);
+        final View overlay = findViewById(R.id.overlay);
         mFab = new MaterialSheetFab(sFab, sheetView, overlay, ColorResources.getPrimary(), ColorResources.getAccent());
+        mFab.setEventListener(new MaterialSheetFabEventListener() {
+            @Override
+            public void onShowSheet() {
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    final AppBarLayout layout = (AppBarLayout) findViewById(R.id.appbar);
+                    layout.setExpanded(false);
+                }
+                super.onShowSheet();
+            }
+
+            @Override
+            public void onHideSheet() {
+                super.onHideSheet();
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    final AppBarLayout layout = (AppBarLayout) findViewById(R.id.appbar);
+                    layout.setExpanded(true);
+                }
+            }
+        });
         final View mainContent = findViewById(R.id.main_content);
         ColorResources.theme((ViewGroup) mainContent);
 

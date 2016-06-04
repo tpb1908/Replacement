@@ -44,6 +44,7 @@ public class ColorResources {
     private static Context mContext;
     private static ColorResources instance;
     private static ArrayList<Themable> mListeners;
+    private static SharedPreferences.Editor mEditor;
 
     private static int primary;
     private static int primaryDark;
@@ -68,9 +69,9 @@ public class ColorResources {
     public static ColorResources getColorResources(Context context, Themable listener) {
         if(instance == null) {
             instance = new ColorResources(context);
-            SharedPreferences prefs = context.getSharedPreferences("colors", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = prefs.edit();
-            if(!prefs.contains("colorPrimary")) writeDefaultValues(editor);
+            final SharedPreferences prefs = context.getSharedPreferences("colors", Context.MODE_PRIVATE);
+            mEditor = prefs.edit();
+            if(!prefs.contains("colorPrimary")) writeDefaultValues(mEditor);
             final Resources res = mContext.getResources();
             darkTheme = prefs.getBoolean("darkTheme", false);
             primary = prefs.getInt("colorPrimary", res.getColor(R.color.colorPrimary));
@@ -88,8 +89,7 @@ public class ColorResources {
             cardBackgroundDark = prefs.getInt("cardDark", res.getColor(R.color.cardDark));
             divider = prefs.getInt("divider", res.getColor(R.color.divider));
             dividerDark = prefs.getInt("dividerDark", res.getColor(R.color.dividerDark));
-            darkTheme = true;
-            editor.apply();
+            mEditor.apply();
         }
         if(listener != null) mListeners.add(listener);
         return instance;
@@ -170,6 +170,8 @@ public class ColorResources {
 
     public static void setDarkTheme(boolean isDark) {
         darkTheme = isDark;
+        mEditor.putBoolean("darkTheme", isDark);
+        mEditor.commit();
     }
 
     public static boolean isDarkTheme() {
@@ -317,7 +319,10 @@ public class ColorResources {
                     } else if(v instanceof TextView) {
                         final TextView t = (TextView) v;
                         //Setting the text color based on whether or not the text is a title
-                        if(t.getTextSize() >= mContext.getResources().getDimension(R.dimen.text_title_size)) {
+                        if(t.getTextSize() >= mContext.getResources().getDimension(R.dimen.text_title_size)
+                                || t.getLineCount() > 1
+                                || t.getText().toString().contains("...")) {
+                            Log.i(TAG, "Setting primary color on " + t.toString());
                             t.setTextColor(getPrimaryText());
                         } else {
                             t.setTextColor(getSecondaryText());

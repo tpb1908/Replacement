@@ -55,9 +55,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if(mQueuedUpdates.size() > 3) {
             notifyDataSetChanged();
         } else {
-            for(Runnable r : mQueuedUpdates) {
-                r.run();
-            }
+            for(Runnable r : mQueuedUpdates) r.run();
         }
         mQueuedUpdates.clear();
     }
@@ -131,18 +129,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 case 2:
                     final int color = subject.getColor();
                     final HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
-                    ColorResources.theme((ViewGroup) hvh.itemView);
-                    hvh.mTitleBar.setBackgroundColor(color);
-                    final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
-                    hvh.mSubjectName.setText(subjectNameClass);
-                    if(Colour.blackOrWhiteContrastingColor(color) == 0) {
-                        hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
-                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
-                    } else {
-                        hvh.mSubjectName.setTextColor(Color.parseColor("#FFFFFF"));
-                        //What the fuck is up with that method name??
-                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
-                    }
                     hvh.mHomeWorkTitle.setText(task.getTitle());
                     hvh.mDueDay.setText(timeRange);
                     hvh.mDetail = task.getDetail();
@@ -159,6 +145,18 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                             }
                         };
                         new Handler().postDelayed(r, 50);
+                    }
+                    ColorResources.theme((ViewGroup) hvh.itemView);
+                    hvh.mTitleBar.setBackgroundColor(color);
+                    final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
+                    hvh.mSubjectName.setText(subjectNameClass);
+                    if(Colour.blackOrWhiteContrastingColor(color) == 0) {
+                        hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
+                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
+                    } else {
+                        hvh.mSubjectName.setTextColor(Color.parseColor("#FFFFFF"));
+                        //What the fuck is up with that method name??
+                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
                     }
                     break;
                 case 3:
@@ -257,12 +255,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             });
         }
 
-
-        /*
-            For some reason, when the view is closed after clicking on a link below the top line
-            the textview is pushed up rather than being resized.
-            It works fine if I don't wait to set the text
-         */
         private void openDetail(int duration) {
             if(!mIsAnimating) {
                 final String[] lines = mDetail.split("\n");
@@ -272,7 +264,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 ValueAnimator valueAnimator;
                 final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
                 if(!mIsExpanded) {
-                    mHomeWorkDetail.setSingleLine(false);
                     mHomeWorkDetail.setText(mDetail);
                     valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
                 } else {
@@ -285,12 +276,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     public void onAnimationEnd(Animator animation) {
                         mIsAnimating = false;
                         mIsExpanded = !mIsExpanded;
-                        if(!mIsExpanded) {
-                            mHomeWorkDetail.setSingleLine(true);
-                            mHomeWorkDetail.setText(mDetailHint);
-                        } else  {
-                            mHomeWorkDetail.setText(mDetail);
-                        }
+                        mHomeWorkDetail.setText(mIsExpanded ? mDetail : mDetailHint);
                     }
                 });
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

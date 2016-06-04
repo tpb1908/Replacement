@@ -24,6 +24,10 @@
     <string name="hint_assessment_date">Date</string>
     <string name="label_homework_due_date">Due Date</string>
     <string name="title_term_collector">Terms</string>
+    <string name="title_term_input">New Term</string>
+    <string name="title_term_input_edit">Edit Term</string>
+    <string name="title_homework_input">New Homework</string>
+    <string name="title_homework_input_edit">Edit Homework</string>
     <string name="hint_subject_name">Subject name</string>
     <string name="hint_teacher_name">Teacher</string>
     <string name="label_class_input">Classroom</string>

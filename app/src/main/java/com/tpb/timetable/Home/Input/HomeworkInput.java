@@ -45,7 +45,10 @@ public class HomeworkInput extends SlidingActivity {
         enableFullscreen();
         final Intent i = getIntent();
         if(i.getBooleanExtra("hasOpenPosition", false)) {
-            expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
+            expandFromPoints(i.getIntExtra("leftOffset", 0),
+                    i.getIntExtra("topOffset", 0),
+                    i.getIntExtra("viewWidth", 0),
+                    i.getIntExtra("viewHeight", 0));
         }
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_homework_title);
         final TextInputLayout mTitleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_title);
@@ -75,11 +78,11 @@ public class HomeworkInput extends SlidingActivity {
             }
             mDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTask.getEndDate())));
             mEditing = true;
-            setTitle("Editing homework");
+            setTitle(R.string.title_homework_input_edit);
         } catch(Exception e) {
             mCurrentTask = new Task(2);
             mEditing = false;
-            setTitle("New homework");
+            setTitle(R.string.title_homework_input);
         }
 
         setFab(getResources().getColor(R.color.colorAccent),
@@ -113,6 +116,7 @@ public class HomeworkInput extends SlidingActivity {
                 if(!mEditing) { //Don't change the time that a task is set
                     mCurrentTask.setStartDate(CURRENT);
                 }
+
                 if(!errorFlag) {
                     mCurrentTask.setSubjectID((int) spinner.getSelectedItemId());
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
@@ -130,7 +134,6 @@ public class HomeworkInput extends SlidingActivity {
         });
         ColorResources.theme((ViewGroup) findViewById(R.id.background));
     }
-
 
 
 

@@ -35,6 +35,7 @@ import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Setup.Input.TermInput;
 import com.tpb.timetable.Utils.ColorResources;
 
 import java.util.ArrayList;
@@ -121,7 +122,8 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         });
         final View mainContent = findViewById(R.id.main_content);
         ColorResources.theme((ViewGroup) mainContent);
-
+        final Intent i = new Intent(Home.this, TermInput.class);
+        startActivity(i);
     }
 
 

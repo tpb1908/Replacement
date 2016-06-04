@@ -219,16 +219,114 @@ public class ColorResources {
     }
 
 
+    private static void themeTextInputlayout(TextInputLayout t) {
+        try {
+            //Setting focused text color
+            final Field fFocusedTextColor = TextInputLayout.class.getDeclaredField("mFocusedTextColor");
+            final Field fDefaultTextColor = TextInputLayout.class.getDeclaredField("mDefaultTextColor");
+            fFocusedTextColor.setAccessible(true);
+            fDefaultTextColor.setAccessible(true);
+            fFocusedTextColor.set(t, ColorStateList.valueOf(primary));
+            fDefaultTextColor.set(t, ColorStateList.valueOf(getSecondaryText()));
+        } catch(Throwable ignored) {}
+    }
+
+    private static void themeCardView(CardView c) {
+        c.setCardBackgroundColor(getCardBackground());
+    }
+
+    private static void themeEditText(EditText t) {
+        t.setTextColor(getPrimaryText());
+        //By setting the background color filter we set the color of the bottom bar
+        t.getBackground().setColorFilter(accent, PorterDuff.Mode.SRC_ATOP);
+        t.setHighlightColor(accent);
+        try {
+            //We set the cursor to the accent color
+            final Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+            fCursorDrawableRes.setAccessible(true);
+            final int mCursorDrawableRes = fCursorDrawableRes.getInt(t);
+            final Field fEditor = TextView.class.getDeclaredField("mEditor");
+            fEditor.setAccessible(true);
+            final Object editor = fEditor.get(t);
+            final Class<?> clazz = editor.getClass();
+            final Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
+            fCursorDrawable.setAccessible(true);
+            final Drawable[] drawables = new Drawable[5];
+            drawables[0] = ContextCompat.getDrawable(t.getContext(), mCursorDrawableRes);
+            drawables[1] = ContextCompat.getDrawable(t.getContext(), mCursorDrawableRes);
+            drawables[0].setColorFilter(accent, PorterDuff.Mode.SRC_IN);
+            drawables[1].setColorFilter(accent, PorterDuff.Mode.SRC_IN);
+            fCursorDrawable.set(editor, drawables);
+
+            //We set the selection handles to the accent color
+            //TODO- Get the drawables only once?
+            final Field fHandleRes = TextView.class.getDeclaredField("mTextSelectHandleRes");
+            final Field fHandleLeftRes = TextView.class.getDeclaredField("mTextSelectHandleLeftRes");
+            final Field fHandleRightRes = TextView.class.getDeclaredField("mTextSelectHandleRightRes");
+            fHandleRes.setAccessible(true);
+            fHandleLeftRes.setAccessible(true);
+            fHandleRightRes.setAccessible(true);
+            final int centreHandleRes = fHandleRes.getInt(t);
+            final int leftHandleRes = fHandleLeftRes.getInt(t);
+            final int rightHandleRes = fHandleRightRes.getInt(t);
+            final Field fSelectHandleCenter = editor.getClass().getDeclaredField("mSelectHandleCenter");
+            final Field fSelectHandleLeft = editor.getClass().getDeclaredField("mSelectHandleLeft");
+            final Field fSelectHandleRight = editor.getClass().getDeclaredField("mSelectHandleRight");
+            fSelectHandleCenter.setAccessible(true);
+            fSelectHandleLeft.setAccessible(true);
+            fSelectHandleRight.setAccessible(true);
+            drawables[2] = ContextCompat.getDrawable(t.getContext(), centreHandleRes);
+            drawables[3] = ContextCompat.getDrawable(t.getContext(), leftHandleRes);
+            drawables[4] = ContextCompat.getDrawable(t.getContext(), rightHandleRes);
+            for(Drawable d : drawables) d.setColorFilter(accent, PorterDuff.Mode.SRC_IN);
+            fSelectHandleCenter.set(editor, drawables[2]);
+            fSelectHandleLeft.set(editor, drawables[3]);
+            fSelectHandleRight.set(editor, drawables[4]);
+        } catch(Throwable ignored) {}
+    }
+
+    private static void themeCheckBox(AppCompatCheckBox c) {
+        c.setSupportButtonTintList(ColorStateList.valueOf(accent));
+        c.setHighlightColor(accent);
+        c.setTextColor(getPrimaryText());
+        //Getting a custom ripple for the checkbox
+        c.setBackgroundDrawable(getAdaptiveRippleDrawable(backgroundDark, accent));
+    }
+
+    private static void themeTextView(TextView t) {
+        /*
+         *   We set the text color based on text size (Is it a title?),
+         *   line count (Does the TextView contain the body?),
+         *   and a special clause for detail text which changes
+         */
+        if(t.getTextSize() >= mContext.getResources().getDimension(R.dimen.text_title_size)
+                || t.getLineCount() > 1
+                || t.getId() == R.id.text_homework_detail) {
+            t.setTextColor(getPrimaryText());
+        } else {
+            t.setTextColor(getSecondaryText());
+        }
+        t.setHintTextColor(getPrimaryText());
+        /*
+         * This clause is for the FAB sheet. If we don't set its background, the dark
+         * theme won't show text. Also, this should never cause an exception. Every TextView
+         * has a parent, and if the parent of that parent is null, then instanceof will
+         * return false.
+         */
+        if(t.getParent().getParent() instanceof CardView) t.setBackgroundColor(getCardBackground());
+    }
+
     public static void theme(ViewGroup group) {
         final long start = System.nanoTime();
-        final Stack<ViewGroup> viewStack = new Stack<>();
-        viewStack.push(group);
+        final Stack<ViewGroup> groupStack = new Stack<>();
+        groupStack.push(group);
         //Only the outer level has a background
         group.setBackgroundColor(getBackground());
         View v;
-        while(!viewStack.isEmpty()) {
-            group = viewStack.pop(); //The current ViewGroup
-            for(int i = 0; i < group.getChildCount(); i++) { //All the views in the current Group
+        while(!groupStack.isEmpty()) {
+            //We get the current ViewGroup and iterate through its children
+            group = groupStack.pop();
+            for(int i = 0; i < group.getChildCount(); i++) {
                 v = group.getChildAt(i);
                 //We don't want to do anything to any of these views
                 if(v instanceof RelativeLayout ||
@@ -236,111 +334,32 @@ public class ColorResources {
                         v instanceof RecyclerView ||
                         v instanceof CoordinatorLayout) {
                     //Unless they are a TextInputLayout, which needs different theming
-                    if(v instanceof TextInputLayout) {
-                        TextInputLayout t = (TextInputLayout) v;
-                        try {
-                            //Setting focused text color
-                            final Field fFocusedTextColor = TextInputLayout.class.getDeclaredField("mFocusedTextColor");
-                            final Field fDefaultTextColor = TextInputLayout.class.getDeclaredField("mDefaultTextColor");
-                            fFocusedTextColor.setAccessible(true);
-                            fDefaultTextColor.setAccessible(true);
-                            fFocusedTextColor.set(t, ColorStateList.valueOf(primary));
-                            fDefaultTextColor.set(t, ColorStateList.valueOf(getSecondaryText()));
-                        } catch(Throwable ignored) {
-                        }
-                    }
-                    //The ViewGroup is pushed to the stack so that it's views can be themed later
-                    viewStack.push((ViewGroup) v);
-                } else { //The view is to be themed
+                    if(v instanceof TextInputLayout) themeTextInputlayout((TextInputLayout) v);
+                    //All of these view types contain other views
+                    groupStack.push((ViewGroup) v);
+                } else { //The view is singular, so we theme it
                     if(v instanceof CardView) {
-                        //CardView background must be est, before theming its views
-                        final CardView c = (CardView) v;
-                        c.setCardBackgroundColor(getCardBackground());
-                        viewStack.push(c);
+                        //CardView is technically a layout
+                        themeCardView((CardView) v);
+                        groupStack.push((CardView)v);
                     } else if(v instanceof TextInputEditText || v instanceof EditText) {
-                        //Both TextInputEditText and EditText are themed the same way
-                        final EditText t = (EditText) v;
-                        t.setTextColor(getPrimaryText());
-                        //Setting color filter, which sets the bottom bar
-                        t.getBackground().setColorFilter(accent, PorterDuff.Mode.SRC_ATOP);
-                        t.setHighlightColor(accent);
-                        try {
-                            //Setting the cursor to the correct color
-                            final Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
-                            fCursorDrawableRes.setAccessible(true);
-                            final int mCursorDrawableRes = fCursorDrawableRes.getInt(t);
-                            final Field fEditor = TextView.class.getDeclaredField("mEditor");
-                            fEditor.setAccessible(true);
-                            final Object editor = fEditor.get(t);
-                            final Class<?> clazz = editor.getClass();
-                            final Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
-                            fCursorDrawable.setAccessible(true);
-                            final Drawable[] drawables = new Drawable[5];
-                            drawables[0] = ContextCompat.getDrawable(t.getContext(), mCursorDrawableRes);
-                            drawables[1] = ContextCompat.getDrawable(t.getContext(), mCursorDrawableRes);
-                            drawables[0].setColorFilter(accent, PorterDuff.Mode.SRC_IN);
-                            drawables[1].setColorFilter(accent, PorterDuff.Mode.SRC_IN);
-                            fCursorDrawable.set(editor, drawables);
-
-                            //Setting up the selection handles to be the correct color
-                            //TODO- Get the drawables only once?
-                            final Field fHandleRes = TextView.class.getDeclaredField("mTextSelectHandleRes");
-                            final Field fHandleLeftRes = TextView.class.getDeclaredField("mTextSelectHandleLeftRes");
-                            final Field fHandleRightRes = TextView.class.getDeclaredField("mTextSelectHandleRightRes");
-                            fHandleRes.setAccessible(true);
-                            fHandleLeftRes.setAccessible(true);
-                            fHandleRightRes.setAccessible(true);
-                            final int centreHandleRes = fHandleRes.getInt(t);
-                            final int leftHandleRes = fHandleLeftRes.getInt(t);
-                            final int rightHandleRes = fHandleRightRes.getInt(t);
-                            final Field fSelectHandleCenter = editor.getClass().getDeclaredField("mSelectHandleCenter");
-                            final Field fSelectHandleLeft = editor.getClass().getDeclaredField("mSelectHandleLeft");
-                            final Field fSelectHandleRight = editor.getClass().getDeclaredField("mSelectHandleRight");
-                            fSelectHandleCenter.setAccessible(true);
-                            fSelectHandleLeft.setAccessible(true);
-                            fSelectHandleRight.setAccessible(true);
-                            drawables[2] = ContextCompat.getDrawable(t.getContext(), centreHandleRes);
-                            drawables[3] = ContextCompat.getDrawable(t.getContext(), leftHandleRes);
-                            drawables[4] = ContextCompat.getDrawable(t.getContext(), rightHandleRes);
-                            for(Drawable d : drawables) d.setColorFilter(accent, PorterDuff.Mode.SRC_IN);
-                            fSelectHandleCenter.set(editor, drawables[2]);
-                            fSelectHandleLeft.set(editor, drawables[3]);
-                            fSelectHandleRight.set(editor, drawables[4]);
-                        } catch(Throwable ignored) {
-                            Log.e(TAG, ignored.toString());
-                        }
+                        //We can theme TextInputEditText in the same way as EditText
+                        themeEditText((EditText) v);
                     } else if(v instanceof AppCompatCheckBox) {
-                        final AppCompatCheckBox c = (AppCompatCheckBox) v;
-                        c.setSupportButtonTintList(ColorStateList.valueOf(accent));
-                        c.setHighlightColor(accent);
-                        c.setTextColor(getPrimaryText());
-                        //Getting a custom ripple for the checkbox
-                        c.setBackgroundDrawable(getAdaptiveRippleDrawable(backgroundDark, accent));
+                        themeCheckBox((AppCompatCheckBox) v);
                     } else if(v instanceof TextView) {
-                        final TextView t = (TextView) v;
-                        //Setting the text color based on whether or not the text is a title
-                        if(t.getTextSize() >= mContext.getResources().getDimension(R.dimen.text_title_size)
-                                || t.getLineCount() > 1
-                                || t.getText().toString().contains("...")) {
-                            Log.i(TAG, "Setting primary color on " + t.toString());
-                            t.setTextColor(getPrimaryText());
-                        } else {
-                            t.setTextColor(getSecondaryText());
-                        }
-                        t.setHintTextColor(getPrimaryText());
-                        //This is for the fab sheet
-                        if(t.getParent().getParent() instanceof CardView) {
-                            t.setBackgroundColor(getCardBackground());
-                       }
+                        themeTextView((TextView) v);
                     } else if(v instanceof ColoredSpace) {
                         ((ColoredSpace) v).setColor(getDivider());
                     }
                 }
             }
         }
-        Log.i(TAG, "Theming view took " + (System.nanoTime()-start)/1E9);
+        Log.i(TAG, "Theming  " + group.getClass().getName() + " took " + (System.nanoTime()-start)/1E9);
     }
 
+
+    //http://stackoverflow.com/questions/27787870/how-to-use-rippledrawable-programmatically-in-code-not-xml-with-android-5-0-lo
     private static Drawable getAdaptiveRippleDrawable(int normalColor, int pressedColor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return new RippleDrawable(ColorStateList.valueOf(pressedColor),

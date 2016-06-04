@@ -255,19 +255,26 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             });
         }
 
+        /**
+         * Num lines is definitely correct
+         * So I think that there is a problem with just multiplying, as the textview
+         * has more than just text
+         */
         private void openDetail(int duration) {
-            if(!mIsAnimating) {
+            if(!mIsAnimating && mDetailHint.contains("...")) {
                 final String[] lines = mDetail.split("\n");
                 final StringBuilder builder = new StringBuilder();
                 final View v = mHomeWorkDetail;
                 if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
+                Log.i(TAG, "Num lines " + FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail) + "\n" +
+                        "Original height " + mOriginalHeight);
                 ValueAnimator valueAnimator;
                 final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
                 if(!mIsExpanded) {
                     mHomeWorkDetail.setText(mDetail);
-                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
+                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight, (mOriginalHeight * numLines));
                 } else {
-                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight + (mOriginalHeight * numLines), mOriginalHeight);
+                    valueAnimator = ValueAnimator.ofInt(v.getHeight(), mOriginalHeight);
                 }
                 valueAnimator.setDuration(duration);
                 valueAnimator.setInterpolator(new AccelerateInterpolator());
@@ -277,6 +284,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         mIsAnimating = false;
                         mIsExpanded = !mIsExpanded;
                         mHomeWorkDetail.setText(mIsExpanded ? mDetail : mDetailHint);
+                        Log.i(TAG, "End height " + v.getHeight());
                     }
                 });
                 valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

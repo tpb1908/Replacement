@@ -43,7 +43,7 @@ public class ColorResources {
     private static boolean darkTheme;
     private static Context mContext;
     private static ColorResources instance;
-    private static ArrayList<Themable> mListeners;
+    private static ArrayList<Themable> mListeners = new ArrayList<>();
     private static SharedPreferences.Editor mEditor;
 
     private static int primary;
@@ -93,6 +93,10 @@ public class ColorResources {
         }
         if(listener != null) mListeners.add(listener);
         return instance;
+    }
+
+    public static void addListener(Themable t) {
+        if(t != null) mListeners.add(t);
     }
 
     private static void writeDefaultValues(SharedPreferences.Editor editor) {
@@ -172,6 +176,7 @@ public class ColorResources {
         darkTheme = isDark;
         mEditor.putBoolean("darkTheme", isDark);
         mEditor.commit();
+        themeViews();
     }
 
     public static boolean isDarkTheme() {
@@ -219,7 +224,7 @@ public class ColorResources {
     }
 
 
-    private static void themeTextInputlayout(TextInputLayout t) {
+    private static void themeTextInputLayout(TextInputLayout t) {
         try {
             //Setting focused text color
             final Field fFocusedTextColor = TextInputLayout.class.getDeclaredField("mFocusedTextColor");
@@ -259,7 +264,7 @@ public class ColorResources {
             fCursorDrawable.set(editor, drawables);
 
             //We set the selection handles to the accent color
-            //TODO- Get the drawables only once?
+            //TODO- Cache the drawables? Performance doesn't seem to be a problem
             final Field fHandleRes = TextView.class.getDeclaredField("mTextSelectHandleRes");
             final Field fHandleLeftRes = TextView.class.getDeclaredField("mTextSelectHandleLeftRes");
             final Field fHandleRightRes = TextView.class.getDeclaredField("mTextSelectHandleRightRes");
@@ -334,7 +339,7 @@ public class ColorResources {
                         v instanceof RecyclerView ||
                         v instanceof CoordinatorLayout) {
                     //Unless they are a TextInputLayout, which needs different theming
-                    if(v instanceof TextInputLayout) themeTextInputlayout((TextInputLayout) v);
+                    if(v instanceof TextInputLayout) themeTextInputLayout((TextInputLayout) v);
                     //All of these view types contain other views
                     groupStack.push((ViewGroup) v);
                 } else { //The view is singular, so we theme it
@@ -393,7 +398,7 @@ public class ColorResources {
         return states;
     }
 
-    private void themeViews() {
+    private static void themeViews() {
         for(Themable t : mListeners) {
 
         }

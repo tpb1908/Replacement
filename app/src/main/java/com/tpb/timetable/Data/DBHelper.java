@@ -182,7 +182,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     //Term methods
     private void remove(Term t) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        final SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_TERMS,
                 KEY_ID + " = " + t.getID(),
                 null);
@@ -249,7 +249,7 @@ public class DBHelper extends SQLiteOpenHelper {
         final String QUERY = "SELECT  * FROM " + TABLE_TERMS +
                 " WHERE " + KEY_START_DATE + " > " + CURRENT +
                 " AND " + KEY_END_DATE + " < " + CURRENT;
-        Cursor cursor = db.rawQuery(QUERY, null);
+        final Cursor cursor = db.rawQuery(QUERY, null);
         Term t = new Term();
         if(cursor != null) {
             if(cursor.moveToFirst()) {
@@ -344,7 +344,6 @@ public class DBHelper extends SQLiteOpenHelper {
         final String QUERY = "SELECT * FROM " + TABLE_SUBJECTS;
         final SQLiteDatabase db = this.getWritableDatabase();
         final Cursor cursor = db.rawQuery(QUERY, null);
-
         Subject subject;
         if(cursor != null) {
             if(cursor.moveToFirst()) {
@@ -460,7 +459,6 @@ public class DBHelper extends SQLiteOpenHelper {
         final String QUERY = "SELECT * FROM " + TABLE_CLASS_TIMES;
         final SQLiteDatabase db = this.getWritableDatabase();
         final Cursor cursor = db.rawQuery(QUERY, null);
-
         ClassTime time;
         if(cursor != null) {
             if(cursor.moveToFirst()) {
@@ -486,7 +484,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayWrapper<ClassTime> getClassesForDay(int day) {
-        Log.i(TAG, "Classes for day valid " + classesForDayValid);
         if(!classesForDayValid) {
             if(!classTimeWrapper.isDataValid()) getAllClasses();
             for(int i = 0; i < 7; i++) {
@@ -736,7 +733,7 @@ public class DBHelper extends SQLiteOpenHelper {
         final SQLiteDatabase db = this.getWritableDatabase();
         final ContentValues values = new ContentValues();
         if(o instanceof Task) {
-            Task t = (Task) o;
+            final Task t = (Task) o;
             values.put(KEY_TYPE, t.getType());
             values.put(KEY_TASK_TITLE, t.getTitle());
             values.put(KEY_TASK_DETAIL, t.getDetail());
@@ -753,7 +750,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     KEY_ID + " = " + t.getID(),
                     null);
         } else if(o instanceof ClassTime) {
-            ClassTime ct = (ClassTime) o;
+            final ClassTime ct = (ClassTime) o;
             values.put(KEY_SUBJECT_ID, ct.getSubjectID());
             values.put(KEY_START_TIME,  ct.getStartTime());
             values.put(KEY_END_TIME,  ct.getEndTime());
@@ -763,7 +760,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     KEY_ID + " = " +  ct.getID(),
                     null);
         } else if(o instanceof Subject) {
-            Subject s = (Subject) o;
+            final Subject s = (Subject) o;
             values.put(KEY_SUBJECT_NAME, s.getName());
             values.put(KEY_CLASSROOM, s.getClassroom());
             values.put(KEY_TEACHER, s.getTeacher());
@@ -773,7 +770,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     KEY_ID + " = " + s.getID(),
                     null);
         } else if(o instanceof Assessment) {
-            Assessment a = (Assessment) o;
+            final Assessment a = (Assessment) o;
             values.put(KEY_ASSESSMENT_NAME, a.getName());
             values.put(KEY_ASSESSMENT_DATE, a.getDate());
             values.put(KEY_ASSESSMENT_REVISION, a.getRevision());
@@ -785,7 +782,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     KEY_ID + " = " + a.getID(),
                     null);
         } else if(o instanceof Term) {
-            Term t = (Term) o;
+            final Term t = (Term) o;
             values.put(KEY_TERM_NAME, t.getName());
             values.put(KEY_START_DATE, t.getStartDate());
             values.put(KEY_END_DATE, t.getEndDate());

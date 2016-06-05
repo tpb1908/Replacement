@@ -87,7 +87,7 @@ public class Assessment extends Data implements Comparable<Assessment>, Serializ
     @Override
     public boolean equals(Object o) {
         if(o instanceof Assessment) {
-            Assessment a = (Assessment) o;
+            final Assessment a = (Assessment) o;
             return id == a.id;
         }
         return false;

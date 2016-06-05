@@ -16,6 +16,7 @@ import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Adapters.TaskAdapter;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
+import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.ColorResources;
 
@@ -23,7 +24,7 @@ import com.tpb.timetable.Utils.ColorResources;
 /**
  * Created by theo on 08/04/16.
  */
-public class TaskFragment extends Fragment implements TaskManager {
+public class TaskFragment extends Fragment implements TaskManager, Themable {
     private static final String TAG = "TaskFragment";
     private TaskAdapter mTaskAdapter;
     private TaskManager mTaskInterface;
@@ -57,6 +58,7 @@ public class TaskFragment extends Fragment implements TaskManager {
             mRecycler.setLayoutManager(mLayoutManager);
         }
         mTaskAdapter.runQueuedUpdates();
+        //ColorResources.theme(getViews());
     }
 
     private RecyclerView.LayoutManager getLayoutManager() {
@@ -81,6 +83,7 @@ public class TaskFragment extends Fragment implements TaskManager {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
         ColorResources.theme((ViewGroup) inflated);
+        ColorResources.addListener(this);
         //DataHelper is created here so that the app doesn't force close when it is restarted
         mDB = DBHelper.getInstance(getContext());
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
@@ -90,6 +93,12 @@ public class TaskFragment extends Fragment implements TaskManager {
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);
         return inflated;
+    }
+
+    @Override
+    public ViewGroup getViews() {
+        mTaskAdapter.notifyDataSetChanged();
+        return (ViewGroup) getViews().findViewById(R.id.background);
     }
 
     @Override

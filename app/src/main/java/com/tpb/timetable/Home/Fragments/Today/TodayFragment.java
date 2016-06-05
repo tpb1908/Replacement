@@ -92,6 +92,13 @@ public class TodayFragment extends Fragment implements ClassOpener {
             @Override
             public void onClick(View v) {
                 ColorResources.setDarkTheme(!ColorResources.isDarkTheme());
+                final Intent i = getContext().getPackageManager()
+                        .getLaunchIntentForPackage( getContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(i);
             }
         });
         return inflated;

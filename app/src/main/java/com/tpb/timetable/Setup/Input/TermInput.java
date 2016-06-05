@@ -169,11 +169,6 @@ public class TermInput extends SlidingActivity {
         ColorResources.theme((ViewGroup) findViewById(R.id.background));
     }
 
-    private void checkValid() {
-
-    }
-
-
     public void showDatePicker() {
         final Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(TermInput.this, R.style.DatePickerTheme, dateSetListener,

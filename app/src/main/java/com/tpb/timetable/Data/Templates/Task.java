@@ -149,8 +149,8 @@ public class Task extends Data implements Comparable<Task>, Serializable {
 
     @Override
     public int compareTo(Task another) {
-        if(complete) { //This task is complete
-            if(another.complete) { //If they are both complete, compare times
+        if(complete) { //This task is complete,
+            if(another.complete) { //If they are both complete, we compare times
                 return endDate > another.endDate ? 1 : -1;
             } else { //If the other task isn't complete, it has higher precedence
                 return -1;
@@ -168,7 +168,7 @@ public class Task extends Data implements Comparable<Task>, Serializable {
     @Override
     public boolean equals(Object o) {
         if(o instanceof Task) {
-            Task t = (Task) o;
+            final Task t = (Task) o;
             return id == t.id;
         }
         return false;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
@@ -92,6 +94,8 @@ public class ColorResources {
             mEditor.apply();
         }
         if(listener != null) mListeners.add(listener);
+
+
         return instance;
     }
 
@@ -398,10 +402,29 @@ public class ColorResources {
         return states;
     }
 
-    private static void themeViews() {
+    public static void themeViews() {
+        final long start = System.nanoTime();
         for(Themable t : mListeners) {
-
+            theme(t.getViewGroup());
         }
+        final double secs =  (System.nanoTime()-start)/1E9;
+        Toast.makeText(mContext,
+                "Theming took " + secs,
+                Toast.LENGTH_LONG).show();
+    }
+
+    /** From and for Klinker sliding activity
+     * Adjust the alpha of a color.
+     * @param color the color [0x00000000, 0xffffffff]
+     * @param factor the factor for the alpha [0,1]
+     * @return the adjusted color
+     */
+    public static int adjustAlpha(int color, float factor) {
+        int alpha = Math.round(Color.alpha(color) * factor);
+        int red = Color.red(color);
+        int green = Color.green(color);
+        int blue = Color.blue(color);
+        return Color.argb(alpha, red, green, blue);
     }
 
 }

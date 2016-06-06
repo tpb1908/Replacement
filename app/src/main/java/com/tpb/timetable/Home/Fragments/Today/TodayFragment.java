@@ -22,6 +22,7 @@ import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.Home.Adapters.TodayClassAdapter;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
+import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.ColorResources;
 import com.tpb.timetable.Utils.FormattingUtils;
@@ -29,8 +30,9 @@ import com.tpb.timetable.Utils.FormattingUtils;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TodayFragment extends Fragment implements ClassOpener {
+public class TodayFragment extends Fragment implements ClassOpener, Themable {
     private static final String TAG = "TodayFragment";
+    protected View mView;
     private TaskManager mTaskInterface;
     private ClassOpener mClassInterface;
     private TodayClassAdapter mClassAdapter;
@@ -78,6 +80,7 @@ public class TodayFragment extends Fragment implements ClassOpener {
         final View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
         ColorResources.theme((ViewGroup) inflated);
+        ColorResources.addListener(this);
         mDB =  DBHelper.getInstance(getContext());
         mClassRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
         mClassAdapter = new TodayClassAdapter(getContext(), this, mDB);
@@ -92,16 +95,22 @@ public class TodayFragment extends Fragment implements ClassOpener {
             @Override
             public void onClick(View v) {
                 ColorResources.setDarkTheme(!ColorResources.isDarkTheme());
-                final Intent i = getContext().getPackageManager()
-                        .getLaunchIntentForPackage( getContext().getPackageName() );
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(i);
+//                final Intent i = getContext().getPackageManager()
+//                        .getLaunchIntentForPackage( getContext().getPackageName() );
+//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                startActivity(i);
             }
         });
+        mView = inflated;
         return inflated;
+    }
+
+    @Override
+    public ViewGroup getViewGroup() {
+        return (ViewGroup) mView;
     }
 
     /**

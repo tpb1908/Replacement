@@ -119,14 +119,13 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
                 }
             }
         });
-        final View mainContent = findViewById(R.id.main_content);
-        ColorResources.theme((ViewGroup) mainContent);
+        ColorResources.theme((ViewGroup) findViewById(R.id.background));
     }
 
 
     @Override
-    public ViewGroup getViews() {
-        return (ViewGroup) getWindow().getDecorView();
+    public ViewGroup getViewGroup() {
+        return (ViewGroup) findViewById(R.id.background);
     }
 
     //Adds arguments for SlidingActivity to start from a button

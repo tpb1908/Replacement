@@ -272,7 +272,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
                 if(!mIsExpanded) {
                     mHomeWorkDetail.setText(mDetail);
-                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight, (mOriginalHeight * numLines));
+                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight +(mOriginalHeight * numLines));
                 } else {
                     valueAnimator = ValueAnimator.ofInt(v.getHeight(), mOriginalHeight);
                 }

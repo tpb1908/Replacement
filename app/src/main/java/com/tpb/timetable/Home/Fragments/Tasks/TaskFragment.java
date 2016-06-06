@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -26,10 +25,11 @@ import com.tpb.timetable.Utils.ColorResources;
  */
 public class TaskFragment extends Fragment implements TaskManager, Themable {
     private static final String TAG = "TaskFragment";
+    protected View mView;
     private TaskAdapter mTaskAdapter;
     private TaskManager mTaskInterface;
     private RecyclerView mRecycler;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private StaggeredGridLayoutManager mLayoutManager;
     private DBHelper mDB;
     private int mCurrentRotation;
 
@@ -54,18 +54,25 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
         final int newRotation = getResources().getConfiguration().orientation;
         if(newRotation != mCurrentRotation) {
             mCurrentRotation = newRotation;
-            mLayoutManager = getLayoutManager();
+            setupLayoutManager();
             mRecycler.setLayoutManager(mLayoutManager);
         }
         mTaskAdapter.runQueuedUpdates();
-        //ColorResources.theme(getViews());
+        //ColorResources.theme(getViewGroup());
     }
 
-    private RecyclerView.LayoutManager getLayoutManager() {
+    private void setupLayoutManager() {
+        if(mLayoutManager == null) {
+            if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTaskAdapter.numTasksToday() > 0) {
+                mLayoutManager  = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            } else {
+                mLayoutManager =  new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            }
+        }
         if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTaskAdapter.numTasksToday() > 0) {
-            return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            mLayoutManager.setSpanCount(2);
         } else {
-            return new LinearLayoutManager(getContext());
+            mLayoutManager.setSpanCount(1);
         }
     }
 
@@ -88,17 +95,18 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
         mDB = DBHelper.getInstance(getContext());
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TaskAdapter(getContext(), this);
-        mLayoutManager = getLayoutManager();
+        setupLayoutManager();
         mRecycler.setAdapter(mTaskAdapter);
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);
+        mView = inflated;
         return inflated;
     }
 
     @Override
-    public ViewGroup getViews() {
+    public ViewGroup getViewGroup() {
         mTaskAdapter.notifyDataSetChanged();
-        return (ViewGroup) getViews().findViewById(R.id.background);
+        return (ViewGroup) mView;
     }
 
     @Override
@@ -124,7 +132,7 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
     @Override
     public void countChange(int previousCount, int newCount) {
         if(previousCount <= 1 || newCount == 1) {
-            mRecycler.setLayoutManager(getLayoutManager());
+            setupLayoutManager();
         }
     }
 }

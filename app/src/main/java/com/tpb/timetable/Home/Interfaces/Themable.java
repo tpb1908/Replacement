@@ -13,6 +13,6 @@ import android.view.ViewGroup;
  */
 public interface Themable {
 
-    ViewGroup getViews();
+    ViewGroup getViewGroup();
 
 }

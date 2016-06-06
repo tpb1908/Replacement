@@ -59,7 +59,7 @@ public class HomeworkInput extends SlidingActivity {
         final AppCompatCheckBox mShowReminderInput = (AppCompatCheckBox) findViewById(R.id.checkbox_show_reminder);
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_subject);
         final DBHelper db = DBHelper.getInstance(this);
-        SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, db.getAllSubjects());
+        final SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, db.getAllSubjects());
         spinner.setAdapter(spinnerAdapter);
         mDateInput.setOnClickListener(new View.OnClickListener() {
             @Override

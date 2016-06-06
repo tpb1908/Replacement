@@ -1,6 +1,7 @@
 package com.tpb.timetable.Home.Input;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     }
 
     private View getCustomView(int position, ViewGroup parent) {
+        Log.i(TAG, "getCustomView: Creating view for " + mSubjects.get(position).toString());
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
         final TextView name = (TextView) row.findViewById(R.id.text_subject);
@@ -73,7 +75,6 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         colourBar.setBackgroundColor(mSubjects.get(position).getColor());
         row.setBackgroundColor(ColorResources.getCardBackground());
         name.setTextColor(ColorResources.getPrimaryText());
-
         return row;
     }
 }

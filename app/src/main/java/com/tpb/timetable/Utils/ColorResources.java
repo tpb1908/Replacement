@@ -3,7 +3,6 @@ package com.tpb.timetable.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -24,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -74,23 +74,22 @@ public class ColorResources {
             final SharedPreferences prefs = context.getSharedPreferences("colors", Context.MODE_PRIVATE);
             mEditor = prefs.edit();
             if(!prefs.contains("colorPrimary")) writeDefaultValues(mEditor);
-            final Resources res = mContext.getResources();
             darkTheme = prefs.getBoolean("darkTheme", false);
-            primary = prefs.getInt("colorPrimary", res.getColor(R.color.colorPrimary));
-            primaryDark = prefs.getInt("colorPrimaryDark", res.getColor(R.color.colorPrimaryDark));
-            primaryLight = prefs.getInt("colorPrimaryLight", res.getColor(R.color.colorPrimaryLight));
-            accent = prefs.getInt("colorAccent", res.getColor(R.color.colorAccent));
-            primaryText = prefs.getInt("colorPrimaryText", res.getColor(R.color.colorPrimaryText));
-            primaryTextLight = prefs.getInt("colorPrimaryTextLight", res.getColor(R.color.colorPrimaryTextLight));
-            secondaryText = prefs.getInt("colorSecondaryText", res.getColor(R.color.colorSecondaryText));
-            secondaryTextLight = prefs.getInt("colorSecondaryTextLight", res.getColor(R.color.colorSecondaryTextLight));
-            iconsText = prefs.getInt("iconsText", res.getColor(R.color.colorIconsText));
-            background = prefs.getInt("background", res.getColor(R.color.background));
-            backgroundDark = prefs.getInt("backgroundDark", res.getColor(R.color.backgroundDark));
-            cardBackground = prefs.getInt("card", res.getColor(R.color.card));
-            cardBackgroundDark = prefs.getInt("cardDark", res.getColor(R.color.cardDark));
-            divider = prefs.getInt("divider", res.getColor(R.color.divider));
-            dividerDark = prefs.getInt("dividerDark", res.getColor(R.color.dividerDark));
+            primary = prefs.getInt("colorPrimary", ContextCompat.getColor(mContext, R.color.colorPrimary));
+            primaryDark = prefs.getInt("colorPrimaryDark", ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+            primaryLight = prefs.getInt("colorPrimaryLight", ContextCompat.getColor(mContext, R.color.colorPrimaryLight));
+            accent = prefs.getInt("colorAccent", ContextCompat.getColor(mContext, R.color.colorAccent));
+            primaryText = prefs.getInt("colorPrimaryText", ContextCompat.getColor(mContext, R.color.colorPrimaryText));
+            primaryTextLight = prefs.getInt("colorPrimaryTextLight", ContextCompat.getColor(mContext, R.color.colorPrimaryTextLight));
+            secondaryText = prefs.getInt("colorSecondaryText", ContextCompat.getColor(mContext, R.color.colorSecondaryText));
+            secondaryTextLight = prefs.getInt("colorSecondaryTextLight", ContextCompat.getColor(mContext, R.color.colorSecondaryTextLight));
+            iconsText = prefs.getInt("iconsText", ContextCompat.getColor(mContext, R.color.colorIconsText));
+            background = prefs.getInt("background", ContextCompat.getColor(mContext, R.color.background));
+            backgroundDark = prefs.getInt("backgroundDark", ContextCompat.getColor(mContext, R.color.backgroundDark));
+            cardBackground = prefs.getInt("card", ContextCompat.getColor(mContext, R.color.card));
+            cardBackgroundDark = prefs.getInt("cardDark", ContextCompat.getColor(mContext, R.color.cardDark));
+            divider = prefs.getInt("divider", ContextCompat.getColor(mContext, R.color.divider));
+            dividerDark = prefs.getInt("dividerDark", ContextCompat.getColor(mContext, R.color.dividerDark));
             mEditor.apply();
         }
         if(listener != null) mListeners.add(listener);
@@ -104,23 +103,22 @@ public class ColorResources {
     }
 
     private static void writeDefaultValues(SharedPreferences.Editor editor) {
-        final Resources res = mContext.getResources();
         editor.putBoolean("darkTheme", false);
-        editor.putInt("colorPrimary", res.getColor(R.color.colorPrimary));
-        editor.putInt("colorPrimaryDark", res.getColor(R.color.colorPrimaryDark));
-        editor.putInt("colorPrimaryLight", res.getColor(R.color.colorPrimaryLight));
-        editor.putInt("colorAccent", res.getColor(R.color.colorAccent));
-        editor.putInt("colorPrimaryText", res.getColor(R.color.colorPrimaryText));
-        editor.putInt("colorPrimaryTextLight", res.getColor(R.color.colorPrimaryTextLight));
-        editor.putInt("colorSecondaryText", res.getColor(R.color.colorSecondaryText));
-        editor.putInt("colorSecondaryTextLight", res.getColor(R.color.colorSecondaryTextLight));
-        editor.putInt("iconsText", res.getColor(R.color.colorIconsText));
-        editor.putInt("background", res.getColor(R.color.background));
-        editor.putInt("backgroundDark", res.getColor(R.color.backgroundDark));
-        editor.putInt("card", res.getColor(R.color.card));
-        editor.putInt("cardDark", res.getColor(R.color.cardDark));
-        editor.putInt("divider", res.getColor(R.color.divider));
-        editor.putInt("dividerDark", res.getColor(R.color.dividerDark));
+        editor.putInt("colorPrimary", ContextCompat.getColor(mContext, R.color.colorPrimary));
+        editor.putInt("colorPrimaryDark", ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
+        editor.putInt("colorPrimaryLight", ContextCompat.getColor(mContext, R.color.colorPrimaryLight));
+        editor.putInt("colorAccent", ContextCompat.getColor(mContext, R.color.colorAccent));
+        editor.putInt("colorPrimaryText", ContextCompat.getColor(mContext, R.color.colorPrimaryText));
+        editor.putInt("colorPrimaryTextLight", ContextCompat.getColor(mContext, R.color.colorPrimaryTextLight));
+        editor.putInt("colorSecondaryText", ContextCompat.getColor(mContext, R.color.colorSecondaryText));
+        editor.putInt("colorSecondaryTextLight", ContextCompat.getColor(mContext, R.color.colorSecondaryTextLight));
+        editor.putInt("iconsText", ContextCompat.getColor(mContext, R.color.colorIconsText));
+        editor.putInt("background", ContextCompat.getColor(mContext, R.color.background));
+        editor.putInt("backgroundDark", ContextCompat.getColor(mContext, R.color.backgroundDark));
+        editor.putInt("card", ContextCompat.getColor(mContext, R.color.card));
+        editor.putInt("cardDark", ContextCompat.getColor(mContext, R.color.cardDark));
+        editor.putInt("divider", ContextCompat.getColor(mContext, R.color.divider));
+        editor.putInt("dividerDark", ContextCompat.getColor(mContext, R.color.dividerDark));
         editor.commit();
     }
 
@@ -351,6 +349,9 @@ public class ColorResources {
                         //CardView is technically a layout
                         themeCardView((CardView) v);
                         groupStack.push((CardView)v);
+                    } else if(v instanceof FrameLayout) {
+                        //Later, for the SlidingPanel
+                        //v.setBackgroundColor(getBackground());
                     } else if(v instanceof TextInputEditText || v instanceof EditText) {
                         //We can theme TextInputEditText in the same way as EditText
                         themeEditText((EditText) v);

@@ -53,9 +53,9 @@ import android.widget.ScrollView;
 import android.widget.Scroller;
 import android.widget.TextView;
 
-import com.klinker.android.sliding.ColorUtils;
 import com.klinker.android.sliding.SchedulingUtils;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ColorResources;
 
 /**
  * A custom {@link ViewGroup} that operates similarly to a {@link ScrollView}, except with multiple
@@ -77,7 +77,7 @@ import com.tpb.timetable.R;
  * order to track velocity, modify EdgeEffect color and perform the originally specified animations.
  * As a result this ViewGroup has non-standard talkback and keyboard support.
  */
-public class MultiShrinkScroller extends FrameLayout {
+public class MultiShrinkScroller2 extends FrameLayout {
 
     public enum OpenAnimation {
         SLIDE_UP, EXPAND_FROM_VIEW
@@ -224,7 +224,7 @@ public class MultiShrinkScroller extends FrameLayout {
      * Create a new instance of MultiShrinkScroller.
      * @param context
      */
-    public MultiShrinkScroller(Context context) {
+    public MultiShrinkScroller2(Context context) {
         this(context, null);
     }
 
@@ -233,7 +233,7 @@ public class MultiShrinkScroller extends FrameLayout {
      * @param context
      * @param attrs
      */
-    public MultiShrinkScroller(Context context, AttributeSet attrs) {
+    public MultiShrinkScroller2(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
@@ -243,7 +243,7 @@ public class MultiShrinkScroller extends FrameLayout {
      * @param attrs
      * @param defStyleAttr
      */
-    public MultiShrinkScroller(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MultiShrinkScroller2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
@@ -1431,7 +1431,7 @@ public class MultiShrinkScroller extends FrameLayout {
         // Tell the photo view what tint we are trying to achieve. Depending on the type of
         // drawable used, the photo view may or may not use this tint.
         photoView.setBackgroundColor(headerTintColor);
-        photoTouchInterceptOverlay.setBackgroundColor(ColorUtils.adjustAlpha(headerTintColor, colorAlpha));
+        photoTouchInterceptOverlay.setBackgroundColor(ColorResources.adjustAlpha(headerTintColor, colorAlpha));
         titleGradientDrawable.setAlpha(gradientAlpha);
         actionBarGradientDrawable.setAlpha(gradientAlpha);
     }

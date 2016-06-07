@@ -9,7 +9,7 @@ import android.view.ViewGroup;
  * When an activity needs to use the ThemeHelper class, it
  * must add itself to the listener list.
  * When the ColorResource is updated, it calls all of the listeners
- * so that they can be recreated.
+ * so that they can be rethemed
  */
 public interface Themable {
 

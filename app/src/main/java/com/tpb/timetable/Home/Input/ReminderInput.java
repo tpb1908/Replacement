@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 /**
  * Created by theo on 11/05/16.
@@ -18,7 +19,7 @@ public class ReminderInput extends SlidingActivity {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
+        setPrimaryColors(ThemeHelper.getPrimary(), ThemeHelper.getPrimaryDark());
         enableFullscreen();
         setContent(R.layout.input_reminder);
         final Intent i = getIntent();

@@ -17,8 +17,8 @@ import android.widget.Spinner;
 import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,6 +58,15 @@ public class AssessmentInput extends SlidingActivity {
         });
     }
 
+    @Override
+    public void finish() {
+        if(getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        super.finish();
+    }
+
     public void showDatePicker(View v) {
         final Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(AssessmentInput.this, R.style.DatePickerTheme, dateSetListener,
@@ -92,12 +101,4 @@ public class AssessmentInput extends SlidingActivity {
         }
     };
 
-    @Override
-    public void finish() {
-        if(getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-        super.finish();
-    }
 }

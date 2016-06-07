@@ -648,9 +648,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 null);
         db.close();
         Log.i(TAG, "Deleting an assessment " + assessment.toString());
+
     }
-
-
 
     private int add(Data data) {
         final SQLiteDatabase db = this.getWritableDatabase();
@@ -710,7 +709,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void addAll(ArrayList<?> o) {
-
         if(!o.isEmpty()) {
             if(o.get(0) instanceof Task) {
             } else if(o.get(0) instanceof ClassTime) {
@@ -807,7 +805,6 @@ public class DBHelper extends SQLiteOpenHelper {
             remove((Term) o);
         }
     }
-
 
     /**
      * Everything below this point is abstract wrappers and interfaces

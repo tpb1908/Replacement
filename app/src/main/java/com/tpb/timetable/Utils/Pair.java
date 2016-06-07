@@ -24,7 +24,6 @@ public class Pair<L, R> {
     public boolean equals(Object o) {
         if (!(o instanceof Pair)) return false;
         final Pair p = (Pair) o;
-        return this.left.equals(p.left) &&
-                this.right.equals(p.right);
+        return this.left.equals(p.left) && this.right.equals(p.right);
     }
 }

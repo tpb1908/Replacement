@@ -7,9 +7,8 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +20,11 @@ import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.Home.Adapters.TodayClassAdapter;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
-import com.tpb.timetable.Home.Interfaces.FABManager;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +36,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
     private ClassOpener mClassInterface;
     private TodayClassAdapter mClassAdapter;
     private RecyclerView mClassRecycler;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private StaggeredGridLayoutManager mLayoutManager;
     private BroadcastReceiver mBroadcastReceiver;
     private DBHelper mDB;
     private TextView mDayTermText;
@@ -46,9 +44,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
     private int mCurrentRotation;
 
 
-    public TodayFragment() {
-        // Required empty public constructor
-    }
+    public TodayFragment() {}
 
     public static TodayFragment newInstance() {
         return new TodayFragment();
@@ -70,12 +66,6 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         mCurrentRotation = getResources().getConfiguration().orientation;
     }
 
-
-    @Override
-    public void openClass(ClassTime c) {
-        mClassInterface.openClass(c);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
@@ -85,7 +75,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         mDB =  DBHelper.getInstance(getContext());
         mClassRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
         mClassAdapter = new TodayClassAdapter(getContext(), this, mDB);
-        mLayoutManager = new LinearLayoutManager(getContext());
+        setupLayoutManager();
         mClassRecycler.setAdapter(mClassAdapter);
         mClassRecycler.setLayoutManager(mLayoutManager);
         mDayTermText = (TextView) inflated.findViewById(R.id.text_today_term);
@@ -108,28 +98,6 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         mView = inflated;
         return inflated;
     }
-
-    @Override
-    public ViewGroup getViewGroup() {
-        return (ViewGroup) mView;
-    }
-
-    /**
-     * Sets the title mMessage to the current day and term
-     */
-    private void setDayTermText() {
-        String dayTerm = FormattingUtils.dateToString(new Date());
-        final Term currentTerm = mDB.getCurrentTerm();
-        if(currentTerm.getName() != null) {
-            dayTerm += "- " + currentTerm.getName();
-            mDayTermText.setText(dayTerm);
-        } else {
-            dayTerm += " - Holiday";
-            mDayTermText.setText(dayTerm);
-        }
-        mDayTermText.setTextColor(ThemeHelper.getPrimaryText());
-    }
-
 
     @Override
     public void onAttach(Context context) {
@@ -159,12 +127,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         final int newRotation = getResources().getConfiguration().orientation;
         if(newRotation != mCurrentRotation) {
             mCurrentRotation = newRotation;
-            if(mCurrentRotation == Configuration.ORIENTATION_PORTRAIT) {
-                mLayoutManager = new LinearLayoutManager(getContext());
-            } else if(mClassAdapter.numClassesToday() > 0) {
-                mLayoutManager = new GridLayoutManager(getContext(), 2);
-            }
-            mClassRecycler.setLayoutManager(mLayoutManager);
+            setupLayoutManager();
         }
         //Updating mClassAdapter and reregistering receiver
         getActivity().registerReceiver(mBroadcastReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
@@ -176,5 +139,45 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         //Broadcast reciever must be unregistered
         getActivity().unregisterReceiver(mBroadcastReceiver);
         super.onPause();
+    }
+
+    private void setupLayoutManager() {
+        if(mLayoutManager == null) {
+            if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mClassAdapter.numClassesToday()> 0) {
+                mLayoutManager  = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            } else {
+                mLayoutManager =  new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            }
+        }
+        if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mClassAdapter.numClassesToday() > 0) {
+            mLayoutManager.setSpanCount(2);
+        } else {
+            mLayoutManager.setSpanCount(1);
+        }
+    }
+
+
+    private void setDayTermText() {
+        String dayTerm = FormattingUtils.dateToString(new Date());
+        final Term currentTerm = mDB.getCurrentTerm();
+        if(currentTerm.getName() != null) {
+            dayTerm += "- " + currentTerm.getName();
+            mDayTermText.setText(dayTerm);
+        } else {
+            dayTerm += " - Holiday";
+            mDayTermText.setText(dayTerm);
+        }
+        mDayTermText.setTextColor(ThemeHelper.getPrimaryText());
+    }
+
+
+    @Override
+    public void openClass(ClassTime c) {
+        mClassInterface.openClass(c);
+    }
+
+    @Override
+    public ViewGroup getViewGroup() {
+        return (ViewGroup) mView;
     }
 }

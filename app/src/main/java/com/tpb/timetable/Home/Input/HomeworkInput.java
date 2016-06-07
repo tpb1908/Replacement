@@ -18,8 +18,8 @@ import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,6 +60,9 @@ public class HomeworkInput extends SlidingActivity {
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_subject);
         final DBHelper db = DBHelper.getInstance(this);
         final SubjectSpinnerAdapter spinnerAdapter = new SubjectSpinnerAdapter(this, db.getAllSubjects());
+        assert  mTitleInput != null && mTitleWrapper != null && mDetailInput != null &&
+                mDetailWrapper != null && mDateWrapper != null && mDateInput != null
+                && mShowReminderInput != null && spinner != null;
         spinner.setAdapter(spinnerAdapter);
         mDateInput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,9 +76,7 @@ public class HomeworkInput extends SlidingActivity {
             mDetailInput.setText(mCurrentTask.getDetail());
             mShowReminderInput.setChecked(mCurrentTask.getShowReminder());
             int spinnerPos = spinnerAdapter.getPositionOfSubject(mCurrentTask.getSubjectID());
-            if(spinnerPos != -1) {
-                spinner.setSelection(spinnerPos, true);
-            }
+            if(spinnerPos != -1) spinner.setSelection(spinnerPos, true);
             mDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTask.getEndDate())));
             mEditing = true;
             setTitle(R.string.title_homework_input_edit);
@@ -97,7 +98,6 @@ public class HomeworkInput extends SlidingActivity {
                 } else {
                     mTitleWrapper.setError(null);
                 }
-
                 if(mDetailInput.getText().toString().equals("")) {
                     errorFlag = true;
                     mDetailWrapper.setError("Please add some detail");
@@ -110,13 +110,10 @@ public class HomeworkInput extends SlidingActivity {
                 } else if(mCurrentTask.getEndDate() < CURRENT ) {
                     errorFlag = true;
                     mDateWrapper.setError("Due date must be after the current date");
-                }else {
+                } else {
                     mDateWrapper.setError(null);
                 }
-                if(!mEditing) { //Don't change the time that a task is set
-                    mCurrentTask.setStartDate(CURRENT);
-                }
-
+                if(!mEditing) mCurrentTask.setStartDate(CURRENT);
                 if(!errorFlag) {
                     mCurrentTask.setSubjectID((int) spinner.getSelectedItemId());
                     mCurrentTask.setTitle(mTitleInput.getText().toString());
@@ -135,7 +132,14 @@ public class HomeworkInput extends SlidingActivity {
         ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
     }
 
-
+    @Override
+    public void finish() {
+        if(getCurrentFocus() != null) {
+            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        super.finish();
+    }
 
     public void showDatePicker(View v) {
         final Calendar calendar = Calendar.getInstance();
@@ -158,12 +162,4 @@ public class HomeworkInput extends SlidingActivity {
         }
     };
 
-    @Override
-    public void finish() {
-        if(getCurrentFocus() != null) {
-            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-        super.finish();
-    }
 }

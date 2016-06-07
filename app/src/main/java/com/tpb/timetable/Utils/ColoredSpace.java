@@ -46,7 +46,4 @@ public class ColoredSpace extends View {
         return mColor;
     }
 
-
-
-
 }

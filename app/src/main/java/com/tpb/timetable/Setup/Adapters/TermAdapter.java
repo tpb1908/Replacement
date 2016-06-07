@@ -28,9 +28,37 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
     private Context mContext;
 
+    public TermAdapter() {super();}
+
     public TermAdapter(Context context) {
         this.mContext = context;
         mTerms = DBHelper.getInstance(context).getAllTerms();
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == 0) {
+            final View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_no_data_message, parent, false);
+            return new MessageViewHolder(v);
+        } else {
+            final View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_term, parent, false);
+            return new TermViewHolder(v, this);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(holder.getItemViewType() == 1) {
+            final TermViewHolder termHolder = (TermViewHolder) holder;
+            final Term term = mTerms.get(position);
+            final String DATERANGE = FormattingUtils.dateToString(new Date(term.getStartDate())) +
+                    " to " + FormattingUtils.dateToString(new Date(term.getEndDate()));
+            termHolder.mTermName.setText(term.getName());
+            termHolder.mDateRange.setText(DATERANGE);
+        } else {
+            final MessageViewHolder mv = (MessageViewHolder) holder;
+            mv.setMessage(mContext.getResources().getString(R.string.message_no_terms_setup));
+        }
     }
 
     public void runQueuedUpdates() {
@@ -40,6 +68,26 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             for(Runnable r : mQueuedUpdates) r.run();
         }
         mQueuedUpdates.clear();
+    }
+
+    public void deleteTerm(int index) {
+        final Term mDeletedTerm = mTerms.get(index);
+        mTerms.remove(index);
+        runQueuedUpdates();
+        mTermRemoveListener.removed(mDeletedTerm);
+    }
+
+    public void open(int index) {}
+
+    //Interface methods
+    @Override
+    public int getItemCount() {
+        return mTerms.size() > 0 ? mTerms.size() : 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mTerms.size() > 0 ? 1 : 0;
     }
 
     @Override
@@ -88,53 +136,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
 
-    public void deleteTerm(int index) {
-        final Term mDeletedTerm = mTerms.get(index);
-        mTerms.remove(index);
-        runQueuedUpdates();
-        mTermRemoveListener.removed(mDeletedTerm);
-    }
-
-    public void open(int index) {}
-
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType == 0) {
-            final View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_no_data_message, parent, false);
-            return new MessageViewHolder(v);
-        } else {
-            final View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_term, parent, false);
-            return new TermViewHolder(v, this);
-        }
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder.getItemViewType() == 1) {
-            final TermViewHolder termHolder = (TermViewHolder) holder;
-            final Term term = mTerms.get(position);
-            final String DATERANGE = FormattingUtils.dateToString(new Date(term.getStartDate())) +
-                    " to " + FormattingUtils.dateToString(new Date(term.getEndDate()));
-            termHolder.mTermName.setText(term.getName());
-            termHolder.mDateRange.setText(DATERANGE);
-        } else {
-            final MessageViewHolder mv = (MessageViewHolder) holder;
-            mv.mMessage.setText(mContext.getResources().getString(R.string.message_no_terms_setup));
-        }
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return mTerms.size() > 0 ? mTerms.size() : 1;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return mTerms.size() > 0 ? 1 : 0;
-    }
-
+    //Term ViewHolder
     public static class TermViewHolder extends RecyclerView.ViewHolder {
         private TextView mTermName;
         private TextView mDateRange;

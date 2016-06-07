@@ -33,9 +33,7 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
     private StaggeredGridLayoutManager mLayoutManager;
     private int mCurrentRotation;
 
-    public TaskFragment() {
-    }
-
+    public TaskFragment() {}
 
     public static TaskFragment newInstance() {
         return new TaskFragment();
@@ -45,50 +43,6 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCurrentRotation = getResources().getConfiguration().orientation;
-
-    }
-
-    //TODO- DataUpdateListener if subjects have changed etc
-    @Override
-    public void onResume() {
-        super.onResume();
-        final int newRotation = getResources().getConfiguration().orientation;
-        if(newRotation != mCurrentRotation) {
-            mCurrentRotation = newRotation;
-            setupLayoutManager();
-            mRecycler.setLayoutManager(mLayoutManager);
-        }
-        mTaskAdapter.runQueuedUpdates();
-    }
-
-    private void setupLayoutManager() {
-        if(mLayoutManager == null) {
-            if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTaskAdapter.numTasksToday() > 0) {
-                mLayoutManager  = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-            } else {
-                mLayoutManager =  new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
-            }
-        }
-        if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTaskAdapter.numTasksToday() > 0) {
-            mLayoutManager.setSpanCount(2);
-        } else {
-            mLayoutManager.setSpanCount(1);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mTaskInterface = (TaskManager) context;
-        } catch(ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement TaskManager interface");
-        }
-        try {
-            mFABManager = (FABManager) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " mus implement FABManager interface");
-        }
     }
 
     @Override
@@ -118,6 +72,50 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
         return inflated;
     }
 
+    //TODO- DataUpdateListener if subjects have changed etc
+    @Override
+    public void onResume() {
+        super.onResume();
+        final int newRotation = getResources().getConfiguration().orientation;
+        if(newRotation != mCurrentRotation) {
+            mCurrentRotation = newRotation;
+            setupLayoutManager();
+            mRecycler.setLayoutManager(mLayoutManager);
+        }
+        mTaskAdapter.runQueuedUpdates();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mTaskInterface = (TaskManager) context;
+        } catch(ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement TaskManager interface");
+        }
+        try {
+            mFABManager = (FABManager) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " mus implement FABManager interface");
+        }
+    }
+
+    private void setupLayoutManager() {
+        if(mLayoutManager == null) {
+            if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTaskAdapter.numTasksToday() > 0) {
+                mLayoutManager  = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            } else {
+                mLayoutManager =  new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+            }
+        }
+        if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTaskAdapter.numTasksToday() > 0) {
+            mLayoutManager.setSpanCount(2);
+        } else {
+            mLayoutManager.setSpanCount(1);
+        }
+    }
+
+    //Interface methods below
     @Override
     public ViewGroup getViewGroup() {
         mTaskAdapter.notifyDataSetChanged();
@@ -146,8 +144,6 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
 
     @Override
     public void countChange(int previousCount, int newCount) {
-        if(previousCount <= 1 || newCount == 1) {
-            setupLayoutManager();
-        }
+        if(previousCount <= 1 || newCount == 1) setupLayoutManager();
     }
 }

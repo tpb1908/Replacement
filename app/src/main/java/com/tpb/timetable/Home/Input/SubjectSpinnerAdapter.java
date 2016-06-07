@@ -20,15 +20,10 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     private Context mContext;
     private DBHelper.ArrayWrapper<Subject> mSubjects;
 
-
     public SubjectSpinnerAdapter(Context context, DBHelper.ArrayWrapper<Subject> subjects) {
         super();
         this.mContext = context;
         this.mSubjects = subjects;
-    }
-
-    public int getPositionOfSubject(int subjectID) {
-        return mSubjects.getPosOfID(subjectID);
     }
 
     @Override
@@ -58,7 +53,8 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
 
     private View getCustomView(int position, ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
+        //False is important. It indicates whether the view should be added directly to the ViewGroup
+        final View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false);
         final TextView name = (TextView) row.findViewById(R.id.text_subject);
         final View colourBar = row.findViewById(R.id.colour_bar);
         final String subjectDescription = mSubjects.get(position).getName() +
@@ -69,6 +65,10 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         row.setBackgroundColor(ThemeHelper.getCardBackground());
         name.setTextColor(ThemeHelper.getPrimaryText());
         return row;
+    }
+
+    public int getPositionOfSubject(int subjectID) {
+        return mSubjects.getPosOfID(subjectID);
     }
 }
 

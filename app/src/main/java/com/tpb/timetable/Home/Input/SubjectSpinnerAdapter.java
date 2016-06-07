@@ -1,7 +1,6 @@
 package com.tpb.timetable.Home.Input;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 /**
  * Created by theo on 20/04/16.
@@ -29,14 +28,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     }
 
     public int getPositionOfSubject(int subjectID) {
-        int pos = -1;
-        for(int i = 0; i < mSubjects.size(); i++) {
-            if(mSubjects.get(i).getID() == subjectID) {
-                pos = i;
-                break;
-            }
-        }
-        return pos;
+        return mSubjects.getPosOfID(subjectID);
     }
 
     @Override
@@ -65,16 +57,17 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
     }
 
     private View getCustomView(int position, ViewGroup parent) {
-        Log.i(TAG, "getCustomView: Creating view for " + mSubjects.get(position).toString());
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false); //False is important. It indicates whether the view should be added directly to the ViewGroup
         final TextView name = (TextView) row.findViewById(R.id.text_subject);
         final View colourBar = row.findViewById(R.id.colour_bar);
-        final String TEXT = mSubjects.get(position).getName() + " " + mSubjects.get(position).getTeacher();
-        name.setText(TEXT);
+        final String subjectDescription = mSubjects.get(position).getName() +
+                " " + mSubjects.get(position).getTeacher();
+        name.setText(subjectDescription);
         colourBar.setBackgroundColor(mSubjects.get(position).getColor());
-        row.setBackgroundColor(ColorResources.getCardBackground());
-        name.setTextColor(ColorResources.getPrimaryText());
+        //No point sending a single TextView and colored view to be themed
+        row.setBackgroundColor(ThemeHelper.getCardBackground());
+        name.setTextColor(ThemeHelper.getPrimaryText());
         return row;
     }
 }

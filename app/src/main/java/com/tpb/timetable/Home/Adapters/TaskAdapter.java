@@ -23,7 +23,7 @@ import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if(holder.getItemViewType() == 0) {
             final MessageViewHolder mvh = (MessageViewHolder) holder;
             mvh.mMessage.setText(R.string.message_no_tasks);
-            ColorResources.theme((ViewGroup) holder.itemView);
+            ThemeHelper.theme((ViewGroup) holder.itemView);
         } else {
             final Task task = mTasks.get(position);
             final Subject subject = mDB.getSubject(task.getSubjectID());
@@ -146,7 +146,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         };
                         new Handler().postDelayed(r, 50);
                     }
-                    ColorResources.theme((ViewGroup) hvh.itemView);
+                    ThemeHelper.theme((ViewGroup) hvh.itemView);
                     hvh.mTitleBar.setBackgroundColor(color);
                     final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                     hvh.mSubjectName.setText(subjectNameClass);

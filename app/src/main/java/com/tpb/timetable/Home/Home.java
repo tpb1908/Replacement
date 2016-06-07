@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,10 +31,11 @@ import com.tpb.timetable.Home.Input.AssessmentInput;
 import com.tpb.timetable.Home.Input.HomeworkInput;
 import com.tpb.timetable.Home.Input.ReminderInput;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
+import com.tpb.timetable.Home.Interfaces.FABManager;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 import java.util.ArrayList;
 
@@ -60,7 +60,7 @@ import java.util.ArrayList;
         //TODO- Move all error messages to string resources
      */
 
-public class Home extends AppCompatActivity implements ClassOpener, TaskManager, Themable {
+public class Home extends AppCompatActivity implements ClassOpener, TaskManager, Themable, FABManager {
     private static final String TAG = "Home";
     private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -68,14 +68,14 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     private DBHelper mDB;
     private TodayFragment mTodayFragment;
     private TaskFragment mTaskFragment;
-    private MaterialSheetFab mFab;
+    private MaterialSheetFab mFAB;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
-        ColorResources.getColorResources(this, this);
+        ThemeHelper.getColorResources(this, this);
         mDB = DBHelper.getInstance(this);
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();
@@ -91,7 +91,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         //Setting up pager
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setBackgroundColor(ColorResources.getPrimary());
+        mViewPager.setBackgroundColor(ThemeHelper.getPrimary());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -99,11 +99,11 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         final SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
         final View sheetView = findViewById(R.id.fabSheet);
         final View overlay = findViewById(R.id.overlay);
-        mFab = new MaterialSheetFab(sFab, sheetView, overlay, ColorResources.getPrimary(), ColorResources.getAccent());
-        mFab.setEventListener(new MaterialSheetFabEventListener() {
+        mFAB = new MaterialSheetFab(sFab, sheetView, overlay, ThemeHelper.getPrimary(), ThemeHelper.getAccent());
+        mFAB.setEventListener(new MaterialSheetFabEventListener() {
             @Override
             public void onShowSheet() {
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     final AppBarLayout layout = (AppBarLayout) findViewById(R.id.appbar);
                     layout.setExpanded(false);
                 }
@@ -113,113 +113,20 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
             @Override
             public void onHideSheet() {
                 super.onHideSheet();
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     final AppBarLayout layout = (AppBarLayout) findViewById(R.id.appbar);
                     layout.setExpanded(true);
                 }
             }
         });
-        ColorResources.theme((ViewGroup) findViewById(R.id.background));
-    }
-
-
-    @Override
-    public ViewGroup getViewGroup() {
-        return (ViewGroup) findViewById(R.id.background);
-    }
-
-    //Adds arguments for SlidingActivity to start from a button
-    public void setExpandLocation(View v, Intent i) {
-        if(v != null) {
-            final int[] location = new int[2];
-            v.getLocationInWindow(location);
-            i.putExtra("leftOffset", location[0]);
-            i.putExtra("topOffset", location[1]);
-            i.putExtra("viewWidth", v.getWidth());
-            i.putExtra("viewHeight", v.getHeight());
-            i.putExtra("hasOpenPosition", true);
-        } else {
-            i.putExtra("hasOpenPosition", false);
-        }
-    }
-
-    public void newHomework(View v) {
-        final Intent i = new Intent(this, HomeworkInput.class);
-        setExpandLocation(v, i);
-        startActivityForResult(i, 1);
-    }
-
-    public void newReminder(View v) {
-        final Intent i = new Intent(this, ReminderInput.class);
-        setExpandLocation(v, i);
-        startActivityForResult(i, 1);
-    }
-
-    public void newTask(View v) {
-
-    }
-
-    public void newAssessment(View v) {
-        final Intent i = new Intent(this, AssessmentInput.class);
-        setExpandLocation(v, i);
-        startActivity(i);
-    }
-
-
-    @Override
-    public void showDeleteSnackBar(final Task t) {
-        final CoordinatorLayout snackBarLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
-        final Snackbar snackbar = Snackbar
-                .make(snackBarLayout, t.getTypeName() + " deleted",Snackbar.LENGTH_LONG)
-                .setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mDB.getAllTasks().addToPos(t);
-                    }
-                });
-        snackbar.show();
-    }
-
-    @Override
-    public void openTask(Task t, View v) {
-
-    }
-
-    @Override
-    public void openReminder(Task r, View v) {
-
-    }
-
-    @Override
-    public void openHomework(Task h, View v) {
-        final Intent i = new Intent(this, HomeworkInput.class);
-        setExpandLocation(v, i);
-        i.putExtra("task", h);
-        startActivityForResult(i, 1);
-    }
-
-    @Override
-    public void openClass(ClassTime c) {
-        Log.i(TAG, "Opening class " + c);
-    }
-
-    @Override
-    public void countChange(int previousCount, int newCount) {}
-
-    @Override
-    public void onBackPressed () {
-        if(mFab.isSheetVisible()) {
-            mFab.hideSheet();
-        } else {
-            super.onBackPressed();
-        }
+        ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mFab.isSheetVisible()) {
-            mFab.hideSheet();
+        if(mFAB.isSheetVisible()) {
+            mFAB.hideSheet();
         }
     }
 
@@ -237,44 +144,96 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
 
     @Override
     protected void onStart () {
-        /*DBHelper may be null when application is restarted
-        *If the DBHelper is not null, all this will do is return
-        * the already instantiated singleton, so there's no real
-        * performance concerns
-         */
         mDB = DBHelper.getInstance(this);
         super.onStart();
-
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            if(position == 0) {
-                mTodayFragment = TodayFragment.newInstance();
-                return mTodayFragment;
-            } else if(position == 1) {
-                mTaskFragment = TaskFragment.newInstance();
-                return mTaskFragment;
-            } else {return null;}
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return titles[position];
+    @Override
+    public void onBackPressed () {
+        if(mFAB.isSheetVisible()) {
+            mFAB.hideSheet();
+        } else {
+            super.onBackPressed();
         }
     }
 
+    public void newHomework(View v) {
+        final Intent i = new Intent(this, HomeworkInput.class);
+        ThemeHelper.setExpandLocation(v, i);
+        startActivityForResult(i, 1);
+    }
+
+    public void newReminder(View v) {
+        final Intent i = new Intent(this, ReminderInput.class);
+        ThemeHelper.setExpandLocation(v, i);
+        startActivityForResult(i, 1);
+    }
+
+    public void newTask(View v) {
+
+    }
+
+    public void newAssessment(View v) {
+        final Intent i = new Intent(this, AssessmentInput.class);
+        ThemeHelper.setExpandLocation(v, i);
+        startActivity(i);
+    }
+
+
+    //Begin interface methods
+    @Override
+    public void showFAB() {
+        mFAB.showFab();
+    }
+
+    @Override
+    public void hideFAB() {
+        mFAB.hideSheetThenFab();
+
+    }
+
+    @Override
+    public ViewGroup getViewGroup() {
+        return (ViewGroup) findViewById(R.id.background);
+    }
+
+    @Override
+    public void openTask(Task t, View v) {}
+
+    @Override
+    public void openReminder(Task r, View v) {}
+
+    @Override
+    public void openHomework(Task h, View v) {
+        final Intent i = new Intent(this, HomeworkInput.class);
+        ThemeHelper.setExpandLocation(v, i);
+        i.putExtra("task", h);
+        startActivityForResult(i, 1);
+    }
+
+    @Override
+    public void countChange(int previousCount, int newCount) {}
+
+    @Override
+    public void showDeleteSnackBar(final Task t) {
+        final CoordinatorLayout snackBarLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
+        final Snackbar snackbar = Snackbar
+                .make(snackBarLayout, t.getTypeName() + " deleted",Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDB.getAllTasks().addToPos(t);
+                    }
+                });
+        snackbar.show();
+    }
+    //End Interface methods
+
+
+    @Override
+    public void openClass(ClassTime c) {
+    }
+    
     private void testSubjects() {
         final ArrayList<Subject> subjects = new ArrayList<>();
         Subject s = new Subject();
@@ -298,4 +257,40 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         mDB.getAllSubjects().addAll(subjects);
 
     }
+    
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if(position == 0) {
+                mTodayFragment = TodayFragment.newInstance();
+                return mTodayFragment;
+            } else if(position == 1) {
+                mTaskFragment = TaskFragment.newInstance();
+                return mTaskFragment;
+            } else {return null;}
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            if(position == 0) showFAB();
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
+        }
+    }
+
+
 }

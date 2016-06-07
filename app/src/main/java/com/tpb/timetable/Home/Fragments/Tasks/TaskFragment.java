@@ -11,13 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Adapters.TaskAdapter;
+import com.tpb.timetable.Home.Interfaces.FABManager;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 
 /**
@@ -28,9 +28,9 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
     protected View mView;
     private TaskAdapter mTaskAdapter;
     private TaskManager mTaskInterface;
+    private FABManager mFABManager;
     private RecyclerView mRecycler;
     private StaggeredGridLayoutManager mLayoutManager;
-    private DBHelper mDB;
     private int mCurrentRotation;
 
     public TaskFragment() {
@@ -45,6 +45,7 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCurrentRotation = getResources().getConfiguration().orientation;
+
     }
 
     //TODO- DataUpdateListener if subjects have changed etc
@@ -58,7 +59,6 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
             mRecycler.setLayoutManager(mLayoutManager);
         }
         mTaskAdapter.runQueuedUpdates();
-        //ColorResources.theme(getViewGroup());
     }
 
     private void setupLayoutManager() {
@@ -84,15 +84,18 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
         } catch(ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement TaskManager interface");
         }
+        try {
+            mFABManager = (FABManager) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " mus implement FABManager interface");
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
-        ColorResources.theme((ViewGroup) inflated);
-        ColorResources.addListener(this);
-        //DataHelper is created here so that the app doesn't force close when it is restarted
-        mDB = DBHelper.getInstance(getContext());
+        ThemeHelper.theme((ViewGroup) inflated);
+        ThemeHelper.addListener(this);
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TaskAdapter(getContext(), this);
         setupLayoutManager();
@@ -100,6 +103,18 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
         mRecycler.setHasFixedSize(false);
         mRecycler.setLayoutManager(mLayoutManager);
         mView = inflated;
+        mRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy > 0) { //Up- e.g. finger moving up the screen
+                    mFABManager.hideFAB();
+                } else { //Down
+                    mFABManager.showFAB();
+                }
+            }
+        });
+
         return inflated;
     }
 

@@ -914,25 +914,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
         public void set(int index, T t) {
             mData.set(index, t);
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.set(index, t);
-            }
+            for(ArrayChangeListener<T> l : mListeners) l.set(index, t);
             mDBHelper.add(t);
         }
 
         public void add(T t) {
             mData.add(t);
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.add(t);
-            }
+            for(ArrayChangeListener<T> l : mListeners) l.add(t);
             t.setID(mDBHelper.add(t));
         }
 
         public void add(int index, T t) {
             mData.add(index, t);
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.add(index, t);
-            }
+            for(ArrayChangeListener<T> l : mListeners) l.add(index, t);
             t.setID(mDBHelper.add(t));
         }
 
@@ -954,59 +948,50 @@ public class DBHelper extends SQLiteOpenHelper {
             mData.remove(t);
             if(oldIndex > newIndex) {
                 mData.add(newIndex, t);
-                for(ArrayChangeListener<T> l : mListeners) {
-                    l.moved(oldIndex, newIndex);
-                }
+                for(ArrayChangeListener<T> l : mListeners) l.moved(oldIndex, newIndex);
             } else {
                 mData.add(newIndex-1, t);
-                for(ArrayChangeListener<T> l : mListeners) {
-                    l.moved(newIndex-1, oldIndex);
-                }
+                for(ArrayChangeListener<T> l : mListeners) l.moved(newIndex-1, oldIndex);
             }
         }
 
         public void update(T t) {
             mData.set(mData.indexOf(t), t);
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.updated(mData.indexOf(t), t);
-            }
+            for(ArrayChangeListener<T> l : mListeners) l.updated(mData.indexOf(t), t);
             mDBHelper.update(t);
         }
 
         public void remove(T t) {
             final int index = mData.indexOf(t);
             mData.remove(index);
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.removed(index, t);
-            }
+            for(ArrayChangeListener<T> l : mListeners) l.removed(index, t);
             mDBHelper.remove(t);
         }
 
         public void remove(int index) {
             final T t = mData.get(index);
             mData.remove(index);
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.removed(index, t);
-            }
+            for(ArrayChangeListener<T> l : mListeners) l.removed(index, t);
             mDBHelper.remove(t);
         }
 
         public void removeAll(T t) {
-            for(int i = mData.indexOf(t); i >= 0; i = mData.indexOf(t)) {
-                mData.remove(i);
-            }
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.dataSetChanged();
-            }
+            for(int i = mData.indexOf(t); i >= 0; i = mData.indexOf(t)) mData.remove(i);
+            for(ArrayChangeListener<T> l : mListeners) l.dataSetChanged();
             mDBHelper.remove(t);
         }
 
         public void clear() {
             mData.clear();
             mDataValid = false;
-            for(ArrayChangeListener<T> l : mListeners) {
-                l.cleared();
+            for(ArrayChangeListener<T> l : mListeners) l.cleared();
+        }
+
+        public int getPosOfID(int id) {
+            for(int i = 0; i < mData.size(); i++) {
+                if(mData.get(i).getID() == id) return i;
             }
+            return -1;
         }
 
         @Override

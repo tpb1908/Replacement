@@ -46,7 +46,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 /**
  * Sliding activity that handles all interaction with users. It will be shown with about 150dp of
@@ -109,7 +109,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
 
         scroller = (MultiShrinkScroller2) findViewById(R.id.multiscroller);
         content = (FrameLayout) findViewById(R.id.content_container);
-        ColorResources.theme((content));
+        ThemeHelper.theme((content));
         headerContent = (FrameLayout) findViewById(R.id.header_content_container);
 
         photoView = (ImageView) findViewById(R.id.photo);

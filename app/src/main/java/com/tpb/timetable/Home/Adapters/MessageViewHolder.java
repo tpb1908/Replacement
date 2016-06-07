@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 
 /**
@@ -17,7 +17,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     public MessageViewHolder(View v) {
         super(v);
         mMessage = (TextView) v.findViewById(R.id.text_message);
-        mMessage.setTextColor(ColorResources.getPrimaryText());
+        mMessage.setTextColor(ThemeHelper.getPrimaryText());
     }
 
 }

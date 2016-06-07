@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.text.ParseException;
@@ -36,12 +36,12 @@ public class AssessmentInput extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_assessment);
-        setPrimaryColors(ColorResources.getPrimary(), ColorResources.getPrimaryDark());
+        setPrimaryColors(ThemeHelper.getPrimary(), ThemeHelper.getPrimaryDark());
         enableFullscreen();
         final Intent i = getIntent();
         expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         final RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
-        ColorResources.theme(background);
+        ThemeHelper.theme(background);
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_assessment_title);
         final EditText mNotesInputs = (EditText) findViewById(R.id.edittext_assessment_notes);
         final Spinner mSubjectSpinner = (Spinner) findViewById(R.id.spinner_subject);

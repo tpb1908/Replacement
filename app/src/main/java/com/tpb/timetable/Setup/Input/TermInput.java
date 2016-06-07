@@ -17,7 +17,7 @@ import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.text.ParseException;
@@ -166,7 +166,7 @@ public class TermInput extends SlidingActivity {
                 }
             }
         });
-        ColorResources.theme((ViewGroup) findViewById(R.id.background));
+        ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
     }
 
     public void showDatePicker() {

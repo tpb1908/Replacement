@@ -18,7 +18,7 @@ import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.text.ParseException;
@@ -40,8 +40,8 @@ public class HomeworkInput extends SlidingActivity {
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_homework);
         setPrimaryColors(
-                ColorResources.getPrimary(),
-                ColorResources.getPrimaryDark());
+                ThemeHelper.getPrimary(),
+                ThemeHelper.getPrimaryDark());
         enableFullscreen();
         final Intent i = getIntent();
         if(i.getBooleanExtra("hasOpenPosition", false)) {
@@ -132,7 +132,7 @@ public class HomeworkInput extends SlidingActivity {
                 }
             }
         });
-        ColorResources.theme((ViewGroup) findViewById(R.id.background));
+        ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
     }
 
 

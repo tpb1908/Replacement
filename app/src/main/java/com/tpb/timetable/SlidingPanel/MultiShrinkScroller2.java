@@ -55,7 +55,7 @@ import android.widget.TextView;
 
 import com.klinker.android.sliding.SchedulingUtils;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 /**
  * A custom {@link ViewGroup} that operates similarly to a {@link ScrollView}, except with multiple
@@ -1431,7 +1431,7 @@ public class MultiShrinkScroller2 extends FrameLayout {
         // Tell the photo view what tint we are trying to achieve. Depending on the type of
         // drawable used, the photo view may or may not use this tint.
         photoView.setBackgroundColor(headerTintColor);
-        photoTouchInterceptOverlay.setBackgroundColor(ColorResources.adjustAlpha(headerTintColor, colorAlpha));
+        photoTouchInterceptOverlay.setBackgroundColor(ThemeHelper.adjustAlpha(headerTintColor, colorAlpha));
         titleGradientDrawable.setAlpha(gradientAlpha);
         actionBarGradientDrawable.setAlpha(gradientAlpha);
     }

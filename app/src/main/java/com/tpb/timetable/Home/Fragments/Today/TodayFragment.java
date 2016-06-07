@@ -21,10 +21,11 @@ import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.Home.Adapters.TodayClassAdapter;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
+import com.tpb.timetable.Home.Interfaces.FABManager;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ColorResources;
+import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.Calendar;
@@ -79,8 +80,8 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
-        ColorResources.theme((ViewGroup) inflated);
-        ColorResources.addListener(this);
+        ThemeHelper.theme((ViewGroup) inflated);
+        ThemeHelper.addListener(this);
         mDB =  DBHelper.getInstance(getContext());
         mClassRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
         mClassAdapter = new TodayClassAdapter(getContext(), this, mDB);
@@ -94,7 +95,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ColorResources.setDarkTheme(!ColorResources.isDarkTheme());
+                ThemeHelper.setDarkTheme(!ThemeHelper.isDarkTheme());
 //                final Intent i = getContext().getPackageManager()
 //                        .getLaunchIntentForPackage( getContext().getPackageName() );
 //                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -126,7 +127,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
             dayTerm += " - Holiday";
             mDayTermText.setText(dayTerm);
         }
-        mDayTermText.setTextColor(ColorResources.getPrimaryText());
+        mDayTermText.setTextColor(ThemeHelper.getPrimaryText());
     }
 
 

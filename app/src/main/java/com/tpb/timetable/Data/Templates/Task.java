@@ -1,5 +1,7 @@
 package com.tpb.timetable.Data.Templates;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -148,7 +150,7 @@ public class Task extends Data implements Comparable<Task>, Serializable {
     }
 
     @Override
-    public int compareTo(Task another) {
+    public int compareTo(@NonNull Task another) {
         if(complete) { //This task is complete,
             if(another.complete) { //If they are both complete, we compare times
                 return endDate > another.endDate ? 1 : -1;

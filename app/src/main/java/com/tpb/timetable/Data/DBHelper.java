@@ -77,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final ArrayWrapper<ClassTime> classTimeWrapper = new ArrayWrapper<>(this);
     private final ArrayWrapper<Assessment> assessmentWrapper = new ArrayWrapper<>(this);
     private final ArrayWrapper<Task> taskWrapper = new ArrayWrapper<>(this);
-    private ArrayList<ArrayWrapper<ClassTime>> classesForDay = new ArrayList<>(7);
+    private final ArrayList<ArrayWrapper<ClassTime>> classesForDay = new ArrayList<>(7);
     private boolean classesForDayValid = false;
 
 
@@ -174,7 +174,7 @@ public class DBHelper extends SQLiteOpenHelper {
      * All arraylist methods are accessed through the wrapper
      * Some type specific methods are accessed through the db helper
      * Database access only happens through the wrapper, this stops any confusion
-     * and repetaed calls
+     * and repeated calls
      *
      */
 
@@ -656,7 +656,7 @@ public class DBHelper extends SQLiteOpenHelper {
         final ContentValues values = new ContentValues();
         int id = -1;
         if(data instanceof Task) {
-            Task t = (Task) data;
+            final Task t = (Task) data;
             values.put(KEY_TYPE, t.getType());
             values.put(KEY_TASK_TITLE, t.getTitle());
             values.put(KEY_TASK_DETAIL, t.getDetail());
@@ -671,7 +671,7 @@ public class DBHelper extends SQLiteOpenHelper {
             id = (int) db.insert(TABLE_TASKS_CURRENT, null, values);
             Log.i(TAG, "Adding " + t.toString());
         } else if(data instanceof ClassTime) {
-            ClassTime ct = (ClassTime) data;
+            final ClassTime ct = (ClassTime) data;
             values.put(KEY_SUBJECT_ID, ct.getSubjectID());
             values.put(KEY_START_TIME, ct.getStartTime());
             values.put(KEY_END_TIME, ct.getEndTime());
@@ -679,7 +679,7 @@ public class DBHelper extends SQLiteOpenHelper {
             id = (int) db.insert(TABLE_CLASS_TIMES, null, values);
             Log.i(TAG, "Adding " + ct.toString());
         } else if(data instanceof Subject) {
-            Subject s = (Subject) data;
+            final Subject s = (Subject) data;
             values.put(KEY_SUBJECT_NAME, s.getName());
             values.put(KEY_CLASSROOM, s.getClassroom());
             values.put(KEY_TEACHER, s.getTeacher());
@@ -687,7 +687,7 @@ public class DBHelper extends SQLiteOpenHelper {
             id = ((int) db.insert(TABLE_SUBJECTS, null, values));
             Log.i(TAG, "Adding " + s.toString());
         } else if(data instanceof Assessment) {
-            Assessment a = (Assessment) data;
+            final Assessment a = (Assessment) data;
             values.put(KEY_ASSESSMENT_NAME, a.getName());
             values.put(KEY_ASSESSMENT_DATE, a.getDate());
             values.put(KEY_ASSESSMENT_REVISION, a.getRevision());
@@ -697,7 +697,7 @@ public class DBHelper extends SQLiteOpenHelper {
             id = (int) db.insert(TABLE_ASSESSMENTS, null, values);
             Log.i(TAG, "Adding " + a.toString());
         } else if(data instanceof Term) {
-            Term t = (Term) data;
+            final Term t = (Term) data;
             values.put(KEY_TERM_NAME, t.getName());
             values.put(KEY_START_DATE, t.getStartDate());
             values.put(KEY_END_DATE, t.getEndDate());
@@ -840,10 +840,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     public class ArrayWrapper<T extends Data & Comparable<T>> {
-        private DBHelper mDBHelper;
+        private final  DBHelper mDBHelper;
         private boolean mDataValid;
         private ArrayList<T> mData = new ArrayList<>();
-        private ArrayList<ArrayChangeListener<T>> mListeners = new ArrayList<>();
+        private final ArrayList<ArrayChangeListener<T>> mListeners = new ArrayList<>();
 
         public ArrayWrapper(DBHelper dbHelper) {
             this.mDBHelper = dbHelper;

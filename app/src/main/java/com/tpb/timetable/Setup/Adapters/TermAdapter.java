@@ -25,7 +25,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private static final String TAG = "TermAdapter";
     private DBHelper.ArrayWrapper<Term> mTerms;
     private RemoveListener<Term> mTermRemoveListener;
-    private ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
+    private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
     private Context mContext;
 
     public TermAdapter() {super();}

@@ -23,6 +23,7 @@ import com.tpb.timetable.Utils.ThemeHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -34,7 +35,10 @@ public class HomeworkInput extends SlidingActivity {
     private static final String TAG = "HomeworkInput";
     private Task mCurrentTask;
     private EditText mDateInput;
+    private EditText mTitleInput;
+    private EditText mDetailInput;
     private boolean mEditing;
+    private boolean[] errors = new boolean[2];
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -50,9 +54,9 @@ public class HomeworkInput extends SlidingActivity {
                     i.getIntExtra("viewWidth", 0),
                     i.getIntExtra("viewHeight", 0));
         }
-        final EditText mTitleInput = (EditText) findViewById(R.id.edittext_homework_title);
+        mTitleInput = (EditText) findViewById(R.id.edittext_homework_title);
         final TextInputLayout mTitleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_title);
-        final EditText mDetailInput = (EditText) findViewById(R.id.edittext_homework_detail);
+        mDetailInput = (EditText) findViewById(R.id.edittext_homework_detail);
         final TextInputLayout mDetailWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_detail);
         final TextInputLayout mDateWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_homework_due_date);
         mDateInput = (EditText) findViewById(R.id.edittext_homework_due_date);
@@ -70,6 +74,8 @@ public class HomeworkInput extends SlidingActivity {
                 showDatePicker(v);
             }
         });
+        mTitleInput.setOnFocusChangeListener(errorListener);
+        mDetailInput.setOnFocusChangeListener(errorListener);
         try {
             mCurrentTask = (Task) i.getSerializableExtra("task");
             mTitleInput.setText(mCurrentTask.getTitle());
@@ -85,25 +91,16 @@ public class HomeworkInput extends SlidingActivity {
             mEditing = false;
             setTitle(R.string.title_homework_input);
         }
+        Arrays.fill(errors, !mEditing); //If mEditing is true, the fields are already acceptable
 
-        setFab(getResources().getColor(R.color.colorAccent),
+        setFab(ThemeHelper.getAccent(),
                 R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean errorFlag = false;
                 final long CURRENT = Calendar.getInstance().getTimeInMillis();
-                if(mTitleInput.getText().toString().equals("")) {
-                    errorFlag = true;
-                    mTitleWrapper.setError("Please set a title");
-                } else {
-                    mTitleWrapper.setError(null);
-                }
-                if(mDetailInput.getText().toString().equals("")) {
-                    errorFlag = true;
-                    mDetailWrapper.setError("Please add some detail");
-                } else {
-                    mDetailWrapper.setError(null);
-                }
+                mTitleWrapper.setError(errors[1] ? "Please set a title" : null);
+                mDetailWrapper.setError(errors[1] ? "Please add some detail" : null);
+                boolean errorFlag = (errors[0] | errors[1]);
                 if(mDateInput.getText().toString().equals("")) {
                     errorFlag = true;
                     mDateWrapper.setError("Please set a date");
@@ -146,6 +143,7 @@ public class HomeworkInput extends SlidingActivity {
         new DatePickerDialog(HomeworkInput.this, R.style.DatePickerTheme, dateSetListener,
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
+        mDetailInput.clearFocus();
     }
 
     private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -158,6 +156,22 @@ public class HomeworkInput extends SlidingActivity {
                 mCurrentTask.setEndDate(d.getTime());
             } catch (ParseException e) {
                 Log.e(TAG, "Parsing exception in OnDateSetListener",e);
+            }
+        }
+    };
+
+    private View.OnFocusChangeListener errorListener = new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            switch(v.getId()) {
+                case R.id.edittext_homework_title:
+                    errors[0] = mTitleInput.getText().toString().equals("");
+                    break;
+                case R.id.edittext_homework_detail:
+                    errors[1] = mDetailInput.getText().toString().equals("");
+                    break;
+                default:
+                    Log.i(TAG, "onFocusChange: Default view " + v.toString());
             }
         }
     };

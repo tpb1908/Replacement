@@ -50,7 +50,7 @@ public class AssessmentInput extends SlidingActivity {
         final DBHelper db = DBHelper.getInstance(this);
         mSubjectSpinner.setAdapter(new SubjectSpinnerAdapter(this, db.getAllSubjects()));
 
-        setFab(getResources().getColor(R.color.colorAccent), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
+        setFab(ThemeHelper.getAccent(), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -74,7 +74,7 @@ public class AssessmentInput extends SlidingActivity {
                 calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");

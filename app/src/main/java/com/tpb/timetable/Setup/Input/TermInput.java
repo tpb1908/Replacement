@@ -40,7 +40,7 @@ public class TermInput extends SlidingActivity {
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_term);
-        setPrimaryColors(getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorPrimaryDark));
+        setPrimaryColors(ThemeHelper.getPrimary(), ThemeHelper.getPrimaryDark());
         enableFullscreen();
         final Intent i = getIntent();
         if(i.getBooleanExtra("hasOpenPosition", false)) {

@@ -17,8 +17,8 @@ import com.tpb.timetable.Utils.ThemeHelper;
  */
 public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget.SpinnerAdapter {
     private static final String TAG = "SubjectSpinnerAdapter";
-    private Context mContext;
-    private DBHelper.ArrayWrapper<Subject> mSubjects;
+    private final Context mContext;
+    private final DBHelper.ArrayWrapper<Subject> mSubjects;
 
     public SubjectSpinnerAdapter(Context context, DBHelper.ArrayWrapper<Subject> subjects) {
         super();

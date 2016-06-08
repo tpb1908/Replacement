@@ -1,5 +1,7 @@
 package com.tpb.timetable.Data.Templates;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -48,7 +50,7 @@ public class Term extends Data implements Comparable<Term>, Serializable {
     }
 
     @Override
-    public int compareTo(Term another) {
+    public int compareTo(@NonNull Term another) {
         if(startDate > another.endDate) {
             return 1;
         } else if(startDate ==  another.endDate) {

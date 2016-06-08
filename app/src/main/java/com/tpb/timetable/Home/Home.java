@@ -62,7 +62,7 @@ import java.util.ArrayList;
 
 public class Home extends AppCompatActivity implements ClassOpener, TaskManager, Themable, FABManager {
     private static final String TAG = "Home";
-    private static String[] titles = new String[] {"Today", "Tasks", "Timetable"};
+    private static final String[] titles = new String[] {"Today", "Tasks", "Timetable"};
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private DBHelper mDB;

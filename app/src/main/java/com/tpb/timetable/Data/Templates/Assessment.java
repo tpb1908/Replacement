@@ -1,5 +1,7 @@
 package com.tpb.timetable.Data.Templates;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -94,7 +96,7 @@ public class Assessment extends Data implements Comparable<Assessment>, Serializ
     }
 
     @Override
-    public int compareTo(Assessment another) {
+    public int compareTo(@NonNull Assessment another) {
         if(date < another.date) {
             return 1;
         } else if(date == another.date) {

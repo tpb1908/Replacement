@@ -40,7 +40,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private boolean currentOpen = false;
     private int currentPosition = -1;
     private boolean wasEmpty = false; //this is needed so that adding a value doesn't cause an inconsistency
-    private ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
+    private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
 
     public TaskAdapter() {
         super();

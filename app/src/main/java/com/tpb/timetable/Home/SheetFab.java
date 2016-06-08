@@ -42,8 +42,8 @@ public class SheetFab extends FloatingActionButton implements AnimatedFab {
         // Only use scale animation if FAB is hidden
         if (getVisibility() != View.VISIBLE) {
             // Pivots indicate where the animation begins from
-            float pivotX = getPivotX() + translationX;
-            float pivotY = getPivotY() + translationY;
+            final float pivotX = getPivotX() + translationX;
+            final float pivotY = getPivotY() + translationY;
 
             ScaleAnimation anim;
             // If pivots are 0, that means the FAB hasn't been drawn yet so just use the
@@ -67,8 +67,8 @@ public class SheetFab extends FloatingActionButton implements AnimatedFab {
     public void hide() {
         if (getVisibility() == View.VISIBLE) {
             // Pivots indicate where the animation begins from
-            float pivotX = getPivotX() + getTranslationX();
-            float pivotY = getPivotY() + getTranslationY();
+            final float pivotX = getPivotX() + getTranslationX();
+            final float pivotY = getPivotY() + getTranslationY();
 
             // Animate FAB shrinking
             ScaleAnimation anim = new ScaleAnimation(1, 0, 1, 0, pivotX, pivotY);

@@ -46,7 +46,7 @@ public class ThemeHelper {
     private static boolean darkTheme;
     private static Context mContext;
     private static ThemeHelper instance;
-    private static ArrayList<Themable> mListeners = new ArrayList<>();
+    private static final ArrayList<Themable> mListeners = new ArrayList<>();
     private static SharedPreferences.Editor mEditor;
 
     private static int primary;

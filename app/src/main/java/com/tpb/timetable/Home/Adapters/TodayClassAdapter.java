@@ -23,9 +23,9 @@ import java.util.Calendar;
  */
 public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DBHelper.ArrayChangeListener<ClassTime> {
     private static final String TAG = "TodayClassAdapter";
-    private Context mContext;
-    private ClassOpener mClassInterface;
-    private DBHelper.ArrayWrapper<ClassTime> mClasses;
+    private final Context mContext;
+    private final ClassOpener mClassInterface;
+    private final DBHelper.ArrayWrapper<ClassTime> mClasses;
     private Calendar mCalendar;
     private int currentTime;
     private int currentTimePosition;
@@ -207,12 +207,12 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     public static class ClassViewHolder extends RecyclerView.ViewHolder {
         private static TodayClassAdapter parent;
-        private TextView className;
-        private TextView classTime;
-        private TextView teacherName;
-        private TextView classRoom;//False is important. It indicates whether the view should be added directly to the ViewGroup
-        private View colourBar;
-        private ProgressBar timerBar;
+        private final TextView className;
+        private final TextView classTime;
+        private final TextView teacherName;
+        private final TextView classRoom;//False is important. It indicates whether the view should be added directly to the ViewGroup
+        private final View colourBar;
+        private final ProgressBar timerBar;
 
         public ClassViewHolder(View v, TodayClassAdapter p) {
             super(v);
@@ -237,7 +237,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      * ViewHolder for a class in the current day which has already passed
      */
     public static class ClassPastViewHolder extends RecyclerView.ViewHolder {
-        private TextView info;
+        private final TextView info;
         public ClassPastViewHolder(View v) {
             super(v);
             setIsRecyclable(false);

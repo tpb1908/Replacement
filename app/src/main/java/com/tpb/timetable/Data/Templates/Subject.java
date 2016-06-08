@@ -1,5 +1,7 @@
 package com.tpb.timetable.Data.Templates;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -73,7 +75,7 @@ public class Subject extends Data implements Comparable<Subject>, Serializable {
     }
 
     @Override
-    public int compareTo(Subject another) {
+    public int compareTo(@NonNull Subject another) {
         return 0;
     }
 }

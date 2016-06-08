@@ -1,5 +1,7 @@
 package com.tpb.timetable.Data.Templates;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
@@ -67,7 +69,7 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
     }
 
     @Override
-    public int compareTo(ClassTime another) {
+    public int compareTo(@NonNull ClassTime another) {
         return startTime >= another.startTime ? 1 : -1;
     }
 

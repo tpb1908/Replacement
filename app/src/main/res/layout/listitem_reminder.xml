@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/reminderIcon"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toEndOf="@+id/reminderIcon"/>
 
             <ImageView
@@ -49,7 +49,7 @@
                 android:layout_width="58dp"
                 android:layout_height="58dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="16dp"
                 android:background="#00ffffff"
                 android:src="@drawable/icon_reminder"/>

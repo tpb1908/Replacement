@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TimeTable.iml" filepath="$PROJECT_DIR$/TimeTable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Replacement.iml" filepath="$PROJECT_DIR$/Replacement.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/sliding/android-slidingactivity/sample/sample.iml" filepath="$PROJECT_DIR$/sliding/android-slidingactivity/sample/sample.iml" />
     </modules>

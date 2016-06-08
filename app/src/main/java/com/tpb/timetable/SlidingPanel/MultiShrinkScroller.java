@@ -77,7 +77,7 @@ import com.tpb.timetable.Utils.ThemeHelper;
  * order to track velocity, modify EdgeEffect color and perform the originally specified animations.
  * As a result this ViewGroup has non-standard talkback and keyboard support.
  */
-public class MultiShrinkScroller2 extends FrameLayout {
+public class MultiShrinkScroller extends FrameLayout {
 
     public enum OpenAnimation {
         SLIDE_UP, EXPAND_FROM_VIEW
@@ -224,7 +224,7 @@ public class MultiShrinkScroller2 extends FrameLayout {
      * Create a new instance of MultiShrinkScroller.
      * @param context
      */
-    public MultiShrinkScroller2(Context context) {
+    public MultiShrinkScroller(Context context) {
         this(context, null);
     }
 
@@ -233,7 +233,7 @@ public class MultiShrinkScroller2 extends FrameLayout {
      * @param context
      * @param attrs
      */
-    public MultiShrinkScroller2(Context context, AttributeSet attrs) {
+    public MultiShrinkScroller(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
@@ -243,7 +243,7 @@ public class MultiShrinkScroller2 extends FrameLayout {
      * @param attrs
      * @param defStyleAttr
      */
-    public MultiShrinkScroller2(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MultiShrinkScroller(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);

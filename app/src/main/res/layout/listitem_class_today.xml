@@ -20,7 +20,7 @@
             android:layout_height="6dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_gravity="left|center_horizontal"
+            android:layout_gravity="start|center_horizontal"
             />
 
         <RelativeLayout
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/icon_class"
                 android:layout_toEndOf="@+id/icon_class"
-                android:layout_toLeftOf="@+id/text_teacher_name"
+                android:layout_toStartOf="@+id/text_teacher_name"
                 android:singleLine="true"
                 android:textStyle="bold"/>
 
@@ -61,9 +61,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/icon_class"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toEndOf="@+id/icon_class"
-                android:layout_toLeftOf="@+id/text_classroom"/>
+                android:layout_toStartOf="@+id/text_classroom"/>
 
             <TextView
                 android:id="@+id/text_classroom"
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/text_class_time"
                 android:layout_alignBottom="@+id/text_class_time"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:paddingEnd="10dp"
                 android:singleLine="true"/>
 

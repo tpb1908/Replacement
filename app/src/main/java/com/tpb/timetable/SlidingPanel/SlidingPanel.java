@@ -78,7 +78,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
     private ImageView photoView;
     private FloatingActionButton fab;
     private View photoViewTempBackground;
-    private MultiShrinkScroller2 scroller;
+    private MultiShrinkScroller scroller;
     private FrameLayout content;
     private ColorDrawable windowScrim;
     private boolean isEntranceAnimationFinished;
@@ -86,7 +86,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
     private boolean isExitAnimationFinished;
     private boolean isStarting;
     private boolean startFullscreen = false;
-    private MultiShrinkScroller2.OpenAnimation openAnimation = MultiShrinkScroller2.OpenAnimation.SLIDE_UP;
+    private MultiShrinkScroller.OpenAnimation openAnimation = MultiShrinkScroller.OpenAnimation.SLIDE_UP;
     private FrameLayout headerContent;
 
     /**
@@ -107,7 +107,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
 
         setContentView(R.layout.sliding_activity);
 
-        scroller = (MultiShrinkScroller2) findViewById(R.id.multiscroller);
+        scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
         content = (FrameLayout) findViewById(R.id.content_container);
         ThemeHelper.theme((content));
         headerContent = (FrameLayout) findViewById(R.id.header_content_container);
@@ -181,9 +181,9 @@ public abstract class SlidingPanel extends AppCompatActivity {
     /**
      * Use this method to pre-configure scroller. It will be called before initialisation
      *
-     * @param scroller {@link MultiShrinkScroller2} instance
+     * @param scroller {@link MultiShrinkScroller} instance
      */
-    protected void configureScroller(MultiShrinkScroller2 scroller){
+    protected void configureScroller(MultiShrinkScroller scroller){
 
     }
 
@@ -364,7 +364,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
      * @param viewHeight the height of the view you are expanding from/
      */
     public void expandFromPoints(int leftOffset, int topOffset, int viewWidth, int viewHeight) {
-        openAnimation = MultiShrinkScroller2.OpenAnimation.EXPAND_FROM_VIEW;
+        openAnimation = MultiShrinkScroller.OpenAnimation.EXPAND_FROM_VIEW;
         scroller.setExpansionPoints(leftOffset, topOffset, viewWidth, viewHeight);
     }
 
@@ -390,7 +390,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
 
         hasAlreadyBeenOpened = true;
 
-        if (openAnimation == MultiShrinkScroller2.OpenAnimation.EXPAND_FROM_VIEW) {
+        if (openAnimation == MultiShrinkScroller.OpenAnimation.EXPAND_FROM_VIEW) {
             // hide the content and show it in a bit, much smoother animation
 
             content.setVisibility(View.GONE);
@@ -403,7 +403,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
                             .alpha(1f)
                             .start();
                 }
-            }, MultiShrinkScroller2.ANIMATION_DURATION);
+            }, MultiShrinkScroller.ANIMATION_DURATION);
         }
 
         boolean openToCurrentPosition =  getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE &&
@@ -500,8 +500,8 @@ public abstract class SlidingPanel extends AppCompatActivity {
     }
 
 
-    private final MultiShrinkScroller2.MultiShrinkScrollerListener multiShrinkScrollerListener
-            = new MultiShrinkScroller2.MultiShrinkScrollerListener() {
+    private final MultiShrinkScroller.MultiShrinkScrollerListener multiShrinkScrollerListener
+            = new MultiShrinkScroller.MultiShrinkScrollerListener() {
         @Override
         public void onScrolledOffBottom() {
             isExitAnimationFinished = true;
@@ -536,7 +536,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
 
                 final ValueAnimator contentAlpha = ValueAnimator.ofFloat(1f, 0f);
                 contentAlpha.setInterpolator(interpolator);
-                contentAlpha.setDuration(MultiShrinkScroller2.ANIMATION_DURATION + 300);
+                contentAlpha.setDuration(MultiShrinkScroller.ANIMATION_DURATION + 300);
                 contentAlpha.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator animation) {

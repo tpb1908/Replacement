@@ -18,6 +18,7 @@
         android:textColor="@color/colorPrimaryText"
         android:layout_centerVertical="true"
         android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:layout_toEndOf="@+id/colour_bar"/>
 
 

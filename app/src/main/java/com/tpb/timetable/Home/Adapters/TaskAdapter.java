@@ -335,6 +335,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
                 }
             });
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -343,11 +344,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             });
         }
 
-        /**
-         * Num lines is definitely correct
-         * So I think that there is a problem with just multiplying, as the textview
-         * has more than just text
-         */
         private void openDetail(int duration) {
             if(!mIsAnimating && mDetailHint.contains("...")) {
                 final String[] lines = mDetail.split("\n");

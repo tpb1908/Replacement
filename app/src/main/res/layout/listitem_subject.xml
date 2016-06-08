@@ -43,7 +43,7 @@
                 android:layout_alignBaseline="@+id/text_homework_subject"
                 android:layout_alignBottom="@+id/text_homework_subject"
                 android:layout_alignStart="@+id/text_classroom"
-                android:layout_marginRight="8dp"/>
+                android:layout_marginEnd="8dp"/>
 
             <TextView
                 android:id="@+id/text_classroom"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/icon_class"
                 android:layout_marginEnd="76dp"
-                android:layout_marginLeft="150dp"
+                android:layout_marginStart="150dp"
                 android:layout_toStartOf="@+id/button_delete"/>
 
             <ImageView
@@ -59,7 +59,7 @@
                 android:layout_width="58dp"
                 android:layout_height="58dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
 
                 android:layout_marginTop="16dp"
                 android:background="#00ffffff"

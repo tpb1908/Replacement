@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 android:textStyle="bold"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"/>

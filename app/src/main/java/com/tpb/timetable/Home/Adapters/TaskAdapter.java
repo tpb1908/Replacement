@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,14 +16,13 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mattyork.colours.Colour;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
 import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,7 +82,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             final HomeworkViewHolder HVH = (HomeworkViewHolder) holder;
             if(HVH.mIsExpanded) {
                 HVH.mIsExpanded = false;
-                HVH.openDetail(300);
+                HVH.toggleDetail(300);
             }
         }
     }
@@ -120,7 +118,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 case 1:
                     break;
                 case 2:
-                    final int color = subject.getColor();
+                    final int titleBackground = subject.getColor();
                     final HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
                     hvh.mHomeWorkTitle.setText(task.getTitle());
                     hvh.mDueDay.setText(timeRange);
@@ -134,23 +132,20 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         final Runnable r = new Runnable() {
                             @Override
                             public void run() {
-                                hvh.openDetail(50);
+                                hvh.toggleDetail(50);
                             }
                         };
                         new Handler().postDelayed(r, 50);
                     }
                     ThemeHelper.theme((ViewGroup) hvh.itemView);
-                    hvh.mTitleBar.setBackgroundColor(color);
+                    hvh.mTitleBar.setBackgroundColor(titleBackground);
                     final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
                     hvh.mSubjectName.setText(subjectNameClass);
-                    if(Colour.blackOrWhiteContrastingColor(color) == 0) {
-                        hvh.mSubjectName.setTextColor(Color.parseColor("#000000"));
-                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework, 0, 0, 0);
-                    } else {
-                        hvh.mSubjectName.setTextColor(Color.parseColor("#FFFFFF"));
-                        //What the fuck is up with that method name??
-                        hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.icon_homework_white, 0, 0, 0);
-                    }
+                    //What the hell
+                    hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(
+                            ThemeHelper.getColoredDrawable(R.drawable.icon_homework, titleBackground),
+                            null, null, null);
+                    hvh.mSubjectName.setTextColor(ThemeHelper.getContrastingTextColor(titleBackground));
                     break;
                 case 3:
                     break;
@@ -339,12 +334,12 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    openDetail(300);
+                    toggleDetail(300);
                 }
             });
         }
 
-        private void openDetail(int duration) {
+        private void toggleDetail(int duration) {
             if(!mIsAnimating && mDetailHint.contains("...")) {
                 final String[] lines = mDetail.split("\n");
                 final StringBuilder builder = new StringBuilder();

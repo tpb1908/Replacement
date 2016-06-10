@@ -72,7 +72,6 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
         return inflated;
     }
 
-    //TODO- DataUpdateListener if subjects have changed etc
     @Override
     public void onResume() {
         super.onResume();

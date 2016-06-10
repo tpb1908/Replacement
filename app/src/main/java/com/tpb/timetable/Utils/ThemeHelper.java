@@ -20,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -366,7 +365,7 @@ public class ThemeHelper {
                 }
             }
         }
-        Log.i(TAG, "Theming  " + group.getClass().getName() + " took " + (System.nanoTime()-start)/1E9);
+        //Log.i(TAG, "Theming  " + group.getClass().getName() + " took " + (System.nanoTime()-start)/1E9);
     }
 
 
@@ -428,6 +427,57 @@ public class ThemeHelper {
         } else {
             i.putExtra("hasOpenPosition", false);
         }
+    }
+
+    public static Drawable getColoredDrawable(int resID) {
+        return getColoredDrawable(resID, getBackground());
+    }
+
+    public static Drawable getColoredDrawable(int resID, int background) {
+        final boolean darkIcon = perceivedBrightness(background) < 0.5;
+        switch(resID) {
+            case R.drawable.icon_homework:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_homework : R.drawable.icon_homework_white);
+            case R.drawable.icon_assessment:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_assessment : R.drawable.icon_assessment_white);
+            case R.drawable.icon_assignment:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_assignment : R.drawable.icon_assessment_white);
+            case R.drawable.icon_calendar:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_calendar : R.drawable.icon_calendar_white);
+            case R.drawable.icon_class:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_class : R.drawable.icon_class_white);
+            case R.drawable.icon_delete:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_delete : R.drawable.icon_delete_white);
+            case R.drawable.icon_note:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_note : R.drawable.icon_note_white);
+            case R.drawable.icon_reminder:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_reminder : R.drawable.icon_reminder_white);
+            case R.drawable.icon_subject:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_subject : R.drawable.icon_subject_white);
+            case R.drawable.icon_unarchive:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_unarchive : R.drawable.icon_unarchive_white);
+        }
+        return null;
+    }
+
+    public static int getContrastingTextColor(int background) {
+        return perceivedBrightness(background) < 0.5 ? Color.BLACK : Color.WHITE;
+    }
+
+    private static double perceivedBrightness(int c) {
+        return (Color.red(c)* Color.red(c) * .299 +
+                        Color.green(c) * Color.green(c) * .587 +
+                        Color.blue(c) * Color.blue(c) * .114)/255D;
     }
 
     /** From and for Klinker sliding activity

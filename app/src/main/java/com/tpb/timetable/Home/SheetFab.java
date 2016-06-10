@@ -4,12 +4,9 @@ import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 
 import com.gordonwong.materialsheetfab.AnimatedFab;
-import com.tpb.timetable.R;
 
 /**
  * Created by theo on 10/04/16.
@@ -49,13 +46,5 @@ public class SheetFab extends FloatingActionButton implements AnimatedFab {
             animate().translationY(this.getHeight() + 48).setInterpolator(new AccelerateInterpolator(2)).start();
             offScreen = true;
         }
-    }
-    private void setTranslation(float translationX, float translationY) {
-        animate().setInterpolator(getInterpolator()).setDuration(200)
-                .translationX(translationX).translationY(translationY);
-    }
-
-    private Interpolator getInterpolator() {
-        return AnimationUtils.loadInterpolator(getContext(), R.interpolator.msf_interpolator);
     }
 }

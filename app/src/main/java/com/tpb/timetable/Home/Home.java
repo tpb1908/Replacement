@@ -189,7 +189,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     @Override
     public void hideFAB() {
         mFAB.hideSheetThenFab();
-
     }
 
     @Override

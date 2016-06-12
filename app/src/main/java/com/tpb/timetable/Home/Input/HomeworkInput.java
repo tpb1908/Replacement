@@ -1,6 +1,5 @@
 package com.tpb.timetable.Home.Input;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -20,6 +18,7 @@ import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.FormattingUtils;
 import com.tpb.timetable.Utils.ThemeHelper;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,6 +126,7 @@ public class HomeworkInput extends SlidingActivity {
             }
         });
         ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
+
     }
 
     @Override
@@ -139,26 +139,28 @@ public class HomeworkInput extends SlidingActivity {
     }
 
     public void showDatePicker(View v) {
-        final Calendar calendar = Calendar.getInstance();
-        new DatePickerDialog(HomeworkInput.this, R.style.DatePickerTheme, dateSetListener,
-                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show();
+        final Calendar now = Calendar.getInstance();
+        final DatePickerDialog dpd = DatePickerDialog.newInstance(
+                new com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        try {
+                            final Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            mDateInput.setText(FormattingUtils.dateToString(d));
+                            mCurrentTask.setEndDate(d.getTime());
+                        } catch (ParseException e) {
+                            Log.e(TAG, "Parsing exception in OnDateSetListener",e);
+                        }
+                    }
+                },
+                now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.setAccentColor(ThemeHelper.getAccent());
+        dpd.setThemeDark(ThemeHelper.isDarkTheme());
+        dpd.show(getFragmentManager(), TAG);
         mDetailInput.clearFocus();
     }
-
-    private DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                final Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                mDateInput.setText(FormattingUtils.dateToString(d));
-                mCurrentTask.setEndDate(d.getTime());
-            } catch (ParseException e) {
-                Log.e(TAG, "Parsing exception in OnDateSetListener",e);
-            }
-        }
-    };
 
     private View.OnFocusChangeListener errorListener = new View.OnFocusChangeListener() {
         @Override

@@ -33,6 +33,7 @@ import java.util.Date;
 public class HomeworkInput extends SlidingActivity {
     private static final String TAG = "HomeworkInput";
     private Task mCurrentTask;
+    private long mOriginalDate = Long.MAX_VALUE;
     private EditText mDateInput;
     private EditText mTitleInput;
     private EditText mDetailInput;
@@ -83,6 +84,7 @@ public class HomeworkInput extends SlidingActivity {
             int spinnerPos = spinnerAdapter.getPositionOfSubject(mCurrentTask.getSubjectID());
             if(spinnerPos != -1) spinner.setSelection(spinnerPos, true);
             mDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTask.getEndDate())));
+            mOriginalDate = mCurrentTask.getEndDate();
             mEditing = true;
             setTitle(R.string.title_homework_input_edit);
         } catch(Exception e) {
@@ -103,7 +105,8 @@ public class HomeworkInput extends SlidingActivity {
                 if(mDateInput.getText().toString().equals("")) {
                     errorFlag = true;
                     mDateWrapper.setError("Please set a date");
-                } else if(mCurrentTask.getEndDate() < CURRENT ) {
+                    //The second condition below can only happen when the date has not been changed
+                } else if(mCurrentTask.getEndDate() < CURRENT && mOriginalDate != mCurrentTask.getEndDate()) {
                     errorFlag = true;
                     mDateWrapper.setError("Due date must be after the current date");
                 } else {

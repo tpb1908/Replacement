@@ -469,5 +469,4 @@ public class ThemeHelper {
         int blue = Color.blue(color);
         return Color.argb(alpha, red, green, blue);
     }
-
 }

@@ -105,7 +105,8 @@ public class FormattingUtils {
         final int startMinute = start - (startHour*100);
         final int endMinute = end - (endHour*100);
 
-        return ((float) ((timeHour*60+timeMinute)-(startHour*60+startMinute))) / ((float)((endHour*60+endMinute)-(startHour*60+startMinute)));
+        return ((float) ((timeHour*60+timeMinute)-(startHour*60+startMinute))) /
+                ((float)((endHour*60+endMinute)-(startHour*60+startMinute)));
 
     }
 

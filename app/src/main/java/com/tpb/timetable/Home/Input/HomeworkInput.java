@@ -144,9 +144,8 @@ public class HomeworkInput extends SlidingActivity {
                 new com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         try {
-                            final Date d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            final Date d = new SimpleDateFormat("yyyy-MM-dd").parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             mDateInput.setText(FormattingUtils.dateToString(d));
                             mCurrentTask.setEndDate(d.getTime());
                         } catch (ParseException e) {

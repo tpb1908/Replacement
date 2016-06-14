@@ -169,17 +169,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    /**
-     * What is to happen now-
-     * All arraylist methods are accessed through the wrapper
-     * Some type specific methods are accessed through the db helper
-     * Database access only happens through the wrapper, this stops any confusion
-     * and repeated calls
-     *
-     */
-
-
-
     //Term methods
     private void remove(Term t) {
         final SQLiteDatabase db = this.getWritableDatabase();
@@ -952,9 +941,21 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
+        /*
+        Note to self:
+        The change to this method ensures that when the sort comparator of an item is changed
+        it is moved to the correct position in the whichever adapter is attached to the dataset
+         */
         public void update(T t) {
-            mData.set(mData.indexOf(t), t);
-            for(ArrayChangeListener<T> l : mListeners) l.updated(mData.indexOf(t), t);
+            final int oldIndex = mData.indexOf(t);
+            mData.set(oldIndex, t);
+            Collections.sort(mData);
+            final int newIndex = mData.indexOf(t);
+            if(newIndex == oldIndex) {
+                for (ArrayChangeListener<T> l : mListeners) l.updated(newIndex, t);
+            } else {
+                for (ArrayChangeListener<T> l : mListeners) l.moved(oldIndex, newIndex);
+            }
             mDBHelper.update(t);
         }
 

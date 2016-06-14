@@ -211,6 +211,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     @Override
     public void moved(int oldIndex, int newIndex) {
         notifyItemMoved(oldIndex, newIndex);
+        notifyItemChanged(newIndex);
     }
 
     @Override

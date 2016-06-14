@@ -69,14 +69,13 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.setMessage(R.string.message_no_classes);
         } else {
             final ClassTime ct = mClasses.get(position);
-            //TODO- Update this. getSubject is no longer in use
-            final Subject s = ct.getSubject();
+            final Subject sub = ct.getSubject();
             if(h.getItemViewType() == 1) {
                 final ClassViewHolder holder = (ClassViewHolder) h ;
                 String timeRange;
-                holder.className.setText(s.getName());
-                holder.classRoom.setText(s.getClassroom());
-                holder.teacherName.setText(s.getTeacher());
+                holder.className.setText(sub.getName());
+                holder.classRoom.setText(sub.getClassroom());
+                holder.teacherName.setText(sub.getTeacher());
                 holder.timerBar.setScaleY(3f);
                 mCalendar = Calendar.getInstance();
                 final int start = ct.getStartTime();
@@ -89,18 +88,18 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     holder.timerBar.setVisibility(View.VISIBLE);
                     //Filters timer color by subject color
                     holder.timerBar.getProgressDrawable().setColorFilter(
-                            new LightingColorFilter(0xFF000000, s.getColor()));
+                            new LightingColorFilter(0xFF000000, sub.getColor()));
                     holder.timerBar.setProgress((int) (100 * scale));
                 } else {
                     holder.timerBar.setVisibility(View.INVISIBLE);
                 }
-                holder.colourBar.setBackgroundColor(s.getColor());
+                holder.colourBar.setBackgroundColor(sub.getColor());
                 timeRange = FormattingUtils.format(start);
                 timeRange += " to " + FormattingUtils.format(end);
                 holder.classTime.setText(timeRange);
             } else {
                 final ClassPastViewHolder holder = (ClassPastViewHolder) h;
-                final String info = s.getName() + " with " + s.getTeacher() +
+                final String info = sub.getName() + " with " + sub.getTeacher() +
                         " from " + FormattingUtils.format(ct.getStartTime()) +
                         " to " + FormattingUtils.format(ct.getEndTime());
                 holder.info.setText(info);

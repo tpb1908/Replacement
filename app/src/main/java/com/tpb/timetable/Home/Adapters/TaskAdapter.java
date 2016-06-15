@@ -102,7 +102,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 case 1:
                     break;
                 case 2:
-                    ((HomeworkViewHolder) holder).setup(task, subject);
+                    final HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
+                    hvh.itemView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            hvh.setup(task, subject);
+                        }
+                    });
                     break;
                 case 3:
                     break;
@@ -340,17 +346,15 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     null
             );
             mSubjectName.setTextColor(ThemeHelper.getContrastingTextColor(titleBackground));
-            if(mOriginalHeight == 0) {
-                mOriginalHeight = mHomeWorkDetail.getHeight();
-            }
+            if(mOriginalHeight == 0) mOriginalHeight = mHomeWorkDetail.getHeight();
             if(parent.mToggleStates.size() <= getAdapterPosition()) {
                 parent.mToggleStates.add(false);
                 mIsExpanded = false;
             } else {
-                Log.i(TAG, "setup: mOriginal height " + mOriginalHeight);
                 mHomeWorkDetail.setText(mDetailHint);
                 mHomeWorkDetail.getLayoutParams().height = mOriginalHeight;
                 mHomeWorkDetail.requestLayout();
+                mOriginalHeight = mHomeWorkDetail.getHeight();
                 mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
                 toggleDetail(0);
             }

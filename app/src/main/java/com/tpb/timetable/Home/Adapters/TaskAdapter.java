@@ -70,7 +70,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             case 3: //Reminder
                 return null;
             default:
-                Log.i(TAG, "Returning null viewholder");
                 return null;
         }
     }
@@ -184,11 +183,14 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             @Override
             public void run() {
                 final int newIndex = mTasks.indexOf(task);
-                final boolean oldToggleState = mToggleStates.get(index);
-                mToggleStates.remove(index);
-                mToggleStates.set(newIndex, oldToggleState);
-                notifyItemMoved(index, newIndex);
+                if(newIndex != index) {
+                    final boolean oldToggleState = mToggleStates.get(index);
+                    mToggleStates.remove(index);
+                    mToggleStates.add(newIndex, oldToggleState);
+                    notifyItemMoved(index, newIndex);
+                }
                 notifyItemChanged(newIndex);
+                Log.i(TAG, "run: Update: index " + index + " newIndex " + newIndex);
             }
         });
     }
@@ -265,7 +267,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private ImageButton mDeleteButton;
         private boolean mIsExpanded = false;
         private boolean mIsAnimating;
-        private int mOriginalHeight = -1;
+        private int mOriginalHeight = 0;
 
         public HomeworkViewHolder(View v, final TaskAdapter parent) {
             super(v);
@@ -332,25 +334,24 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     null
             );
             mSubjectName.setTextColor(ThemeHelper.getContrastingTextColor(titleBackground));
-            if(mOriginalHeight == -1) mOriginalHeight = mHomeWorkDetail.getHeight();
-
+            if(mOriginalHeight == 0) {
+                mOriginalHeight = mHomeWorkDetail.getHeight();
+            }
             if(parent.mToggleStates.size() <= getAdapterPosition()) {
                 parent.mToggleStates.add(false);
                 mIsExpanded = false;
             } else {
-                Log.i(TAG, "setup: Toggling view on create with " + parent.mToggleStates.get(getAdapterPosition()));
+                Log.i(TAG, "setup: mOriginal height " + mOriginalHeight);
                 mHomeWorkDetail.setText(mDetailHint);
                 mHomeWorkDetail.getLayoutParams().height = mOriginalHeight;
                 mHomeWorkDetail.requestLayout();
                 mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
                 toggleDetail(0);
             }
-            Log.i(TAG, "setup: mIsExpanded " + mIsExpanded);
-
-
         }
 
         private void shrink(int duration) {
+            Log.i(TAG, "shrinking");
             final String[] lines = mDetail.split("\n");
             final StringBuilder builder = new StringBuilder();
             final View v = mHomeWorkDetail;
@@ -393,9 +394,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
 
         private void grow(int duration) {
+            Log.i(TAG, "growing");
             mHomeWorkDetail.setText(mDetail);
             final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
-            final ValueAnimator valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight +(mOriginalHeight * numLines));
+            final ValueAnimator valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
             final View v = mHomeWorkDetail;
             valueAnimator.setDuration(duration);
             valueAnimator.setInterpolator(new AccelerateInterpolator());
@@ -420,6 +422,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private void toggleDetail(int duration) {
             Log.i(TAG, "toggleDetail: duration " + duration + " mIsExpanded " + mIsExpanded);
             if(mOriginalHeight == 0) mOriginalHeight = mHomeWorkDetail.getHeight();
+            Log.i(TAG, "toggleDetail: mOriginalHeight " + mOriginalHeight);
             if(mDetailHint.contains("...")) {
                 if(mIsExpanded) {
                     shrink(duration);

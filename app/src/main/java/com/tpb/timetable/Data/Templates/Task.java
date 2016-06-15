@@ -30,11 +30,11 @@ public class Task extends Data implements Comparable<Task>, Serializable {
 
     public String getTypeName() {
         switch(type) {
-            case 0:
-                return "Task";
             case 1:
-                return "Homework";
+                return "Task";
             case 2:
+                return "Homework";
+            case 3:
                 return "Reminder";
             default:
                 return "";

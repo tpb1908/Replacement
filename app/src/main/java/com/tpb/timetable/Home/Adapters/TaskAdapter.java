@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +38,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private int currentPosition = -1;
     private boolean wasEmpty = false; //this is needed so that adding a value doesn't cause an inconsistency
     private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
+    private final ArrayList<Boolean> mToggleStates = new ArrayList<>();
 
     public TaskAdapter() {
         super();
@@ -76,18 +76,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void onViewRecycled(RecyclerView.ViewHolder holder) {
-        super.onViewRecycled(holder);
-        if(holder instanceof HomeworkViewHolder) {
-            final HomeworkViewHolder HVH = (HomeworkViewHolder) holder;
-            if(HVH.mIsExpanded) {
-                HVH.mIsExpanded = false;
-                HVH.toggleDetail(300);
-            }
-        }
-    }
-
-    @Override
     public int getItemCount () {
         if(mTasks.size() == 0) {
             wasEmpty = true;
@@ -106,46 +94,16 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if(holder.getItemViewType() == 0) {
             final MessageViewHolder mvh = (MessageViewHolder) holder;
             mvh.setMessage(R.string.message_no_tasks);
-            //ThemeHelper.theme((ViewGroup) holder.itemView);
+            //Message View holder themes itself
         } else {
             final Task task = mTasks.get(position);
             final Subject subject = mDB.getSubject(task.getSubjectID());
-            String timeRange = "Set on ";
-            //http://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
-            timeRange += FormattingUtils.dateToString(new Date(task.getStartDate()));
-            timeRange += ", Due by " + FormattingUtils.dateToString(new Date(task.getEndDate()));
+
             switch(holder.getItemViewType()) {
                 case 1:
                     break;
                 case 2:
-                    final int titleBackground = subject.getColor();
-                    final HomeworkViewHolder hvh = (HomeworkViewHolder) holder;
-                    hvh.mHomeWorkTitle.setText(task.getTitle());
-                    hvh.mDueDay.setText(timeRange);
-                    hvh.mDetail = task.getDetail();
-                    hvh.mDetailHint = task.getDetail().split("\n", 2)[0];
-                    if(hvh.mDetail.length() > hvh.mDetailHint.length()) {
-                        hvh.mDetailHint += "...";
-                    }
-                    hvh.mHomeWorkDetail.setText(hvh.mDetailHint);
-                    if(position == currentPosition && currentOpen) {
-                        final Runnable r = new Runnable() {
-                            @Override
-                            public void run() {
-                                hvh.toggleDetail(50);
-                            }
-                        };
-                        new Handler().postDelayed(r, 50);
-                    }
-                    ThemeHelper.theme((ViewGroup) hvh.itemView);
-                    hvh.mTitleBar.setBackgroundColor(titleBackground);
-                    final String subjectNameClass = subject.getName() + ", " + subject.getTeacher();
-                    hvh.mSubjectName.setText(subjectNameClass);
-                    //What the hell
-                    hvh.mSubjectName.setCompoundDrawablesWithIntrinsicBounds(
-                            ThemeHelper.getColoredDrawable(R.drawable.icon_homework, titleBackground),
-                            null, null, null);
-                    hvh.mSubjectName.setTextColor(ThemeHelper.getContrastingTextColor(titleBackground));
+                    ((HomeworkViewHolder) holder).setup(task, subject);
                     break;
                 case 3:
                     break;
@@ -174,7 +132,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         switch(getItemViewType(position)) {
             case 1: //Task
                 break;
-            case 2:
+            case 2: //Homework
                 currentPosition = position;
                 mTaskManager.openHomework(mTasks.get(position), v);
                 break;
@@ -210,6 +168,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void moved(int oldIndex, int newIndex) {
+        final boolean oldToggleState = mToggleStates.get(oldIndex);
+        mToggleStates.remove(oldIndex);
+        mToggleStates.set(newIndex, oldToggleState);
         notifyItemMoved(oldIndex, newIndex);
         notifyItemChanged(newIndex);
     }
@@ -223,6 +184,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             @Override
             public void run() {
                 final int newIndex = mTasks.indexOf(task);
+                final boolean oldToggleState = mToggleStates.get(index);
+                mToggleStates.remove(index);
+                mToggleStates.set(newIndex, oldToggleState);
                 notifyItemMoved(index, newIndex);
                 notifyItemChanged(newIndex);
             }
@@ -237,6 +201,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 notifyItemRemoved(index);
             }
         });
+        mToggleStates.remove(index);
         if(mTasks.size() == 0) {
             wasEmpty = true;
             mTaskManager.countChange(1, 0);
@@ -247,6 +212,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     public void cleared() {
         notifyDataSetChanged();
         wasEmpty = true;
+        mToggleStates.clear();
     }
 
     @Override
@@ -259,6 +225,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     wasEmpty = false;
                     mTaskManager.countChange(0, 1);
                 } else {
+                    mToggleStates.add(mTasks.indexOf(task), false);
                     notifyItemInserted(mTasks.indexOf(task));
                 }
             }
@@ -272,6 +239,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mTaskManager.countChange(0, 1);
             wasEmpty = false;
         } else {
+            mToggleStates.add(mTasks.indexOf(task), false);
             notifyItemInserted(index);
         }
     }
@@ -284,6 +252,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     private static class HomeworkViewHolder extends TaskViewHolder {
+        private TaskAdapter parent;
         private RelativeLayout mTitleBar;
         private TextView mSubjectName;
         private TextView mHomeWorkDetail;
@@ -294,14 +263,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private Button mDoneButton;
         private Button mEditButton;
         private ImageButton mDeleteButton;
-        private boolean mIsExpanded;
+        private boolean mIsExpanded = false;
         private boolean mIsAnimating;
-        private int mOriginalHeight = 0;
-
+        private int mOriginalHeight = -1;
 
         public HomeworkViewHolder(View v, final TaskAdapter parent) {
             super(v);
-            mIsExpanded = false;
+            this.parent = parent;
             mIsAnimating = false;
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
             mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
@@ -331,67 +299,133 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
                 }
             });
-
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    toggleDetail(300);
+                    if(!mIsAnimating) {
+                        toggleDetail(300);
+                        parent.mToggleStates.set(getAdapterPosition(), !mIsExpanded);
+                    }
                 }
             });
         }
 
-        private void toggleDetail(int duration) {
-            if(!mIsAnimating && mDetailHint.contains("...")) {
-                final String[] lines = mDetail.split("\n");
-                final StringBuilder builder = new StringBuilder();
-                final View v = mHomeWorkDetail;
-                if(mOriginalHeight == 0) mOriginalHeight = v.getHeight();
-                Log.i(TAG, "Num lines " + FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail) + "\n" +
-                        "Original height " + mOriginalHeight);
-                ValueAnimator valueAnimator;
-                final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
-                if(!mIsExpanded) {
-                    mHomeWorkDetail.setText(mDetail);
-                    valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight +(mOriginalHeight * numLines));
-                } else {
-                    valueAnimator = ValueAnimator.ofInt(v.getHeight(), mOriginalHeight);
-                }
-                valueAnimator.setDuration(duration);
-                valueAnimator.setInterpolator(new AccelerateInterpolator());
-                valueAnimator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mIsAnimating = false;
-                        mIsExpanded = !mIsExpanded;
-                        mHomeWorkDetail.setText(mIsExpanded ? mDetail : mDetailHint);
-                        Log.i(TAG, "End height " + v.getHeight());
-                    }
-                });
-                valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        /**
-                         * Something of a hack. What this does, is builds up the correct fraction
-                         * of the full detail. The index formula ensures that there is no juddering
-                         * at the start by always adding 1 to the fraction of the possible number
-                         * of lines. The min call just ensure that nothing can go wrong
-                         */
-                        if(mIsExpanded && animation.getAnimatedFraction() != 1.0) {
-                            final int index = (int) Math.min(lines.length,
-                                    1+Math.floor((1-animation.getAnimatedFraction()) * lines.length));
-                            for(int i = 0; i < index; i++) {
-                                builder.append(lines[i]);
-                                builder.append("\n");
-                            }
-                            mHomeWorkDetail.setText(builder.toString());
-                            builder.setLength(0); //set length keeps the string buffer
-                        }
-                        v.getLayoutParams().height = (int) animation.getAnimatedValue();
-                        v.requestLayout();
+        private void setup(final Task task, final Subject subject) {
+            String timeRange = "Set on ";
+            timeRange += FormattingUtils.dateToString(new Date(task.getStartDate()));
+            timeRange += ", Due by " + FormattingUtils.dateToString(new Date(task.getEndDate()));
+            final int titleBackground = subject.getColor();
+            mHomeWorkTitle.setText(task.getTitle());
+            mDueDay.setText(timeRange);
+            mDetail = task.getDetail();
+            mDetailHint = task.getDetail().split("\n", 2)[0];
+            if(mDetail.length() > mDetailHint.length()) mDetailHint += "...";
+            mHomeWorkDetail.setText(mDetailHint);
+            ThemeHelper.theme((ViewGroup) itemView);
+            mTitleBar.setBackgroundColor(titleBackground);
+            final String identifier = subject.getName() + " " + subject.getTeacher();
+            mSubjectName.setText(identifier);
+            mSubjectName.setCompoundDrawablesWithIntrinsicBounds(
+                    ThemeHelper.getColoredDrawable(R.drawable.icon_homework, titleBackground),
+                    null,
+                    null,
+                    null
+            );
+            mSubjectName.setTextColor(ThemeHelper.getContrastingTextColor(titleBackground));
+            if(mOriginalHeight == -1) mOriginalHeight = mHomeWorkDetail.getHeight();
 
+            if(parent.mToggleStates.size() <= getAdapterPosition()) {
+                parent.mToggleStates.add(false);
+                mIsExpanded = false;
+            } else {
+                Log.i(TAG, "setup: Toggling view on create with " + parent.mToggleStates.get(getAdapterPosition()));
+                mHomeWorkDetail.setText(mDetailHint);
+                mHomeWorkDetail.getLayoutParams().height = mOriginalHeight;
+                mHomeWorkDetail.requestLayout();
+                mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
+                toggleDetail(0);
+            }
+            Log.i(TAG, "setup: mIsExpanded " + mIsExpanded);
+
+
+        }
+
+        private void shrink(int duration) {
+            final String[] lines = mDetail.split("\n");
+            final StringBuilder builder = new StringBuilder();
+            final View v = mHomeWorkDetail;
+            final ValueAnimator valueAnimator = ValueAnimator.ofInt(v.getHeight(), mOriginalHeight);
+            valueAnimator.setDuration(duration);
+            valueAnimator.setInterpolator(new AccelerateInterpolator());
+            valueAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mIsAnimating = false;
+                    mIsExpanded = !mIsExpanded;
+                    mHomeWorkDetail.setText(mDetailHint);
+                }
+            });
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    /**
+                     * Something of a hack. What this does, is builds up the correct fraction
+                     * of the full detail. The index formula ensures that there is no juddering
+                     * at the start by always adding 1 to the fraction of the possible number
+                     * of lines. The min call just ensure that nothing can go wrong
+                     */
+                    if(mIsExpanded && animation.getAnimatedFraction() != 1.0) {
+                        final int index = (int) Math.min(lines.length,
+                                1+Math.floor((1-animation.getAnimatedFraction()) * lines.length));
+                        for(int i = 0; i < index; i++) {
+                            builder.append(lines[i]);
+                            builder.append("\n");
+                        }
+                        mHomeWorkDetail.setText(builder.toString());
+                        builder.setLength(0); //set length keeps the string buffer
                     }
-                });
-                mIsAnimating = true;
-                valueAnimator.start();
+                    v.getLayoutParams().height = (int) animation.getAnimatedValue();
+                    v.requestLayout();
+
+                }
+            });
+            mIsAnimating = true;
+            valueAnimator.start();
+        }
+
+        private void grow(int duration) {
+            mHomeWorkDetail.setText(mDetail);
+            final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
+            final ValueAnimator valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight +(mOriginalHeight * numLines));
+            final View v = mHomeWorkDetail;
+            valueAnimator.setDuration(duration);
+            valueAnimator.setInterpolator(new AccelerateInterpolator());
+            valueAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mIsAnimating = false;
+                    mIsExpanded = true;
+                }
+            });
+            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    v.getLayoutParams().height = (int) animation.getAnimatedValue();
+                    v.requestLayout();
+                }
+            });
+            mIsAnimating = true;
+            valueAnimator.start();
+        }
+
+        private void toggleDetail(int duration) {
+            Log.i(TAG, "toggleDetail: duration " + duration + " mIsExpanded " + mIsExpanded);
+            if(mOriginalHeight == 0) mOriginalHeight = mHomeWorkDetail.getHeight();
+            if(mDetailHint.contains("...")) {
+                if(mIsExpanded) {
+                    shrink(duration);
+                } else {
+                    grow(duration);
+                }
             }
         }
     }

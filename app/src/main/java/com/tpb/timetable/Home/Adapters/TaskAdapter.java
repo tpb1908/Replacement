@@ -168,8 +168,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     @Override
     public void moved(int oldIndex, int newIndex) {
         final boolean oldToggleState = mToggleStates.get(oldIndex);
-        mToggleStates.remove(oldIndex);
-        mToggleStates.set(newIndex, oldToggleState);
+        if(oldIndex < newIndex) {
+            mToggleStates.remove(oldIndex);
+            mToggleStates.add(newIndex-1, oldToggleState);
+        } else {
+            mToggleStates.remove(oldToggleState);
+            mToggleStates.add(newIndex, oldToggleState);
+        }
         notifyItemMoved(oldIndex, newIndex);
         notifyItemChanged(newIndex);
     }
@@ -183,12 +188,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             @Override
             public void run() {
                 final int newIndex = mTasks.indexOf(task);
+
                 if(newIndex != index) {
                     final boolean oldToggleState = mToggleStates.get(index);
                     mToggleStates.remove(index);
                     mToggleStates.add(newIndex, oldToggleState);
-                    notifyItemMoved(index, newIndex);
                 }
+                notifyItemMoved(index, newIndex);
                 notifyItemChanged(newIndex);
                 Log.i(TAG, "run: Update: index " + index + " newIndex " + newIndex);
             }

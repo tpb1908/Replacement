@@ -143,6 +143,7 @@ public class HomeworkInput extends SlidingActivity {
 
     public void showDatePicker(View v) {
         final Calendar now = Calendar.getInstance();
+        if(mOriginalDate != Long.MAX_VALUE) now.setTimeInMillis(mOriginalDate);
         final DatePickerDialog dpd = DatePickerDialog.newInstance(
                 new com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener() {
                     @Override

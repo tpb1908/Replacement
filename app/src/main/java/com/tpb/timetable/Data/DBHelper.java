@@ -941,15 +941,12 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
 
-        /*
-        Note to self:
-        The change to this method ensures that when the sort comparator of an item is changed
-        it is moved to the correct position in the whichever adapter is attached to the dataset
-         */
         public void update(T t) {
             final int oldIndex = mData.indexOf(t);
             mData.set(oldIndex, t);
+            Log.i(TAG, "update: prior to sort " + mData.toString());
             Collections.sort(mData);
+            Log.i(TAG, "update: after sort " + mData.toString());
             final int newIndex = mData.indexOf(t);
             if(newIndex == oldIndex) {
                 for (ArrayChangeListener<T> l : mListeners) l.updated(newIndex, t);

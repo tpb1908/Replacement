@@ -269,6 +269,17 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
     }
 
+    @Override
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+        if(holder instanceof HomeworkViewHolder) {
+            if(((HomeworkViewHolder) holder).mIsExpanded) {
+                ((HomeworkViewHolder) holder).toggleDetail(0);
+            }
+        }
+
+        super.onViewRecycled(holder);
+    }
+
     //Viewholders
     private static class TaskViewHolder extends RecyclerView.ViewHolder {
         public TaskViewHolder(View v) {
@@ -307,7 +318,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mIsExpanded) toggleDetail(0);
+                    if(mIsExpanded) toggleDetail(150);
                     parent.deleteTask(getAdapterPosition());
                 }
             });
@@ -366,7 +377,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         mHomeWorkDetail.setText(mDetail);
                         mOriginalHeight = mHomeWorkDetail.getHeight();
                         mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
-                        toggleDetail(150);
+                        toggleDetail(0);
                     }
                 });
             }

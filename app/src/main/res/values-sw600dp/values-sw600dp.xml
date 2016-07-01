@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values-sw600dp/dimens.xml -->
+    <eat-comment/>
+    <dimen name="sliding_header_max_height">400dp</dimen>
+    <dimen name="sliding_photo_container_height">360dip</dimen>
+</resources>

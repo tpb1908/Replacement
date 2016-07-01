@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 
-import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
+import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.ThemeHelper;
 
 /**
  * Created by theo on 11/05/16.
  */
-public class ReminderInput extends SlidingActivity {
+public class ReminderInput extends SlidingPanel {
     private static final String TAG = "ReminderInput";
     private Task mCurrentTask;
 

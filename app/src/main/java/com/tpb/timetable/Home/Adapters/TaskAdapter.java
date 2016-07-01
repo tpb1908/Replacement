@@ -29,13 +29,21 @@ import java.util.Date;
 /**
  * Created by theo on 08/04/16.
  */
+
+/**
+ * Problems still to fix-
+ * When an expanded task is deleted and then added back, its height is incorrect,
+ * the text is not set correctly, but the viewholder still has the height
+ */
+
+
 public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DBHelper.ArrayChangeListener<Task> {
     private static final String TAG = "TaskAdapter";
     private TaskManager mTaskManager;
     private DBHelper mDB;
     private DBHelper.ArrayWrapper<Task> mTasks;
-    private boolean currentOpen = false;
-    private int currentPosition = -1;
+    private boolean mCurrentOpen = false;
+    private int mCurrentPosition = -1;
     private boolean wasEmpty = false; //this is needed so that adding a value doesn't cause an inconsistency
     private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
     private final ArrayList<Boolean> mToggleStates = new ArrayList<>();
@@ -130,7 +138,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mTasks.remove(position);
         runQueuedUpdates();
         mTaskManager.showDeleteSnackBar(mDeletedTask);
-        currentPosition = position;
+        mCurrentPosition = position;
     }
 
     private void editTask(int position, View v) {
@@ -138,7 +146,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             case 1: //Task
                 break;
             case 2: //Homework
-                currentPosition = position;
+                mCurrentPosition = position;
                 mTaskManager.openHomework(mTasks.get(position), v);
                 break;
             case 3: //Reminder
@@ -194,7 +202,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             @Override
             public void run() {
                 final int newIndex = mTasks.indexOf(task);
-
                 if(newIndex != index) {
                     final boolean oldToggleState = mToggleStates.get(index);
                     mToggleStates.remove(index);
@@ -215,6 +222,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 notifyItemRemoved(index);
             }
         });
+        mCurrentOpen = mToggleStates.get(index);
+        mCurrentPosition = index;
         mToggleStates.remove(index);
         if(mTasks.size() == 0) {
             wasEmpty = true;
@@ -239,8 +248,9 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     wasEmpty = false;
                     mTaskManager.countChange(0, 1);
                 } else {
-                    mToggleStates.add(mTasks.indexOf(task), false);
-                    notifyItemInserted(mTasks.indexOf(task));
+                    final int index = mTasks.indexOf(task);
+                    mToggleStates.add(index, index == mCurrentPosition && mCurrentOpen);
+                    notifyItemInserted(index);
                 }
             }
         });
@@ -248,12 +258,13 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void add(int index, Task task) {
+        Log.i(TAG, "add: Adding " + task + " to index" + index);
         if(wasEmpty) {
             notifyItemChanged(0);
             mTaskManager.countChange(0, 1);
             wasEmpty = false;
         } else {
-            mToggleStates.add(mTasks.indexOf(task), false);
+            mToggleStates.add(index, index == mCurrentPosition && mCurrentOpen);
             notifyItemInserted(index);
         }
     }
@@ -296,14 +307,12 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parent.currentOpen = mIsExpanded;
                     parent.deleteTask(getAdapterPosition());
                 }
             });
             mEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parent.currentOpen = mIsExpanded;
                     parent.editTask(getAdapterPosition(), mEditButton);
                 }
             });
@@ -346,18 +355,23 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     null
             );
             mSubjectName.setTextColor(ThemeHelper.getContrastingTextColor(titleBackground));
-            if(mOriginalHeight == 0) mOriginalHeight = mHomeWorkDetail.getHeight();
             if(parent.mToggleStates.size() <= getAdapterPosition()) {
                 parent.mToggleStates.add(false);
                 mIsExpanded = false;
             } else {
-                mHomeWorkDetail.setText(mDetailHint);
-                mHomeWorkDetail.getLayoutParams().height = mOriginalHeight;
-                mHomeWorkDetail.requestLayout();
-                mOriginalHeight = mHomeWorkDetail.getHeight();
-                mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
-                toggleDetail(0);
+                mHomeWorkDetail.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "run: height " + mHomeWorkDetail.getHeight());
+                        mHomeWorkDetail.setText(mDetail);
+                        mHomeWorkDetail.requestLayout();
+                        mOriginalHeight = mHomeWorkDetail.getHeight();
+                        mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
+                        toggleDetail(0);
+                    }
+                });
             }
+            Log.i(TAG, "setup: Height is " + mOriginalHeight);
         }
 
         private void shrink(int duration) {
@@ -430,7 +444,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
 
         private void toggleDetail(int duration) {
-            Log.i(TAG, "toggleDetail: duration " + duration + " mIsExpanded " + mIsExpanded);
             if(mOriginalHeight == 0) mOriginalHeight = mHomeWorkDetail.getHeight();
             Log.i(TAG, "toggleDetail: mOriginalHeight " + mOriginalHeight);
             if(mDetailHint.contains("...")) {

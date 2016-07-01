@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -224,6 +225,8 @@ public class ThemeHelper {
                         //CardView is technically a layout
                         themeCardView((CardView) v);
                         groupStack.push((CardView)v);
+                    } else if(v instanceof ScrollView) {
+                        v.setBackgroundColor(getBackground());
                     } else if(v instanceof FrameLayout) {
                         //Later, for the SlidingPanel
                         //v.setBackgroundColor(getBackground());

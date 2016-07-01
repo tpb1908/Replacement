@@ -12,10 +12,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
+import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.FormattingUtils;
 import com.tpb.timetable.Utils.ThemeHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -30,7 +30,7 @@ import java.util.Date;
 /**
  * Created by theo on 01/05/16.
  */
-public class HomeworkInput extends SlidingActivity {
+public class HomeworkInput extends SlidingPanel {
     private static final String TAG = "HomeworkInput";
     private Task mCurrentTask;
     private long mOriginalDate = Long.MAX_VALUE;
@@ -122,7 +122,7 @@ public class HomeworkInput extends SlidingActivity {
                     if(mEditing) {
                         db.getAllTasks().update(mCurrentTask);
                     } else {
-                        db.getAllTasks().addToPos(mCurrentTask);
+                        db.getAllTasks().addToPosition(mCurrentTask);
                     }
                     finish();
                 }

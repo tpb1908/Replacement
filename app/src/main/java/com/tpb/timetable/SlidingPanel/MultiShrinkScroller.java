@@ -53,7 +53,6 @@ import android.widget.ScrollView;
 import android.widget.Scroller;
 import android.widget.TextView;
 
-import com.klinker.android.sliding.SchedulingUtils;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.ThemeHelper;
 
@@ -190,7 +189,7 @@ public class MultiShrinkScroller extends FrameLayout {
     /**
      * Listener for snapping the content to the bottom of the screen.
      */
-    private final AnimatorListener exitAnimationListner = new AnimatorListenerAdapter() {
+    private final AnimatorListener exitAnimationListener = new AnimatorListenerAdapter() {
         @Override
         public void onAnimationEnd(Animator animation) {
             if ((getScrollUntilOffBottom() > 0 || openAnimation == OpenAnimation.EXPAND_FROM_VIEW) && listener != null) {
@@ -249,7 +248,6 @@ public class MultiShrinkScroller extends FrameLayout {
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         setFocusable(false);
         setWillNotDraw(false);
-
         edgeGlowBottom = new EdgeEffect(context);
         edgeGlowTop = new EdgeEffect(context);
         scroller = new Scroller(context, INTERPOLATOR);
@@ -286,6 +284,7 @@ public class MultiShrinkScroller extends FrameLayout {
         } else {
             textSizePathInterpolator = null;
         }
+
     }
 
     public float getIntermediateHeaderHeightRatio() {
@@ -301,6 +300,7 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     public void initialize(MultiShrinkScrollerListener listener, boolean isOpenContactSquare) {
         scrollView = (ScrollView) findViewById(R.id.content_scroller);
+        ThemeHelper.theme(scrollView);
         scrollViewChild = findViewById(R.id.content_container);
         toolbar = findViewById(R.id.toolbar_parent);
         photoViewContainer = findViewById(R.id.toolbar_parent);
@@ -721,7 +721,7 @@ public class MultiShrinkScroller extends FrameLayout {
             translateAnimation.setRepeatCount(0);
             translateAnimation.setInterpolator(interpolator);
             translateAnimation.setDuration(EXIT_FLING_ANIMATION_DURATION_MS);
-            translateAnimation.addListener(exitAnimationListner);
+            translateAnimation.addListener(exitAnimationListener);
             translateAnimation.start();
         } else {
             reverseExpansionAnimation();
@@ -907,7 +907,7 @@ public class MultiShrinkScroller extends FrameLayout {
         ObjectAnimator translationY = ObjectAnimator.ofFloat(this, View.TRANSLATION_Y, 0f, expansionTopOffset);
         translationY.setInterpolator(interpolator);
         translationY.setDuration(ANIMATION_DURATION);
-        translationY.addListener(exitAnimationListner);
+        translationY.addListener(exitAnimationListener);
         translationY.start();
     }
 

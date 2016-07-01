@@ -221,7 +221,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        mDB.getAllTasks().addToPos(t);
+                        mDB.getAllTasks().addToPosition(t);
                     }
                 });
         snackbar.show();

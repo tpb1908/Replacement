@@ -921,7 +921,7 @@ public class DBHelper extends SQLiteOpenHelper {
             mDBHelper.addAll(toAdd);
         }
 
-        public void addToPos(T t) {
+        public void addToPosition(T t) {
             int pos;
             for(pos = 0; pos < mData.size(); pos++) {
                 if(t.compareTo(mData.get(pos)) < 0) break;

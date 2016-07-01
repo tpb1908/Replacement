@@ -13,12 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 
-import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.ThemeHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ import java.util.Date;
 /**
  * Created by theo on 25/05/16.
  */
-public class TermInput extends SlidingActivity {
+public class TermInput extends SlidingPanel {
     private static final String TAG = "TermInput";
     private Term mCurrentTerm;
     private DBHelper.ArrayWrapper<Term> mTerms;
@@ -161,7 +161,7 @@ public class TermInput extends SlidingActivity {
                     if(mEditing) {
                         mTerms.update(mCurrentTerm);
                     } else {
-                        mTerms.addToPos(mCurrentTerm);
+                        mTerms.addToPosition(mCurrentTerm);
                     }
                 }
             }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/attrs.xml -->
+    <eat-comment/>
+    <attr format="reference" name="content_background"/>
+    <attr format="reference" name="popup_theme"/>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/bools.xml -->
+    <eat-comment/>
+    <bool name="sliding_two_panel">false</bool>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="fab_ripple">#88ffffff</color>
+    <color name="light_background">#FAFAFA</color>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/dimens.xml -->
+    <eat-comment/>
+    <dimen name="fab_marginBottom">0dp</dimen>
+    <dimen name="fab_marginRight">0dp</dimen>
+    <dimen name="fab_marginTop">-56dp</dimen>
+    <dimen name="fab_size">48dp</dimen>
+    <dimen name="first_card_marginTop">12dp</dimen>
+    <dimen name="sliding_dismiss_distance_on_release">40dp</dimen>
+    <dimen name="sliding_dismiss_distance_on_scroll">100dp</dimen>
+    <dimen name="sliding_header_max_height">300dp</dimen>
+    <item format="float" name="sliding_landscape_photo_ratio" type="dimen">0.7</item>
+    <dimen name="sliding_maximum_title_size">26sp</dimen>
+    <dimen name="sliding_photo_container_height">180dp</dimen>
+    <dimen name="sliding_snap_to_top_slop_height">33dp</dimen>
+    <dimen name="sliding_starting_empty_height">150dp</dimen>
+    <dimen name="sliding_title_initial_margin">16dp</dimen>
+    <dimen name="sliding_toolbar_elevation">4.5dp</dimen>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/integers.xml -->
+    <eat-comment/>
+    <integer name="sliding_title_lines">1</integer>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="sliding_transparent_view_description">Click to return to previous screen</string>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="Theme.Sliding" parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="content_background">@color/dark_background</item>
+        <item name="popup_theme">@style/ThemeOverlay.AppCompat</item>
+    </style>
+    <style name="Theme.Sliding.DayNight" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="content_background">@color/light_background</item>
+        <item name="popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+    <style name="Theme.Sliding.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="content_background">@color/light_background</item>
+        <item name="popup_theme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+</resources>

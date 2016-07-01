@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values-land/bools.xml -->
+    <eat-comment/>
+    <!--<bool name="sliding_two_panel">true</bool>-->
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values-land/dimens.xml -->
+    <eat-comment/>
+    <!--<dimen name="sliding_maximum_title_size">20sp</dimen> -->
+    <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values-land/integers.xml -->
+    <eat-comment/>
+    <!--<integer name="sliding_title_lines">5</integer>-->
+</resources>

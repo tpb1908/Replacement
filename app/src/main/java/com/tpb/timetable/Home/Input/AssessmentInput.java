@@ -14,9 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-import com.klinker.android.sliding.SlidingActivity;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.R;
+import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.FormattingUtils;
 import com.tpb.timetable.Utils.ThemeHelper;
 
@@ -28,7 +28,7 @@ import java.util.Date;
 /**
  * Created by theo on 05/05/16.
  */
-public class AssessmentInput extends SlidingActivity {
+public class AssessmentInput extends SlidingPanel {
     private static final String TAG = "AssessmentInput";
     private EditText mDateInput;
     private LinearLayout mMarkLayout;

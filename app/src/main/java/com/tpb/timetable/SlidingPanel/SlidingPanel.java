@@ -106,10 +106,13 @@ public abstract class SlidingPanel extends AppCompatActivity {
         }
 
         setContentView(R.layout.sliding_activity);
-
-        scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
         content = (FrameLayout) findViewById(R.id.content_container);
         ThemeHelper.theme((content));
+        System.out.println("Is content null " + content.toString());
+
+        scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
+        System.out.println("Is scroller null? " + scroller.toString());
+        //ThemeHelper.theme(content);
         headerContent = (FrameLayout) findViewById(R.id.header_content_container);
 
         photoView = (ImageView) findViewById(R.id.photo);

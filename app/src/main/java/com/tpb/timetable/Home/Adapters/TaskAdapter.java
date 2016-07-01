@@ -307,6 +307,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(mIsExpanded) toggleDetail(0);
                     parent.deleteTask(getAdapterPosition());
                 }
             });
@@ -362,12 +363,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 mHomeWorkDetail.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i(TAG, "run: height " + mHomeWorkDetail.getHeight());
                         mHomeWorkDetail.setText(mDetail);
-                        mHomeWorkDetail.requestLayout();
                         mOriginalHeight = mHomeWorkDetail.getHeight();
                         mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
-                        toggleDetail(0);
+                        toggleDetail(150);
                     }
                 });
             }

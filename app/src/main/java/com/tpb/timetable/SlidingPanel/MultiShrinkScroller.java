@@ -1301,19 +1301,22 @@ public class MultiShrinkScroller extends FrameLayout {
     }
 
     /**
-     * Update the FAB visibility state depending on toolbar height.
+     * FAB is always shown, no matter toolbar height. Hiding it makes it fiddly to use
+     *
+     * --Update the FAB visibility state depending on toolbar height.--
      */
     private void updateFabStatus() {
         if (enableFab) {
-            if (getToolbarHeight() >= intermediateHeaderHeight) {
-                if (!fab.isShown()) {
-                    fab.show();
-                }
-            } else {
-                if (fab.isShown()) {
-                    fab.hide();
-                }
-            }
+            if(!fab.isShown()) fab.show();
+//            if (getToolbarHeight() >= intermediateHeaderHeight) {
+//                if (!fab.isShown()) {
+//                    fab.show();
+//                }
+//            } else {
+//                if (fab.isShown()) {
+//                    fab.hide();
+//                }
+//            }
         }
     }
 

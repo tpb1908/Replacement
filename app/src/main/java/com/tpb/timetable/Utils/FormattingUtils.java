@@ -134,9 +134,15 @@ public class FormattingUtils {
         final Calendar  cal = Calendar.getInstance();
         cal.setTime(d);
         final int day = cal.get(Calendar.DAY_OF_MONTH);
-        String format = DateFormat.format("EEEE", d) + " " +
-                DateFormat.format("MMMM",d) + " " +
-                day + getSuffix(day);
+
+
+
+        String format = DateFormat.format("EEEE", d) + " ";
+        if(cal.get(Calendar.MONTH) != Calendar.getInstance().get(Calendar.MONTH)) {
+            format += DateFormat.format("MMMM",d) + " ";
+        }
+        format +=  day + getSuffix(day);
+
         if(d.getYear() != new Date().getYear()) {
             format += " " + (1900+d.getYear());
         }

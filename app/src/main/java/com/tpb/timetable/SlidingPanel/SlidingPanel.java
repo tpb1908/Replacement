@@ -442,6 +442,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
         scroller.setHeaderTintColor(primaryColor);
         statusBarColor = primaryColorDark;
         updateStatusBarColor();
+        ThemeHelper.setTaskDescription(this);
     }
 
     private void updateStatusBarColor() {

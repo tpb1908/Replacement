@@ -75,7 +75,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
-        ThemeHelper.getColorResources(this, this);
+        ThemeHelper.setTaskDescription(this);
         mDB = DBHelper.getInstance(this);
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();

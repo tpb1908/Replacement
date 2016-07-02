@@ -1,9 +1,13 @@
 package com.tpb.timetable.Utils;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -197,6 +201,12 @@ public class ThemeHelper {
 
     public static int getHintText() {
         return darkTheme ? hintTextLight : hintText;
+    }
+
+    public static void setTaskDescription(Activity activity) {
+        final Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), android.R.mipmap.sym_def_app_icon);
+        final ActivityManager.TaskDescription desc = new ActivityManager.TaskDescription(activity.getString(R.string.app_name), bm, primaryDark);
+        activity.setTaskDescription(desc);
     }
 
     //Theming stuff

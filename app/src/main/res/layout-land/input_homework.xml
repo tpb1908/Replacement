@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+    >
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrapper_edittext_homework_title"
+        android:layout_marginTop="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/input_padding">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edittext_homework_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:imeOptions="flagNoExtractUi"
+            android:hint="@string/hint_title"
+            android:inputType="textCapWords|textAutoCorrect"
+            android:lines="1"
+            android:theme="@style/AppTheme"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wrapper_edittext_homework_detail"
+        android:layout_below="@+id/wrapper_edittext_homework_title"
+        android:layout_marginTop="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/input_padding">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edittext_homework_detail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/wrapper_edittext_homework_title"
+            android:autoLink="web|email"
+            android:linksClickable="true"
+            android:imeOptions="flagNoExtractUi"
+            android:ems="10"
+            android:hint="@string/hint_homework_detail"
+            android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+
+            android:theme="@style/AppTheme"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/wrapper_edittext_homework_due_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wrapper_edittext_homework_detail"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="@dimen/input_padding"
+        android:layout_marginTop="@dimen/input_padding">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/edittext_homework_due_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_homework_due_date"
+            android:theme="@style/AppTheme"
+            android:inputType="none"
+            android:focusable="false"
+            android:enabled="true"
+            />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spinner_subject"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/checkbox_show_reminder"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/input_padding"
+        android:clickable="true"
+        android:spinnerMode="dropdown"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/checkbox_show_reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/wrapper_edittext_homework_due_date"
+        android:layout_marginBottom="@dimen/input_padding"
+        android:layout_marginTop="@dimen/input_padding"
+        android:text="@string/show_reminder"
+        android:theme="@style/AppTheme"/>
+
+
+</RelativeLayout>

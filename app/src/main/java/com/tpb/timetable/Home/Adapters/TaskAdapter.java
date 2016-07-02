@@ -381,11 +381,10 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     }
                 });
             }
-            Log.i(TAG, "setup: Height is " + mOriginalHeight);
         }
 
         private void shrink(int duration) {
-            Log.i(TAG, "shrinking");
+            Log.i(TAG, "shrink: index " + getAdapterPosition());
             final String[] lines = mDetail.split("\n");
             final StringBuilder builder = new StringBuilder();
             final View v = mHomeWorkDetail;
@@ -428,7 +427,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
 
         private void grow(int duration) {
-            Log.i(TAG, "growing");
+            Log.i(TAG, "grow: index " + getAdapterPosition());
             mHomeWorkDetail.setText(mDetail);
             final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
             final ValueAnimator valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
@@ -455,7 +454,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         private void toggleDetail(int duration) {
             if(mOriginalHeight == 0) mOriginalHeight = mHomeWorkDetail.getHeight();
-            Log.i(TAG, "toggleDetail: mOriginalHeight " + mOriginalHeight);
             if(mDetailHint.contains("...")) {
                 if(mIsExpanded) {
                     shrink(duration);

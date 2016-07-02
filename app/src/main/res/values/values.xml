@@ -5,8 +5,6 @@
     <attr format="reference" name="content_background"/>
     <attr format="reference" name="popup_theme"/>
     <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/bools.xml -->
-    <eat-comment/>
-    <bool name="sliding_two_panel">false</bool>
     <!-- From: file:/media/luke/workspace/libraries/android-slidingactivity/library/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="fab_ripple">#88ffffff</color>

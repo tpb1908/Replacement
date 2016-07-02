@@ -42,6 +42,7 @@ import android.view.ViewAnimationUtils;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -67,6 +68,8 @@ import com.tpb.timetable.Utils.ThemeHelper;
  * You may use any combination of these to achieve the desired look.
  */
 public abstract class SlidingPanel extends AppCompatActivity {
+
+    private static final String TAG = "SlidingPanel";
 
     private static final int ANIMATION_STATUS_BAR_COLOR_CHANGE_DURATION = 150;
     private static final int SCRIM_COLOR = Color.argb(0xC8, 0, 0, 0);
@@ -104,17 +107,11 @@ public abstract class SlidingPanel extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-
         setContentView(R.layout.sliding_activity);
         content = (FrameLayout) findViewById(R.id.content_container);
-        ThemeHelper.theme((content));
-        System.out.println("Is content null " + content.toString());
-
+        ThemeHelper.theme(content);
         scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
-        System.out.println("Is scroller null? " + scroller.toString());
-        //ThemeHelper.theme(content);
         headerContent = (FrameLayout) findViewById(R.id.header_content_container);
-
         photoView = (ImageView) findViewById(R.id.photo);
         photoViewTempBackground = findViewById(R.id.photo_background);
         final View transparentView = findViewById(R.id.transparent_view);
@@ -524,7 +521,10 @@ public abstract class SlidingPanel extends AppCompatActivity {
         @Override
         public void onStartScrollOffBottom() {
             isExitAnimationInProgress = true;
-
+            if(getCurrentFocus() != null) {
+                final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
             if (scroller.willUseReverseExpansion()) {
                 content.removeAllViews();
 

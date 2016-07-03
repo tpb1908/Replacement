@@ -112,6 +112,7 @@ public class TermInput extends SlidingPanel {
 
                 for(int i = 0; i < mTerms.size(); i++) {
                     if(mCurrentTerm.overlaps(mTerms.get(i)) && !mTerms.get(i).equals(mCurrentTerm)) {
+                        flags[4] = true;
                         //TODO- Give date values
                         final int index = i;
                         new AlertDialog.Builder(TermInput.this)
@@ -123,13 +124,12 @@ public class TermInput extends SlidingPanel {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         mTerms.remove(index);
-                                        flags[4] = false;
+                                        close();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        flags[4] = true;
                                     }
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -138,18 +138,22 @@ public class TermInput extends SlidingPanel {
                     }
                 }
 
-                if(!(flags[0] && flags[1] && flags[2] && flags[3] && flags[4])) {
-                    if(mEditing) {
-                        mTerms.update(mCurrentTerm);
-                        finish();
-                    } else {
-                        mTerms.addToPosition(mCurrentTerm);
-                        finish();
-                    }
+                if(!(flags[0] || flags[1] || flags[2] || flags[3] || flags[4])) {
+                    close();
                 }
             }
         });
         UIHelper.theme((ViewGroup) findViewById(R.id.background));
+    }
+
+    private void close() {
+        if(mEditing) {
+            mTerms.update(mCurrentTerm);
+            finish();
+        } else {
+            mTerms.addToPosition(mCurrentTerm);
+            finish();
+        }
     }
 
     public void showDatePicker() {

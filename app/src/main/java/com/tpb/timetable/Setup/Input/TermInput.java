@@ -93,62 +93,43 @@ public class TermInput extends SlidingPanel {
             @Override
             public void onClick(View v) {
                 mCurrentTerm.setName(titleInput.getText().toString());
-                boolean errorFlag = false;
-                if(titleInput.getText().toString().equals("")) {
-                    errorFlag = true;
-                    final String ERROR = "Please input a term name";
-                    titleWrapper.setError(ERROR);
-                } else {
-                    titleWrapper.setError(null);
+                final boolean[] flags = new boolean[5];
+                flags[0] = titleInput.getText().toString().equals("");
+                flags[1] = mCurrentTerm.getStartDate() == 0;
+                flags[2] = mCurrentTerm.getEndDate() == 0;
+                flags[3] = mCurrentTerm.getStartDate() > mCurrentTerm.getEndDate();
+
+                titleWrapper.setError(flags[0] ?
+                        getApplicationContext().getString(R.string.error_no_term_name) : null);
+                startWrapper.setError(flags[1] ?
+                        getApplicationContext().getString(R.string.error_no_term_name) : null);
+                endWrapper.setError(flags[2] ?
+                        getApplicationContext().getString(R.string.error_no_term_name) : null);
+                if(!(flags[1] || flags[2]) && flags[3]) {
+                    startWrapper.setError(getApplicationContext().getString(R.string.error_start_date_after_end));
+                    endWrapper.setError(getApplicationContext().getString(R.string.error_end_date_before_start));
                 }
-                if(mCurrentTerm.getStartDate() == 0) {
-                    errorFlag = true;
-                    final String ERROR = "Please set a start date";
-                    startWrapper.setError(ERROR);
-                } else {
-                    if(mCurrentTerm.getStartDate()> mCurrentTerm.getEndDate()) {
-                        errorFlag = true;
-                        final String ERROR = "Start date must be before end date";
-                        startWrapper.setError(ERROR);
-                    } else {
-                        startWrapper.setError(null);
-                    }
-                }
-                if(mCurrentTerm.getEndDate() == 0) {
-                    errorFlag = true;
-                    final String ERROR = "Please set an end date";
-                    endWrapper.setError(ERROR);
-                } else {
-                    if(mCurrentTerm.getStartDate() > mCurrentTerm.getEndDate()) {
-                        errorFlag = true;
-                        final String ERROR = "End date must be after start date";
-                        endWrapper.setError(ERROR);
-                    } else {
-                        endWrapper.setError(null);
-                    }
-                }
-                final boolean[] overlap = new boolean[1];
+
                 for(int i = 0; i < mTerms.size(); i++) {
-                    if(mCurrentTerm.overlaps(mTerms.get(i))) {
+                    if(mCurrentTerm.overlaps(mTerms.get(i)) && !mTerms.get(i).equals(mCurrentTerm)) {
                         //TODO- Give date values
-                        final String message = "This terms overlaps " +
-                                mTerms.get(i).getName() + ". Delete "+
-                                mTerms.get(i).getName() + "?";
                         final int index = i;
                         new AlertDialog.Builder(TermInput.this)
                                 .setTitle("Overlapping term")
-                                .setMessage(message)
+                                .setMessage(String.format(
+                                        getApplicationContext().getString(R.string.error_overlapping_terms),
+                                        mTerms.get(i).getName(), mTerms.get(i).getName()))
                                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         mTerms.remove(index);
-                                        overlap[0] = false;
+                                        flags[4] = false;
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        overlap[0] = true;
+                                        flags[4] = true;
                                     }
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -156,12 +137,14 @@ public class TermInput extends SlidingPanel {
                         break;
                     }
                 }
-                if(overlap[0]) errorFlag = true;
-                if(!errorFlag) {
+
+                if(!(flags[0] && flags[1] && flags[2] && flags[3] && flags[4])) {
                     if(mEditing) {
                         mTerms.update(mCurrentTerm);
+                        finish();
                     } else {
                         mTerms.addToPosition(mCurrentTerm);
+                        finish();
                     }
                 }
             }

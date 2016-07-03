@@ -8,23 +8,16 @@
     tools:context="com.tpb.timetable.Setup.TermCollector">
 
 
-    <LinearLayout
-        android:id="@+id/activity_term_linear"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_terms"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/toolbar"
-        android:orientation="vertical">
+        android:clipToPadding="false"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_terms"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:clipToPadding="false"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            />
 
-    </LinearLayout>
 
 
     <include layout="@layout/content_term_collector"/>

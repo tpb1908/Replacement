@@ -225,7 +225,6 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         Collections.sort(result);
-        Collections.reverse(result);
         db.close();
         Log.i(TAG, "All terms " + result.toString());
         termWrapper.setData(result);

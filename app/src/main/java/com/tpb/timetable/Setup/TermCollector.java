@@ -12,10 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
+import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Setup.Adapters.TermAdapter;
 import com.tpb.timetable.Setup.Input.TermInput;
@@ -24,7 +24,7 @@ import com.tpb.timetable.Utils.UIHelper;
 /**
  * Created by theo on 03/07/16.
  */
-public class TermCollector extends AppCompatActivity implements DBHelper.ArrayChangeListener<Term> {
+public class TermCollector extends AppCompatActivity implements AdapterManager<Term> {
     private static final String TAG = "TermCollector";
 
     private TermAdapter mTermAdapter;
@@ -52,7 +52,7 @@ public class TermCollector extends AppCompatActivity implements DBHelper.ArrayCh
         }
 
         mTermRecycler = (RecyclerView) findViewById(R.id.recycler_terms);
-        mTermAdapter = new TermAdapter(getApplicationContext());
+        mTermAdapter = new TermAdapter(getApplicationContext(),this);
         mTermRecycler.setAdapter(mTermAdapter);
         mCurrentRotation = getResources().getConfiguration().orientation;
         setupLayoutManager();
@@ -60,7 +60,6 @@ public class TermCollector extends AppCompatActivity implements DBHelper.ArrayCh
 
         mAddTermFAB = (FloatingActionButton) findViewById(R.id.fab_add_term);
         mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_term_add_finish);
-        UIHelper.theme((ViewGroup) findViewById(R.id.snackbarPosition));
 
         mDoneFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,20 +93,14 @@ public class TermCollector extends AppCompatActivity implements DBHelper.ArrayCh
         //mAddTermFAB.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.fab_icon_plus));
     }
 
-    public void openTerm(Term term, View v) {
-        final Intent editTerm = new Intent(TermCollector.this, TermInput.class);
-        editTerm.putExtra("term", term);
-        UIHelper.setExpandLocation(v, editTerm);
-        startActivity(editTerm);
-    }
-
     private void setupLayoutManager() {
         if(mLayoutManager == null) {
             if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTermAdapter.numTerms() > 0) {
-                mLayoutManager  = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+                mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             } else {
-                mLayoutManager =  new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+                mLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
             }
+            mTermRecycler.setLayoutManager(mLayoutManager);
         }
         if(mCurrentRotation == Configuration.ORIENTATION_LANDSCAPE && mTermAdapter.numTerms() > 0) {
             mLayoutManager.setSpanCount(2);
@@ -117,41 +110,31 @@ public class TermCollector extends AppCompatActivity implements DBHelper.ArrayCh
     }
 
     @Override
-    public void removed(int index, final Term term) {
+    public void open(Term term, @Nullable View v) {
+        final Intent editTerm = new Intent(TermCollector.this, TermInput.class);
+        editTerm.putExtra("term", term);
+        UIHelper.setExpandLocation(v, editTerm);
+        startActivity(editTerm);
+    }
+
+    @Override
+    public void removed(final Term t) {
         final CoordinatorLayout snackBarLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
         final Snackbar snackbar = Snackbar
-                .make(snackBarLayout, term.getName() + " deleted",Snackbar.LENGTH_LONG)
+                .make(snackBarLayout, t.getName() + " deleted",Snackbar.LENGTH_LONG)
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DBHelper.getInstance(getApplicationContext()).getAllTerms().addToPosition(term);
+                        DBHelper.getInstance(getApplicationContext()).getAllTerms().addToPosition(t);
+                        mTermAdapter.runQueuedUpdates();
                     }
                 });
         snackbar.show();
     }
 
-   //Unused arraychangelistener methods
     @Override
-    public void dataSetChanged() {}
-
-    @Override
-    public void dataSorted() {}
-
-    @Override
-    public void add(Term term) {}
-
-    @Override
-    public void add(int index, Term term) {}
-
-    @Override
-    public void set(int index, Term term) {}
-
-    @Override
-    public void moved(int oldIndex, int newIndex) {}
-
-    @Override
-    public void updated(int index, Term term) {}
-
-    @Override
-    public void cleared() {}
+    protected void onResume() {
+        super.onResume();
+        mTermAdapter.runQueuedUpdates();
+    }
 }

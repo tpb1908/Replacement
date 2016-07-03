@@ -7,6 +7,8 @@ import com.tpb.timetable.Data.Templates.ClassTime;
  */
 public interface ClassOpener {
 
+    //TODO- Replace with adapter manager
+
     void openClass(ClassTime c);
 
 }

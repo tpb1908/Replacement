@@ -228,17 +228,15 @@ public class UIHelper {
                 if(v instanceof RelativeLayout ||
                         v instanceof LinearLayout ||
                         v instanceof RecyclerView ||
-                        v instanceof CoordinatorLayout) {
+                        v instanceof CoordinatorLayout ||
+                        v instanceof CardView) {
                     //Unless they are a TextInputLayout, which needs different theming
                     if(v instanceof TextInputLayout) themeTextInputLayout((TextInputLayout) v);
+                    if(v instanceof CardView) themeCardView((CardView) v);
                     //All of these view types contain other views
                     groupStack.push((ViewGroup) v);
                 } else { //The view is singular, so we theme it
-                    if(v instanceof CardView) {
-                        //CardView is technically a layout
-                        themeCardView((CardView) v);
-                        groupStack.push((CardView)v);
-                    } else if(v instanceof ScrollView) {
+                    if(v instanceof ScrollView) {
                         v.setBackgroundColor(getBackground());
                     } else if(v instanceof FrameLayout) {
                         //Later, for the SlidingPanel

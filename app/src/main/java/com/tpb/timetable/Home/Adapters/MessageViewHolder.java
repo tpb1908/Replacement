@@ -12,6 +12,7 @@ import com.tpb.timetable.Utils.UIHelper;
  * Created by theo on 30/04/16.
  */
 public class MessageViewHolder extends RecyclerView.ViewHolder {
+    private static final String TAG = "MessageViewHolder";
     private TextView mMessage;
 
     public MessageViewHolder(View v) {

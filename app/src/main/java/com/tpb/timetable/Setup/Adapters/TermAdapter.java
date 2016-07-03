@@ -2,6 +2,7 @@ package com.tpb.timetable.Setup.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
+import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,11 +27,15 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private static final String TAG = "TermAdapter";
     private DBHelper.ArrayWrapper<Term> mTerms;
     private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
+    private AdapterManager<Term> mManager;
     private Context mContext;
+    private boolean mWasEmpty;
 
-    public TermAdapter(Context context) {
-        this.mContext = context;
+    public TermAdapter(Context context, AdapterManager<Term> manager) {
+        mContext = context;
+        mManager = manager;
         mTerms = DBHelper.getInstance(context).getAllTerms();
+        mTerms.addListener(this);
     }
 
     @Override
@@ -51,9 +58,11 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     " to " + FormattingUtils.dateToString(new Date(term.getEndDate()));
             termHolder.mTermName.setText(term.getName());
             termHolder.mDateRange.setText(DATERANGE);
+            Log.i(TAG, "onBindViewHolder: Creating term viewholder");
         } else {
             final MessageViewHolder mv = (MessageViewHolder) holder;
             mv.setMessage(mContext.getResources().getString(R.string.message_no_terms_setup));
+            Log.i(TAG, "onBindViewHolder: Creating message viewholder");
         }
     }
 
@@ -67,7 +76,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     public void deleteTerm(int index) {
-        final Term mDeletedTerm = mTerms.get(index);
+        mManager.removed(mTerms.get(index));
         mTerms.remove(index);
         runQueuedUpdates();
     }
@@ -76,12 +85,16 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         return mTerms.size();
     }
 
-    public void open(int index) {}
-
     //Interface methods
     @Override
     public int getItemCount() {
-        return mTerms.size() > 0 ? mTerms.size() : 1;
+        if(mTerms.size() == 0) {
+            mWasEmpty = true;
+            return 1;
+        } else {
+          mWasEmpty = false;
+            return mTerms.size();
+        }
     }
 
     @Override
@@ -100,33 +113,59 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     @Override
-    public void add(int index, Term term) {
-        notifyItemInserted(index);
+    public void add(final int index, Term term) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                if(mWasEmpty) {
+                    notifyItemChanged(0);
+                } else {
+                    notifyItemInserted(index);
+                }
+            }
+        });
     }
 
     @Override
     public void add(Term term) {
-        notifyItemInserted(mTerms.indexOf(term));
+        add(mTerms.indexOf(term), term);
     }
 
     @Override
-    public void set(int index, Term term) {
-        notifyItemChanged(index);
+    public void set(final int index, Term term) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(index);
+            }
+        });
     }
 
     @Override
     public void moved(int oldIndex, int newIndex) {
         notifyItemMoved(oldIndex, newIndex);
+        notifyItemChanged(newIndex);
     }
 
     @Override
-    public void updated(int index, Term term) {
-        notifyItemChanged(index);
+    public void updated(final int index, Term term) {
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemChanged(index);
+            }
+        });
     }
 
     @Override
-    public void removed(int index, Term term) {
-        notifyItemRemoved(index);
+    public void removed(final int index, Term term) {
+        Log.i(TAG, "removed: Received notification of removed term");
+        mQueuedUpdates.add(new Runnable() {
+            @Override
+            public void run() {
+                notifyItemRemoved(index);
+            }
+        });
     }
 
     @Override
@@ -141,7 +180,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private TextView mDateRange;
         private ImageButton mDeleteButton;
 
-        public TermViewHolder(View itemView, final TermAdapter parent) {
+        public TermViewHolder(final View itemView, final TermAdapter parent) {
             super(itemView);
             mTermName = (TextView) itemView.findViewById(R.id.text_term_name);
             mDateRange = (TextView) itemView.findViewById(R.id.text_term_date_range);
@@ -155,9 +194,12 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    parent.open(getAdapterPosition());
+                    parent.mManager.open(
+                            parent.mTerms.get(getAdapterPosition()),
+                            itemView);
                 }
             });
+            UIHelper.theme((ViewGroup) itemView);
         }
     }
 

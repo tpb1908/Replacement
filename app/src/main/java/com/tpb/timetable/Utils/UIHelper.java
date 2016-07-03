@@ -18,6 +18,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -283,6 +284,11 @@ public class UIHelper {
         c.setCardBackgroundColor(getCardBackground());
     }
 
+    public static void themeFAB(FloatingActionButton f) {
+        f.setBackgroundTintList(ColorStateList.valueOf(getAccent()));
+        f.setImageTintList(ColorStateList.valueOf(darkTheme ? Color.WHITE : Color.BLACK));
+    }
+
     private static void themeEditText(EditText t) {
         t.setTextColor(getPrimaryText());
         //By setting the background color filter we set the color of the bottom bar
@@ -459,8 +465,15 @@ public class UIHelper {
             case R.drawable.icon_back:
                 return ContextCompat.getDrawable(mContext,
                         darkIcon ? R.drawable.icon_back : R.drawable.icon_back_white);
+            case R.drawable.fab_icon_next:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.fab_icon_next : R.drawable.fab_icon_next_white);
+            case R.drawable.fab_icon_plus:
+                return  ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.fab_icon_plus : R.drawable.fab_icon_plus_white);
         }
-        return null;
+        //If we don't know what it is, just return the original icon
+        return ContextCompat.getDrawable(mContext, resID);
     }
 
     public static int getContrastingTextColor(int background) {

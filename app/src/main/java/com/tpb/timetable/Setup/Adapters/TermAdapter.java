@@ -12,7 +12,6 @@ import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Setup.RemoveListener;
 import com.tpb.timetable.Utils.FormattingUtils;
 
 import java.util.ArrayList;
@@ -24,11 +23,8 @@ import java.util.Date;
 public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DBHelper.ArrayChangeListener<Term> {
     private static final String TAG = "TermAdapter";
     private DBHelper.ArrayWrapper<Term> mTerms;
-    private RemoveListener<Term> mTermRemoveListener;
     private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
     private Context mContext;
-
-    public TermAdapter() {super();}
 
     public TermAdapter(Context context) {
         this.mContext = context;
@@ -74,7 +70,10 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         final Term mDeletedTerm = mTerms.get(index);
         mTerms.remove(index);
         runQueuedUpdates();
-        mTermRemoveListener.removed(mDeletedTerm);
+    }
+
+    public int numTerms() {
+        return mTerms.size();
     }
 
     public void open(int index) {}

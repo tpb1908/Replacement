@@ -45,11 +45,11 @@ import java.util.Stack;
 /**
  * Created by theo on 30/05/16.
  */
-public class ThemeHelper {
-    private static final String TAG = "ThemeHelper";
+public class UIHelper {
+    private static final String TAG = "UIHelper";
     private static boolean darkTheme;
     private static Context mContext;
-    private static ThemeHelper instance;
+    private static UIHelper instance;
     private static final ArrayList<Themable> mListeners = new ArrayList<>();
     private static SharedPreferences.Editor mEditor;
 
@@ -71,13 +71,13 @@ public class ThemeHelper {
     private static int divider;
     private static int dividerDark;
 
-    private ThemeHelper(Context context) {
+    private UIHelper(Context context) {
         mContext = context;
     }
 
-    public static ThemeHelper getColorResources(Context context, Themable listener) {
+    public static UIHelper getColorResources(Context context, Themable listener) {
         if(instance == null) {
-            instance = new ThemeHelper(context);
+            instance = new UIHelper(context);
             final SharedPreferences prefs = context.getSharedPreferences("colors", Context.MODE_PRIVATE);
             mEditor = prefs.edit();
             if(!prefs.contains("colorPrimary")) writeDefaultValues(mEditor);
@@ -133,19 +133,19 @@ public class ThemeHelper {
     }
 
     public static void setPrimary(int primary) {
-        ThemeHelper.primary = primary;
+        UIHelper.primary = primary;
     }
 
     public static void setPrimaryDark(int primaryDark) {
-        ThemeHelper.primaryDark = primaryDark;
+        UIHelper.primaryDark = primaryDark;
     }
 
     public static void setPrimaryLight(int primaryLight) {
-        ThemeHelper.primaryLight = primaryLight;
+        UIHelper.primaryLight = primaryLight;
     }
 
     public static void setAccent(int accent) {
-        ThemeHelper.accent = accent;
+        UIHelper.accent = accent;
     }
 
     public static void setDarkTheme(boolean isDark) {
@@ -210,6 +210,8 @@ public class ThemeHelper {
     }
 
     //Theming stuff
+
+
     public static void theme(ViewGroup group) {
         final Stack<ViewGroup> groupStack = new Stack<>();
         groupStack.push(group);
@@ -265,7 +267,6 @@ public class ThemeHelper {
                 "Theming took " + secs,
                 Toast.LENGTH_LONG).show();
     }
-
 
     private static void themeTextInputLayout(TextInputLayout t) {
         try {
@@ -455,6 +456,9 @@ public class ThemeHelper {
             case R.drawable.icon_unarchive:
                 return ContextCompat.getDrawable(mContext,
                         darkIcon ? R.drawable.icon_unarchive : R.drawable.icon_unarchive_white);
+            case R.drawable.icon_back:
+                return ContextCompat.getDrawable(mContext,
+                        darkIcon ? R.drawable.icon_back : R.drawable.icon_back_white);
         }
         return null;
     }

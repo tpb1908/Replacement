@@ -18,7 +18,7 @@ import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.FormattingUtils;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,7 +40,7 @@ public class TermInput extends SlidingPanel {
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_term);
-        setPrimaryColors(ThemeHelper.getPrimary(), ThemeHelper.getPrimaryDark());
+        setPrimaryColors(UIHelper.getPrimary(), UIHelper.getPrimaryDark());
         enableFullscreen();
         final Intent i = getIntent();
         if(i.getBooleanExtra("hasOpenPosition", false)) {
@@ -166,7 +166,7 @@ public class TermInput extends SlidingPanel {
                 }
             }
         });
-        ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
+        UIHelper.theme((ViewGroup) findViewById(R.id.background));
     }
 
     public void showDatePicker() {

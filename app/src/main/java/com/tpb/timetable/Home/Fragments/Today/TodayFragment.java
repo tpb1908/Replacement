@@ -24,7 +24,7 @@ import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.FormattingUtils;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -70,8 +70,8 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
-        ThemeHelper.theme((ViewGroup) inflated);
-        ThemeHelper.addListener(this);
+        UIHelper.theme((ViewGroup) inflated);
+        UIHelper.addListener(this);
         mDB =  DBHelper.getInstance(getContext());
         mClassRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
         mClassAdapter = new TodayClassAdapter(getContext(), this, mDB);
@@ -85,7 +85,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ThemeHelper.setDarkTheme(!ThemeHelper.isDarkTheme());
+                UIHelper.setDarkTheme(!UIHelper.isDarkTheme());
 //                final Intent i = getContext().getPackageManager()
 //                        .getLaunchIntentForPackage( getContext().getPackageName() );
 //                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -167,7 +167,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
             dayTerm += " - Holiday";
             mDayTermText.setText(dayTerm);
         }
-        mDayTermText.setTextColor(ThemeHelper.getPrimaryText());
+        mDayTermText.setTextColor(UIHelper.getPrimaryText());
     }
 
 

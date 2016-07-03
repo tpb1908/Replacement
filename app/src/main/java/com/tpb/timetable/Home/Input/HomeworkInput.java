@@ -17,7 +17,7 @@ import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.FormattingUtils;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -44,8 +44,8 @@ public class HomeworkInput extends SlidingPanel {
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_homework);
         setPrimaryColors(
-                ThemeHelper.getPrimary(),
-                ThemeHelper.getPrimaryDark());
+                UIHelper.getPrimary(),
+                UIHelper.getPrimaryDark());
         enableFullscreen();
         final Intent i = getIntent();
         if(i.getBooleanExtra("hasOpenPosition", false)) {
@@ -94,7 +94,7 @@ public class HomeworkInput extends SlidingPanel {
         }
         Arrays.fill(errors, !mEditing); //If mEditing is true, the fields are already acceptable
 
-        setFab(ThemeHelper.getAccent(),
+        setFab(UIHelper.getAccent(),
                 R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +128,7 @@ public class HomeworkInput extends SlidingPanel {
                 }
             }
         });
-        ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
+        UIHelper.theme((ViewGroup) findViewById(R.id.background));
 
     }
 
@@ -159,8 +159,8 @@ public class HomeworkInput extends SlidingPanel {
                 },
                 now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH)
         );
-        dpd.setAccentColor(ThemeHelper.getAccent());
-        dpd.setThemeDark(ThemeHelper.isDarkTheme());
+        dpd.setAccentColor(UIHelper.getAccent());
+        dpd.setThemeDark(UIHelper.isDarkTheme());
         dpd.show(getFragmentManager(), TAG);
         mDetailInput.clearFocus();
     }

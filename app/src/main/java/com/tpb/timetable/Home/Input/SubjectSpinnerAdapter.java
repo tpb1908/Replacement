@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 /**
  * Created by theo on 20/04/16.
@@ -62,8 +62,8 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         name.setText(subjectDescription);
         colourBar.setBackgroundColor(mSubjects.get(position).getColor());
         //No point sending a single TextView and colored view to be themed
-        row.setBackgroundColor(ThemeHelper.getCardBackground());
-        name.setTextColor(ThemeHelper.getPrimaryText());
+        row.setBackgroundColor(UIHelper.getCardBackground());
+        name.setTextColor(UIHelper.getPrimaryText());
         return row;
     }
 

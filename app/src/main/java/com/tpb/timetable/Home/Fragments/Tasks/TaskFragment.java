@@ -17,7 +17,7 @@ import com.tpb.timetable.Home.Interfaces.FABManager;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 
 /**
@@ -48,8 +48,8 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
-        ThemeHelper.theme((ViewGroup) inflated);
-        ThemeHelper.addListener(this);
+        UIHelper.theme((ViewGroup) inflated);
+        UIHelper.addListener(this);
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TaskAdapter(getContext(), this);
         setupLayoutManager();

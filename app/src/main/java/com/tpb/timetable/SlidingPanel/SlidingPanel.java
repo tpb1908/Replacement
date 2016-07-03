@@ -47,7 +47,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 /**
  * Sliding activity that handles all interaction with users. It will be shown with about 150dp of
@@ -109,7 +109,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
         }
         setContentView(R.layout.sliding_activity);
         content = (FrameLayout) findViewById(R.id.content_container);
-        ThemeHelper.theme(content);
+        UIHelper.theme(content);
         scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
         headerContent = (FrameLayout) findViewById(R.id.header_content_container);
         photoView = (ImageView) findViewById(R.id.photo);
@@ -442,7 +442,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
         scroller.setHeaderTintColor(primaryColor);
         statusBarColor = primaryColorDark;
         updateStatusBarColor();
-        ThemeHelper.setTaskDescription(this);
+        UIHelper.setTaskDescription(this);
     }
 
     private void updateStatusBarColor() {

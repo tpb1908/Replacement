@@ -15,6 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,7 @@ import com.tpb.timetable.Home.Interfaces.FABManager;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
 
@@ -75,7 +76,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
-        ThemeHelper.setTaskDescription(this);
+        UIHelper.setTaskDescription(this);
         mDB = DBHelper.getInstance(this);
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();
@@ -91,7 +92,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         //Setting up pager
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setBackgroundColor(ThemeHelper.getPrimary());
+        mViewPager.setBackgroundColor(UIHelper.getPrimary());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -99,7 +100,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         final SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
         final View sheetView = findViewById(R.id.fabSheet);
         final View overlay = findViewById(R.id.overlay);
-        mFAB = new MaterialSheetFab(sFab, sheetView, overlay, ThemeHelper.getPrimary(), ThemeHelper.getAccent());
+        mFAB = new MaterialSheetFab(sFab, sheetView, overlay, UIHelper.getPrimary(), UIHelper.getAccent());
         mFAB.setEventListener(new MaterialSheetFabEventListener() {
             @Override
             public void onShowSheet() {
@@ -119,7 +120,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
                 }
             }
         });
-        ThemeHelper.theme((ViewGroup) findViewById(R.id.background));
+        UIHelper.theme((ViewGroup) findViewById(R.id.background));
     }
 
     @Override
@@ -130,9 +131,12 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         }
     }
 
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_home, menu);
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        final MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_home, menu);
+
         return true;
     }
 
@@ -159,13 +163,13 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
 
     public void newHomework(View v) {
         final Intent i = new Intent(this, HomeworkInput.class);
-        ThemeHelper.setExpandLocation(v, i);
+        UIHelper.setExpandLocation(v, i);
         startActivityForResult(i, 1);
     }
 
     public void newReminder(View v) {
         final Intent i = new Intent(this, ReminderInput.class);
-        ThemeHelper.setExpandLocation(v, i);
+        UIHelper.setExpandLocation(v, i);
         startActivityForResult(i, 1);
     }
 
@@ -175,7 +179,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
 
     public void newAssessment(View v) {
         final Intent i = new Intent(this, AssessmentInput.class);
-        ThemeHelper.setExpandLocation(v, i);
+        UIHelper.setExpandLocation(v, i);
         startActivity(i);
     }
 
@@ -205,7 +209,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     @Override
     public void openHomework(Task h, View v) {
         final Intent i = new Intent(this, HomeworkInput.class);
-        ThemeHelper.setExpandLocation(v, i);
+        UIHelper.setExpandLocation(v, i);
         i.putExtra("task", h);
         startActivityForResult(i, 1);
     }

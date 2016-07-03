@@ -37,6 +37,13 @@
     <string name="message_no_tasks">No current tasks</string>
     <string name="message_no_terms_setup">Add your terms</string>
 
+    <string name="menu_settings">Settings</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_edit_terms">Terms</string>
+    <string name="menu_edit_subjects">Subjects</string>
+    <string name="menu_edit_classes">Classes</string>
+
+
     <!--TODO Fix these strings-->
     <string name="homework">Homework</string>
     <string name="task">Task</string>

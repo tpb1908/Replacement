@@ -21,7 +21,7 @@ import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Utils.FormattingUtils;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -356,17 +356,17 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mDetailHint = task.getDetail().split("\n", 2)[0];
             if(mDetail.length() > mDetailHint.length()) mDetailHint += "...";
             mHomeWorkDetail.setText(mDetailHint);
-            ThemeHelper.theme((ViewGroup) itemView);
+            UIHelper.theme((ViewGroup) itemView);
             mTitleBar.setBackgroundColor(titleBackground);
             final String identifier = subject.getName() + " " + subject.getTeacher();
             mSubjectName.setText(identifier);
             mSubjectName.setCompoundDrawablesWithIntrinsicBounds(
-                    ThemeHelper.getColoredDrawable(R.drawable.icon_homework, titleBackground),
+                    UIHelper.getColoredDrawable(R.drawable.icon_homework, titleBackground),
                     null,
                     null,
                     null
             );
-            mSubjectName.setTextColor(ThemeHelper.getContrastingTextColor(titleBackground));
+            mSubjectName.setTextColor(UIHelper.getContrastingTextColor(titleBackground));
             if(parent.mToggleStates.size() <= getAdapterPosition()) {
                 parent.mToggleStates.add(false);
                 mIsExpanded = false;

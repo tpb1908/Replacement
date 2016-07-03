@@ -54,7 +54,7 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 /**
  * A custom {@link ViewGroup} that operates similarly to a {@link ScrollView}, except with multiple
@@ -302,7 +302,7 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     public void initialize(MultiShrinkScrollerListener listener, boolean isOpenContactSquare) {
         scrollView = (ScrollView) findViewById(R.id.content_scroller);
-        ThemeHelper.theme(scrollView);
+        UIHelper.theme(scrollView);
         scrollViewChild = findViewById(R.id.content_container);
         toolbar = findViewById(R.id.toolbar_parent);
         photoViewContainer = findViewById(R.id.toolbar_parent);
@@ -1448,7 +1448,7 @@ public class MultiShrinkScroller extends FrameLayout {
         // Tell the photo view what tint we are trying to achieve. Depending on the type of
         // drawable used, the photo view may or may not use this tint.
         photoView.setBackgroundColor(headerTintColor);
-        photoTouchInterceptOverlay.setBackgroundColor(ThemeHelper.adjustAlpha(headerTintColor, colorAlpha));
+        photoTouchInterceptOverlay.setBackgroundColor(UIHelper.adjustAlpha(headerTintColor, colorAlpha));
         titleGradientDrawable.setAlpha(gradientAlpha);
         actionBarGradientDrawable.setAlpha(gradientAlpha);
     }

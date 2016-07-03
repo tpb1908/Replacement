@@ -7,7 +7,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 /**
  * Created by theo on 11/05/16.
@@ -19,7 +19,7 @@ public class ReminderInput extends SlidingPanel {
 
     @Override
     public void init(Bundle savedInstanceState) {
-        setPrimaryColors(ThemeHelper.getPrimary(), ThemeHelper.getPrimaryDark());
+        setPrimaryColors(UIHelper.getPrimary(), UIHelper.getPrimaryDark());
         enableFullscreen();
         setContent(R.layout.input_reminder);
         final Intent i = getIntent();

@@ -18,7 +18,7 @@ import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.FormattingUtils;
-import com.tpb.timetable.Utils.ThemeHelper;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,12 +36,12 @@ public class AssessmentInput extends SlidingPanel {
     @Override
     public void init(Bundle savedInstanceState) {
         setContent(R.layout.input_assessment);
-        setPrimaryColors(ThemeHelper.getPrimary(), ThemeHelper.getPrimaryDark());
+        setPrimaryColors(UIHelper.getPrimary(), UIHelper.getPrimaryDark());
         enableFullscreen();
         final Intent i = getIntent();
         expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         final RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
-        ThemeHelper.theme(background);
+        UIHelper.theme(background);
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_assessment_title);
         final EditText mNotesInputs = (EditText) findViewById(R.id.edittext_assessment_notes);
         final Spinner mSubjectSpinner = (Spinner) findViewById(R.id.spinner_subject);
@@ -50,7 +50,7 @@ public class AssessmentInput extends SlidingPanel {
         final DBHelper db = DBHelper.getInstance(this);
         mSubjectSpinner.setAdapter(new SubjectSpinnerAdapter(this, db.getAllSubjects()));
 
-        setFab(ThemeHelper.getAccent(), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
+        setFab(UIHelper.getAccent(), R.drawable.fab_icon_tick_white, new FloatingActionButton.OnClickListener() {
             @Override
             public void onClick(View v) {
 

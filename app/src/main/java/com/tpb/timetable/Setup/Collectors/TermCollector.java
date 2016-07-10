@@ -1,4 +1,4 @@
-package com.tpb.timetable.Setup;
+package com.tpb.timetable.Setup.Collectors;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -46,9 +46,8 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
         final Intent launchIntent = getIntent();
         try {
             mNextWindow = (Class) launchIntent.getSerializableExtra("nextWindow");
-            mShouldFinishWhenDone = false;
-        } catch(Exception e) {
-            mShouldFinishWhenDone = true;
+        } finally {
+            mShouldFinishWhenDone = mNextWindow == null;
         }
 
         mTermRecycler = (RecyclerView) findViewById(R.id.recycler_terms);
@@ -74,10 +73,10 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
             }
         });
         if(mShouldFinishWhenDone) {
-            mDoneFAB.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.fab_icon_tick));
+            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
         } else {
             Log.i(TAG, "onCreate: Setting done drawable to icon next");
-            mDoneFAB.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.fab_icon_next));
+            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
         }
         UIHelper.themeFAB(mDoneFAB);
 
@@ -90,7 +89,6 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
             }
         });
         UIHelper.themeFAB(mAddTermFAB);
-        //mAddTermFAB.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.fab_icon_plus));
     }
 
     private void setupLayoutManager() {

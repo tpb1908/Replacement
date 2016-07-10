@@ -1,56 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".Setup.Collectors.SubjectCollector">
 
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.SubjectCollector"
-    tools:showIn="@layout/input_subject">
-
-    <me.yugy.github.reveallayout.RevealLayout
-        android:id="@+id/reveal_layout_subject"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentEnd="true"
-        android:background="#ffffff"
-        android:visibility="invisible">
-
-        <View
-            android:id="@+id/reveal_view_subject"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignStart="@id/reveal_layout_subject"
-            android:layout_alignTop="@id/reveal_layout_subject"
-            android:background="@color/colorAccent"
-            android:visibility="invisible"/>
-    </me.yugy.github.reveallayout.RevealLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_finish_subject_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:src="@drawable/fab_icon_next"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_subject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_finish_subject_add"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:src="@drawable/fab_icon_plus"/>
-
-
-</RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_subjects"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:clipToPadding="false"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            />
+</FrameLayout>

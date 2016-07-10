@@ -23,6 +23,7 @@ import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Setup.Collectors.TermCollector;
 import com.tpb.timetable.Utils.FormattingUtils;
 import com.tpb.timetable.Utils.UIHelper;
 
@@ -81,21 +82,21 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         mDayTermText = (TextView) inflated.findViewById(R.id.text_today_term);
         setDayTermText();
         mCurrentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        final Button button = (Button) inflated.findViewById(R.id.theme_button);
-        button.setOnClickListener(new View.OnClickListener() {
+        mView = inflated;
+        ((Button) inflated.findViewById(R.id.theme_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UIHelper.setDarkTheme(!UIHelper.isDarkTheme());
-//                final Intent i = getContext().getPackageManager()
-//                        .getLaunchIntentForPackage( getContext().getPackageName() );
-//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                startActivity(i);
             }
         });
-        mView = inflated;
+
+        ((Button) inflated.findViewById(R.id.testButton)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent i = new Intent(getContext(), TermCollector.class);
+                startActivity(i);
+            }
+        });
         return inflated;
     }
 

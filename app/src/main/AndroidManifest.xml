@@ -32,7 +32,7 @@
             android:theme="@style/Theme.Sliding.Light">
         </activity>
 
-        <activity android:name=".Setup.TermCollector"
+        <activity android:name=".Setup.Collectors.TermCollector"
                   android:theme="@style/AppTheme">
         </activity>
 

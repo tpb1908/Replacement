@@ -28,7 +28,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -238,9 +237,6 @@ public class UIHelper {
                 } else { //The view is singular, so we theme it
                     if(v instanceof ScrollView) {
                         v.setBackgroundColor(getBackground());
-                    } else if(v instanceof FrameLayout) {
-                        //Later, for the SlidingPanel
-                        //v.setBackgroundColor(getBackground());
                     } else if(v instanceof TextInputEditText || v instanceof EditText) {
                         //We can theme TextInputEditText in the same way as EditText
                         themeEditText((EditText) v);

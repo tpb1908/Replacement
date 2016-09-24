@@ -58,8 +58,8 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
         setupLayoutManager();
         UIHelper.theme(mTermRecycler);
 
-        mAddTermFAB = (FloatingActionButton) findViewById(R.id.fab_add_term);
-        mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_term_add_finish);
+        mAddTermFAB = (FloatingActionButton) findViewById(R.id.fab_add);
+        mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
 
         mDoneFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +90,6 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
             }
         });
         UIHelper.themeFAB(mAddTermFAB);
-        //mAddTermFAB.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.fab_icon_plus));
     }
 
     private void setupLayoutManager() {

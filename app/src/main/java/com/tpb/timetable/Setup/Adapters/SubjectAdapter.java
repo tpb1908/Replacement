@@ -9,21 +9,26 @@ import android.view.ViewGroup;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
+import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by theo on 25/05/16.
  */
 public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DBHelper.ArrayChangeListener<Subject> {
-    private DBHelper mDB;
+    private static final String TAG = "SubjectAdapter";
     private DBHelper.ArrayWrapper<Subject> mSubjects;
+    private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
+    private AdapterManager<Subject> mManger;
     private Context mContext;
     
     
-    public SubjectAdapter(Context context) {
-        mDB = DBHelper.getInstance(context);
-        mSubjects = mDB.getAllSubjects();
+    public SubjectAdapter(Context context, AdapterManager<Subject> manager) {
+        mSubjects = DBHelper.getInstance(context).getAllSubjects();
         mSubjects.addListener(this);
+        mManger = manager;
         mContext = context;
     }
 
@@ -41,6 +46,10 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
+    }
+
+    public int numSubjects() {
+        return mSubjects.size();
     }
 
     @Override

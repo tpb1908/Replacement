@@ -82,6 +82,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("firststart", false);
             editor.apply();
+            editor.commit();
             testSubjects();
             //Intent i = new Intent(getApplicationContext(), IntroActivity.class);
             //startActivity(i);

@@ -55,8 +55,6 @@ public class TermInput extends SlidingPanel {
         final TextInputLayout titleWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_term_name);
         final TextInputLayout startWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_term_start_date);
         final TextInputLayout endWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_term_end_date);
-        assert mStartDateInput != null && mEndDateInput != null && titleInput != null
-                && titleWrapper != null && startWrapper != null && endWrapper != null;
 
         mStartDateInput.setOnClickListener(new View.OnClickListener() {
             @Override

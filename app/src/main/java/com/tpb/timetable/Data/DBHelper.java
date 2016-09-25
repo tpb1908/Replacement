@@ -360,7 +360,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.delete(TABLE_CLASS_TIMES,
                 KEY_SUBJECT_ID + " = " + s.getID(),
                 null);
-        getAllClasses();
 
         db.delete(TABLE_TASKS_CURRENT,
                 KEY_SUBJECT_ID + " = " + s.getID(),
@@ -943,9 +942,7 @@ public class DBHelper extends SQLiteOpenHelper {
         public void update(T t) {
             final int oldIndex = mData.indexOf(t);
             mData.set(oldIndex, t);
-            Log.i(TAG, "update: prior to sort " + mData.toString());
             Collections.sort(mData);
-            Log.i(TAG, "update: after sort " + mData.toString());
             final int newIndex = mData.indexOf(t);
             if(newIndex == oldIndex) {
                 for (ArrayChangeListener<T> l : mListeners) l.updated(newIndex, t);

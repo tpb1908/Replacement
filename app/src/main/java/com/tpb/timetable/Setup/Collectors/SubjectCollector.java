@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
+import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
@@ -88,12 +91,31 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
     }
 
     @Override
-    public void open(Subject subject, @Nullable View v) {
-
+    protected void onResume() {
+        super.onResume();
+        mSubjectAdapter.runQueuedUpdates();
     }
 
     @Override
-    public void removed(Subject subject) {
+    public void open(Subject subject, @Nullable View v) {
+        final Intent editSubject = new Intent(SubjectCollector.this, SubjectInput.class);
+        editSubject.putExtra("subject", subject);
+        UIHelper.setExpandLocation(v, editSubject);
+        startActivity(editSubject);
+    }
 
+    @Override
+    public void removed(final Subject s) {
+        final CoordinatorLayout snackBarLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
+        final Snackbar snackbar = Snackbar
+                .make(snackBarLayout, s.getName() + " deleted",Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DBHelper.getInstance(getApplicationContext()).getAllSubjects().add(s);
+                        mSubjectAdapter.runQueuedUpdates();
+                    }
+                });
+        snackbar.show();
     }
 }

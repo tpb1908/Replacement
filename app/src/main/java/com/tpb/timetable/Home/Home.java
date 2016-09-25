@@ -41,25 +41,9 @@ import com.tpb.timetable.Utils.UIHelper;
 import java.util.ArrayList;
 
 /*TODO https://android-arsenal.com/details/1/3086
-* https://android-arsenal.com/details/1/94
 * https://android-arsenal.com/details/1/2323
  */
 
-
-    /*Where I got to-
-        The code runs, but none of the listeners are activated
-        I need to got through and change the inputs to use the data change methods
-        rather than updating through the onActivityResult method.
-        Then redo the fucked up setup classes.
-
-        Edit-
-        The TaskAdapter listener works just fine, but the data helper listener is more difficult
-        What I need to do is create an abstract class that ALL of my TableTemplate classes extend from
-        and then get rid of the use of generics in the DataUpdateListener
-
-
-        //TODO- Move all error messages to string resources
-     */
 
 public class Home extends AppCompatActivity implements ClassOpener, TaskManager, Themable, FABManager {
     private static final String TAG = "Home";
@@ -99,6 +83,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         tabLayout.setupWithViewPager(mViewPager);
             //SheetFab for adding items
         final SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
+        //UIHelper.themeFAB(sFab);
         final View sheetView = findViewById(R.id.fabSheet);
         final View overlay = findViewById(R.id.overlay);
         mFAB = new MaterialSheetFab(sFab, sheetView, overlay, UIHelper.getPrimary(), UIHelper.getAccent());

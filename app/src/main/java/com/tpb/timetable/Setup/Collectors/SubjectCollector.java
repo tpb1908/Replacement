@@ -1,4 +1,4 @@
-package com.tpb.timetable.Setup;
+package com.tpb.timetable.Setup.Collectors;
 
 import android.content.Intent;
 import android.content.res.Configuration;

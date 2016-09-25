@@ -32,12 +32,18 @@
             android:theme="@style/Theme.Sliding.Light">
         </activity>
 
-        <activity android:name=".Setup.TermCollector"
+        <activity android:name=".Setup.Collectors.TermCollector"
                   android:theme="@style/AppTheme">
         </activity>
 
         <activity
             android:name=".Setup.Input.TermInput"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light"
+            >
+        </activity>
+        <activity
+            android:name=".Setup.Input.SubjectInput"
             android:taskAffinity=""
             android:theme="@style/Theme.Sliding.Light"
             >

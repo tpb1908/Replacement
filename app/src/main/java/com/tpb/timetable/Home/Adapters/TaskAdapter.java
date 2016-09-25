@@ -376,6 +376,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     public void run() {
                         mHomeWorkDetail.setText(mDetail);
                         mOriginalHeight = mHomeWorkDetail.getHeight();
+                        Log.i(TAG, "run: Adapter position " + getAdapterPosition());
                         mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
                         toggleDetail(0);
                     }

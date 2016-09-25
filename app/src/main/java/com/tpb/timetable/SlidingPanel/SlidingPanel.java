@@ -147,6 +147,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
         scroller.initialize(multiShrinkScrollerListener, false);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        //UIHelper.themeFAB(fab);
         disableFab(); // default to having the fab be off
 
         SchedulingUtils.doOnPreDraw(scroller, true,

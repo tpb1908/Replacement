@@ -16,7 +16,6 @@
     <string name="label_homework_due_date">Due Date</string>
     <string name="label_edit">EDIT</string>
     <string name="label_done">DONE</string>
-    <string name="label_class_input">Classroom</string>
     <string name="label_color_picker">Color</string>
     <string name="label_subject_spinner">Subject</string>
 
@@ -32,6 +31,7 @@
     <string name="hint_name_last">Last name</string>
     <string name="hint_subject_name">Subject name</string>
     <string name="hint_teacher_name">Teacher</string>
+    <string name="hint_class_input">Classroom</string>
 
     <string name="message_no_classes">No classes today</string>
     <string name="message_no_tasks">No current tasks</string>

@@ -25,12 +25,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -223,21 +224,25 @@ public class UIHelper {
             group = groupStack.pop();
             for(int i = 0; i < group.getChildCount(); i++) {
                 v = group.getChildAt(i);
+                Log.i(TAG, "theme: " + v.toString());
                 //We don't want to do anything to any of these views, only their children
                 if(v instanceof RelativeLayout ||
                         v instanceof LinearLayout ||
                         v instanceof RecyclerView ||
                         v instanceof CoordinatorLayout ||
-                        v instanceof CardView) {
+                        v instanceof CardView ||
+                        v instanceof FrameLayout) {
                     //Unless they are a TextInputLayout, which needs different theming
                     if(v instanceof TextInputLayout) themeTextInputLayout((TextInputLayout) v);
                     if(v instanceof CardView) themeCardView((CardView) v);
                     //All of these view types contain other views
                     groupStack.push((ViewGroup) v);
                 } else { //The view is singular, so we theme it
-                    if(v instanceof ScrollView) {
-                        v.setBackgroundColor(getBackground());
-                    } else if(v instanceof TextInputEditText || v instanceof EditText) {
+//
+//                    if(v instanceof ScrollView) {
+//                        v.setBackgroundColor(getBackground());
+//                    } else
+                    if(v instanceof TextInputEditText || v instanceof EditText) {
                         //We can theme TextInputEditText in the same way as EditText
                         themeEditText((EditText) v);
                     } else if(v instanceof AppCompatCheckBox) {
@@ -284,6 +289,7 @@ public class UIHelper {
     }
 
     private static void themeEditText(EditText t) {
+        Log.i(TAG, "themeEditText: " + t.toString());
         t.setTextColor(getPrimaryText());
         //By setting the background color filter we set the color of the bottom bar
         t.getBackground().setColorFilter(accent, PorterDuff.Mode.SRC_ATOP);

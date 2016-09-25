@@ -308,7 +308,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             this.parent = parent;
             mIsAnimating = false;
             mTitleBar =  (RelativeLayout) v.findViewById(R.id.layout_homework_title);
-            mSubjectName = (TextView) v.findViewById(R.id.text_homework_subject);
+            mSubjectName = (TextView) v.findViewById(R.id.text_subject);
             mHomeWorkTitle = (TextView) v.findViewById(R.id.text_homework_title);
             mDueDay = (TextView) v.findViewById(R.id.text_homework_due_day);
             mHomeWorkDetail = (TextView) v.findViewById(R.id.text_homework_detail);

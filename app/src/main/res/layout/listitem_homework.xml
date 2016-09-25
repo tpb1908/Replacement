@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/text_homework_subject"
+                    android:id="@+id/text_subject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="8dp"

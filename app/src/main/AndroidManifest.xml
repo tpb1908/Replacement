@@ -42,6 +42,11 @@
             android:theme="@style/Theme.Sliding.Light"
             >
         </activity>
+
+        <activity android:name=".Setup.Collectors.SubjectCollector"
+                  android:theme="@style/AppTheme">
+        </activity>
+
         <activity
             android:name=".Setup.Input.SubjectInput"
             android:taskAffinity=""

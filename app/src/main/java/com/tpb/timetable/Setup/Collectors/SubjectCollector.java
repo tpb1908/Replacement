@@ -14,7 +14,7 @@ import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
 import com.tpb.timetable.Setup.Adapters.SubjectAdapter;
-import com.tpb.timetable.Setup.Input.TermInput;
+import com.tpb.timetable.Setup.Input.SubjectInput;
 import com.tpb.timetable.Utils.UIHelper;
 
 /**
@@ -46,6 +46,7 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
         } catch(Exception e) {
             mShouldFinishWhenDone = true;
         }
+
         mSubjectRecycler = (RecyclerView) findViewById(R.id.recycler_subjects);
         mSubjectAdapter = new SubjectAdapter(getApplicationContext(), this);
         mSubjectRecycler.setAdapter(mSubjectAdapter);
@@ -60,9 +61,9 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
         mAddSubjectFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent newTerm = new Intent(SubjectCollector.this, TermInput.class);
-                UIHelper.setExpandLocation(v, newTerm);
-                startActivity(newTerm);
+                final Intent newSubject = new Intent(SubjectCollector.this, SubjectInput.class);
+                UIHelper.setExpandLocation(v, newSubject);
+                startActivity(newSubject);
             }
         });
 

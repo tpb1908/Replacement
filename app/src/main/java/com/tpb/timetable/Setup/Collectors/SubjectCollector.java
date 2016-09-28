@@ -48,11 +48,13 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
         mAddSubjectFab = (FloatingActionButton) findViewById(R.id.fab_add);
         try {
             mNextWindow = (Class) launchIntent.getSerializableExtra("nextWindow");
-            mShouldFinishWhenDone = false;
-            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
-        } catch(Exception e) {
-            mShouldFinishWhenDone = true;
-            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
+        } finally {
+            mShouldFinishWhenDone = mNextWindow == null;
+            if(mShouldFinishWhenDone) {
+                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
+            } else {
+                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
+            }
         }
 
         mSubjectRecycler = (RecyclerView) findViewById(R.id.recycler_subjects);

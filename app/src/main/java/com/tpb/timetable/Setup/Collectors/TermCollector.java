@@ -47,11 +47,13 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
         mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
         try {
             mNextWindow = (Class) launchIntent.getSerializableExtra("nextWindow");
-            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
-            mShouldFinishWhenDone = false;
-        } catch(Exception e) {
-            mShouldFinishWhenDone = true;
-            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
+        } finally {
+            mShouldFinishWhenDone = mNextWindow == null;
+            if(mShouldFinishWhenDone) {
+                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
+            } else {
+                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
+            }
         }
 
         mTermRecycler = (RecyclerView) findViewById(R.id.recycler_terms);

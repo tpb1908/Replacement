@@ -201,8 +201,6 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 }
             });
             UIHelper.theme((ViewGroup) itemView);
-//            UIHelper.setDrawableColor(mDeleteButton.getDrawable(), UIHelper.getCardBackground());
-//            UIHelper.setDrawableColor(mIcon.getDrawable(), UIHelper.getCardBackground());
         }
     }
 

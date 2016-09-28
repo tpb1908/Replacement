@@ -30,6 +30,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -251,6 +253,7 @@ public class UIHelper {
         while(!groupStack.isEmpty()) {
             //We get the current ViewGroup and iterate through its children
             group = groupStack.pop();
+
             for(int i = 0; i < group.getChildCount(); i++) {
                 v = group.getChildAt(i);
                 //We don't want to do anything to any of these views, only their children
@@ -263,9 +266,8 @@ public class UIHelper {
                     //Unless they are a TextInputLayout, which needs different theming
                     if(v instanceof TextInputLayout) themeTextInputLayout((TextInputLayout) v);
                     if(v instanceof CardView) themeCardView((CardView) v);
-
-                        //All of these view types contain other views
-                        groupStack.push((ViewGroup) v);
+                    //All of these view types contain other views
+                    groupStack.push((ViewGroup) v);
 
                 } else { //The view is singular, so we theme it
                     if(v instanceof TextInputEditText || v instanceof EditText) {
@@ -277,6 +279,10 @@ public class UIHelper {
                         themeTextView((TextView) v);
                     } else if(v instanceof ColoredSpace) {
                         ((ColoredSpace) v).setColor(getDivider());
+                    } else if(v instanceof ImageButton) {
+                        setDrawableColor(((ImageButton) v).getDrawable(), getBackground());
+                    } else if(v instanceof ImageView) {
+                        setDrawableColor(((ImageView) v).getDrawable(), getBackground());
                     }
                 }
             }
@@ -305,8 +311,8 @@ public class UIHelper {
     }
 
     public static void themeFAB(FloatingActionButton f) {
-        f.setBackgroundTintList(ColorStateList.valueOf(getAccent()));
-        f.setImageTintList(ColorStateList.valueOf(darkTheme ? Color.WHITE : Color.BLACK));
+        f.setBackgroundTintList(ColorStateList.valueOf(accent));
+        setDrawableColor(f.getDrawable(), accent);
     }
 
     private static void themeEditText(EditText t) {

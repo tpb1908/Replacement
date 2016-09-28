@@ -32,7 +32,8 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
     private StaggeredGridLayoutManager mLayoutManager;
     private int mCurrentRotation;
     private FloatingActionButton mAddSubjectFab;
-    private FloatingActionButton mDoneFab;
+    private FloatingActionButton mDoneFAB;
+
 
     private boolean mShouldFinishWhenDone;
     private Class mNextWindow;
@@ -43,11 +44,15 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
         setContentView(R.layout.activity_subject_collector);
 
         final Intent launchIntent = getIntent();
+        mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
+        mAddSubjectFab = (FloatingActionButton) findViewById(R.id.fab_add);
         try {
             mNextWindow = (Class) launchIntent.getSerializableExtra("nextWindow");
             mShouldFinishWhenDone = false;
+            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
         } catch(Exception e) {
             mShouldFinishWhenDone = true;
+            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
         }
 
         mSubjectRecycler = (RecyclerView) findViewById(R.id.recycler_subjects);
@@ -59,8 +64,6 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
 
         UIHelper.theme(mSubjectRecycler);
 
-        mAddSubjectFab = (FloatingActionButton) findViewById(R.id.fab_add);
-
         mAddSubjectFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,10 +73,10 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
             }
         });
 
-        mDoneFab = (FloatingActionButton) findViewById(R.id.fab_add_finish);
 
-        UIHelper.setDrawableColor(mAddSubjectFab.getDrawable(), UIHelper.getAccent());
-        UIHelper.setDrawableColor(mDoneFab.getDrawable(), UIHelper.getAccent());
+
+        UIHelper.themeFAB(mDoneFAB);
+        UIHelper.themeFAB(mAddSubjectFab);
 
     }
 

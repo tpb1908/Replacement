@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
@@ -141,6 +142,7 @@ public class TermInput extends SlidingPanel {
                 }
             }
         });
+        Log.i(TAG, "init: " + ((ImageView) findViewById(R.id.icon_calendar)).getDrawable());
         UIHelper.theme((ViewGroup) findViewById(R.id.background));
     }
 

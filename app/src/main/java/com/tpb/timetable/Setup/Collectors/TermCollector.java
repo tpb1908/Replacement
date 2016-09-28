@@ -10,7 +10,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 
 import com.tpb.timetable.Data.DBHelper;
@@ -44,10 +43,15 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
         setContentView(R.layout.activity_term_collector);
 
         final Intent launchIntent = getIntent();
+        mAddTermFAB = (FloatingActionButton) findViewById(R.id.fab_add);
+        mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
         try {
             mNextWindow = (Class) launchIntent.getSerializableExtra("nextWindow");
-        } finally {
-            mShouldFinishWhenDone = mNextWindow == null;
+            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
+            mShouldFinishWhenDone = false;
+        } catch(Exception e) {
+            mShouldFinishWhenDone = true;
+            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
         }
 
         mTermRecycler = (RecyclerView) findViewById(R.id.recycler_terms);
@@ -57,8 +61,6 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
         setupLayoutManager();
         UIHelper.theme(mTermRecycler);
 
-        mAddTermFAB = (FloatingActionButton) findViewById(R.id.fab_add);
-        mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
 
         mDoneFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,12 +74,6 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
                 }
             }
         });
-        if(mShouldFinishWhenDone) {
-            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
-        } else {
-            Log.i(TAG, "onCreate: Setting done drawable to icon next");
-            mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
-        }
         UIHelper.themeFAB(mDoneFAB);
 
         mAddTermFAB.setOnClickListener(new View.OnClickListener() {

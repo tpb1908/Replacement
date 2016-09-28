@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tpb.timetable.Data.DBHelper;
@@ -178,19 +179,19 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     public static class TermViewHolder extends RecyclerView.ViewHolder {
         private TextView mTermName;
         private TextView mDateRange;
-        private ImageButton mDeleteButton;
 
         public TermViewHolder(final View itemView, final TermAdapter parent) {
             super(itemView);
             mTermName = (TextView) itemView.findViewById(R.id.text_term_name);
             mDateRange = (TextView) itemView.findViewById(R.id.text_term_date_range);
-            mDeleteButton = (ImageButton) itemView.findViewById(R.id.button_delete);
+            final ImageButton mDeleteButton = (ImageButton) itemView.findViewById(R.id.button_delete);
             mDeleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     parent.deleteTerm(getAdapterPosition());
                 }
             });
+            final ImageView mIcon = (ImageView) itemView.findViewById(R.id.icon_term);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -200,6 +201,8 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 }
             });
             UIHelper.theme((ViewGroup) itemView);
+//            UIHelper.setDrawableColor(mDeleteButton.getDrawable(), UIHelper.getCardBackground());
+//            UIHelper.setDrawableColor(mIcon.getDrawable(), UIHelper.getCardBackground());
         }
     }
 

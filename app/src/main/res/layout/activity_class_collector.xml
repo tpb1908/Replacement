@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-    android:id="@+id/main_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:fitsSystemWindows="true"
-    tools:context="com.anapp.tpb.replacement.Setup.DataPresentation.ClassTimeCollector">
+    android:id="@+id/background">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -24,7 +21,6 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
-
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
@@ -32,29 +28,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/day_pager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add_class"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/fab_icon_plus"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_finish_add_class"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/fab_icon_tick"
-        android:visibility="invisible"/>
+    <include layout="@layout/content_collector"/>
 
 </android.support.design.widget.CoordinatorLayout>

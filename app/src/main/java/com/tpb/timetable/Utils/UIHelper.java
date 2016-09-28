@@ -20,6 +20,7 @@ import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -266,8 +267,17 @@ public class UIHelper {
                     //Unless they are a TextInputLayout, which needs different theming
                     if(v instanceof TextInputLayout) themeTextInputLayout((TextInputLayout) v);
                     if(v instanceof CardView) themeCardView((CardView) v);
-                    //All of these view types contain other views
-                    groupStack.push((ViewGroup) v);
+                    if(v instanceof TabLayout) {
+                        themeTabLayout((TabLayout) v);
+                    } else {
+                        /*All of these view types contain other views
+                        *However, we don't want to theme the TextViews
+                        * in the TabLayout as if they are part of a
+                        * content view
+                         */
+                        groupStack.push((ViewGroup) v);
+                    }
+
 
                 } else { //The view is singular, so we theme it
                     if(v instanceof TextInputEditText || v instanceof EditText) {
@@ -313,6 +323,11 @@ public class UIHelper {
     public static void themeFAB(FloatingActionButton f) {
         f.setBackgroundTintList(ColorStateList.valueOf(accent));
         setDrawableColor(f.getDrawable(), accent);
+    }
+
+    private static void themeTabLayout(TabLayout t) {
+        t.setSelectedTabIndicatorColor(accent);
+        t.setTabTextColors(getPrimaryLight(), getPrimaryText());
     }
 
     private static void themeEditText(EditText t) {
@@ -457,11 +472,13 @@ public class UIHelper {
     }
 
     public static void setDrawableColor(Drawable drawable, int background) {
-        final boolean lightIcon = perceivedBrightness(background) > 0.5;
-        if(lightIcon) {
-            drawable.setColorFilter(new PorterDuffColorFilter(iconGrey, PorterDuff.Mode.SRC_IN));
-        } else {
-            drawable.setColorFilter(new PorterDuffColorFilter(iconWhite, PorterDuff.Mode.SRC_IN));
+        if(drawable != null) {
+            final boolean lightIcon = perceivedBrightness(background) > 0.5;
+            if(lightIcon) {
+                drawable.setColorFilter(new PorterDuffColorFilter(iconGrey, PorterDuff.Mode.SRC_IN));
+            } else {
+                drawable.setColorFilter(new PorterDuffColorFilter(iconWhite, PorterDuff.Mode.SRC_IN));
+            }
         }
     }
 

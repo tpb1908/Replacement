@@ -76,7 +76,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         setSupportActionBar(toolbar);
         //Setting up pager
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.day_pager);
         mViewPager.setBackgroundColor(UIHelper.getPrimary());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

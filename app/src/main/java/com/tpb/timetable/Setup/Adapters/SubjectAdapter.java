@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tpb.timetable.Data.DBHelper;
@@ -13,6 +15,7 @@ import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
 
@@ -92,7 +95,11 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             subject = (TextView) itemView.findViewById(R.id.text_subject);
             teacher = (TextView) itemView.findViewById(R.id.text_teacher_name);
             classroom = (TextView) itemView.findViewById(R.id.text_classroom);
-            itemView.findViewById(R.id.button_delete).setOnClickListener(new View.OnClickListener() {
+            final ImageButton delete = (ImageButton) itemView.findViewById(R.id.button_delete);
+            UIHelper.setDrawableColor(delete.getDrawable(), UIHelper.getCardBackground());
+            delete.refreshDrawableState();
+            //delete.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.icon_delete, UIHelper.getCardBackground()));
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     parent.delete(getAdapterPosition());
@@ -104,6 +111,10 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     parent.open(getAdapterPosition(), itemView);
                 }
             });
+            final ImageView iv = (ImageView) itemView.findViewById(R.id.icon_class);
+            UIHelper.setDrawableColor(iv.getDrawable(), UIHelper.getCardBackground());
+           // iv.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.icon_class, UIHelper.getCardBackground()));
+
         }
     }
 

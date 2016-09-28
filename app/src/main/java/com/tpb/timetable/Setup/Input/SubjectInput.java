@@ -51,7 +51,6 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
         final TextInputLayout classroomWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_subject_classroom);
 
 
-
         try {
             mCurrentSubject = (Subject) i.getSerializableExtra("subject");
             mEditing = true;

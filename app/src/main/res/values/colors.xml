@@ -34,7 +34,7 @@
 
     <color name="icon_grey">#727272</color>
     <color name="white">#FFFFFF</color>
-
+    <color name="black">#000000</color>
 
     <color name="red_50">#FFEBEE</color>
     <color name="red_100">#FFCDD2</color>

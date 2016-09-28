@@ -72,6 +72,9 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
 
         mDoneFab = (FloatingActionButton) findViewById(R.id.fab_add_finish);
 
+        UIHelper.setDrawableColor(mAddSubjectFab.getDrawable(), UIHelper.getAccent());
+        UIHelper.setDrawableColor(mDoneFab.getDrawable(), UIHelper.getAccent());
+
     }
 
     private void setupLayoutManager() {
@@ -117,5 +120,15 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
                     }
                 });
         snackbar.show();
+    }
+
+    @Override
+    public void finish() {
+        if(mShouldFinishWhenDone) {
+            super.finish();
+        } else {
+            final Intent next = new Intent(SubjectCollector.this, mNextWindow);
+            startActivity(next);
+        }
     }
 }

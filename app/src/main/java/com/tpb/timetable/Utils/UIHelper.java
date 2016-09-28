@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
@@ -25,7 +26,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -33,7 +33,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
@@ -49,7 +48,7 @@ import java.util.Stack;
 public class UIHelper {
     private static final String TAG = "UIHelper";
     private static boolean darkTheme;
-    private static Context mContext;
+    private  Context mContext;
     private static UIHelper instance;
     private static final ArrayList<Themable> mListeners = new ArrayList<>();
     private static SharedPreferences.Editor mEditor;
@@ -71,6 +70,9 @@ public class UIHelper {
     private static int cardBackgroundDark;
     private static int divider;
     private static int dividerDark;
+    private static int iconBlack;
+    private static int iconGrey;
+    private static int iconWhite;
 
     private UIHelper(Context context) {
         mContext = context;
@@ -78,28 +80,32 @@ public class UIHelper {
 
     public static UIHelper getColorResources(Context context, Themable listener) {
         if(instance == null) {
+            
             instance = new UIHelper(context);
             final SharedPreferences prefs = context.getSharedPreferences("colors", Context.MODE_PRIVATE);
             mEditor = prefs.edit();
             if(!prefs.contains("colorPrimary")) writeDefaultValues(mEditor);
             darkTheme = prefs.getBoolean("darkTheme", false);
-            primary = prefs.getInt("colorPrimary", ContextCompat.getColor(mContext, R.color.colorPrimary));
-            primaryDark = prefs.getInt("colorPrimaryDark", ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
-            primaryLight = prefs.getInt("colorPrimaryLight", ContextCompat.getColor(mContext, R.color.colorPrimaryLight));
-            accent = prefs.getInt("colorAccent", ContextCompat.getColor(mContext, R.color.colorAccent));
-            primaryText = prefs.getInt("colorPrimaryText", ContextCompat.getColor(mContext, R.color.colorPrimaryText));
-            primaryTextLight = prefs.getInt("colorPrimaryTextLight", ContextCompat.getColor(mContext, R.color.colorPrimaryTextLight));
-            secondaryText = prefs.getInt("colorSecondaryText", ContextCompat.getColor(mContext, R.color.colorSecondaryText));
-            secondaryTextLight = prefs.getInt("colorSecondaryTextLight", ContextCompat.getColor(mContext, R.color.colorSecondaryTextLight));
-            hintText = prefs.getInt("colorHintText", ContextCompat.getColor(mContext, R.color.colorHintText));
-            hintTextLight = prefs.getInt("colorHintTextLight", ContextCompat.getColor(mContext, R.color.colorHintTextLight));
-            iconsText = prefs.getInt("colorIconsText", ContextCompat.getColor(mContext, R.color.colorIconsText));
-            background = prefs.getInt("colorBackground", ContextCompat.getColor(mContext, R.color.background));
-            backgroundDark = prefs.getInt("colorBackgroundDark", ContextCompat.getColor(mContext, R.color.backgroundDark));
-            cardBackground = prefs.getInt("colorCard", ContextCompat.getColor(mContext, R.color.card));
-            cardBackgroundDark = prefs.getInt("colorCardDark", ContextCompat.getColor(mContext, R.color.cardDark));
-            divider = prefs.getInt("colorDivider", ContextCompat.getColor(mContext, R.color.divider));
-            dividerDark = prefs.getInt("colorDividerDark", ContextCompat.getColor(mContext, R.color.dividerDark));
+            primary = prefs.getInt("colorPrimary", ContextCompat.getColor(instance.mContext, R.color.colorPrimary));
+            primaryDark = prefs.getInt("colorPrimaryDark", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryDark));
+            primaryLight = prefs.getInt("colorPrimaryLight", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryLight));
+            accent = prefs.getInt("colorAccent", ContextCompat.getColor(instance.mContext, R.color.colorAccent));
+            primaryText = prefs.getInt("colorPrimaryText", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryText));
+            primaryTextLight = prefs.getInt("colorPrimaryTextLight", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryTextLight));
+            secondaryText = prefs.getInt("colorSecondaryText", ContextCompat.getColor(instance.mContext, R.color.colorSecondaryText));
+            secondaryTextLight = prefs.getInt("colorSecondaryTextLight", ContextCompat.getColor(instance.mContext, R.color.colorSecondaryTextLight));
+            hintText = prefs.getInt("colorHintText", ContextCompat.getColor(instance.mContext, R.color.colorHintText));
+            hintTextLight = prefs.getInt("colorHintTextLight", ContextCompat.getColor(instance.mContext, R.color.colorHintTextLight));
+            iconsText = prefs.getInt("colorIconsText", ContextCompat.getColor(instance.mContext, R.color.colorIconsText));
+            background = prefs.getInt("colorBackground", ContextCompat.getColor(instance.mContext, R.color.background));
+            backgroundDark = prefs.getInt("colorBackgroundDark", ContextCompat.getColor(instance.mContext, R.color.backgroundDark));
+            cardBackground = prefs.getInt("colorCard", ContextCompat.getColor(instance.mContext, R.color.card));
+            cardBackgroundDark = prefs.getInt("colorCardDark", ContextCompat.getColor(instance.mContext, R.color.cardDark));
+            divider = prefs.getInt("colorDivider", ContextCompat.getColor(instance.mContext, R.color.divider));
+            dividerDark = prefs.getInt("colorDividerDark", ContextCompat.getColor(instance.mContext, R.color.dividerDark));
+            iconBlack = prefs.getInt("colorIconBlack", ContextCompat.getColor(instance.mContext, R.color.black));
+            iconGrey = prefs.getInt("colorIconGrey", ContextCompat.getColor(instance.mContext, R.color.icon_grey));
+            iconWhite = prefs.getInt("colorIconWhite", ContextCompat.getColor(instance.mContext, R.color.white));
             mEditor.apply();
         }
         addListener(listener);
@@ -113,25 +119,32 @@ public class UIHelper {
 
     private static void writeDefaultValues(SharedPreferences.Editor editor) {
         editor.putBoolean("darkTheme", false);
-        editor.putInt("colorPrimary", ContextCompat.getColor(mContext, R.color.colorPrimary));
-        editor.putInt("colorPrimaryDark", ContextCompat.getColor(mContext, R.color.colorPrimaryDark));
-        editor.putInt("colorPrimaryLight", ContextCompat.getColor(mContext, R.color.colorPrimaryLight));
-        editor.putInt("colorAccent", ContextCompat.getColor(mContext, R.color.colorAccent));
-        editor.putInt("colorPrimaryText", ContextCompat.getColor(mContext, R.color.colorPrimaryText));
-        editor.putInt("colorPrimaryTextLight", ContextCompat.getColor(mContext, R.color.colorPrimaryTextLight));
-        editor.putInt("colorSecondaryText", ContextCompat.getColor(mContext, R.color.colorSecondaryText));
-        editor.putInt("colorSecondaryTextLight", ContextCompat.getColor(mContext, R.color.colorSecondaryTextLight));
-        editor.putInt("colorHintText", ContextCompat.getColor(mContext, R.color.colorHintText));
-        editor.putInt("colorHintTextLight", ContextCompat.getColor(mContext, R.color.colorHintTextLight));
-        editor.putInt("colorIconsText", ContextCompat.getColor(mContext, R.color.colorIconsText));
-        editor.putInt("colorBackground", ContextCompat.getColor(mContext, R.color.background));
-        editor.putInt("colorBackgroundDark", ContextCompat.getColor(mContext, R.color.backgroundDark));
-        editor.putInt("colorCard", ContextCompat.getColor(mContext, R.color.card));
-        editor.putInt("colorCardDark", ContextCompat.getColor(mContext, R.color.cardDark));
-        editor.putInt("colorDivider", ContextCompat.getColor(mContext, R.color.divider));
-        editor.putInt("colorDividerDark", ContextCompat.getColor(mContext, R.color.dividerDark));
+        editor.putInt("colorPrimary", ContextCompat.getColor(instance.mContext, R.color.colorPrimary));
+        editor.putInt("colorPrimaryDark", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryDark));
+        editor.putInt("colorPrimaryLight", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryLight));
+        editor.putInt("colorAccent", ContextCompat.getColor(instance.mContext, R.color.colorAccent));
+        editor.putInt("colorPrimaryText", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryText));
+        editor.putInt("colorPrimaryTextLight", ContextCompat.getColor(instance.mContext, R.color.colorPrimaryTextLight));
+        editor.putInt("colorSecondaryText", ContextCompat.getColor(instance.mContext, R.color.colorSecondaryText));
+        editor.putInt("colorSecondaryTextLight", ContextCompat.getColor(instance.mContext, R.color.colorSecondaryTextLight));
+        editor.putInt("colorHintText", ContextCompat.getColor(instance.mContext, R.color.colorHintText));
+        editor.putInt("colorHintTextLight", ContextCompat.getColor(instance.mContext, R.color.colorHintTextLight));
+        editor.putInt("colorIconsText", ContextCompat.getColor(instance.mContext, R.color.colorIconsText));
+        editor.putInt("colorBackground", ContextCompat.getColor(instance.mContext, R.color.background));
+        editor.putInt("colorBackgroundDark", ContextCompat.getColor(instance.mContext, R.color.backgroundDark));
+        editor.putInt("colorCard", ContextCompat.getColor(instance.mContext, R.color.card));
+        editor.putInt("colorCardDark", ContextCompat.getColor(instance.mContext, R.color.cardDark));
+        editor.putInt("colorDivider", ContextCompat.getColor(instance.mContext, R.color.divider));
+        editor.putInt("colorDividerDark", ContextCompat.getColor(instance.mContext, R.color.dividerDark));
+        editor.putInt("colorIconBlack", ContextCompat.getColor(instance.mContext, R.color.black));
+        editor.putInt("colorIconGrey", ContextCompat.getColor(instance.mContext, R.color.icon_grey));
+        editor.putInt("colorIconWhite", ContextCompat.getColor(instance.mContext, R.color.white));
         editor.commit();
     }
+
+    /**
+     * Begin setters
+     */
 
     public static void setPrimary(int primary) {
         UIHelper.primary = primary;
@@ -155,6 +168,16 @@ public class UIHelper {
         mEditor.commit();
         themeViews();
     }
+
+    /**
+     * End setters
+     */
+
+
+    /**
+     * Start variable gettesrs
+     */
+
 
     public static boolean isDarkTheme() {
         return darkTheme;
@@ -204,13 +227,19 @@ public class UIHelper {
         return darkTheme ? hintTextLight : hintText;
     }
 
+    /**
+     * End variable getters
+     */
+
     public static void setTaskDescription(Activity activity) {
         final Bitmap bm = BitmapFactory.decodeResource(activity.getResources(), android.R.mipmap.sym_def_app_icon);
         final ActivityManager.TaskDescription desc = new ActivityManager.TaskDescription(activity.getString(R.string.app_name), bm, primaryDark);
         activity.setTaskDescription(desc);
     }
 
-    //Theming stuff
+    /**
+     * Start view theming methods
+     */
 
 
     public static void theme(ViewGroup group) {
@@ -224,7 +253,6 @@ public class UIHelper {
             group = groupStack.pop();
             for(int i = 0; i < group.getChildCount(); i++) {
                 v = group.getChildAt(i);
-                Log.i(TAG, "theme: " + v.toString());
                 //We don't want to do anything to any of these views, only their children
                 if(v instanceof RelativeLayout ||
                         v instanceof LinearLayout ||
@@ -235,13 +263,11 @@ public class UIHelper {
                     //Unless they are a TextInputLayout, which needs different theming
                     if(v instanceof TextInputLayout) themeTextInputLayout((TextInputLayout) v);
                     if(v instanceof CardView) themeCardView((CardView) v);
-                    //All of these view types contain other views
-                    groupStack.push((ViewGroup) v);
+
+                        //All of these view types contain other views
+                        groupStack.push((ViewGroup) v);
+
                 } else { //The view is singular, so we theme it
-//
-//                    if(v instanceof ScrollView) {
-//                        v.setBackgroundColor(getBackground());
-//                    } else
                     if(v instanceof TextInputEditText || v instanceof EditText) {
                         //We can theme TextInputEditText in the same way as EditText
                         themeEditText((EditText) v);
@@ -258,14 +284,9 @@ public class UIHelper {
     }
 
     private static void themeViews() {
-        final long start = System.nanoTime();
         for(Themable t : mListeners) {
             theme(t.getViewGroup());
         }
-        final double secs =  (System.nanoTime()-start)/1E9;
-        Toast.makeText(mContext,
-                "Theming took " + secs,
-                Toast.LENGTH_LONG).show();
     }
 
     private static void themeTextInputLayout(TextInputLayout t) {
@@ -289,7 +310,6 @@ public class UIHelper {
     }
 
     private static void themeEditText(EditText t) {
-        Log.i(TAG, "themeEditText: " + t.toString());
         t.setTextColor(getPrimaryText());
         //By setting the background color filter we set the color of the bottom bar
         t.getBackground().setColorFilter(accent, PorterDuff.Mode.SRC_ATOP);
@@ -359,7 +379,7 @@ public class UIHelper {
          *   line count (Does the TextView contain the body?),
          *   and a special clause for detail text which changes
          */
-        if(t.getTextSize() >= mContext.getResources().getDimension(R.dimen.text_title_size)
+        if(t.getTextSize() >= instance.mContext.getResources().getDimension(R.dimen.text_title_size)
                 || t.getLineCount() > 1
                 || t.getId() == R.id.text_homework_detail) {
             t.setTextColor(getPrimaryText());
@@ -375,6 +395,11 @@ public class UIHelper {
          */
         if(t.getParent().getParent() instanceof CardView) t.setBackgroundColor(getCardBackground());
     }
+
+    /**
+     * End view theming methods
+     */
+
 
     //http://stackoverflow.com/questions/27787870/how-to-use-rippledrawable-programmatically-in-code-not-xml-with-android-5-0-lo
     private static Drawable getAdaptiveRippleDrawable(int normalColor, int pressedColor) {
@@ -425,55 +450,17 @@ public class UIHelper {
         }
     }
 
-    public static Drawable getColoredDrawable(int resID) {
-        return getColoredDrawable(resID, getBackground());
+    public static void setDrawableColor(Drawable drawable, int background) {
+        final boolean lightIcon = perceivedBrightness(background) > 0.5;
+        if(lightIcon) {
+            drawable.setColorFilter(new PorterDuffColorFilter(iconGrey, PorterDuff.Mode.SRC_IN));
+        } else {
+            drawable.setColorFilter(new PorterDuffColorFilter(iconWhite, PorterDuff.Mode.SRC_IN));
+        }
     }
 
-    public static Drawable getColoredDrawable(int resID, int background) {
-        final boolean darkIcon = perceivedBrightness(background) > 0.5;
-        switch(resID) {
-            case R.drawable.icon_homework:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_homework : R.drawable.icon_homework_white);
-            case R.drawable.icon_assessment:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_assessment : R.drawable.icon_assessment_white);
-            case R.drawable.icon_assignment:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_assignment : R.drawable.icon_assessment_white);
-            case R.drawable.icon_calendar:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_calendar : R.drawable.icon_calendar_white);
-            case R.drawable.icon_class:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_class : R.drawable.icon_class_white);
-            case R.drawable.icon_delete:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_delete : R.drawable.icon_delete_white);
-            case R.drawable.icon_note:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_note : R.drawable.icon_note_white);
-            case R.drawable.icon_reminder:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_reminder : R.drawable.icon_reminder_white);
-            case R.drawable.icon_subject:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_subject : R.drawable.icon_subject_white);
-            case R.drawable.icon_unarchive:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_unarchive : R.drawable.icon_unarchive_white);
-            case R.drawable.icon_back:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.icon_back : R.drawable.icon_back_white);
-            case R.drawable.fab_icon_next:
-                return ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.fab_icon_next : R.drawable.fab_icon_next_white);
-            case R.drawable.fab_icon_plus:
-                return  ContextCompat.getDrawable(mContext,
-                        darkIcon ? R.drawable.fab_icon_plus : R.drawable.fab_icon_plus_white);
-        }
-        //If we don't know what it is, just return the original icon
-        return ContextCompat.getDrawable(mContext, resID);
+    public static void setDrawableColor(int resId, int background) {
+        setDrawableColor(ContextCompat.getColor(instance.mContext, resId), background);
     }
 
     public static int getContrastingTextColor(int background) {

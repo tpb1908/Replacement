@@ -360,12 +360,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mTitleBar.setBackgroundColor(titleBackground);
             final String identifier = subject.getName() + " " + subject.getTeacher();
             mSubjectName.setText(identifier);
-            mSubjectName.setCompoundDrawablesWithIntrinsicBounds(
-                    UIHelper.getColoredDrawable(R.drawable.icon_homework, titleBackground),
-                    null,
-                    null,
-                    null
-            );
+            UIHelper.setDrawableColor(mSubjectName.getCompoundDrawables()[0], UIHelper.getCardBackground());
+
             mSubjectName.setTextColor(UIHelper.getContrastingTextColor(titleBackground));
             if(parent.mToggleStates.size() <= getAdapterPosition()) {
                 parent.mToggleStates.add(false);
@@ -376,7 +372,6 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     public void run() {
                         mHomeWorkDetail.setText(mDetail);
                         mOriginalHeight = mHomeWorkDetail.getHeight();
-                        Log.i(TAG, "run: Adapter position " + getAdapterPosition());
                         mIsExpanded = !parent.mToggleStates.get(getAdapterPosition());
                         toggleDetail(0);
                     }

@@ -28,7 +28,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final String TAG = "SubjectAdapter";
     private DBHelper.ArrayWrapper<Subject> mSubjects;
     private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
-    private AdapterManager<Subject> mManger;
+    private AdapterManager<Subject> mManager;
     private Context mContext;
     private boolean mWasEmpty;
     
@@ -36,7 +36,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public SubjectAdapter(Context context, AdapterManager<Subject> manager) {
         mSubjects = DBHelper.getInstance(context).getAllSubjects();
         mSubjects.addListener(this);
-        mManger = manager;
+        mManager = manager;
         mContext = context;
     }
 
@@ -128,11 +128,11 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private void open(int pos, View view) {
-        mManger.open(mSubjects.get(pos), view);
+        mManager.open(mSubjects.get(pos), view);
     }
 
     private void delete(int pos) {
-        mManger.removed(mSubjects.get(pos));
+        mManager.removed(mSubjects.get(pos));
         mSubjects.remove(pos);
         runQueuedUpdates();
     }

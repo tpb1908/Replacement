@@ -987,7 +987,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         @Override
         public String toString() {
-            return "ArrayWrapper " + mData.toString();
+            return "ArrayWrapper { listeners " + mListeners.toString()  + ", data " + mData.toString() + " }";
         }
     }
 

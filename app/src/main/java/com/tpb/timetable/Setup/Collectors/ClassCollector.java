@@ -34,7 +34,7 @@ public class ClassCollector extends AppCompatActivity {
         final TabLayout tl = (TabLayout) findViewById(R.id.tabs);
         tl.setupWithViewPager(vp);
 
-        UIHelper.theme((ViewGroup) findViewById(R.id.background));
+        UIHelper.theme((ViewGroup) findViewById(android.R.id.content));
     }
 
     private class DayPagerAdapter extends FragmentPagerAdapter {

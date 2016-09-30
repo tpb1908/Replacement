@@ -62,7 +62,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             Log.i(TAG, "onBindViewHolder: Creating term viewholder");
         } else {
             final MessageViewHolder mv = (MessageViewHolder) holder;
-            mv.setMessage(mContext.getResources().getString(R.string.message_no_terms_setup));
+            mv.setMessage(mContext.getResources().getString(R.string.message_no_terms_created));
             Log.i(TAG, "onBindViewHolder: Creating message viewholder");
         }
     }

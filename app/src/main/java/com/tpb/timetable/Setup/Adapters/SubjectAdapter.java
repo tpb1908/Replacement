@@ -60,6 +60,9 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             svh.subject.setText(s.getName());
             svh.teacher.setText(s.getTeacher());
             svh.classroom.setText(s.getClassroom());
+        } else {
+            final MessageViewHolder mv = (MessageViewHolder) holder;
+            mv.setMessage(R.string.message_no_subjects_created);
         }
     }
 

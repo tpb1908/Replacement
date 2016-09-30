@@ -34,8 +34,10 @@
     <string name="hint_class_input">Classroom</string>
 
     <string name="message_no_classes">No classes today</string>
+    <string name="message_no_classes_created">No classes created</string>
+    <string name="message_no_subjects_created">No subject created</string>
     <string name="message_no_tasks">No current tasks</string>
-    <string name="message_no_terms_setup">Add your terms</string>
+    <string name="message_no_terms_created">Add your terms</string>
 
     <string name="menu_settings">Settings</string>
     <string name="menu_edit">Edit</string>

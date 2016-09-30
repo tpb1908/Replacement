@@ -29,8 +29,9 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private boolean mWasEmpty;
 
 
-    public ClassAdapter(Context context, AdapterManager<ClassTime> manager) {
-        mClasses = DBHelper.getInstance(context).getAllClasses();
+    public ClassAdapter(Context context, AdapterManager<ClassTime> manager, int day) {
+        mClasses = DBHelper.getInstance(context).getClassesForDay(day);
+        Log.d(TAG, "ClassAdapter: Classes " + mClasses.toString());
         mClasses.addListener(this);
         mManager = manager;
         mContext = context;
@@ -39,7 +40,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == 0) {
-            final View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_subject, parent, false);
+            final View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_class, parent, false);
             return new ClassViewHolder(v);
         } else {
             final View v = LayoutInflater.from(mContext).inflate(R.layout.listitem_no_data_message, parent, false);
@@ -49,10 +50,15 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if(holder.getItemViewType() == 0) {
 
+        } else {
+            final MessageViewHolder mv = (MessageViewHolder) holder;
+            mv.setMessage(R.string.message_no_classes_created);
+        }
     }
 
-    public int numSubjects() {
+    public int numClassesToday() {
         return mClasses.size();
     }
 
@@ -65,6 +71,11 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mWasEmpty = false;
             return mClasses.size();
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return mClasses.size() > 0 ? 0 : 1;
     }
 
     public void runQueuedUpdates() {
@@ -155,6 +166,5 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void cleared() {
         notifyDataSetChanged();
     }
-
 
 }

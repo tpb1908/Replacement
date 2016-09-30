@@ -95,7 +95,7 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
         try {
             mFABManager = (FABManager) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " mus implement FABManager interface");
+            throw new ClassCastException(context.toString() + " must implement FABManager interface");
         }
     }
 

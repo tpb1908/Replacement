@@ -35,6 +35,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.tpb.timetable.Home.Interfaces.Themable;
@@ -293,6 +294,8 @@ public class UIHelper {
                         setDrawableColor(((ImageButton) v).getDrawable(), getBackground());
                     } else if(v instanceof ImageView) {
                         setDrawableColor(((ImageView) v).getDrawable(), getBackground());
+                    } else if(v instanceof Spinner) {
+                        themeSpinner((Spinner) v);
                     }
                 }
             }
@@ -415,6 +418,12 @@ public class UIHelper {
          * return false.
          */
         if(t.getParent().getParent() instanceof CardView) t.setBackgroundColor(getCardBackground());
+    }
+
+    private static void themeSpinner(Spinner s) {
+        final Drawable d = s.getBackground().getConstantState().newDrawable();
+        setDrawableColor(d, getCardBackground());
+        s.setBackground(d);
     }
 
     /**

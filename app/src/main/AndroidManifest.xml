@@ -57,6 +57,12 @@
                   android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity
+            android:name=".Setup.Input.ClassInput"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light">
+        </activity>
+
         <activity android:name=".Home.Splash"
                   android:theme="@style/SplashTheme">
             <intent-filter>

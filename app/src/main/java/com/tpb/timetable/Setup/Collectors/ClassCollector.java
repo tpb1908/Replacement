@@ -2,6 +2,7 @@ package com.tpb.timetable.Setup.Collectors;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,6 +40,13 @@ public class ClassCollector extends AppCompatActivity implements AdapterManager<
         final TabLayout tl = (TabLayout) findViewById(R.id.tabs);
         tl.setupWithViewPager(vp);
         UIHelper.theme((ViewGroup) findViewById(android.R.id.content));
+        final FloatingActionButton newFAB = (FloatingActionButton) findViewById(R.id.fab_add);
+        final FloatingActionButton done = (FloatingActionButton) findViewById(R.id.fab_add_finish);
+        newFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
     }
 
     @Override

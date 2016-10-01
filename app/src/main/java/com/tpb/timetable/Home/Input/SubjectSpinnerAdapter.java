@@ -67,6 +67,10 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         return row;
     }
 
+    public Subject getSubject(int pos) {
+        return mSubjects.get(pos);
+    }
+
     public int getPositionOfSubject(int subjectID) {
         return mSubjects.getPosOfID(subjectID);
     }

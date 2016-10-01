@@ -51,6 +51,7 @@
     <string name="error_start_date_after_end">Start date must be before end date</string>
     <string name="error_end_date_before_start">End date must be after start date</string>
     <string name="error_overlapping_terms">This terms overlaps %1$s. Delete %2$s?</string>
+    <string name="error_overlapping_classes">This class overlaps %1$s. Delete the other class?</string>
 
 
     <!--TODO Fix these strings-->

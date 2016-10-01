@@ -86,7 +86,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     currentTimePosition = h.getAdapterPosition();
                     final float scale = FormattingUtils.getPercentageComplete(currentTime, start, end);
                     holder.timerBar.setVisibility(View.VISIBLE);
-                    //Filters timer color by subject color
+                    //Filters timer color by getSubject color
                     holder.timerBar.getProgressDrawable().setColorFilter(
                             new LightingColorFilter(0xFF000000, sub.getColor()));
                     holder.timerBar.setProgress((int) (100 * scale));

@@ -276,7 +276,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //End term methods
 
 
-    //Start subject methods
+    //Start getSubject methods
 
     public Subject getSubject(int id) {
         final SQLiteDatabase db = this.getWritableDatabase();
@@ -356,7 +356,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private void remove(Subject s) {
         final SQLiteDatabase db = this.getWritableDatabase();
-        Log.i(TAG, "Deleting subject " + s.toString());
+        Log.i(TAG, "Deleting getSubject " + s.toString());
         db.delete(TABLE_CLASS_TIMES,
                 KEY_SUBJECT_ID + " = " + s.getID(),
                 null);
@@ -399,7 +399,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
     }
-    //End subject methods
+    //End getSubject methods
 
 
     //Start class methods
@@ -477,7 +477,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 classesForDay.add(new ArrayWrapper<ClassTime>(this));
             }
             for(ClassTime ct : classTimeWrapper.mData) {
-                classesForDay.get(ct.getDay()).add(ct);
+                classesForDay.get(ct.getDay()).mData.add(ct);
             }
             classesForDayValid = true;
         }
@@ -705,7 +705,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     subjectWrapper.clear();
                     getAllSubjects();
                 } catch(Exception e) {
-                    Log.e(TAG, "Cast to subject arraylist failed");
+                    Log.e(TAG, "Cast to getSubject arraylist failed");
                 }
 
             } else if(o.get(0) instanceof Assessment) {

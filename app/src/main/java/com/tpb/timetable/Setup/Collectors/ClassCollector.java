@@ -1,5 +1,6 @@
 package com.tpb.timetable.Setup.Collectors;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Setup.Input.ClassInput;
 import com.tpb.timetable.Utils.UIHelper;
 
 /**
@@ -41,10 +43,30 @@ public class ClassCollector extends AppCompatActivity implements AdapterManager<
         tl.setupWithViewPager(vp);
         UIHelper.theme((ViewGroup) findViewById(android.R.id.content));
         final FloatingActionButton newFAB = (FloatingActionButton) findViewById(R.id.fab_add);
-        final FloatingActionButton done = (FloatingActionButton) findViewById(R.id.fab_add_finish);
+        final FloatingActionButton doneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
         newFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final Intent i = new Intent(ClassCollector.this, ClassInput.class);
+                UIHelper.setExpandLocation(view, i);
+                startActivity(i);
+            }
+        });
+        vp.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if(position < vp.getChildCount() - 1) {
+                    doneFAB.setImageDrawable(getResources().getDrawable(R.drawable.fab_icon_next));
+                } else {
+                    doneFAB.setImageDrawable(getResources().getDrawable(R.drawable.fab_icon_tick));
+                }
+                UIHelper.setDrawableColor(doneFAB.getDrawable(), UIHelper.getAccent());
+            }
+        });
+        doneFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                vp.setCurrentItem(Math.min(vp.getCurrentItem() + 1, vp.getChildCount() -1));
             }
         });
     }

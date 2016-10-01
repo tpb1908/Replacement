@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
-import com.tpb.timetable.Setup.Input.ClassInput;
+import com.tpb.timetable.Setup.Collectors.ClassCollector;
 import com.tpb.timetable.Utils.UIHelper;
 
 public class Splash extends AppCompatActivity {
@@ -21,7 +21,7 @@ public class Splash extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(Splash.this, ClassInput.class));
+                startActivity(new Intent(Splash.this, ClassCollector.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }

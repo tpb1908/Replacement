@@ -6,12 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
 
@@ -51,7 +54,9 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == 0) {
-
+            final ClassViewHolder cv = (ClassViewHolder) holder;
+            cv.colourBar.setBackgroundColor(mClasses.get(position).getSubject().getColor());
+            cv.subject.setText(mClasses.get(position).getSubject().getName());
         } else {
             final MessageViewHolder mv = (MessageViewHolder) holder;
             mv.setMessage(R.string.message_no_classes_created);
@@ -88,9 +93,18 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     static class ClassViewHolder extends RecyclerView.ViewHolder {
+        private View colourBar;
+        private TextView subject;
+        private TextView classTime;
+        private ImageButton delete;
 
         public ClassViewHolder(final View itemView) {
             super(itemView);
+            colourBar = itemView.findViewById(R.id.colour_bar);
+            subject = (TextView) itemView.findViewById(R.id.text_subject);
+            classTime = (TextView) itemView.findViewById(R.id.text_class_time);
+            delete = (ImageButton) itemView.findViewById(R.id.button_delete);
+            UIHelper.theme((ViewGroup) itemView.findViewById(R.id.card_view));
         }
     }
 

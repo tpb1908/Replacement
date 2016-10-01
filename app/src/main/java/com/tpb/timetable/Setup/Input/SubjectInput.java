@@ -52,7 +52,7 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
 
 
         try {
-            mCurrentSubject = (Subject) i.getSerializableExtra("subject");
+            mCurrentSubject = (Subject) i.getSerializableExtra("getSubject");
             mEditing = true;
             pallete.setSelectedColor(mCurrentSubject.getColor());
             name.setText(mCurrentSubject.getName());
@@ -62,7 +62,7 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
         } catch(Exception e) {
             mEditing = false;
             mCurrentSubject = new Subject();
-            setTitle("New subject");
+            setTitle("New getSubject");
         }
 
         UIHelper.theme((ViewGroup) findViewById(R.id.text_input));
@@ -74,7 +74,7 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
                         boolean error = false;
                         if(name.getText().toString().isEmpty()) {
                             error = true;
-                            nameWrapper.setError("Enter a subject name");
+                            nameWrapper.setError("Enter a getSubject name");
                         } else {
                             nameWrapper.setError(null);
                             mCurrentSubject.setName(name.getText().toString());

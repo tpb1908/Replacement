@@ -108,7 +108,7 @@ public class Assessment extends Data implements Comparable<Assessment>, Serializ
 
     @Override
     public String toString() {
-        return "Assessment { id=" + id + ", date="+ date + ", subject=" + subjectID +
+        return "Assessment { id=" + id + ", date="+ date + ", getSubject=" + subjectID +
                 ", revision=" + revision + ", percentage=" + percentage + ", complete="+complete;
     }
 }

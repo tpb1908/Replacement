@@ -41,7 +41,7 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_collector);
-
+        setTitle("Terms");
         final Intent launchIntent = getIntent();
         mAddTermFAB = (FloatingActionButton) findViewById(R.id.fab_add);
         mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);

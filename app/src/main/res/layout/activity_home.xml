@@ -29,11 +29,7 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
             </android.support.v7.widget.Toolbar>
-
-
         </FrameLayout>
-
-
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -80,7 +76,7 @@
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/icon_note_grey"
+                    android:drawableStart="@drawable/icon_note_grey"
                     android:onClick="newTask"
                     android:text="@string/task"
                     android:textSize="24sp"/>
@@ -90,7 +86,7 @@
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/icon_homework_grey"
+                    android:drawableStart="@drawable/icon_homework_grey"
                     android:onClick="newHomework"
                     android:text="@string/homework"
                     android:textSize="24sp"/>
@@ -100,7 +96,7 @@
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/icon_reminder_grey"
+                    android:drawableStart="@drawable/icon_reminder_grey"
                     android:onClick="newReminder"
                     android:text="@string/reminder"
                     android:textSize="24sp"/>
@@ -110,7 +106,7 @@
                     style="@style/SheetItem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/icon_assessment_grey"
+                    android:drawableStart="@drawable/icon_assessment_grey"
                     android:onClick="newAssessment"
                     android:text="@string/assessment"
                     android:textSize="24sp"/>

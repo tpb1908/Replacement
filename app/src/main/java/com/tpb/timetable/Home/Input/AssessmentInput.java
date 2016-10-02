@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 
 import java.text.ParseException;
@@ -81,7 +81,7 @@ public class AssessmentInput extends SlidingPanel {
             Date d = new Date();
             try {
                 d = format.parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                String dString = FormattingUtils.dateToString(d);
+                String dString = Format.dateToString(d);
                 mDateInput.setText(dString);
             } catch (ParseException e) {
                 Log.e(TAG, "Parsing exception in OnDateSetListener",e);

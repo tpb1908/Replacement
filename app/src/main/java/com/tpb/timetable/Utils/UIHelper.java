@@ -27,6 +27,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -249,8 +250,10 @@ public class UIHelper {
     public static void theme(ViewGroup group) {
         final Stack<ViewGroup> groupStack = new Stack<>();
         groupStack.push(group);
+        Log.i(TAG, "theme: Root viewgroup is " + group);
         //We only set the background of the highest level to avoid overdraw
-        group.setBackgroundColor(getBackground());
+        final int bg = group instanceof CardView ? getCardBackground() : getBackground();
+        group.setBackgroundColor(bg);
         View v;
         while(!groupStack.isEmpty()) {
             //We get the current ViewGroup and iterate through its children
@@ -278,7 +281,6 @@ public class UIHelper {
                          */
                         groupStack.push((ViewGroup) v);
                     }
-
 
                 } else { //The view is singular, so we theme it
                     if(v instanceof TextInputEditText || v instanceof EditText) {
@@ -479,14 +481,25 @@ public class UIHelper {
         }
     }
 
-    public static void setDrawableColor(Drawable drawable, int background) {
+    //TODO - Fix this
+    public static void setDrawableColor(Drawable drawable, int bgColor) {
         if(drawable != null) {
-            final boolean lightIcon = perceivedBrightness(background) > 0.5;
-            if(lightIcon) {
+            if(bgColor == cardBackground || bgColor == background) {
                 drawable.setColorFilter(new PorterDuffColorFilter(iconGrey, PorterDuff.Mode.SRC_IN));
-            } else {
+            } else if(bgColor == cardBackgroundDark || bgColor == accent) {
+
                 drawable.setColorFilter(new PorterDuffColorFilter(iconWhite, PorterDuff.Mode.SRC_IN));
+            } else if(bgColor == primary) {
+
+            } else {
+                final boolean darkIcon = perceivedBrightness(bgColor) > 0.5;
+                if(darkIcon) {
+                    drawable.setColorFilter(new PorterDuffColorFilter(iconGrey, PorterDuff.Mode.SRC_IN));
+                } else {
+                    drawable.setColorFilter(new PorterDuffColorFilter(iconWhite, PorterDuff.Mode.SRC_IN));
+                }
             }
+
         }
     }
 

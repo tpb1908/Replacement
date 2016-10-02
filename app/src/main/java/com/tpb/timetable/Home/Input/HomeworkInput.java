@@ -16,7 +16,7 @@ import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -83,7 +83,7 @@ public class HomeworkInput extends SlidingPanel {
             mShowReminderInput.setChecked(mCurrentTask.getShowReminder());
             int spinnerPos = spinnerAdapter.getPositionOfSubject(mCurrentTask.getSubjectID());
             if(spinnerPos != -1) spinner.setSelection(spinnerPos, true);
-            mDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTask.getEndDate())));
+            mDateInput.setText(Format.dateToString(new Date(mCurrentTask.getEndDate())));
             mOriginalDate = mCurrentTask.getEndDate();
             mEditing = true;
             setTitle(R.string.title_homework_input_edit);
@@ -128,7 +128,7 @@ public class HomeworkInput extends SlidingPanel {
                 }
             }
         });
-        UIHelper.theme((ViewGroup) findViewById(R.id.background));
+        UIHelper.theme((ViewGroup) findViewById(R.id.content_container));
 
     }
 
@@ -150,7 +150,7 @@ public class HomeworkInput extends SlidingPanel {
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
                         try {
                             final Date d = new SimpleDateFormat("yyyy-MM-dd").parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                            mDateInput.setText(FormattingUtils.dateToString(d));
+                            mDateInput.setText(Format.dateToString(d));
                             mCurrentTask.setEndDate(d.getTime());
                         } catch (ParseException e) {
                             Log.e(TAG, "Parsing exception in OnDateSetListener",e);

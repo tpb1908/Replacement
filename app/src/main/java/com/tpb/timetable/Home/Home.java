@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,14 +37,12 @@ import com.tpb.timetable.Home.Interfaces.FABManager;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
+import com.tpb.timetable.Setup.Collectors.ClassCollector;
+import com.tpb.timetable.Setup.Collectors.SubjectCollector;
+import com.tpb.timetable.Setup.Collectors.TermCollector;
 import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
-
-/*TODO https://android-arsenal.com/details/1/3086
-* https://android-arsenal.com/details/1/2323
- */
-
 
 public class Home extends AppCompatActivity implements ClassOpener, TaskManager, Themable, FABManager {
     private static final String TAG = "Home";
@@ -61,6 +60,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         super.onCreate(savedInstanceState);
         final SharedPreferences pref = getSharedPreferences("mypref", MODE_PRIVATE);
         UIHelper.setTaskDescription(this);
+        UIHelper.addListener(this);
         mDB = DBHelper.getInstance(this);
         if(pref.getBoolean("firststart", true)) {
             SharedPreferences.Editor editor = pref.edit();
@@ -83,7 +83,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         tabLayout.setupWithViewPager(mViewPager);
             //SheetFab for adding items
         final SheetFab sFab= (SheetFab) findViewById(R.id.sheetFab);
-        //UIHelper.themeFAB(sFab);
         final View sheetView = findViewById(R.id.fabSheet);
         final View overlay = findViewById(R.id.overlay);
         mFAB = new MaterialSheetFab(sFab, sheetView, overlay, UIHelper.getPrimary(), UIHelper.getAccent());
@@ -117,18 +116,31 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
+        Log.i(TAG, "onCreateOptionsMenu: ");
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        switch(id) {
+            case R.id.menu_settings:
+
+                break;
+            case R.id.menu_edit_classes:
+                startActivity(new Intent(Home.this, ClassCollector.class));
+                break;
+            case R.id.menu_edit_subjects:
+                startActivity(new Intent(Home.this, SubjectCollector.class));
+                break;
+            case R.id.menu_edit_terms:
+                startActivity(new Intent(Home.this, TermCollector.class));
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -227,21 +239,46 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         final ArrayList<Subject> subjects = new ArrayList<>();
         Subject s = new Subject();
         s.setName("Maths");
-        s.setTeacher("Maths teacher");
-        s.setClassroom("Maths classroom");
-        s.setColor(getResources().getColor(R.color.blue_600));
+        s.setTeacher("TMM");
+        s.setClassroom("L4.04");
+        s.setColor(getResources().getColor(R.color.blue_500));
+        subjects.add(s);
+        s = new Subject();
+        s.setName("Maths");
+        s.setTeacher("RJS");
+        s.setClassroom("L0.25");
+        s.setColor(getResources().getColor(R.color.cyan_500));
         subjects.add(s);
         s =  new Subject();
         s.setName("Physics");
-        s.setTeacher("Physics teacher");
-        s.setClassroom("Physics classroom");
-        s.setColor(getResources().getColor(R.color.red_700));
+        s.setTeacher("SWG");
+        s.setClassroom("L4.08");
+        s.setColor(getResources().getColor(R.color.red_500));
+        subjects.add(s);
+        s =  new Subject();
+        s.setName("Physics");
+        s.setTeacher("SJY");
+        s.setClassroom("L1.10");
+        s.setColor(getResources().getColor(R.color.orange_500));
+        subjects.add(s);
+        s = new Subject();
+        s =  new Subject();
+        s.setName("Physics");
+        s.setTeacher("AJT");
+        s.setClassroom("L4.09");
+        s.setColor(getResources().getColor(R.color.deep_orange_500));
         subjects.add(s);
         s = new Subject();
         s.setName("Computer science");
-        s.setTeacher("Computer science teacher");
-        s.setClassroom("Computer science classroom");
-        s.setColor(getResources().getColor(R.color.green_400));
+        s.setTeacher("MQL");
+        s.setClassroom("L2.09");
+        s.setColor(getResources().getColor(R.color.green_500));
+        subjects.add(s);
+        s = new Subject();
+        s.setName("Computer science");
+        s.setTeacher("SJY");
+        s.setClassroom("L1.10");
+        s.setColor(getResources().getColor(R.color.light_green_500));
         subjects.add(s);
         mDB.getAllSubjects().addAll(subjects);
 
@@ -249,7 +286,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+       SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

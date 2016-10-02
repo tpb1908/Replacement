@@ -9,9 +9,9 @@ import java.util.Date;
 /**
  * Created by theo on 21/04/16.
  */
-public class FormattingUtils {
+public class Format {
     
-    private FormattingUtils() {}
+    private Format() {}
 
     //TODO- What the fuck is going on here???
 
@@ -92,16 +92,10 @@ public class FormattingUtils {
     }
 
     public static float getPercentageComplete(int time, int start, int end) {
-        final int timeHour = (int) Math.floor((float) time/100);
-        final int startHour = (int) Math.floor((float)start/100);
-        final int endHour = (int) Math.floor((float)end/100);
-        final int timeMinute = time - (timeHour*100);
-        final int startMinute = start - (startHour*100);
-        final int endMinute = end - (endHour*100);
-
-        return ((float) ((timeHour*60+timeMinute)-(startHour*60+startMinute))) /
-                ((float)((endHour*60+endMinute)-(startHour*60+startMinute)));
-
+        if(time < start || time > end) return  0;
+        time -= start;
+        end -= start;
+        return (float) time/ end;
     }
 
     /**
@@ -132,10 +126,10 @@ public class FormattingUtils {
 
 
         String format = DateFormat.format("EEEE", d) + " ";
+        format +=  day + getSuffix(day);
         if(cal.get(Calendar.MONTH) != Calendar.getInstance().get(Calendar.MONTH)) {
             format += DateFormat.format("MMMM",d) + " ";
         }
-        format +=  day + getSuffix(day);
 
         if(d.getYear() != new Date().getYear()) {
             format += " " + (1900+d.getYear());

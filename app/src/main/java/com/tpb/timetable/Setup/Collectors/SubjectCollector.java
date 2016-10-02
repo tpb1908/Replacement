@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
@@ -34,7 +35,6 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
     private FloatingActionButton mAddSubjectFab;
     private FloatingActionButton mDoneFAB;
 
-
     private boolean mShouldFinishWhenDone;
     private Class mNextWindow;
 
@@ -42,7 +42,7 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_subject_collector);
-
+        setTitle("Subjects");
         final Intent launchIntent = getIntent();
         mDoneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
         mAddSubjectFab = (FloatingActionButton) findViewById(R.id.fab_add);
@@ -61,10 +61,31 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
         mSubjectAdapter = new SubjectAdapter(getApplicationContext(), this);
         mSubjectRecycler.setAdapter(mSubjectAdapter);
 
+        mSubjectRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy > 0) {
+                    mDoneFAB.hide();
+                    mAddSubjectFab.hide();
+                } else {
+                    mDoneFAB.show();
+                    mAddSubjectFab.show();
+                }
+            }
+        });
+
         mCurrentRotation = getResources().getConfiguration().orientation;
         setupLayoutManager();
 
-        UIHelper.theme(mSubjectRecycler);
+        mDoneFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         mAddSubjectFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,11 +96,7 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
             }
         });
 
-
-
-        UIHelper.themeFAB(mDoneFAB);
-        UIHelper.themeFAB(mAddSubjectFab);
-
+        UIHelper.theme((ViewGroup) findViewById(android.R.id.content));
     }
 
     private void setupLayoutManager() {

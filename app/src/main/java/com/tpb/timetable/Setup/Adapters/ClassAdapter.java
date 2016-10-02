@@ -14,12 +14,10 @@ import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
-
-import static com.tpb.timetable.R.id.subject;
 
 /**
  * Created by theo on 25/05/16.
@@ -58,13 +56,15 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             final ClassViewHolder cv = (ClassViewHolder) holder;
             cv.colourBar.setBackgroundColor(mClasses.get(position).getSubject().getColor());
             cv.subject.setText(mClasses.get(position).getSubject().getName());
-            String timeRange = FormattingUtils.format(mClasses.get(position).getStartTime()) +
-                    " to " + FormattingUtils.format(mClasses.get(position).getEndTime());
+            String timeRange = Format.format(mClasses.get(position).getStartTime()) +
+                    " to " + Format.format(mClasses.get(position).getEndTime());
             cv.classTime.setText(timeRange);
             cv.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mManager.removed(mClasses.get(holder.getAdapterPosition()));
+                    mClasses.remove(holder.getAdapterPosition());
+                    runQueuedUpdates();
                 }
             });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -166,14 +166,12 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void moved(int oldIndex, int newIndex) {
-        Log.i(TAG, "moved: " + oldIndex + ", " + newIndex + ", " + subject);
         notifyItemMoved(oldIndex, newIndex);
         notifyItemChanged(newIndex);
     }
 
     @Override
     public void updated(final int index, ClassTime classTime) {
-        Log.i(TAG, "updated: " + index + ", " + subject);
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {

@@ -15,7 +15,7 @@ import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.Home.Adapters.MessageViewHolder;
 import com.tpb.timetable.Home.Interfaces.AdapterManager;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
@@ -55,8 +55,8 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         if(holder.getItemViewType() == 1) {
             final TermViewHolder termHolder = (TermViewHolder) holder;
             final Term term = mTerms.get(position);
-            final String DATERANGE = FormattingUtils.dateToString(new Date(term.getStartDate())) +
-                    " to " + FormattingUtils.dateToString(new Date(term.getEndDate()));
+            final String DATERANGE = Format.dateToString(new Date(term.getStartDate())) +
+                    " to " + Format.dateToString(new Date(term.getEndDate()));
             termHolder.mTermName.setText(term.getName());
             termHolder.mDateRange.setText(DATERANGE);
             Log.i(TAG, "onBindViewHolder: Creating term viewholder");

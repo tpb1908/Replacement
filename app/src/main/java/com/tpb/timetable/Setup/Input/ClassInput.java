@@ -16,7 +16,7 @@ import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Input.SubjectSpinnerAdapter;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -63,8 +63,8 @@ public class ClassInput extends SlidingPanel {
         try {
             mCurrentClass = (ClassTime) i.getSerializableExtra("class");
             mEditing = true;
-            start.setText(FormattingUtils.format(mCurrentClass.getStartTime()));
-            end.setText(FormattingUtils.format(mCurrentClass.getEndTime()));
+            start.setText(Format.format(mCurrentClass.getStartTime()));
+            end.setText(Format.format(mCurrentClass.getEndTime()));
             subjectSpinner.setSelection(ssa.getPositionOfSubject(mCurrentClass.getSubjectID()));
             setTitle("Edit class");
         } catch(Exception e) {
@@ -82,13 +82,13 @@ public class ClassInput extends SlidingPanel {
                 int hour = now.get(Calendar.HOUR_OF_DAY);
                 int min = now.get(Calendar.MINUTE);
                 if(mCurrentClass.getStartTime() != -1) {
-                    hour = FormattingUtils.getHour(mCurrentClass.getStartTime());
-                    min = FormattingUtils.getMinute(mCurrentClass.getStartTime())
+                    hour = Format.getHour(mCurrentClass.getStartTime());
+                    min = Format.getMinute(mCurrentClass.getStartTime())
 ;                }
                 final TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-                        start.setText(FormattingUtils.format(hourOfDay, minute));
+                        start.setText(Format.format(hourOfDay, minute));
                         mCurrentClass.setStartTime((hourOfDay*60) + minute);
                     }
                 },
@@ -109,13 +109,13 @@ public class ClassInput extends SlidingPanel {
                 int hour = now.get(Calendar.HOUR_OF_DAY);
                 int min = now.get(Calendar.MINUTE);
                 if(mCurrentClass.getEndTime() != -1) {
-                    hour = FormattingUtils.getHour(mCurrentClass.getEndTime());
-                    min = FormattingUtils.getMinute(mCurrentClass.getEndTime())
+                    hour = Format.getHour(mCurrentClass.getEndTime());
+                    min = Format.getMinute(mCurrentClass.getEndTime())
                     ;                }
                 final TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-                        end.setText(FormattingUtils.format(hourOfDay, minute));
+                        end.setText(Format.format(hourOfDay, minute));
                         mCurrentClass.setEndTime((hourOfDay*60) + minute);
                     }
                 },
@@ -130,7 +130,7 @@ public class ClassInput extends SlidingPanel {
         });
 
 
-        setFab(UIHelper.getAccent(), R.drawable.fab_icon_tick, new View.OnClickListener() {
+        setFab(UIHelper.getAccent(), R.drawable.fab_icon_tick_white, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean error = false;
@@ -148,6 +148,7 @@ public class ClassInput extends SlidingPanel {
                 } else {
                     endWrapper.setError(null);
                 }
+                //TODO- Check that times are in the right order
                 final DBHelper.ArrayWrapper<ClassTime> classes = DBHelper.getInstance(getApplicationContext()).getClassesForDay(day);
                 for(int i = 0; i < classes.size(); i++) {
                     if(classes.get(i).overlaps(mCurrentClass) && !classes.get(i).equals(mCurrentClass)) {
@@ -185,8 +186,7 @@ public class ClassInput extends SlidingPanel {
 
             }
         });
-
-        UIHelper.theme((ViewGroup) findViewById(android.R.id.content));
+        UIHelper.theme((ViewGroup) findViewById(R.id.content_container));
 
     }
 }

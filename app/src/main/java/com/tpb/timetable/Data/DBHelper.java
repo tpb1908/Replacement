@@ -463,7 +463,6 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         Collections.sort(classes);
-        Collections.reverse(classes);
         db.close();
         classTimeWrapper.setData(classes);
         Log.i(TAG, "Returning all classes" + classes.toString());
@@ -485,7 +484,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayWrapper<ClassTime> getClassesToday() {
-        return getClassesForDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK)-1);
+        return getClassesForDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2);
     }
     //End class methods
 
@@ -664,6 +663,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(KEY_END_TIME, ct.getEndTime());
             values.put(KEY_DAY, ct.getDay());
             id = (int) db.insert(TABLE_CLASS_TIMES, null, values);
+            classesForDayValid = false;
             Log.i(TAG, "Adding " + ct.toString());
         } else if(data instanceof Subject) {
             final Subject s = (Subject) data;
@@ -924,6 +924,7 @@ public class DBHelper extends SQLiteOpenHelper {
             for(pos = 0; pos < mData.size(); pos++) {
                 if(t.compareTo(mData.get(pos)) < 0) break;
             }
+            Log.i(TAG, "addToPosition: Pos = " + pos);
             add(pos, t);
         }
 

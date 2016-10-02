@@ -14,7 +14,8 @@ import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
+import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.Calendar;
 
@@ -37,6 +38,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mClassInterface = mClassInterface;
         this.mClasses = dataHelper.getClassesToday();
         mClasses.addListener(this);
+        collectData();
     }
 
     /**
@@ -54,7 +56,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             vh = new MessageViewHolder(v);
         } else if(viewType == 1) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_class_today, parent, false);
-            vh = new ClassViewHolder(v, this);
+            vh = new ClassViewHolder(v);
         } else {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_class_today_past, parent, false);
             vh = new ClassPastViewHolder(v);
@@ -70,6 +72,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             final ClassTime ct = mClasses.get(position);
             final Subject sub = ct.getSubject();
+
             if(h.getItemViewType() == 1) {
                 final ClassViewHolder holder = (ClassViewHolder) h ;
                 String timeRange;
@@ -84,26 +87,30 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 if(currentTime > start && currentTime < end) {
                     currentEndTime = ct.getEndTime();
                     currentTimePosition = h.getAdapterPosition();
-                    final float scale = FormattingUtils.getPercentageComplete(currentTime, start, end);
+
                     holder.timerBar.setVisibility(View.VISIBLE);
-                    //Filters timer color by getSubject color
                     holder.timerBar.getProgressDrawable().setColorFilter(
                             new LightingColorFilter(0xFF000000, sub.getColor()));
-                    holder.timerBar.setProgress((int) (100 * scale));
+
+                    holder.timerBar.setProgress((int) (100 * Format.getPercentageComplete(currentTime, start, end)));
                 } else {
                     holder.timerBar.setVisibility(View.INVISIBLE);
                 }
+
                 holder.colourBar.setBackgroundColor(sub.getColor());
-                timeRange = FormattingUtils.format(start);
-                timeRange += " to " + FormattingUtils.format(end);
+                timeRange = Format.format(start);
+                timeRange += " to " + Format.format(end);
                 holder.classTime.setText(timeRange);
+
+                UIHelper.theme((ViewGroup) h.itemView);
             } else {
                 final ClassPastViewHolder holder = (ClassPastViewHolder) h;
                 final String info = sub.getName() + " with " + sub.getTeacher() +
-                        " from " + FormattingUtils.format(ct.getStartTime()) +
-                        " to " + FormattingUtils.format(ct.getEndTime());
+                        " from " + Format.format(ct.getStartTime()) +
+                        " to " + Format.format(ct.getEndTime());
                 holder.info.setText(info);
             }
+
         }
     }
 
@@ -134,7 +141,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void collectData() {
         mCalendar = Calendar.getInstance();
         //this.mClasses = mDB.getClassesForDay(mCalendar.get(Calendar.DAY_OF_WEEK));
-        currentTime = (mCalendar.get(Calendar.HOUR_OF_DAY)*100) + mCalendar.get(Calendar.MINUTE);
+        currentTime = (mCalendar.get(Calendar.HOUR_OF_DAY)*60) + mCalendar.get(Calendar.MINUTE);
         if(currentEndTime < currentTime) {
             notifyItemChanged(currentTimePosition);
         } else {
@@ -200,12 +207,10 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return  mClasses.size();
     }
 
-    //Viewholder classes
     /**
      * ViewHolder class for a class in the current day which is yet to pass
      */
-    public static class ClassViewHolder extends RecyclerView.ViewHolder {
-        private static TodayClassAdapter parent;
+    private class ClassViewHolder extends RecyclerView.ViewHolder {
         private final TextView className;
         private final TextView classTime;
         private final TextView teacherName;
@@ -213,9 +218,9 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private final View colourBar;
         private final ProgressBar timerBar;
 
-        public ClassViewHolder(View v, TodayClassAdapter p) {
+        ClassViewHolder(View v) {
             super(v);
-            parent = p;
+
             setIsRecyclable(false);
             className = (TextView) v.findViewById(R.id.text_subject);
             classTime = (TextView) v.findViewById(R.id.text_class_time);
@@ -226,7 +231,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick (View v) {
-                    parent.openClass(getAdapterPosition());
+                    TodayClassAdapter.this.openClass(getAdapterPosition());
                 }
             });
         }
@@ -235,9 +240,10 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     /**
      * ViewHolder for a class in the current day which has already passed
      */
-    public static class ClassPastViewHolder extends RecyclerView.ViewHolder {
+    private static class ClassPastViewHolder extends RecyclerView.ViewHolder {
         private final TextView info;
-        public ClassPastViewHolder(View v) {
+
+        ClassPastViewHolder(View v) {
             super(v);
             setIsRecyclable(false);
             info = (TextView) v.findViewById(R.id.text_subject);

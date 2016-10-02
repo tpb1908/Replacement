@@ -23,8 +23,7 @@ import com.tpb.timetable.Home.Interfaces.ClassOpener;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Setup.Collectors.TermCollector;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.Calendar;
@@ -89,14 +88,6 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
                 UIHelper.setDarkTheme(!UIHelper.isDarkTheme());
             }
         });
-
-        ((Button) inflated.findViewById(R.id.testButton)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent i = new Intent(getContext(), TermCollector.class);
-                startActivity(i);
-            }
-        });
         return inflated;
     }
 
@@ -159,7 +150,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
 
 
     private void setDayTermText() {
-        String dayTerm = FormattingUtils.dateToString(new Date());
+        String dayTerm = Format.dateToString(new Date());
         final Term currentTerm = mDB.getCurrentTerm();
         if(currentTerm.getName() != null) {
             dayTerm += "- " + currentTerm.getName();

@@ -34,13 +34,4 @@
         android:layout_marginBottom="129dp"
         android:text="Theme"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Terms"
-        android:id="@+id/testButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="43dp"/>
-
 </RelativeLayout>

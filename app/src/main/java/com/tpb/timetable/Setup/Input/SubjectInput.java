@@ -62,10 +62,10 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
         } catch(Exception e) {
             mEditing = false;
             mCurrentSubject = new Subject();
-            setTitle("New getSubject");
+            setTitle("New Subject");
         }
 
-        UIHelper.theme((ViewGroup) findViewById(R.id.text_input));
+        UIHelper.theme((ViewGroup) findViewById(R.id.content_container));
 
         setFab(UIHelper.getAccent(),
                 R.drawable.fab_icon_tick_white, new View.OnClickListener() {

@@ -79,9 +79,10 @@ public class DayFragment extends android.support.v4.app.Fragment {
         mClassAdapter.runQueuedUpdates();
     }
 
-    public void addClass(ClassTime ct) {
-        mClassAdapter.add(ct);
+    public void runQueuedUpdates() {
+        mClassAdapter.runQueuedUpdates();
     }
+
 
     private void setupLayoutManager() {
         if(mLayoutManager == null) {

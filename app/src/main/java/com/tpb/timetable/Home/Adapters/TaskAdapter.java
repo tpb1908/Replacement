@@ -20,7 +20,7 @@ import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Data.Templates.Task;
 import com.tpb.timetable.Home.Interfaces.TaskManager;
 import com.tpb.timetable.R;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 
 import java.util.ArrayList;
@@ -347,8 +347,8 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         private void setup(final Task task, final Subject subject) {
             String timeRange = "Set on ";
-            timeRange += FormattingUtils.dateToString(new Date(task.getStartDate()));
-            timeRange += ", Due by " + FormattingUtils.dateToString(new Date(task.getEndDate()));
+            timeRange += Format.dateToString(new Date(task.getStartDate()));
+            timeRange += ", Due by " + Format.dateToString(new Date(task.getEndDate()));
             final int titleBackground = subject.getColor();
             mHomeWorkTitle.setText(task.getTitle());
             mDueDay.setText(timeRange);
@@ -425,7 +425,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         private void grow(int duration) {
             Log.i(TAG, "grow: index " + getAdapterPosition());
             mHomeWorkDetail.setText(mDetail);
-            final int numLines = FormattingUtils.numLinesForTextView(mHomeWorkDetail, mDetail);
+            final int numLines = Format.numLinesForTextView(mHomeWorkDetail, mDetail);
             final ValueAnimator valueAnimator = ValueAnimator.ofInt(mOriginalHeight, mOriginalHeight + (mOriginalHeight * numLines));
             final View v = mHomeWorkDetail;
             valueAnimator.setDuration(duration);

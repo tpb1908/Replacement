@@ -10,13 +10,12 @@ import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Term;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
-import com.tpb.timetable.Utils.FormattingUtils;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 
 import java.text.ParseException;
@@ -74,8 +73,8 @@ public class TermInput extends SlidingPanel {
         try {
             mCurrentTerm = (Term) i.getSerializableExtra("term");
             titleInput.setText(mCurrentTerm.getName());
-            mStartDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTerm.getStartDate())));
-            mEndDateInput.setText(FormattingUtils.dateToString(new Date(mCurrentTerm.getEndDate())));
+            mStartDateInput.setText(Format.dateToString(new Date(mCurrentTerm.getStartDate())));
+            mEndDateInput.setText(Format.dateToString(new Date(mCurrentTerm.getEndDate())));
             mEditing = true;
             setTitle(R.string.title_term_input_edit);
         } catch(Exception e) {
@@ -140,8 +139,7 @@ public class TermInput extends SlidingPanel {
                 }
             }
         });
-        Log.i(TAG, "init: " + ((ImageView) findViewById(R.id.icon_calendar)).getDrawable());
-        UIHelper.theme((ViewGroup) findViewById(R.id.background));
+        UIHelper.theme((ViewGroup) findViewById(R.id.content_container));
     }
 
     private void close() {
@@ -163,10 +161,10 @@ public class TermInput extends SlidingPanel {
                         try {
                             final Date d = new SimpleDateFormat("yyyy-MM-dd").parse(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             if(mDatePosition) {
-                                mStartDateInput.setText(FormattingUtils.dateToString(d));
+                                mStartDateInput.setText(Format.dateToString(d));
                                 mCurrentTerm.setStartDate(d.getTime());
                             } else {
-                                mEndDateInput.setText(FormattingUtils.dateToString(d));
+                                mEndDateInput.setText(Format.dateToString(d));
                                 mCurrentTerm.setEndDate(d.getTime());
                             }
                         } catch (ParseException e) {

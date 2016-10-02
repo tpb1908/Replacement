@@ -86,7 +86,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return mSubjects.size() > 0 ? 0 : 1;
     }
 
-    static class SubjectViewHolder extends RecyclerView.ViewHolder {
+    private static class SubjectViewHolder extends RecyclerView.ViewHolder {
         private View colourBar;
         private TextView subject;
         private TextView teacher;

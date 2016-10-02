@@ -2,6 +2,8 @@ package com.tpb.timetable.Data.Templates;
 
 import android.support.annotation.NonNull;
 
+import com.tpb.timetable.Utils.FormattingUtils;
+
 import java.io.Serializable;
 
 /**
@@ -9,7 +11,7 @@ import java.io.Serializable;
  */
 public class ClassTime extends Data implements Comparable<ClassTime>, Serializable {
     private int id = -1;
-    private int day;
+    private int day = -1;
     private int subjectID;
     private int startTime;
     private int endTime;
@@ -80,7 +82,8 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
     @Override
     public String toString() {
         String string = "Class {id=" + id + ", SubjectId=" + subjectID + ", start=" + startTime +
-                ", end=" + endTime+ ", day=" + day;
+                " " + FormattingUtils.format(startTime) + ", end=" + endTime +
+                " " + FormattingUtils.format(endTime) + ", day=" + day;
         if(subject != null) string += ", getSubject " + subject.toString();
         return string + "}";
     }

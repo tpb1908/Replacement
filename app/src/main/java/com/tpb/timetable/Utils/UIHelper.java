@@ -440,7 +440,6 @@ public class UIHelper {
             return getStateListDrawable(normalColor, pressedColor);
         }
     }
-
     private static Drawable getRippleMask(int color) {
         final float[] outerRadii = new float[8];
         // 3 is radius of final ripple,

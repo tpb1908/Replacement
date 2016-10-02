@@ -3,7 +3,9 @@ package com.tpb.timetable.Setup.Collectors;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -73,12 +75,24 @@ public class ClassCollector extends AppCompatActivity implements AdapterManager<
 
     @Override
     public void open(ClassTime classTime, @Nullable View v) {
-
+        final Intent i = new Intent(ClassCollector.this, ClassInput.class);
+        i.putExtra("class", classTime);
+        UIHelper.setExpandLocation(v, i);
+        startActivity(i);
     }
 
     @Override
-    public void removed(ClassTime classTime) {
-
+    public void removed(final ClassTime c) {
+        final CoordinatorLayout snackBarLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
+        final Snackbar snackbar = Snackbar
+                .make(snackBarLayout, c.getSubject().getName() + " deleted",Snackbar.LENGTH_LONG)
+                .setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        
+                    }
+                });
+        snackbar.show();
     }
 
     private class DayPagerAdapter extends FragmentPagerAdapter {

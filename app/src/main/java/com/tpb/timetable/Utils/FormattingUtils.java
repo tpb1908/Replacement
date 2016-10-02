@@ -13,29 +13,30 @@ public class FormattingUtils {
     
     private FormattingUtils() {}
 
+    //TODO- What the fuck is going on here???
+
     public static int hmToInt(int hour, int minute) {
-        return (hour * 100) + minute;
+        return (hour * 60) + minute;
     }
 
     /**
-     * Formats a numeric time in the format HHMM
+     * Formats a numeric time in the format 60*h + m
      * @param time The time to format
      * @param separator The separator to place between hours and minutes
      * @return The formatted time string
      */
     public static String format(int time, String separator) {
-        if(time < 0 || time > 2400) {
-            throw new IllegalArgumentException("Time must be between 0 and 2400. " + time + " is invalid");
+        if(time < 0 || time > 1440) {
+            throw new IllegalArgumentException("Time must be between 0 and 1440. " + time + " is invalid");
         }
-        if (time < 1000) {
-            if(time == 0 || time == 2400) {
-                return "0:00";
-            } else {
-                return (Integer.toString(time).substring(0, 1) + separator + Integer.toString(time).substring(1));
-            }
+        final int mins = time%60;
+        final int hours = (time-mins)/60;
+        if(mins == 0) {
+            return hours + separator + "00";
         } else {
-            return (Integer.toString(time).substring(0, 2) + separator + Integer.toString(time).substring(2));
+            return hours + separator + mins;
         }
+
     }
 
     /**
@@ -61,7 +62,7 @@ public class FormattingUtils {
      * @return A formatted string of the time
      */
     public static String format(int hour, int minute, String separator) {
-        return format((hour*100)+minute, separator);
+        return format((hour*60)+minute, separator);
     }
 
     /**
@@ -74,27 +75,20 @@ public class FormattingUtils {
     }
 
     /**
-     * @param time An integer time in the format hhmm
-     * @return The hour of the time, as a string
+     * @param time An integer time in the format 60*h + m
+     * @return The hour of the time
      */
-    public static String getHour(int time) {
-        if(time < 1000) {
-            return Integer.toString(time).substring(0, 1);
-        } else {
-            return Integer.toString(time).substring(0, 2);
-        }
+    public static int getHour(int time) {
+        return (time -time%60)/60;
+        
     }
 
     /**
-     * @param time An integer time in the format hhmm
-     * @return The minute of the time, as a string
+     * @param time An integer time in the format 60*h + m
+     * @return The minute of the time,
      */
-    public static String getMinute(int time) {
-        if(time < 1000) {
-            return Integer.toString(time).substring(1);
-        } else {
-            return Integer.toString(time).substring(2);
-        }
+    public static int getMinute(int time) {
+        return time%60;
     }
 
     public static float getPercentageComplete(int time, int start, int end) {

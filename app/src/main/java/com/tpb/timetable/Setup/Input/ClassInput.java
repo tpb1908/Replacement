@@ -75,9 +75,16 @@ public class ClassInput extends SlidingPanel {
         }
 
         start.setOnClickListener(new View.OnClickListener() {
-            final Calendar now = Calendar.getInstance();
+
             @Override
             public void onClick(View view) {
+                final Calendar now = Calendar.getInstance();
+                int hour = now.get(Calendar.HOUR_OF_DAY);
+                int min = now.get(Calendar.MINUTE);
+                if(mCurrentClass.getStartTime() != -1) {
+                    hour = FormattingUtils.getHour(mCurrentClass.getStartTime());
+                    min = FormattingUtils.getMinute(mCurrentClass.getStartTime())
+;                }
                 final TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
@@ -85,8 +92,8 @@ public class ClassInput extends SlidingPanel {
                         mCurrentClass.setStartTime((hourOfDay*60) + minute);
                     }
                 },
-                        now.get(Calendar.HOUR_OF_DAY),
-                        now.get(Calendar.MINUTE),
+                        hour,
+                        min,
                         true
                 );
                 tpd.setAccentColor(UIHelper.getAccent());
@@ -95,9 +102,16 @@ public class ClassInput extends SlidingPanel {
             }
         });
         end.setOnClickListener(new View.OnClickListener() {
-            final Calendar now = Calendar.getInstance();
+
             @Override
             public void onClick(View view) {
+                final Calendar now = Calendar.getInstance();
+                int hour = now.get(Calendar.HOUR_OF_DAY);
+                int min = now.get(Calendar.MINUTE);
+                if(mCurrentClass.getEndTime() != -1) {
+                    hour = FormattingUtils.getHour(mCurrentClass.getEndTime());
+                    min = FormattingUtils.getMinute(mCurrentClass.getEndTime())
+                    ;                }
                 final TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
@@ -105,8 +119,8 @@ public class ClassInput extends SlidingPanel {
                         mCurrentClass.setEndTime((hourOfDay*60) + minute);
                     }
                 },
-                        now.get(Calendar.HOUR_OF_DAY),
-                        now.get(Calendar.MINUTE),
+                        hour,
+                        min,
                         true
                 );
                 tpd.setAccentColor(UIHelper.getAccent());
@@ -136,7 +150,7 @@ public class ClassInput extends SlidingPanel {
                 }
                 final DBHelper.ArrayWrapper<ClassTime> classes = DBHelper.getInstance(getApplicationContext()).getClassesForDay(day);
                 for(int i = 0; i < classes.size(); i++) {
-                    if(classes.get(i).overlaps(mCurrentClass)) {
+                    if(classes.get(i).overlaps(mCurrentClass) && !classes.get(i).equals(mCurrentClass)) {
                         error = true;
                         final ClassTime overlap = classes.get(i);
                         new AlertDialog.Builder(ClassInput.this)

@@ -107,7 +107,7 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
     @Override
     public void open(Subject subject, @Nullable View v) {
         final Intent editSubject = new Intent(SubjectCollector.this, SubjectInput.class);
-        editSubject.putExtra("getSubject", subject);
+        editSubject.putExtra("subject", subject);
         UIHelper.setExpandLocation(v, editSubject);
         startActivity(editSubject);
     }

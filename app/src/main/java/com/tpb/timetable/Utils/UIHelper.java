@@ -39,6 +39,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
 
@@ -250,7 +251,6 @@ public class UIHelper {
     public static void theme(ViewGroup group) {
         final Stack<ViewGroup> groupStack = new Stack<>();
         groupStack.push(group);
-        Log.i(TAG, "theme: Root viewgroup is " + group);
         //We only set the background of the highest level to avoid overdraw
         final int bg = group instanceof CardView ? getCardBackground() : getBackground();
         group.setBackgroundColor(bg);
@@ -261,6 +261,7 @@ public class UIHelper {
 
             for(int i = 0; i < group.getChildCount(); i++) {
                 v = group.getChildAt(i);
+                Log.i(TAG, "theme: view " + v);
                 //We don't want to do anything to any of these views, only their children
                 if(v instanceof RelativeLayout ||
                         v instanceof LinearLayout ||
@@ -273,7 +274,7 @@ public class UIHelper {
                     if(v instanceof CardView) themeCardView((CardView) v);
                     if(v instanceof TabLayout) {
                         themeTabLayout((TabLayout) v);
-                    } else {
+                    } else if(!(v instanceof MaterialSearchView)){
                         /*All of these view types contain other views
                         *However, we don't want to theme the TextViews
                         * in the TabLayout as if they are part of a
@@ -283,22 +284,24 @@ public class UIHelper {
                     }
 
                 } else { //The view is singular, so we theme it
-                    if(v instanceof TextInputEditText || v instanceof EditText) {
-                        //We can theme TextInputEditText in the same way as EditText
-                        themeEditText((EditText) v);
-                    } else if(v instanceof AppCompatCheckBox) {
-                        themeCheckBox((AppCompatCheckBox) v);
-                    } else if(v instanceof TextView) {
-                        themeTextView((TextView) v);
-                    } else if(v instanceof ColoredSpace) {
-                        ((ColoredSpace) v).setColor(getDivider());
-                    } else if(v instanceof ImageButton) {
-                        setDrawableColor(((ImageButton) v).getDrawable(), getBackground());
-                    } else if(v instanceof ImageView) {
-                        setDrawableColor(((ImageView) v).getDrawable(), getBackground());
-                    } else if(v instanceof Spinner) {
-                        themeSpinner((Spinner) v);
-                    }
+                    try { //TODO
+                        if(v instanceof TextInputEditText || v instanceof EditText) {
+                            //We can theme TextInputEditText in the same way as EditText
+                            themeEditText((EditText) v);
+                        } else if(v instanceof AppCompatCheckBox) {
+                            themeCheckBox((AppCompatCheckBox) v);
+                        } else if(v instanceof TextView) {
+                            themeTextView((TextView) v);
+                        } else if(v instanceof ColoredSpace) {
+                            ((ColoredSpace) v).setColor(getDivider());
+                        } else if(v instanceof ImageButton) {
+                            setDrawableColor(((ImageButton) v).getDrawable(), getBackground());
+                        } else if(v instanceof ImageView) {
+                            setDrawableColor(((ImageView) v).getDrawable(), getBackground());
+                        } else if(v instanceof Spinner) {
+                            themeSpinner((Spinner) v);
+                        }
+                    } catch(NullPointerException n) {}
                 }
             }
         }
@@ -336,6 +339,7 @@ public class UIHelper {
     }
 
     private static void themeEditText(EditText t) {
+        //TODO- Theme the search properly
         t.setTextColor(getPrimaryText());
         //By setting the background color filter we set the color of the bottom bar
         t.getBackground().setColorFilter(accent, PorterDuff.Mode.SRC_ATOP);

@@ -484,7 +484,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayWrapper<ClassTime> getClassesToday() {
-        return getClassesForDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 2);
+        return getClassesForDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1);
     }
     //End class methods
 

@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Subject;
@@ -53,7 +54,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     private TodayFragment mTodayFragment;
     private TaskFragment mTaskFragment;
     private MaterialSheetFab mFAB;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,13 +121,46 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         Log.i(TAG, "onCreateOptionsMenu: ");
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
+
+        MaterialSearchView searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Do some magic
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+            }
+        });
+        searchView.setMenuItem(menu.findItem(R.id.action_search));
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch(id) {
+            case R.id.action_search:
+
+                break;
             case R.id.menu_settings:
 
                 break;
@@ -144,6 +177,12 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onOptionsMenuClosed(Menu menu) {
+        super.onOptionsMenuClosed(menu);
+    }
+
     @Override
     protected void onStart () {
         mDB = DBHelper.getInstance(this);
@@ -154,7 +193,8 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     public void onBackPressed () {
         if(mFAB.isSheetVisible()) {
             mFAB.hideSheet();
-        } else {
+        }  else {
+
             super.onBackPressed();
         }
     }

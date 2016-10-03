@@ -63,7 +63,7 @@ public class ClassCollector extends AppCompatActivity implements AdapterManager<
             @Override
             public void onClick(View view) {
                 final Intent i = new Intent(ClassCollector.this, ClassInput.class);
-                i.putExtra("day", vp.getCurrentItem());
+                i.putExtra("day", vp.getCurrentItem() + 2);
                 UIHelper.setExpandLocation(view, i);
                 startActivity(i);
             }

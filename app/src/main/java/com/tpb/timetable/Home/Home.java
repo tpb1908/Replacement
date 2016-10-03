@@ -127,6 +127,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do some magic
+                Log.i(TAG, "onQueryTextSubmit: ");
                 return false;
             }
 

@@ -45,7 +45,7 @@ public class ClassInput extends SlidingPanel {
                     i.getIntExtra("viewWidth", 0),
                     i.getIntExtra("viewHeight", 0));
         }
-        final int day = i.getIntExtra("day", 0);
+        final int day = i.getIntExtra("day", 2); //Default monday
 
 
         mCurrentClass = new ClassTime();

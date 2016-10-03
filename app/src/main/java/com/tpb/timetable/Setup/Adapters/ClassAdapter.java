@@ -2,7 +2,6 @@ package com.tpb.timetable.Setup.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public ClassAdapter(Context context, AdapterManager<ClassTime> manager, int day) {
         mClasses = DBHelper.getInstance(context).getClassesForDay(day);
-        Log.d(TAG, "ClassAdapter: Classes " + mClasses.toString());
         mClasses.addListener(this);
         mManager = manager;
         mContext = context;

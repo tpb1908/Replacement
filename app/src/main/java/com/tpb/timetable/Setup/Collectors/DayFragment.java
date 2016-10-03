@@ -31,7 +31,7 @@ public class DayFragment extends android.support.v4.app.Fragment {
     static DayFragment newInstance(int day) {
         final DayFragment df = new DayFragment();
         final Bundle args = new Bundle();
-        args.putInt("day", day);
+        args.putInt("day", day+2);
         df.setArguments(args);
         return df;
     }

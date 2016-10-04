@@ -96,6 +96,7 @@ public class ClassInput extends SlidingPanel {
                         min,
                         true
                 );
+                tpd.setTitle("Start Time");
                 tpd.setAccentColor(UIHelper.getAccent());
                 tpd.setThemeDark(UIHelper.isDarkTheme());
                 tpd.show(getFragmentManager(), TAG);
@@ -110,8 +111,7 @@ public class ClassInput extends SlidingPanel {
                 int min = now.get(Calendar.MINUTE);
                 if(mCurrentClass.getEndTime() != -1) {
                     hour = Format.getHour(mCurrentClass.getEndTime());
-                    min = Format.getMinute(mCurrentClass.getEndTime())
-                    ;                }
+                    min = Format.getMinute(mCurrentClass.getEndTime());                }
                 final TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
@@ -123,6 +123,7 @@ public class ClassInput extends SlidingPanel {
                         min,
                         true
                 );
+                tpd.setTitle("Start Time");
                 tpd.setAccentColor(UIHelper.getAccent());
                 tpd.setThemeDark(UIHelper.isDarkTheme());
                 tpd.show(getFragmentManager(), TAG);
@@ -136,6 +137,7 @@ public class ClassInput extends SlidingPanel {
                 boolean error = false;
                 final Subject s = ssa.getSubject(subjectSpinner.getSelectedItemPosition());
                 mCurrentClass.setSubject(s);
+
                 if(start.getText().toString().isEmpty()) {
                     error = true;
                     startWrapper.setError("Enter a start time");
@@ -147,6 +149,13 @@ public class ClassInput extends SlidingPanel {
                     endWrapper.setError("Enter an end time");
                 } else {
                     endWrapper.setError(null);
+                }
+                if(!error) {
+                    if(mCurrentClass.getEndTime() < mCurrentClass.getStartTime()) {
+                        error = true;
+                        startWrapper.setError("Start time must be before end time");
+                        endWrapper.setError("End time must be after start time");
+                    }
                 }
                 //TODO- Check that times are in the right order
                 final DBHelper.ArrayWrapper<ClassTime> classes = DBHelper.getInstance(getApplicationContext()).getClassesForDay(day);

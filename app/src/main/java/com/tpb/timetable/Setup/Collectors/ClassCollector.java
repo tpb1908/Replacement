@@ -112,7 +112,7 @@ public class ClassCollector extends AppCompatActivity implements AdapterManager<
                     @Override
                     public void onClick(View view) {
                         DBHelper.getInstance(getApplicationContext()).getClassesForDay(c.getDay()).addToPosition(c);
-                        dpa.runQueuedUpdates(c.getDay());
+                        dpa.runQueuedUpdates(c.getDay()-2);
                     }
                 });
         snackbar.show();

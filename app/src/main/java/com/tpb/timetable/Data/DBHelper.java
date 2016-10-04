@@ -437,6 +437,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + ct.getID(),
                 null);
         db.close();
+        //May be necessary
+        classesForDay.get(ct.getDay()).mData.remove(ct);
+        classTimeWrapper.mData.remove(ct);
         Log.i(TAG, "Removing class " + ct.toString());
     }
 

@@ -13,8 +13,8 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
     private int id = -1;
     private int day = -1;
     private int subjectID;
-    private int startTime;
-    private int endTime;
+    private int startTime = -1;
+    private int endTime = -1;
     private Subject subject;
 
     public ClassTime() {}

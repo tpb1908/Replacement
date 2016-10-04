@@ -61,7 +61,7 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
         mTermRecycler.setAdapter(mTermAdapter);
         mCurrentRotation = getResources().getConfiguration().orientation;
         setupLayoutManager();
-        UIHelper.theme(mTermRecycler);
+        UIHelper.theme(getApplicationContext(), mTermRecycler);
 
 
         mDoneFAB.setOnClickListener(new View.OnClickListener() {

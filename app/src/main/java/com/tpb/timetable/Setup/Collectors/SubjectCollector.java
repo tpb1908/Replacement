@@ -96,7 +96,7 @@ public class SubjectCollector extends AppCompatActivity implements AdapterManage
             }
         });
 
-        UIHelper.theme((ViewGroup) findViewById(android.R.id.content));
+        UIHelper.theme(this, (ViewGroup) findViewById(android.R.id.content));
     }
 
     private void setupLayoutManager() {

@@ -118,7 +118,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             subject = (TextView) itemView.findViewById(R.id.text_subject);
             classTime = (TextView) itemView.findViewById(R.id.text_class_time);
             delete = (ImageButton) itemView.findViewById(R.id.button_delete);
-            UIHelper.theme((ViewGroup) itemView);
+            UIHelper.theme(itemView.getContext(), (ViewGroup) itemView);
         }
     }
 

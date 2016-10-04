@@ -54,7 +54,7 @@ import java.util.Stack;
 public class UIHelper {
     private static final String TAG = "UIHelper";
     private static boolean darkTheme;
-    private  Context mContext;
+    private Context mContext;
     private static UIHelper instance;
     private static final ArrayList<Themable> mListeners = new ArrayList<>();
     private static SharedPreferences.Editor mEditor;
@@ -84,9 +84,8 @@ public class UIHelper {
         mContext = context;
     }
 
-    public static UIHelper getColorResources(Context context, Themable listener) {
+    public static void setupColourResources(Context context, Themable listener) {
         if(instance == null) {
-            
             instance = new UIHelper(context);
             final SharedPreferences prefs = context.getSharedPreferences("colors", Context.MODE_PRIVATE);
             mEditor = prefs.edit();
@@ -114,9 +113,8 @@ public class UIHelper {
             iconWhite = prefs.getInt("colorIconWhite", ContextCompat.getColor(instance.mContext, R.color.white));
             mEditor.apply();
         }
-        addListener(listener);
+        if(listener != null) addListener(listener);
 
-        return instance;
     }
 
     public static void addListener(Themable t) {
@@ -168,11 +166,11 @@ public class UIHelper {
         UIHelper.accent = accent;
     }
 
-    public static void setDarkTheme(boolean isDark) {
+    public static void setDarkTheme(Context context, boolean isDark) {
         darkTheme = isDark;
         mEditor.putBoolean("darkTheme", isDark);
         mEditor.commit();
-        themeViews();
+        themeViews(context);
     }
 
     /**
@@ -248,7 +246,9 @@ public class UIHelper {
      */
 
 
-    public static void theme(ViewGroup group) {
+    public static void theme(Context context, ViewGroup group) {
+        setupColourResources(context, null);
+
         final Stack<ViewGroup> groupStack = new Stack<>();
         groupStack.push(group);
         //We only set the background of the highest level to avoid overdraw
@@ -307,9 +307,9 @@ public class UIHelper {
         }
     }
 
-    private static void themeViews() {
+    private static void themeViews(Context context) {
         for(Themable t : mListeners) {
-            theme(t.getViewGroup());
+            theme(context, t.getViewGroup());
         }
     }
 

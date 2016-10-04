@@ -55,7 +55,7 @@ public class ClassCollector extends AppCompatActivity implements AdapterManager<
         vp.setOffscreenPageLimit(5);
         final TabLayout tl = (TabLayout) findViewById(R.id.tabs);
         tl.setupWithViewPager(vp);
-        UIHelper.theme((ViewGroup) findViewById(android.R.id.content));
+        UIHelper.theme(this, (ViewGroup) findViewById(android.R.id.content));
         final FloatingActionButton newFAB = (FloatingActionButton) findViewById(R.id.fab_add);
         final FloatingActionButton doneFAB = (FloatingActionButton) findViewById(R.id.fab_add_finish);
 

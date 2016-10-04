@@ -48,7 +48,7 @@ public class TaskFragment extends Fragment implements TaskManager, Themable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_tasks, container, false);
-        UIHelper.theme((ViewGroup) inflated);
+        UIHelper.theme(getContext(), (ViewGroup) inflated);
         UIHelper.addListener(this);
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_tasks);
         mTaskAdapter = new TaskAdapter(getContext(), this);

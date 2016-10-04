@@ -56,7 +56,7 @@ public class DayFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_class_input, container, false);
-        UIHelper.theme((ViewGroup) inflated);
+        UIHelper.theme(getContext(), (ViewGroup) inflated);
         mRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
         day = getArguments().getInt("day");
         mClassAdapter = new ClassAdapter(getContext(), mManager, day);

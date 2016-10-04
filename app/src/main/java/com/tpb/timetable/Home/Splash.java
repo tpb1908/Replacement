@@ -13,7 +13,7 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UIHelper.getColorResources(this, null);
+        UIHelper.setupColourResources(this, null);
         getWindow().getDecorView().getBackground().setColorFilter(
                 UIHelper.getPrimary(),
                 PorterDuff.Mode.SRC_ATOP);

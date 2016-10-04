@@ -356,7 +356,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mDetailHint = task.getDetail().split("\n", 2)[0];
             if(mDetail.length() > mDetailHint.length()) mDetailHint += "...";
             mHomeWorkDetail.setText(mDetailHint);
-            UIHelper.theme((ViewGroup) itemView);
+            UIHelper.theme(itemView.getContext(), (ViewGroup) itemView);
             mTitleBar.setBackgroundColor(titleBackground);
             final String identifier = subject.getName() + " " + subject.getTeacher();
             mSubjectName.setText(identifier);

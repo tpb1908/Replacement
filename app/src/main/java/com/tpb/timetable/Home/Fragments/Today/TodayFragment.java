@@ -70,7 +70,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflated = inflater.inflate(R.layout.fragment_today_classes, container, false);
         //DataHelper is created here so that the app doesn't force close when it is restarted
-        UIHelper.theme((ViewGroup) inflated);
+        UIHelper.theme(getContext(), (ViewGroup) inflated);
         UIHelper.addListener(this);
         mDB =  DBHelper.getInstance(getContext());
         mClassRecycler = (RecyclerView) inflated.findViewById(R.id.recycler_class_today);
@@ -85,7 +85,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         ((Button) inflated.findViewById(R.id.theme_button)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIHelper.setDarkTheme(!UIHelper.isDarkTheme());
+                UIHelper.setDarkTheme(getContext(), !UIHelper.isDarkTheme());
             }
         });
         return inflated;

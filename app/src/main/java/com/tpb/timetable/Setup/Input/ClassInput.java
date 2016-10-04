@@ -186,7 +186,7 @@ public class ClassInput extends SlidingPanel {
 
             }
         });
-        UIHelper.theme((ViewGroup) findViewById(R.id.content_container));
+        UIHelper.theme(this, (ViewGroup) findViewById(R.id.content_container));
 
     }
 }

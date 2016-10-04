@@ -200,7 +200,7 @@ public class TermAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                             itemView);
                 }
             });
-            UIHelper.theme((ViewGroup) itemView);
+            UIHelper.theme(itemView.getContext(), (ViewGroup) itemView);
         }
     }
 

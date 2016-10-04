@@ -109,7 +109,7 @@ public abstract class SlidingPanel extends AppCompatActivity {
         }
         setContentView(R.layout.sliding_activity);
         content = (FrameLayout) findViewById(R.id.content_container);
-        UIHelper.theme(content);
+        UIHelper.theme(this, content);
         scroller = (MultiShrinkScroller) findViewById(R.id.multiscroller);
         headerContent = (FrameLayout) findViewById(R.id.header_content_container);
         photoView = (ImageView) findViewById(R.id.photo);

@@ -41,7 +41,7 @@ public class AssessmentInput extends SlidingPanel {
         final Intent i = getIntent();
         expandFromPoints(i.getIntExtra("leftOffset", 0), i.getIntExtra("topOffset", 0), i.getIntExtra("viewWidth", 0), i.getIntExtra("viewHeight", 0));
         final RelativeLayout background = (RelativeLayout) findViewById(R.id.background);
-        UIHelper.theme(background);
+        UIHelper.theme(this, background);
         final EditText mTitleInput = (EditText) findViewById(R.id.edittext_assessment_title);
         final EditText mNotesInputs = (EditText) findViewById(R.id.edittext_assessment_notes);
         final Spinner mSubjectSpinner = (Spinner) findViewById(R.id.spinner_subject);

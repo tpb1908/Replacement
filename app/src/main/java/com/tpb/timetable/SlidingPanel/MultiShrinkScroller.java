@@ -302,7 +302,7 @@ public class MultiShrinkScroller extends FrameLayout {
      */
     public void initialize(MultiShrinkScrollerListener listener, boolean isOpenContactSquare) {
         scrollView = (ScrollView) findViewById(R.id.content_scroller);
-        UIHelper.theme(scrollView);
+        UIHelper.theme(getContext(), scrollView);
         scrollViewChild = findViewById(R.id.content_container);
         toolbar = findViewById(R.id.toolbar_parent);
         photoViewContainer = findViewById(R.id.toolbar_parent);

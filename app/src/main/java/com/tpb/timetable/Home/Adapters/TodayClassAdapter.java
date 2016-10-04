@@ -102,7 +102,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 timeRange += " to " + Format.format(end);
                 holder.classTime.setText(timeRange);
 
-                UIHelper.theme((ViewGroup) h.itemView);
+                UIHelper.theme(mContext, (ViewGroup) h.itemView);
             } else {
                 final ClassPastViewHolder holder = (ClassPastViewHolder) h;
                 final String info = sub.getName() + " with " + sub.getTeacher() +

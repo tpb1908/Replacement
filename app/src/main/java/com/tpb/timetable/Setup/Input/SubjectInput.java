@@ -65,7 +65,7 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
             setTitle("New Subject");
         }
 
-        UIHelper.theme((ViewGroup) findViewById(R.id.content_container));
+        UIHelper.theme(this, (ViewGroup) findViewById(R.id.content_container));
 
         setFab(UIHelper.getAccent(),
                 R.drawable.fab_icon_tick_white, new View.OnClickListener() {

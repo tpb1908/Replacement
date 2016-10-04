@@ -1,8 +1,10 @@
 package com.tpb.timetable.Home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleCursorAdapter;
 
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
@@ -54,6 +57,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     private TodayFragment mTodayFragment;
     private TaskFragment mTaskFragment;
     private MaterialSheetFab mFAB;
+    private MaterialSearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         setContentView(R.layout.activity_home);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         //Setting up pager
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.day_pager);
@@ -105,7 +110,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
                 }
             }
         });
-        UIHelper.theme((ViewGroup) findViewById(R.id.background));
+        UIHelper.theme(this, (ViewGroup) findViewById(R.id.background));
     }
 
     @Override
@@ -122,23 +127,23 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_home, menu);
 
-        MaterialSearchView searchView = (MaterialSearchView) findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+        mSearchView = (MaterialSearchView) findViewById(R.id.search_view);
+        mSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 //Do some magic
-                Log.i(TAG, "onQueryTextSubmit: ");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 //Do some magic
+                Log.i(TAG, "onQueryTextChange: Text change");
                 return false;
             }
         });
 
-        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+        mSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
                 //Do some magic
@@ -149,7 +154,7 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
                 //Do some magic
             }
         });
-        searchView.setMenuItem(menu.findItem(R.id.action_search));
+        mSearchView.setMenuItem(menu.findItem(R.id.action_search));
         return true;
     }
 
@@ -194,8 +199,9 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
     public void onBackPressed () {
         if(mFAB.isSheetVisible()) {
             mFAB.hideSheet();
-        }  else {
-
+        } else if(mSearchView.isSearchOpen()) {
+            mSearchView.closeSearch();
+        } else {
             super.onBackPressed();
         }
     }
@@ -356,6 +362,25 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         @Override
         public CharSequence getPageTitle(int position) {
             return titles[position];
+        }
+    }
+
+    //TODO- http://ramannanda.blogspot.co.uk/2014/10/android-searchview-integration-with.html
+    private static class SearchAdapter extends SimpleCursorAdapter {
+        private Context context;
+
+        public SearchAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+            this.context = context;
+        }
+
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            super.bindView(view, context, cursor);
+        }
+
+        private void loadData(String query) {
+
         }
     }
 

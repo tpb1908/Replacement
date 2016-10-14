@@ -33,6 +33,8 @@ public class Format {
         final int hours = (time-mins)/60;
         if(mins == 0) {
             return hours + separator + "00";
+        } else if(mins < 10) {
+            return hours + separator + "0" + mins;
         } else {
             return hours + separator + mins;
         }
@@ -155,6 +157,4 @@ public class Format {
         }
         return numLines;
     }
-
-
 }

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.android.internal.util.Predicate;
 import com.tpb.timetable.Data.Templates.Assessment;
 import com.tpb.timetable.Data.Templates.ClassTime;
 import com.tpb.timetable.Data.Templates.Data;
@@ -77,11 +78,6 @@ public class DBHelper extends SQLiteOpenHelper {
     private final ArrayWrapper<ClassTime> classTimeWrapper = new ArrayWrapper<>(this);
     private final ArrayWrapper<Assessment> assessmentWrapper = new ArrayWrapper<>(this);
     private final ArrayWrapper<Task> taskWrapper = new ArrayWrapper<>(this);
-    private final ArrayList<ArrayWrapper<ClassTime>> classesForDay = new ArrayList<>(7);
-    private boolean classesForDayValid = false;
-
-
-
 
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -437,9 +433,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 KEY_ID + " = " + ct.getID(),
                 null);
         db.close();
-        //May be necessary
-        classesForDay.get(ct.getDay()).mData.remove(ct);
-        classTimeWrapper.mData.remove(ct);
         Log.i(TAG, "Removing class " + ct.toString());
     }
 
@@ -472,23 +465,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return classTimeWrapper;
     }
 
-    public ArrayWrapper<ClassTime> getClassesForDay(int day) {
-        if(!classesForDayValid) {
-            if(!classTimeWrapper.isDataValid()) getAllClasses();
-            for(int i = 0; i < 7; i++) {
-                classesForDay.add(new ArrayWrapper<ClassTime>(this));
-            }
-            for(ClassTime ct : classTimeWrapper.mData) {
-                classesForDay.get(ct.getDay()).mData.add(ct);
-            }
-            classesForDayValid = true;
-        }
-        return classesForDay.get(day);
+    public ClassDayWrapper getClassesForDay(int day, ArrayChangeListener<ClassTime> listener) {
+        if(!classTimeWrapper.isDataValid()) getAllClasses();
+        return new ClassDayWrapper(classTimeWrapper, day, listener);
     }
 
-    public ArrayWrapper<ClassTime> getClassesToday() {
-        return getClassesForDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+    public ClassDayWrapper getClassesToday(ArrayChangeListener<ClassTime> listener) {
+        if(!classTimeWrapper.isDataValid()) getAllClasses();
+        final int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        return new ClassDayWrapper(classTimeWrapper, day, listener);
     }
+
     //End class methods
 
 
@@ -666,7 +653,6 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(KEY_END_TIME, ct.getEndTime());
             values.put(KEY_DAY, ct.getDay());
             id = (int) db.insert(TABLE_CLASS_TIMES, null, values);
-            classesForDayValid = false;
             Log.i(TAG, "Adding " + ct.toString());
         } else if(data instanceof Subject) {
             final Subject s = (Subject) data;
@@ -933,7 +919,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         public void move(int oldIndex, int newIndex) {
             final T t = mData.get(oldIndex);
-            mData.remove(t);
+            mData.remove(oldIndex);
             if(oldIndex > newIndex) {
                 mData.add(newIndex, t);
                 for(ArrayChangeListener<T> l : mListeners) l.moved(oldIndex, newIndex);
@@ -961,6 +947,14 @@ public class DBHelper extends SQLiteOpenHelper {
             mData.remove(index);
             for(ArrayChangeListener<T> l : mListeners) l.removed(index, t);
             mDBHelper.remove(t);
+        }
+
+        public ArrayList<T> filter(Predicate<T> pred) {
+            final ArrayList<T> filtered = new ArrayList<>();
+            for(T t : mData) {
+                if(pred.apply(t)) filtered.add(t);
+            }
+            return filtered;
         }
 
         public void remove(int index) {
@@ -995,4 +989,196 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public class ClassDayWrapper implements ArrayChangeListener<ClassTime> {
+        private static final String TAG = "ClassDayWrapper";
+        private ArrayWrapper<ClassTime> allClasses;
+        private ArrayList<ClassTime> mClasses = new ArrayList<>();
+        private final Predicate<ClassTime> mPredicate;
+        private final ArrayChangeListener<ClassTime> mListener;
+        private boolean justUpdated = false;
+
+        ClassDayWrapper(ArrayWrapper<ClassTime> allClasses, final int day, ArrayChangeListener<ClassTime> listener) {
+            this.allClasses = allClasses;
+            allClasses.addListener(this);
+            mListener = listener;
+            mPredicate = new Predicate<ClassTime>() {
+                @Override
+                public boolean apply(ClassTime classTime) {
+                    return classTime.getDay() == day;
+                }
+            };
+            mClasses = allClasses.filter(mPredicate);
+        }
+
+        public ClassTime get(int pos) {
+            return mClasses.get(pos);
+        }
+
+        public boolean isEmpty() {
+            return mClasses.isEmpty();
+        }
+
+        public int size() {
+            return mClasses.size();
+        }
+
+        public boolean contains(ClassTime ct) {
+            return mClasses.contains(ct);
+        }
+
+        public int indexOf(ClassTime ct) {
+            return mClasses.indexOf(ct);
+        }
+
+        public int lastIndexOf(ClassTime ct) {
+            return mClasses.lastIndexOf(ct);
+        }
+
+        public ClassTime getInDay(int index) {
+            return mClasses.get(index);
+        }
+
+        public void setInDay(int index, ClassTime ct) {
+            mClasses.set(index, ct);
+            mListener.updated(index, ct);
+        }
+
+        public void addToDay(ClassTime ct) {
+            mClasses.add(ct);
+            justUpdated = true;
+            allClasses.add(ct);
+        }
+
+        public void addToDay(int index, ClassTime ct) {
+            mClasses.add(index, ct);
+            justUpdated = true;
+            allClasses.add(ct);
+        }
+
+        public void addToPosition(ClassTime ct) {
+            int pos;
+            for(pos = 0; pos < mClasses.size(); pos++) {
+                if(ct.compareTo(mClasses.get(pos)) < 0) break;
+            }
+            Log.i(TAG, "addToPosition: Pos = " + pos);
+            addToDay(pos, ct);
+        }
+
+        public void move(int oldIndex, int newIndex) {
+            final ClassTime ct = mClasses.get(oldIndex);
+            mClasses.remove(oldIndex);
+            if(oldIndex > newIndex) {
+                mClasses.add(newIndex, ct);
+            } else {
+                mClasses.add(newIndex-1, ct);
+            }
+        }
+
+        public void update(ClassTime ct) {
+            final int oldIndex = mClasses.indexOf(ct);
+            mClasses.set(oldIndex, ct);
+            updated(oldIndex, ct);
+        }
+
+        public void remove(ClassTime ct) {
+            mClasses.remove(ct);
+            justUpdated = true;
+            mClasses.remove(ct);
+        }
+
+        public void remove(int pos) {
+            final ClassTime ct = mClasses.get(pos);
+            mClasses.remove(pos);
+            mListener.removed(pos, ct);
+            justUpdated = true;
+            allClasses.remove(ct);
+        }
+
+        @Override
+        public void dataSetChanged() {
+            mClasses = allClasses.filter(mPredicate);
+            justUpdated = false;
+        }
+
+        @Override
+        public void dataSorted() {
+            mClasses = allClasses.filter(mPredicate);
+            justUpdated = false;
+        }
+
+        @Override
+        public void moved(int oldIndex, int newIndex) {
+            Log.i(TAG, "moved: Called from wrapper");
+            if(!justUpdated && mClasses.contains(allClasses.get(newIndex))) {
+                final int old = mClasses.indexOf(allClasses.get(newIndex));
+                mClasses = allClasses.filter(mPredicate);
+                mListener.moved(old, mClasses.indexOf(allClasses.get(newIndex)));
+            }
+            justUpdated = false;
+        }
+
+        @Override
+        public void updated(int index, ClassTime classTime) {
+            if(!justUpdated && mClasses.contains(classTime)) {
+                final int ind = mClasses.indexOf(classTime);
+                mClasses.set(ind, classTime);
+                mListener.updated(ind, classTime);
+
+                final int newIndex = mClasses.indexOf(classTime);
+                if(newIndex == index) {
+                    mListener.updated(newIndex, classTime);
+                } else {
+                    mListener.moved(index, newIndex);
+                }
+
+            }
+            justUpdated = false;
+        }
+
+        @Override
+        public void removed(int index, ClassTime classTime) {
+            if(!justUpdated) {
+                final int ind = mClasses.indexOf(classTime);
+                if(ind != -1) {
+                    mClasses.remove(ind);
+                    mListener.removed(ind, classTime);
+                }
+            }
+            justUpdated = false;
+        }
+
+        @Override
+        public void cleared() {
+            mClasses.clear();
+            justUpdated = false;
+        }
+
+        @Override
+        public void add(ClassTime classTime) {
+            if(!justUpdated && mPredicate.apply(classTime)) {
+                mClasses.add(classTime);
+                Collections.sort(mClasses);
+                mListener.add(mClasses.indexOf(classTime), classTime);
+            }
+            justUpdated = false;
+        }
+
+        @Override
+        public void add(int index, ClassTime classTime) {
+            if(!justUpdated && mPredicate.apply(classTime)) {
+                mClasses.add(classTime);
+                Collections.sort(mClasses);
+                mListener.add(mClasses.indexOf(classTime), classTime);
+            }
+            justUpdated = false;
+        }
+
+        @Override
+        public void set(int index, ClassTime classTime) {
+            if(!justUpdated && mPredicate.apply(classTime)) {
+                mClasses.set(mClasses.indexOf(classTime), classTime);
+            }
+            justUpdated = false;
+        }
+    }
 }

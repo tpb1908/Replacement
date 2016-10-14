@@ -23,18 +23,17 @@ import java.util.ArrayList;
  */
 public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements DBHelper.ArrayChangeListener<ClassTime> {
     private static final String TAG = "ClassAdapter";
-    private DBHelper.ArrayWrapper<ClassTime> mClasses;
+    private DBHelper.ClassDayWrapper mClassesToday;
     private AdapterManager<ClassTime> mManager;
     private final ArrayList<Runnable> mQueuedUpdates = new ArrayList<>();
     private Context mContext;
     private boolean mWasEmpty;
 
 
-    public ClassAdapter(Context context, AdapterManager<ClassTime> manager, int day) {
-        mClasses = DBHelper.getInstance(context).getClassesForDay(day);
-        mClasses.addListener(this);
+    public ClassAdapter(Context context, AdapterManager<ClassTime> manager, final int day) {
         mManager = manager;
         mContext = context;
+        mClassesToday = DBHelper.getInstance(context).getClassesForDay(day, this);
     }
 
     @Override
@@ -52,23 +51,23 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == 0) {
             final ClassViewHolder cv = (ClassViewHolder) holder;
-            cv.colourBar.setBackgroundColor(mClasses.get(position).getSubject().getColor());
-            cv.subject.setText(mClasses.get(position).getSubject().getName());
-            String timeRange = Format.format(mClasses.get(position).getStartTime()) +
-                    " to " + Format.format(mClasses.get(position).getEndTime());
+            cv.colourBar.setBackgroundColor(mClassesToday.get(position).getSubject().getColor());
+            cv.subject.setText(mClassesToday.get(position).getSubject().getName());
+            String timeRange = Format.format(mClassesToday.get(position).getStartTime()) +
+                    " to " + Format.format(mClassesToday.get(position).getEndTime());
             cv.classTime.setText(timeRange);
             cv.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mManager.removed(mClasses.get(holder.getAdapterPosition()));
-                    mClasses.remove(holder.getAdapterPosition());
+                    mManager.removed(mClassesToday.get(holder.getAdapterPosition()));
+                    mClassesToday.remove(holder.getAdapterPosition());
                     runQueuedUpdates();
                 }
             });
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mManager.open(mClasses.get(holder.getAdapterPosition()), holder.itemView);
+                    mManager.open(mClassesToday.get(holder.getAdapterPosition()), holder.itemView);
                 }
             });
         } else {
@@ -78,23 +77,23 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public int numClassesToday() {
-        return mClasses.size();
+        return mClassesToday.size();
     }
 
     @Override
     public int getItemCount() {
-        if(mClasses.size() == 0) {
+        if(mClassesToday.size() == 0) {
             mWasEmpty = true;
             return 1;
         } else {
             mWasEmpty = false;
-            return mClasses.size();
+            return mClassesToday.size();
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mClasses.size() > 0 ? 0 : 1;
+        return mClassesToday.size() > 0 ? 0 : 1;
     }
 
     public void runQueuedUpdates() {
@@ -123,6 +122,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
+
     @Override
     public void dataSetChanged() {
         notifyDataSetChanged();
@@ -135,7 +135,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void add(ClassTime classTime) {
-        add(mClasses.indexOf(classTime), classTime);
+        add(mClassesToday.indexOf(classTime), classTime);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void set(final int index, ClassTime classTime) {
+    public void set(final int index, final ClassTime classTime) {
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {
@@ -169,17 +169,17 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     @Override
-    public void updated(final int index, ClassTime classTime) {
+    public void updated(final int index, final ClassTime classTime) {
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {
-                notifyItemChanged(index);
+                notifyItemChanged(mClassesToday.indexOf(classTime));
             }
         });
     }
 
     @Override
-    public void removed(final int index, ClassTime classTime) {
+    public void removed(final int index, final ClassTime classTime) {
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {

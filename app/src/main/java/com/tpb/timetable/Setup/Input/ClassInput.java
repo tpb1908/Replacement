@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
@@ -63,6 +64,7 @@ public class ClassInput extends SlidingPanel {
         try {
             mCurrentClass = (ClassTime) i.getSerializableExtra("class");
             mEditing = true;
+            Log.i(TAG, "init: Editing " + mCurrentClass.toString());
             start.setText(Format.format(mCurrentClass.getStartTime()));
             end.setText(Format.format(mCurrentClass.getEndTime()));
             subjectSpinner.setSelection(ssa.getPositionOfSubject(mCurrentClass.getSubjectID()));
@@ -83,8 +85,7 @@ public class ClassInput extends SlidingPanel {
                 int min = now.get(Calendar.MINUTE);
                 if(mCurrentClass.getStartTime() != -1) {
                     hour = Format.getHour(mCurrentClass.getStartTime());
-                    min = Format.getMinute(mCurrentClass.getStartTime())
-;                }
+                    min = Format.getMinute(mCurrentClass.getStartTime());                }
                 final TimePickerDialog tpd = TimePickerDialog.newInstance(new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
@@ -158,7 +159,7 @@ public class ClassInput extends SlidingPanel {
                     }
                 }
                 //TODO- Check that times are in the right order
-                final DBHelper.ArrayWrapper<ClassTime> classes = DBHelper.getInstance(getApplicationContext()).getClassesForDay(day);
+                final DBHelper.ArrayWrapper<ClassTime> classes = DBHelper.getInstance(getApplicationContext()).getAllClasses();
                 for(int i = 0; i < classes.size(); i++) {
                     if(classes.get(i).overlaps(mCurrentClass) && !classes.get(i).equals(mCurrentClass)) {
                         error = true;
@@ -186,6 +187,7 @@ public class ClassInput extends SlidingPanel {
                 }
                 if(!error) {
                     if(mEditing) {
+                        Log.i(TAG, "onClick: Updating: Classes " + classes.toString() + " class " + mCurrentClass.toString());
                         classes.update(mCurrentClass);
                     } else {
                         classes.addToPosition(mCurrentClass);

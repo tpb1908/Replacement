@@ -111,7 +111,7 @@ public class ClassCollector extends AppCompatActivity implements AdapterManager<
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DBHelper.getInstance(getApplicationContext()).getClassesForDay(c.getDay()).addToPosition(c);
+                        DBHelper.getInstance(getApplicationContext()).getAllClasses().add(c);
                         dpa.runQueuedUpdates(c.getDay()-2);
                     }
                 });

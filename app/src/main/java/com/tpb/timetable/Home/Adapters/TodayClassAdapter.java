@@ -26,7 +26,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final String TAG = "TodayClassAdapter";
     private final Context mContext;
     private final ClassOpener mClassInterface;
-    private final DBHelper.ArrayWrapper<ClassTime> mClasses;
+    private final DBHelper.ClassDayWrapper mClasses;
     private Calendar mCalendar;
     private int currentTime;
     private int currentTimePosition;
@@ -36,8 +36,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         this.mContext = context;
         this.mCalendar = Calendar.getInstance();
         this.mClassInterface = mClassInterface;
-        this.mClasses = dataHelper.getClassesToday();
-        mClasses.addListener(this);
+        this.mClasses = dataHelper.getClassesToday(this);
         collectData();
     }
 

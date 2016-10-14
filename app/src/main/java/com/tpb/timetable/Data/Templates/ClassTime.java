@@ -72,11 +72,11 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
 
     @Override
     public int compareTo(@NonNull ClassTime another) {
-        return startTime >= another.startTime ? 1 : -1;
+        return day >= another.day && startTime >= another.startTime ? 1 : -1;
     }
 
     public boolean overlaps(ClassTime toCheck) {
-        return (startTime < toCheck.endTime && endTime > toCheck.startTime);
+        return day == toCheck.day && startTime < toCheck.endTime && endTime > toCheck.startTime;
     }
 
     @Override
@@ -90,10 +90,6 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof ClassTime) {
-            ClassTime ct = (ClassTime) o;
-            return  id == ct.id;
-        }
-        return false;
+        return o instanceof ClassTime && id == ((ClassTime) o).id;
     }
 }

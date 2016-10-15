@@ -82,7 +82,7 @@ public class ClassInput extends SlidingPanel {
             public void onClick(View view) {
                 final Calendar now = Calendar.getInstance();
                 int hour = now.get(Calendar.HOUR_OF_DAY);
-                int min = now.get(Calendar.MINUTE);
+                int min = 0;
                 if(mCurrentClass.getStartTime() != -1) {
                     hour = Format.getHour(mCurrentClass.getStartTime());
                     min = Format.getMinute(mCurrentClass.getStartTime());                }
@@ -108,8 +108,8 @@ public class ClassInput extends SlidingPanel {
             @Override
             public void onClick(View view) {
                 final Calendar now = Calendar.getInstance();
-                int hour = now.get(Calendar.HOUR_OF_DAY);
-                int min = now.get(Calendar.MINUTE);
+                int hour = Math.min(now.get(Calendar.HOUR_OF_DAY) + 1, 23);
+                int min = 0;
                 if(mCurrentClass.getEndTime() != -1) {
                     hour = Format.getHour(mCurrentClass.getEndTime());
                     min = Format.getMinute(mCurrentClass.getEndTime());                }
@@ -138,6 +138,7 @@ public class ClassInput extends SlidingPanel {
                 boolean error = false;
                 final Subject s = ssa.getSubject(subjectSpinner.getSelectedItemPosition());
                 mCurrentClass.setSubject(s);
+
 
                 if(start.getText().toString().isEmpty()) {
                     error = true;
@@ -187,7 +188,6 @@ public class ClassInput extends SlidingPanel {
                 }
                 if(!error) {
                     if(mEditing) {
-                        Log.i(TAG, "onClick: Updating: Classes " + classes.toString() + " class " + mCurrentClass.toString());
                         classes.update(mCurrentClass);
                     } else {
                         classes.addToPosition(mCurrentClass);

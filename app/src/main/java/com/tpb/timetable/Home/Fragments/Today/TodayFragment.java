@@ -12,7 +12,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.tpb.timetable.Data.DBHelper;
@@ -82,7 +81,7 @@ public class TodayFragment extends Fragment implements ClassOpener, Themable {
         setDayTermText();
         mCurrentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
         mView = inflated;
-        ((Button) inflated.findViewById(R.id.theme_button)).setOnClickListener(new View.OnClickListener() {
+        inflated.findViewById(R.id.theme_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UIHelper.setDarkTheme(getContext(), !UIHelper.isDarkTheme());

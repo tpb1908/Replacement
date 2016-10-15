@@ -2,6 +2,7 @@ package com.tpb.timetable.Setup.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,6 +155,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void set(final int index, final ClassTime classTime) {
+        Log.i(TAG, "set: ");
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {
@@ -164,15 +166,18 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void moved(int oldIndex, int newIndex) {
+        Log.i(TAG, "moved: " + oldIndex + ", " + newIndex);
         notifyItemMoved(oldIndex, newIndex);
         notifyItemChanged(newIndex);
     }
 
     @Override
     public void updated(final int index, final ClassTime classTime) {
+        Log.i(TAG, "updated: ");
         mQueuedUpdates.add(new Runnable() {
             @Override
             public void run() {
+                Log.i(TAG, "run: Updating at position " + mClassesToday.indexOf(classTime));
                 notifyItemChanged(mClassesToday.indexOf(classTime));
             }
         });

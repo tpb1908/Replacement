@@ -118,7 +118,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         //If there are no classes, the only item will be of type message
         if(mClasses.size() == 0) {
             return 0;
-        } else if(mClasses.get(position).getEndTime() > currentTime){
+        } else if(mClasses.get(position).getEndTime() > currentTime) {
             return  1; //Full view
         } else { //If the class has passed
             return 2;

@@ -1122,10 +1122,10 @@ public class DBHelper extends SQLiteOpenHelper {
             if(!justUpdated && mClasses.contains(classTime)) {
                 final int ind = mClasses.indexOf(classTime);
                 mClasses.set(ind, classTime);
-                mListener.updated(ind, classTime);
-
+                Log.i(TAG, "updated: Updated in " + TAG  + " classes " + mClasses);
                 final int newIndex = mClasses.indexOf(classTime);
-                if(newIndex == index) {
+                Log.i(TAG, "updated: oldIndex " + ind + " newIndex " + newIndex);
+                if(newIndex == ind) {
                     mListener.updated(newIndex, classTime);
                 } else {
                     mListener.moved(index, newIndex);

@@ -50,9 +50,9 @@ public class TermCollector extends AppCompatActivity implements AdapterManager<T
         } finally {
             mShouldFinishWhenDone = mNextWindow == null;
             if(mShouldFinishWhenDone) {
-                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick_white));
+                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_tick));
             } else {
-                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next_white));
+                mDoneFAB.setImageDrawable(getApplicationContext().getDrawable(R.drawable.fab_icon_next));
             }
         }
 

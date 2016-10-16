@@ -52,7 +52,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
                 android:background="#00ffffff"
-                android:src="@drawable/icon_class"/>
+                android:src="@drawable/icon_subject"/>
 
             <ImageButton
                 android:id="@+id/button_delete"

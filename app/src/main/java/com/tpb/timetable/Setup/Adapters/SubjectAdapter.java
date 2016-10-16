@@ -99,9 +99,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             teacher = (TextView) itemView.findViewById(R.id.text_teacher_name);
             classroom = (TextView) itemView.findViewById(R.id.text_classroom);
             final ImageButton delete = (ImageButton) itemView.findViewById(R.id.button_delete);
-            UIHelper.setDrawableColor(delete.getDrawable(), UIHelper.getCardBackground());
+
             delete.refreshDrawableState();
-            //delete.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.icon_delete, UIHelper.getCardBackground()));
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -115,8 +114,8 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
             final ImageView iv = (ImageView) itemView.findViewById(R.id.icon_class);
-            UIHelper.setDrawableColor(iv.getDrawable(), UIHelper.getCardBackground());
-           // iv.setImageDrawable(UIHelper.getColoredDrawable(R.drawable.icon_class, UIHelper.getCardBackground()));
+
+            UIHelper.theme(itemView.getContext(), (ViewGroup) itemView );
 
         }
     }

@@ -39,6 +39,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.gordonwong.materialsheetfab.DimOverlayFrameLayout;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tpb.timetable.Home.Interfaces.Themable;
 import com.tpb.timetable.R;
@@ -47,6 +48,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
+
+import static android.R.interpolator.linear;
 
 /**
  * Created by theo on 30/05/16.
@@ -252,7 +255,7 @@ public class UIHelper {
         final Stack<ViewGroup> groupStack = new Stack<>();
         groupStack.push(group);
         //We only set the background of the highest level to avoid overdraw
-        final int bg = group instanceof CardView ? getCardBackground() : getBackground();
+        int bg = group instanceof CardView ? getCardBackground() : getBackground();
         group.setBackgroundColor(bg);
         View v;
         while(!groupStack.isEmpty()) {
@@ -270,11 +273,16 @@ public class UIHelper {
                         v instanceof CardView ||
                         v instanceof FrameLayout) {
                     //Unless they are a TextInputLayout, which needs different theming
-                    if(v instanceof TextInputLayout) themeTextInputLayout((TextInputLayout) v);
-                    if(v instanceof CardView) themeCardView((CardView) v);
+                    if(v instanceof TextInputLayout) {
+                        themeTextInputLayout((TextInputLayout) v);
+                    }
+                    if(v instanceof CardView) {
+                        themeCardView((CardView) v);
+                    }
                     if(v instanceof TabLayout) {
                         themeTabLayout((TabLayout) v);
-                    } else if(!(v instanceof MaterialSearchView)){
+                    }
+                    if(!(v instanceof MaterialSearchView)) {
                         /*All of these view types contain other views
                         *However, we don't want to theme the TextViews
                         * in the TabLayout as if they are part of a
@@ -284,7 +292,7 @@ public class UIHelper {
                     }
 
                 } else { //The view is singular, so we theme it
-                    try { //TODO
+                    try {
                         if(v instanceof TextInputEditText || v instanceof EditText) {
                             //We can theme TextInputEditText in the same way as EditText
                             themeEditText((EditText) v);
@@ -295,9 +303,9 @@ public class UIHelper {
                         } else if(v instanceof ColoredSpace) {
                             ((ColoredSpace) v).setColor(getDivider());
                         } else if(v instanceof ImageButton) {
-                            setDrawableColor(((ImageButton) v).getDrawable(), getBackground());
+                            setDrawableColor(((ImageButton) v).getDrawable(), bg);
                         } else if(v instanceof ImageView) {
-                            setDrawableColor(((ImageView) v).getDrawable(), getBackground());
+                            setDrawableColor(((ImageView) v).getDrawable(), bg);
                         } else if(v instanceof Spinner) {
                             themeSpinner((Spinner) v);
                         }
@@ -488,14 +496,17 @@ public class UIHelper {
     //TODO - Fix this
     public static void setDrawableColor(Drawable drawable, int bgColor) {
         if(drawable != null) {
+            Log.i(TAG, "setDrawableColor: Theming drawable on background " + bgColor);
+            Log.d(TAG, "setDrawableColor: background " + background + ", darkBackground " + backgroundDark +
+            ", cardBackground " + cardBackground + " darkCardBackground " + cardBackgroundDark);
             if(bgColor == cardBackground || bgColor == background) {
                 drawable.setColorFilter(new PorterDuffColorFilter(iconGrey, PorterDuff.Mode.SRC_IN));
             } else if(bgColor == cardBackgroundDark || bgColor == accent) {
-
                 drawable.setColorFilter(new PorterDuffColorFilter(iconWhite, PorterDuff.Mode.SRC_IN));
             } else if(bgColor == primary) {
-
+                drawable.setColorFilter(new PorterDuffColorFilter(iconWhite, PorterDuff.Mode.SRC_IN));
             } else {
+                Log.i(TAG, "setDrawableColor: Using precieved brightness");
                 final boolean darkIcon = perceivedBrightness(bgColor) > 0.5;
                 if(darkIcon) {
                     drawable.setColorFilter(new PorterDuffColorFilter(iconGrey, PorterDuff.Mode.SRC_IN));

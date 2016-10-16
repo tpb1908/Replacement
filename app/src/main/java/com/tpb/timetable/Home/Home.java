@@ -308,7 +308,6 @@ public class Home extends AppCompatActivity implements ClassOpener, TaskManager,
         s.setClassroom("L1.10");
         s.setColor(getResources().getColor(R.color.orange_500));
         subjects.add(s);
-        s = new Subject();
         s =  new Subject();
         s.setName("Physics");
         s.setTeacher("AJT");

@@ -54,4 +54,16 @@
         android:clickable="true"
         android:spinnerMode="dropdown"/>
 
+    <Spinner
+        android:id="@+id/spinner_topic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spinner_subject"
+        android:layout_marginTop="@dimen/input_padding"
+        android:clickable="true"
+        android:spinnerMode="dropdown"
+        android:visibility="invisible">
+
+    </Spinner>
+
 </RelativeLayout>

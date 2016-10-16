@@ -55,7 +55,7 @@ public class SubjectSpinnerAdapter extends BaseAdapter implements android.widget
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //False is important. It indicates whether the view should be added directly to the ViewGroup
         final View row = inflater.inflate(R.layout.listitem_subject_spinner, parent, false);
-        final TextView name = (TextView) row.findViewById(R.id.text_subject);
+        final TextView name = (TextView) row.findViewById(R.id.text_subject_topic);
         final View colourBar = row.findViewById(R.id.colour_bar);
         final String subjectDescription = mSubjects.get(position).getName() +
                 " " + mSubjects.get(position).getTeacher();

@@ -37,7 +37,7 @@ public class Task extends Data implements Comparable<Task>, Serializable {
             case 3:
                 return "Reminder";
             default:
-                return "";
+                return "Unknown task type";
         }
     }
 

@@ -51,7 +51,27 @@
                 android:inputType="textCapWords"/>
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/wrapper_edittext_subject_classroom"
+            android:id="@+id/wrapper_edittext_subject_topics"
+            android:layout_marginTop="@dimen/input_padding"
+            android:hint="@string/hint_subject_topics">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/palette"
+                android:id="@+id/edittext_subject_topics"/>
+
+        </android.support.design.widget.TextInputLayout>
+
     </RelativeLayout>
+
+
 
 
     <com.thebluealliance.spectrum.SpectrumPalette
@@ -62,6 +82,8 @@
         android:layout_height="wrap_content">
 
     </com.thebluealliance.spectrum.SpectrumPalette>
+
+
 
 </RelativeLayout>
 

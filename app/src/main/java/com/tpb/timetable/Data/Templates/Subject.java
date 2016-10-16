@@ -2,7 +2,12 @@ package com.tpb.timetable.Data.Templates;
 
 import android.support.annotation.NonNull;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Created by theo on 27/05/16.
@@ -13,6 +18,7 @@ public class Subject extends Data implements Comparable<Subject>, Serializable {
     private String teacher;
     private String classroom;
     private int color;
+    private String[] topics = new String[] {};
 
     public Subject(){}
 
@@ -59,6 +65,33 @@ public class Subject extends Data implements Comparable<Subject>, Serializable {
         this.color = color;
     }
 
+    public String[] getTopics() {
+        return topics;
+    }
+
+    public void setTopics(String[] topics) {
+        this.topics = topics;
+    }
+
+    public void setTopicsFromString(String topicString) {
+        try {
+            final JSONArray jarray = new JSONObject(topicString).optJSONArray("TOPICS");
+            topics = new String[jarray.length()];
+            for(int i = 0; i < jarray.length(); i++) {
+                topics[i] = jarray.optString(i);
+            }
+        } catch(JSONException je) {}
+
+    }
+
+    public String getTopicString() {
+        final JSONObject json = new JSONObject();
+        try {
+            json.put("TOPICS", new JSONArray(topics));
+        } catch(JSONException je) {}
+        return json.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if(o instanceof Subject) {
@@ -71,7 +104,7 @@ public class Subject extends Data implements Comparable<Subject>, Serializable {
     @Override
     public String toString() {
         return "Subject {id=" + id + ", name=" + name + ", teacher=" + teacher +
-                ", classroom=" + classroom + " color=" + color +"}";
+                ", classroom=" + classroom + " color=" + color + "topics=" + Arrays.toString(topics) + "}";
     }
 
     @Override

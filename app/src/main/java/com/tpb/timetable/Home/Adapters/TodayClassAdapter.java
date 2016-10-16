@@ -221,7 +221,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             super(v);
 
             setIsRecyclable(false);
-            className = (TextView) v.findViewById(R.id.text_subject);
+            className = (TextView) v.findViewById(R.id.text_subject_topic);
             classTime = (TextView) v.findViewById(R.id.text_class_time);
             classRoom = (TextView) v.findViewById(R.id.text_classroom);
             teacherName = (TextView) v.findViewById(R.id.text_teacher_name);
@@ -245,7 +245,7 @@ public class TodayClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ClassPastViewHolder(View v) {
             super(v);
             setIsRecyclable(false);
-            info = (TextView) v.findViewById(R.id.text_subject);
+            info = (TextView) v.findViewById(R.id.text_subject_topic);
         }
     }
 }

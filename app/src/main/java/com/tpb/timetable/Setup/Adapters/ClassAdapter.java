@@ -52,10 +52,13 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == 0) {
             final ClassViewHolder cv = (ClassViewHolder) holder;
-            cv.colourBar.setBackgroundColor(mClassesToday.get(position).getSubject().getColor());
-            cv.subject.setText(mClassesToday.get(position).getSubject().getName());
-            String timeRange = Format.format(mClassesToday.get(position).getStartTime()) +
-                    " to " + Format.format(mClassesToday.get(position).getEndTime());
+            final ClassTime c = mClassesToday.get(holder.getAdapterPosition());
+
+            cv.colourBar.setBackgroundColor(c.getSubject().getColor());
+            //TODO- Use format string
+            cv.subject.setText(c.getSubject().getName() + " (" + c.getTopic() + ")");
+            String timeRange = Format.format(c.getStartTime()) +
+                    " to " + Format.format(c.getEndTime());
             cv.classTime.setText(timeRange);
             cv.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -115,7 +118,7 @@ public class ClassAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ClassViewHolder(final View itemView) {
             super(itemView);
             colourBar = itemView.findViewById(R.id.colour_bar);
-            subject = (TextView) itemView.findViewById(R.id.text_subject);
+            subject = (TextView) itemView.findViewById(R.id.text_subject_topic);
             classTime = (TextView) itemView.findViewById(R.id.text_class_time);
             delete = (ImageButton) itemView.findViewById(R.id.button_delete);
             UIHelper.theme(itemView.getContext(), (ViewGroup) itemView);

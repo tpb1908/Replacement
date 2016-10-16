@@ -95,7 +95,7 @@ public class SubjectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         SubjectViewHolder(final View itemView, final SubjectAdapter parent) {
             super(itemView);
             colourBar = itemView.findViewById(R.id.colour_bar);
-            subject = (TextView) itemView.findViewById(R.id.text_subject);
+            subject = (TextView) itemView.findViewById(R.id.text_subject_topic);
             teacher = (TextView) itemView.findViewById(R.id.text_teacher_name);
             classroom = (TextView) itemView.findViewById(R.id.text_classroom);
             final ImageButton delete = (ImageButton) itemView.findViewById(R.id.button_delete);

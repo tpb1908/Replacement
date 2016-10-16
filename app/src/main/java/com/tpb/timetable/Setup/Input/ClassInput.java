@@ -9,11 +9,12 @@ import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.ClassTime;
-import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.Home.Input.SubjectSpinnerAdapter;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
@@ -58,8 +59,29 @@ public class ClassInput extends SlidingPanel {
         final TextInputEditText end = (TextInputEditText) findViewById(R.id.edittext_class_end_time);
 
         final Spinner subjectSpinner = (Spinner) findViewById(R.id.spinner_subject);
+        final Spinner topicSpinner = (Spinner) findViewById(R.id.spinner_topic);
         final SubjectSpinnerAdapter ssa = new SubjectSpinnerAdapter(this, DBHelper.getInstance(this).getAllSubjects());
         subjectSpinner.setAdapter(ssa);
+
+        subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO- Create custom text spinner for theming
+                mCurrentClass.setSubject(ssa.getSubject(i));
+                if(mCurrentClass.getSubject().getTopics().length > 0) {
+                    topicSpinner.setVisibility(View.VISIBLE);
+                    topicSpinner.setAdapter(new ArrayAdapter<>(ClassInput.this, android.R.layout.simple_spinner_dropdown_item, mCurrentClass.getSubject().getTopics()));
+                } else {
+                    topicSpinner.setVisibility(View.INVISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         try {
             mCurrentClass = (ClassTime) i.getSerializableExtra("class");
@@ -68,6 +90,9 @@ public class ClassInput extends SlidingPanel {
             start.setText(Format.format(mCurrentClass.getStartTime()));
             end.setText(Format.format(mCurrentClass.getEndTime()));
             subjectSpinner.setSelection(ssa.getPositionOfSubject(mCurrentClass.getSubjectID()));
+            if(mCurrentClass.getSubject().getTopics().length > 0) {
+                topicSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mCurrentClass.getSubject().getTopics()) );
+            }
             setTitle("Edit class");
         } catch(Exception e) {
             mEditing = false;
@@ -136,10 +161,8 @@ public class ClassInput extends SlidingPanel {
             @Override
             public void onClick(View view) {
                 boolean error = false;
-                final Subject s = ssa.getSubject(subjectSpinner.getSelectedItemPosition());
-                mCurrentClass.setSubject(s);
-
-
+                mCurrentClass.setSubject(ssa.getSubject(subjectSpinner.getSelectedItemPosition()));
+                mCurrentClass.setTopic(topicSpinner.getSelectedItem().toString());
                 if(start.getText().toString().isEmpty()) {
                     error = true;
                     startWrapper.setError("Enter a start time");

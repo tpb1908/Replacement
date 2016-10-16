@@ -14,6 +14,7 @@ import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Subject;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
+import com.tpb.timetable.Utils.Format;
 import com.tpb.timetable.Utils.UIHelper;
 
 /**
@@ -49,6 +50,7 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
         final TextInputLayout teacherWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_subject_teacher);
         final TextInputEditText classroom = (TextInputEditText) findViewById(R.id.edittext_subject_classroom);
         final TextInputLayout classroomWrapper = (TextInputLayout) findViewById(R.id.wrapper_edittext_subject_classroom);
+        final TextInputEditText topics = (TextInputEditText) findViewById(R.id.edittext_subject_topics);
 
 
         try {
@@ -58,6 +60,7 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
             name.setText(mCurrentSubject.getName());
             teacher.setText(mCurrentSubject.getTeacher());
             classroom.setText(mCurrentSubject.getClassroom());
+            topics.setText(Format.join(mCurrentSubject.getTopics(), "\n"));
             setTitle("Edit Subject");
         } catch(Exception e) {
             mEditing = false;
@@ -93,7 +96,10 @@ public class SubjectInput extends SlidingPanel implements SpectrumPalette.OnColo
                             classroomWrapper.setError(null);
                             mCurrentSubject.setClassroom(classroom.getText().toString());
                         }
-
+                        //http://stackoverflow.com/questions/4123385/remove-all-empty-lines
+                        //Remove empty lines and then split the rest of the lines
+                        final String[] split = topics.getText().toString().replaceAll("(?m)^[ \t]*\r?\n", "").split("\\n");
+                        mCurrentSubject.setTopics(split);
                         if(mCurrentSubject.getColor() == 0) {
                             error = true;
                             Toast.makeText(getApplicationContext(), "Select a colour", Toast.LENGTH_LONG).show();

@@ -45,7 +45,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_CLASSROOM = "CLASSROOM";
     private static final String KEY_TEACHER = "TEACHER";
     private static final String KEY_COLOR = "COLOR";
-    private static final String[] SUBJECT_COLUMNS = {KEY_ID, KEY_SUBJECT_NAME, KEY_CLASSROOM, KEY_TEACHER, KEY_COLOR};
+    private static final String KEY_TOPICS = "TOPICS";
+    private static final String[] SUBJECT_COLUMNS = {KEY_ID, KEY_SUBJECT_NAME, KEY_CLASSROOM, KEY_TEACHER, KEY_COLOR, KEY_TOPICS};
 
     private static final String TABLE_CLASS_TIMES = "CLASS_TIMES";
     private static final String KEY_START_TIME = "START_TIME";
@@ -106,7 +107,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 KEY_SUBJECT_NAME + " VARCHAR, " +
                 KEY_CLASSROOM + " VARCHAR, " +
                 KEY_TEACHER + " VARCHAR, " +
-                KEY_COLOR + " INTEGER )";
+                KEY_COLOR + " INTEGER, " +
+                KEY_TOPICS + " VARCHAR)";
         db.execSQL(CREATE_TABLE_SUBJECTS);
 
         final String CREATE_TABLE_CLASS_TIMES = "CREATE TABLE IF NOT EXISTS " +
@@ -292,6 +294,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 subject.setClassroom(cursor.getString(2));
                 subject.setTeacher(cursor.getString(3));
                 subject.setColor(cursor.getInt(4));
+                subject.setTopicsFromString(cursor.getString(5));
             }
             cursor.close();
         }
@@ -316,6 +319,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 subject.setClassroom(cursor.getString(2));
                 subject.setTeacher(cursor.getString(3));
                 subject.setColor(cursor.getInt(4));
+                subject.setTopicsFromString(cursor.getString(5));
             }
             cursor.close();
         }
@@ -338,6 +342,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     subject.setClassroom(cursor.getString(2));
                     subject.setTeacher(cursor.getString(3));
                     subject.setColor(cursor.getInt(4));
+                    subject.setTopicsFromString(cursor.getString(5));
                     subjects.add(subject);
                 } while(cursor.moveToNext());
             }
@@ -380,16 +385,18 @@ public class DBHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             for(Subject s : toAdd) {
+                Log.i(TAG, "addSubjects: Adding subject " + s.toString());
                 values.put(KEY_SUBJECT_NAME, s.getName());
                 values.put(KEY_CLASSROOM, s.getClassroom());
                 values.put(KEY_TEACHER, s.getTeacher());
                 values.put(KEY_COLOR, s.getColor());
+                values.put(KEY_TOPICS, s.getTopicString());
                 db.insert(TABLE_SUBJECTS, null, values);
                 values.clear();
             }
             db.setTransactionSuccessful();
         } catch(Exception e) {
-            Log.i(TAG, "Error when bulk inserting subjects");
+            Log.i(TAG, "Error when bulk inserting subjects " + e.getMessage());
         } finally {
             db.endTransaction();
         }
@@ -631,6 +638,7 @@ public class DBHelper extends SQLiteOpenHelper {
         final SQLiteDatabase db = this.getWritableDatabase();
         final ContentValues values = new ContentValues();
         int id = -1;
+
         if(data instanceof Task) {
             final Task t = (Task) data;
             values.put(KEY_TYPE, t.getType());
@@ -660,6 +668,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(KEY_CLASSROOM, s.getClassroom());
             values.put(KEY_TEACHER, s.getTeacher());
             values.put(KEY_COLOR, s.getColor());
+            values.put(KEY_TOPICS, s.getTopicString());
             id = ((int) db.insert(TABLE_SUBJECTS, null, values));
             Log.i(TAG, "Adding " + s.toString());
         } else if(data instanceof Assessment) {
@@ -739,6 +748,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(KEY_CLASSROOM, s.getClassroom());
             values.put(KEY_TEACHER, s.getTeacher());
             values.put(KEY_COLOR, s.getColor());
+            values.put(KEY_TOPICS, s.getTopicString());
             db.update(TABLE_SUBJECTS,
                     values,
                     KEY_ID + " = " + s.getID(),

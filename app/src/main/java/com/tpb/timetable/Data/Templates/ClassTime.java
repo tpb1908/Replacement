@@ -16,6 +16,7 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
     private int startTime = -1;
     private int endTime = -1;
     private Subject subject;
+    private String topic = "";
 
     public ClassTime() {}
 
@@ -68,6 +69,14 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
     public void setSubject(Subject subject) {
         this.subject = subject;
         this.subjectID = subject.getID();
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     @Override

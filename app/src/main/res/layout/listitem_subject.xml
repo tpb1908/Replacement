@@ -39,7 +39,7 @@
                 android:src="@drawable/icon_subject"/>
 
             <TextView
-                android:id="@+id/text_subject"
+                android:id="@+id/text_subject_topic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/icon_class"
@@ -52,7 +52,7 @@
                 android:id="@+id/text_teacher_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/text_subject"
+                android:layout_alignBottom="@+id/text_subject_topic"
                 android:layout_toStartOf="@+id/button_delete"
                 android:layout_marginEnd="16dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
@@ -63,7 +63,7 @@
                 android:id="@+id/text_classroom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/text_subject"
+                android:layout_below="@+id/text_subject_topic"
                 android:layout_toEndOf="@+id/icon_class"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textSize="14sp"

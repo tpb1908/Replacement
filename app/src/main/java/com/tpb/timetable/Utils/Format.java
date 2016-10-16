@@ -13,7 +13,16 @@ public class Format {
     
     private Format() {}
 
-    //TODO- What the fuck is going on here???
+    public static String join(String[] strings, String separator) {
+        final StringBuilder sb = new StringBuilder(strings.length * 2);
+        for(int i = 0 ; i < strings.length; i++) {
+            sb.append(strings[i]);
+            if(i != strings.length - 1) sb.append(separator);
+        }
+
+        return sb.toString();
+    }
+
 
     public static int hmToInt(int hour, int minute) {
         return (hour * 60) + minute;

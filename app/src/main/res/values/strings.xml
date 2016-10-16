@@ -32,6 +32,7 @@
     <string name="hint_subject_name">Subject name</string>
     <string name="hint_teacher_name">Teacher</string>
     <string name="hint_class_input">Classroom</string>
+    <string name="hint_subject_topics">Topics</string>
 
     <string name="message_no_classes">No classes today</string>
     <string name="message_no_classes_created">No classes created</string>

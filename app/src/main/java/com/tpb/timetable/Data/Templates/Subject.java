@@ -92,19 +92,22 @@ public class Subject extends Data implements Comparable<Subject>, Serializable {
         return json.toString();
     }
 
+    public int topicIndex(String t) {
+        for(int i = 0; i < topics.length; i++) {
+            if(topics[i].equals(t)) return i;
+        }
+        return -1;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if(o instanceof Subject) {
-            final Subject s = (Subject) o;
-            return id == s.id;
-        }
-        return false;
+        return o instanceof Subject && id == ((Subject) o).id;
     }
 
     @Override
     public String toString() {
         return "Subject {id=" + id + ", name=" + name + ", teacher=" + teacher +
-                ", classroom=" + classroom + " color=" + color + "topics=" + Arrays.toString(topics) + "}";
+                ", classroom=" + classroom + " color=" + color + ", topics=" + Arrays.toString(topics) + "}";
     }
 
     @Override

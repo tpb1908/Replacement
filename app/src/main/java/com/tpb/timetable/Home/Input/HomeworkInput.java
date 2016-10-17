@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.Task;
+import com.tpb.timetable.Home.Spinners.SubjectSpinnerAdapter;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.Format;

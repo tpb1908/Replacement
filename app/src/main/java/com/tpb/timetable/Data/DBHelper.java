@@ -52,7 +52,8 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String KEY_START_TIME = "START_TIME";
     private static final String KEY_END_TIME = "END_TIME";
     private static final String KEY_DAY = "DAY";
-    private static final String CLASS_COLUMNS[] = {KEY_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY, KEY_SUBJECT_ID};
+    private static final String KEY_TOPIC = "TOPIC";
+    private static final String CLASS_COLUMNS[] = {KEY_ID, KEY_START_TIME, KEY_END_TIME, KEY_DAY, KEY_TOPIC, KEY_SUBJECT_ID};
 
     private static final String TABLE_TASKS_CURRENT = "CURRENT_TASKS";
     private static final String TABLE_TASKS_ARCHIVE = "ARCHIVED_TASKS";
@@ -118,6 +119,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 KEY_START_TIME + " INTEGER, " +
                 KEY_END_TIME + " INTEGER, " +
                 KEY_DAY + " INTEGER, " +
+                KEY_TOPIC + " VARCHAR, " +
                 "FOREIGN KEY(" + KEY_SUBJECT_ID + ") " + "REFERENCES " + TABLE_SUBJECTS + "(" + KEY_ID + ")) ";
         db.execSQL(CREATE_TABLE_CLASS_TIMES);
 
@@ -426,6 +428,7 @@ public class DBHelper extends SQLiteOpenHelper {
             time.setDay(cursor.getInt(3));
             time.setSubjectID(cursor.getInt(4));
             time.setSubject(getSubjectForData(db, time.getSubjectID()));
+            time.setTopic(cursor.getString(5));
             cursor.close();
         }
         db.close();
@@ -460,6 +463,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     time.setEndTime(cursor.getInt(3));
                     time.setDay(cursor.getInt(4));
                     time.setSubject(getSubjectForData(db, time.getSubjectID()));
+                    time.setTopic(cursor.getString(5));
                     classes.add(time);
                 } while(cursor.moveToNext());
             }
@@ -660,6 +664,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(KEY_START_TIME, ct.getStartTime());
             values.put(KEY_END_TIME, ct.getEndTime());
             values.put(KEY_DAY, ct.getDay());
+            values.put(KEY_TOPIC, ct.getTopic());
             id = (int) db.insert(TABLE_CLASS_TIMES, null, values);
             Log.i(TAG, "Adding " + ct.toString());
         } else if(data instanceof Subject) {
@@ -738,17 +743,24 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(KEY_START_TIME,  ct.getStartTime());
             values.put(KEY_END_TIME,  ct.getEndTime());
             values.put(KEY_DAY,  ct.getDay());
+            values.put(KEY_TOPIC, ct.getTopic());
             db.update(TABLE_CLASS_TIMES,
                     values,
                     KEY_ID + " = " +  ct.getID(),
                     null);
         } else if(o instanceof Subject) {
             final Subject s = (Subject) o;
+            final Subject os = getSubjectForData(db, s.getID());
+            Log.i(TAG, "update: " + s.toString());
+            Log.i(TAG, "update: " + os.toString());
             values.put(KEY_SUBJECT_NAME, s.getName());
             values.put(KEY_CLASSROOM, s.getClassroom());
             values.put(KEY_TEACHER, s.getTeacher());
             values.put(KEY_COLOR, s.getColor());
             values.put(KEY_TOPICS, s.getTopicString());
+
+
+            //TODO- Update the class values here
             db.update(TABLE_SUBJECTS,
                     values,
                     KEY_ID + " = " + s.getID(),
@@ -949,6 +961,7 @@ public class DBHelper extends SQLiteOpenHelper {
             } else {
                 for (ArrayChangeListener<T> l : mListeners) l.moved(oldIndex, newIndex);
             }
+            Log.i(TAG, "update: Update of " + t.toString());
             mDBHelper.update(t);
         }
 

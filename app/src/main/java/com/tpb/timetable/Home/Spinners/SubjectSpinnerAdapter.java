@@ -1,4 +1,4 @@
-package com.tpb.timetable.Home.Input;
+package com.tpb.timetable.Home.Spinners;
 
 import android.content.Context;
 import android.view.LayoutInflater;

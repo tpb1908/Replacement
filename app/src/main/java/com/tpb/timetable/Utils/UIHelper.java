@@ -264,7 +264,7 @@ public class UIHelper {
 
             for(int i = 0; i < group.getChildCount(); i++) {
                 v = group.getChildAt(i);
-                Log.i(TAG, "theme: view " + v);
+                //Log.i(TAG, "theme: view " + v);
                 //We don't want to do anything to any of these views, only their children
                 if(v instanceof RelativeLayout ||
                         v instanceof LinearLayout ||

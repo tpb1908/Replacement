@@ -10,12 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.tpb.timetable.Data.DBHelper;
 import com.tpb.timetable.Data.Templates.ClassTime;
-import com.tpb.timetable.Home.Input.SubjectSpinnerAdapter;
+import com.tpb.timetable.Home.Spinners.SubjectSpinnerAdapter;
+import com.tpb.timetable.Home.Spinners.TextSpinnerAdapter;
 import com.tpb.timetable.R;
 import com.tpb.timetable.SlidingPanel.SlidingPanel;
 import com.tpb.timetable.Utils.Format;
@@ -62,6 +62,10 @@ public class ClassInput extends SlidingPanel {
         final Spinner topicSpinner = (Spinner) findViewById(R.id.spinner_topic);
         final SubjectSpinnerAdapter ssa = new SubjectSpinnerAdapter(this, DBHelper.getInstance(this).getAllSubjects());
         subjectSpinner.setAdapter(ssa);
+        //Log.i(TAG, "init: Class is " + mCurrentClass);
+        Log.i(TAG, "init: Subject is " + mCurrentClass.getSubject());
+        final TextSpinnerAdapter tsa = new TextSpinnerAdapter(new String[]{});
+        topicSpinner.setAdapter(tsa);
 
         subjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -70,7 +74,7 @@ public class ClassInput extends SlidingPanel {
                 mCurrentClass.setSubject(ssa.getSubject(i));
                 if(mCurrentClass.getSubject().getTopics().length > 0) {
                     topicSpinner.setVisibility(View.VISIBLE);
-                    topicSpinner.setAdapter(new ArrayAdapter<>(ClassInput.this, android.R.layout.simple_spinner_dropdown_item, mCurrentClass.getSubject().getTopics()));
+                    tsa.setData(mCurrentClass.getSubject().getTopics());
                 } else {
                     topicSpinner.setVisibility(View.INVISIBLE);
                 }
@@ -91,7 +95,9 @@ public class ClassInput extends SlidingPanel {
             end.setText(Format.format(mCurrentClass.getEndTime()));
             subjectSpinner.setSelection(ssa.getPositionOfSubject(mCurrentClass.getSubjectID()));
             if(mCurrentClass.getSubject().getTopics().length > 0) {
-                topicSpinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mCurrentClass.getSubject().getTopics()) );
+                tsa.setData(mCurrentClass.getSubject().getTopics());
+                topicSpinner.setSelection(tsa.getPosition(mCurrentClass.getTopic()));
+                topicSpinner.setVisibility(View.VISIBLE);
             }
             setTitle("Edit class");
         } catch(Exception e) {

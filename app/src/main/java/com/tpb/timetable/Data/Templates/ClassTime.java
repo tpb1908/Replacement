@@ -92,8 +92,8 @@ public class ClassTime extends Data implements Comparable<ClassTime>, Serializab
     public String toString() {
         String string = "Class {id=" + id + ", SubjectId=" + subjectID + ", start=" + startTime +
                 " " + Format.format(startTime) + ", end=" + endTime +
-                " " + Format.format(endTime) + ", day=" + day;
-        if(subject != null) string += ", getSubject " + subject.toString();
+                " " + Format.format(endTime) + ", day=" + day + ", topic=" + topic;
+        if(subject != null) string += ", subject " + subject.toString();
         return string + "}";
     }
 
